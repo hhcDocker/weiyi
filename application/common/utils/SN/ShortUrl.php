@@ -44,7 +44,7 @@ class ShortUrl extends RandBase {
 	    return $this->code62($result);
     }
 
-    private function code62($x){ 
+    private function code62($x){
 	    $show=''; 
 	    while($x>0){
 	        $s=$x % 62; 
