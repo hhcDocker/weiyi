@@ -1,8 +1,5 @@
 .idea
-composer.lock
 *.log
-thinkphp
 /runtime
 database.php
 .gitignore
-config.php
