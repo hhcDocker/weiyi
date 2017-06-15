@@ -23,7 +23,7 @@ use think\Controller;
 use think\Request;
 use think\Db;
 
-class Index extends Controller
+class IndexBak extends Controller
 {
     /**
      * 接收并处理淘宝、天猫等链接
@@ -219,6 +219,7 @@ class Index extends Controller
      * @return [shop_data]
      */
     public function getShopData() {
+        echo "string";
 		$url = $_GET['shopURL'];
         $client = Client::getInstance();
         $client->getProcedureCompiler()->clearCache();

@@ -2811,3 +2811,237 @@
 [ sql ] [ SQL ] SELECT * FROM `wj_services` WHERE  `shop_url` = 'https://shop114337110.taobao.com'  AND `manager_id` = 1  AND `is_deleted` = 0 LIMIT 1 [ RunTime:0.000654s ]
 [ sql ] [ SQL ] INSERT INTO `wj_services` (`shop_url` , `transformed_url` , `service_start_time` , `service_end_time` , `is_deleted` , `create_time` , `update_time`) VALUES ('https://shop114337110.taobao.com' , '11pAZ4' , 1497534843 , 1497794043 , 0 , 1497534846 , 1497534846) [ RunTime:0.003506s ]
 [ sql ] [ SQL ] SELECT * FROM `wj_services` WHERE  `shop_url` = 'https://shop114337110.taobao.com'  AND `manager_id` = 1  AND `is_deleted` = 0 LIMIT 1 [ RunTime:0.001428s ]
+---------------------------------------------------------------
+[ 2017-06-15T22:11:20+08:00 ] 127.0.0.9 127.0.0.1 GET /weibao/Index_bak/getShopData?url=https://shop114337110.taobao.com&XDEBUG_SESSION_START=17639
+[ info ] 127.0.0.9/weibao/Index_bak/getShopData?url=https://shop114337110.taobao.com&XDEBUG_SESSION_START=17639 [运行时间：0.034183s][吞吐率：29.25req/s] [内存消耗：1,795.79kb] [文件加载：45]
+[ info ] [ LANG ] E:\wtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'weibao',
+    1 => 'Index_bak',
+    2 => 'getShopData',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.9',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate, sdch, br',
+  'accept-language' => 'zh-CN,zh;q=0.8',
+  'cookie' => 'isg=AklJpKNQdLj54wizlj8j3UZKWHVjPj2mauD72eu-xTBvMmlEM-ZNmDdiBqx7; XDEBUG_SESSION=17639',
+)
+[ info ] [ PARAM ] array (
+  'url' => 'https://shop114337110.taobao.com',
+  'XDEBUG_SESSION_START' => '17639',
+)
+[ info ] [ BEHAVIOR ] Run app\index\behavior\OptionsMethod @app_begin [ RunTime:0.000424s ]
+[ info ] [ BEHAVIOR ] Run app\index\behavior\CrossDomain @module_init [ RunTime:0.000342s ]
+[ info ] [ LOG ] INIT File
+[ error ] [0]控制器不存在:IndexBak[E:\wtiao\thinkphp\library\think\App.php:388]
+---------------------------------------------------------------
+[ 2017-06-15T22:12:39+08:00 ] 127.0.0.9 127.0.0.1 GET /weibao/Index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com
+[ info ] 127.0.0.9/weibao/Index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com [运行时间：0.038394s][吞吐率：26.05req/s] [内存消耗：1,795.03kb] [文件加载：45]
+[ info ] [ LANG ] E:\wtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'weibao',
+    1 => 'Index_bak',
+    2 => 'getShopData',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.9',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate, sdch, br',
+  'accept-language' => 'zh-CN,zh;q=0.8',
+  'cookie' => 'isg=AklJpKNQdLj54wizlj8j3UZKWHVjPj2mauD72eu-xTBvMmlEM-ZNmDdiBqx7; XDEBUG_SESSION=17639',
+)
+[ info ] [ PARAM ] array (
+  'shopURL' => 'https://shop114337110.m.taobao.com',
+)
+[ info ] [ BEHAVIOR ] Run app\index\behavior\OptionsMethod @app_begin [ RunTime:0.000717s ]
+[ info ] [ BEHAVIOR ] Run app\index\behavior\CrossDomain @module_init [ RunTime:0.000472s ]
+[ info ] [ LOG ] INIT File
+[ error ] [0]控制器不存在:IndexBak[E:\wtiao\thinkphp\library\think\App.php:388]
+---------------------------------------------------------------
+[ 2017-06-15T22:13:08+08:00 ] 127.0.0.9 127.0.0.1 GET /weibao/index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com
+[ info ] 127.0.0.9/weibao/index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com [运行时间：0.033277s][吞吐率：30.05req/s] [内存消耗：1,795.03kb] [文件加载：45]
+[ info ] [ LANG ] E:\wtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'weibao',
+    1 => 'index_bak',
+    2 => 'getShopData',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.9',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate, sdch, br',
+  'accept-language' => 'zh-CN,zh;q=0.8',
+  'cookie' => 'isg=AklJpKNQdLj54wizlj8j3UZKWHVjPj2mauD72eu-xTBvMmlEM-ZNmDdiBqx7; XDEBUG_SESSION=17639',
+)
+[ info ] [ PARAM ] array (
+  'shopURL' => 'https://shop114337110.m.taobao.com',
+)
+[ info ] [ BEHAVIOR ] Run app\index\behavior\OptionsMethod @app_begin [ RunTime:0.000411s ]
+[ info ] [ BEHAVIOR ] Run app\index\behavior\CrossDomain @module_init [ RunTime:0.000355s ]
+[ info ] [ LOG ] INIT File
+[ error ] [0]控制器不存在:IndexBak[E:\wtiao\thinkphp\library\think\App.php:388]
+---------------------------------------------------------------
+[ 2017-06-15T22:13:16+08:00 ] 127.0.0.9 127.0.0.1 GET /weibao/index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com
+[ info ] 127.0.0.9/weibao/index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com [运行时间：0.032626s][吞吐率：30.65req/s] [内存消耗：1,795.38kb] [文件加载：45]
+[ info ] [ LANG ] E:\wtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'weibao',
+    1 => 'index_bak',
+    2 => 'getShopData',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.9',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate, sdch, br',
+  'accept-language' => 'zh-CN,zh;q=0.8',
+  'cookie' => 'isg=AklJpKNQdLj54wizlj8j3UZKWHVjPj2mauD72eu-xTBvMmlEM-ZNmDdiBqx7; XDEBUG_SESSION=17639',
+)
+[ info ] [ PARAM ] array (
+  'shopURL' => 'https://shop114337110.m.taobao.com',
+)
+[ info ] [ BEHAVIOR ] Run app\index\behavior\OptionsMethod @app_begin [ RunTime:0.000477s ]
+[ info ] [ BEHAVIOR ] Run app\index\behavior\CrossDomain @module_init [ RunTime:0.000444s ]
+[ info ] [ LOG ] INIT File
+[ error ] [0]控制器不存在:IndexBak[E:\wtiao\thinkphp\library\think\App.php:388]
+---------------------------------------------------------------
+[ 2017-06-15T22:13:21+08:00 ] 127.0.0.9 127.0.0.1 GET /weibao/index/getShopData?url=https://shop114337110.taobao.com&XDEBUG_SESSION_START=15610
+[ info ] 127.0.0.9/weibao/index/getShopData?url=https://shop114337110.taobao.com&XDEBUG_SESSION_START=15610 [运行时间：633.129632s][吞吐率：0.00req/s] [内存消耗：3,454.61kb] [文件加载：64]
+[ info ] [ LANG ] E:\wtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'weibao',
+    1 => 'index',
+    2 => 'getShopData',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.9',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate, sdch, br',
+  'accept-language' => 'zh-CN,zh;q=0.8',
+  'cookie' => 'isg=AklJpKNQdLj54wizlj8j3UZKWHVjPj2mauD72eu-xTBvMmlEM-ZNmDdiBqx7; XDEBUG_SESSION=13460',
+)
+[ info ] [ PARAM ] array (
+  'url' => 'https://shop114337110.taobao.com',
+  'XDEBUG_SESSION_START' => '15610',
+)
+[ info ] [ BEHAVIOR ] Run app\index\behavior\OptionsMethod @app_begin [ RunTime:0.001227s ]
+[ info ] [ BEHAVIOR ] Run app\index\behavior\CrossDomain @module_init [ RunTime:0.001136s ]
+[ info ] [ RUN ] app\weibao\controller\Index->getShopData[ E:\wtiao\application\weibao\controller\Index.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'wt',
+  'expire' => 7200,
+  'type' => '',
+  'auto_start' => true,
+  'use_cookies' => 0,
+  'validorigin' => 'validorigin',
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ CACHE ] INIT File
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.000819s ] mysql:dbname=wejumptao;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `wj_services` [ RunTime:0.005830s ]
+[ sql ] [ SQL ] SELECT * FROM `wj_services` WHERE  `shop_url` = 'https://shop114337110.taobao.com'  AND `manager_id` = 1  AND `is_deleted` = 0 LIMIT 1 [ RunTime:0.000935s ]
+[ sql ] [ SQL ] INSERT INTO `wj_services` (`shop_url` , `transformed_url` , `service_start_time` , `service_end_time` , `is_deleted` , `create_time` , `update_time`) VALUES ('https://shop114337110.taobao.com' , '11pAZ4' , 1497535455 , 1497794657 , 0 , 1497536001 , 1497536001) [ RunTime:0.003444s ]
+[ sql ] [ SQL ] SELECT * FROM `wj_services` WHERE  `shop_url` = 'https://shop114337110.taobao.com'  AND `manager_id` = 1  AND `is_deleted` = 0 LIMIT 1 [ RunTime:0.000871s ]
+---------------------------------------------------------------
+[ 2017-06-15T22:13:25+08:00 ] 127.0.0.9 127.0.0.1 GET /weibao/index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com
+[ info ] 127.0.0.9/weibao/index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com [运行时间：0.049687s][吞吐率：20.13req/s] [内存消耗：1,795.27kb] [文件加载：45]
+[ info ] [ LANG ] E:\wtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'weibao',
+    1 => 'index_bak',
+    2 => 'getShopData',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.9',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate, sdch, br',
+  'accept-language' => 'zh-CN,zh;q=0.8',
+  'cookie' => 'isg=AklJpKNQdLj54wizlj8j3UZKWHVjPj2mauD72eu-xTBvMmlEM-ZNmDdiBqx7; XDEBUG_SESSION=15610',
+)
+[ info ] [ PARAM ] array (
+  'shopURL' => 'https://shop114337110.m.taobao.com',
+)
+[ info ] [ BEHAVIOR ] Run app\index\behavior\OptionsMethod @app_begin [ RunTime:0.001002s ]
+[ info ] [ BEHAVIOR ] Run app\index\behavior\CrossDomain @module_init [ RunTime:0.000687s ]
+[ info ] [ LOG ] INIT File
+[ error ] [0]控制器不存在:IndexBak[E:\wtiao\thinkphp\library\think\App.php:388]
+---------------------------------------------------------------
+[ 2017-06-15T22:14:56+08:00 ] 127.0.0.9 127.0.0.1 GET /weibao/index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com
+[ info ] 127.0.0.9/weibao/index_bak/getShopData?shopURL=https://shop114337110.m.taobao.com [运行时间：10.647294s][吞吐率：0.09req/s] [内存消耗：5,643.48kb] [文件加载：187]
+[ info ] [ LANG ] E:\wtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'weibao',
+    1 => 'index_bak',
+    2 => 'getShopData',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.9',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate, sdch, br',
+  'accept-language' => 'zh-CN,zh;q=0.8',
+  'cookie' => 'isg=AklJpKNQdLj54wizlj8j3UZKWHVjPj2mauD72eu-xTBvMmlEM-ZNmDdiBqx7; XDEBUG_SESSION=15610',
+)
+[ info ] [ PARAM ] array (
+  'shopURL' => 'https://shop114337110.m.taobao.com',
+)
+[ info ] [ BEHAVIOR ] Run app\index\behavior\OptionsMethod @app_begin [ RunTime:0.000628s ]
+[ info ] [ BEHAVIOR ] Run app\index\behavior\CrossDomain @module_init [ RunTime:0.000511s ]
+[ info ] [ RUN ] app\weibao\controller\IndexBak->getShopData[ E:\wtiao\application\weibao\controller\IndexBak.php ]
+[ info ] [ LOG ] INIT File
+[ error ] [0]模板文件不存在:E:\wtiao\public/../application/weibao\view\index_bak\tm_shop.html[E:\wtiao\thinkphp\library\think\view\driver\Think.php:80]
