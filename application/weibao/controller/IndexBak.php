@@ -518,7 +518,7 @@ class Index extends Controller
     private function saveShopData($data=array()){
         dump($data);
         $err_msg = '';
-        if (!=empty($data)) {
+        if (empty($data)) {
             return array('code'=>0,'msg'=>'无数据');
         }
         foreach ($data as $k => $v) {
