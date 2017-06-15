@@ -26,7 +26,6 @@ abstract class RandBase implements RandInterface {
      * len is the corresponding serial number length
      */ 
     static $typecode = [
-         "service" => ['code'=>82, 'len'=>20],
          "expense" => ['code'=>72, 'len'=>20],
     ];
     

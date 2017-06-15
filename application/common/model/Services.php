@@ -20,12 +20,12 @@ use think\Db;
 
 class Services extends Base
 {
-    public function getServicesByShopUrl($shop_url='')
+    public function getServicesByShopUrl($shop_url='',$manager_id='')
     {
         if (!$shop_url) {
             return array();
         }
-        $res = Db::table('wj_services')->where('shop_url',$shop_url)->where('is_deleted',0)->find();
+        $res = Db::table('wj_services')->where('shop_url',$shop_url)->where('manager_id',$manager_id)->where('is_deleted',0)->find();
         return $res?$res:array();
     }
 
@@ -47,7 +47,7 @@ class Services extends Base
     		'shop_url'=> $shop_url,
     		'transformed_url'=> $transformed_url,
     		'service_start_time'=> $service_start_time,
-            'service_end_time'=>$service_end_time,
+        'service_end_time'=>$service_end_time,
     		'is_deleted'=> 0,
     		'create_time'=> time(),
     		'update_time'=> time(),

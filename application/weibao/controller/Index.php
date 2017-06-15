@@ -16,6 +16,8 @@
 
 namespace app\weibao\controller;
 use app\common\service\WeiBaoData;
+use app\common\utils\SN\ShortUrl;
+use app\common\utils\SN\ExpenseSN;
 use JonnyW\PhantomJs\Client;
 use think\Controller;
 use think\Request;
@@ -140,7 +142,7 @@ class Index extends Controller
 			echo $html;
 		}
 	}
-    
+
 	public function searchCommodity()
     {
         return $this->fetch('search_commodity');
@@ -187,12 +189,41 @@ class Index extends Controller
 		$arr[]=$str2;
 		echo json_encode($arr);
 	}
-	 
-	 /**
+	
+    /**
      * 接收并处理跳转淘宝店铺、天猫店铺等链接
-     * @return [shop_data]
+     * 之后考虑短链接情况
+     * @param  string  $url  [链接]
+     * @param  integer $flag [是否获取最新数据，默认否]
+     * @return [type]        [description]
      */
-    public function getShopData($url) {
+    public function getShopData() {
+        $url = input('param.url') ? input('param.url'):'';
+        $flag = input('param.flag') ? input('param.flag'):0;
+        $checkUrl = $this->checkUrl($url);
+        if (!$checkUrl['code']) {
+            dump($checkUrl);
+            return;
+        }
+        //mc 暂时
+        //加上判断是否过期
+        //考虑短链接情况，查表获取真实链接
+        $url_info = $this->getShopShortUrlInfo($url);
+        if (empty($url_info)){
+            echo "获取真实链接失败";
+            return;
+        }
+        $service_id = $url_info['id'];
+
+        //不获取最新数据
+        if (!$flag) {
+            $api_info = model('ShopApi')->getShopDataByShopUrl($url);
+            if (!empty($api_info)) {
+                return $api_info;
+            }
+        }
+
+        //把这块剥离为服务层，私有化
         $client = Client::getInstance();
         $client->getProcedureCompiler()->clearCache();
         $client->getEngine()->setPath($_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe');
@@ -213,11 +244,75 @@ class Index extends Controller
         //dump( $response->getUrls());
         //dump($response->getConsole());
         $data=$response->getUrlData();
-		foreach ($data as $key => &$value) {
-			$value=preg_replace('/^mtopjsonp\d\(/','', $value);
-			$value= trim($value,')');
-		}
-		return $this->fetch('tm_shop',array('data' => json_encode($data)));
+        //end
+        
+        if (!$data) {
+            echo "获取数据失败";
+            return;
+        }
+
+        $shop_data=array();
+        $flag_error =0;
+        //校验是否全部获取到
+        foreach ($data as $k => $v) {
+            $v = preg_replace('/^mtopjsonp\d\(([\s\S]+)\)/','$1', $v);
+            $v = json_decode($v,true);
+            if ($v['ret'][0]!="SUCCESS::调用成功"){
+                $flag_error=1;
+                break;
+            }else{
+                if ($k==0){ //第一个接口
+                    $data=$v['data']['data'];
+                    $view=$v['data']['view'];
+                }else{
+                    $data = $v['data'];
+                    $view = array();
+                }
+                $shop_data[]=array(
+                    'shop_url'=> $url,
+                    'api_url'=> $v['api'],
+                    'api_data'=> json_encode($data),
+                    'api_view'=> json_encode($view),
+                    'is_deleted'=> 0,
+                    'create_time'=> time(),
+                    'update_time'=> time(),
+                );
+            }
+        }
+        if ($flag_error) {
+            echo "获取数据失败";
+            return;
+        }else{
+            //软删除之前记录
+            model('ShopApi')->softDeleteShopDataByShopUrl($url);
+            $has_add = model('ShopApi')->batchAddShopData($shop_data);
+            if (!$has_add) {
+                //mc 记录日志或者发送警报，不推送给前端
+            }
+        }
+		return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
+    }
+
+    private function getShopShortUrlInfo($url)
+    {
+        //mc
+        session('manager_id',1);
+        $service_info = model('Services')->getServicesByShopUrl($url,session('manager_id'));
+        //没有服务则表示体验
+        if (empty($service_info)) {
+            $experience_time = config('ExperienceTime');
+            $time_start = time();
+            $time_end = strtotime("+".$experience_time." day");
+            $o = new ShortUrl($url);
+            $shop_url_str = $o->getSN();
+            $service_id = model('Services')->saveServices(session('manager_id'),$url,$shop_url_str,$time_start,$time_end);
+            $service_info = model('Services')->getServicesByShopUrl($url,session('manager_id'));
+            //添加消费记录，体验3天
+            $expense_model = new ExpenseSN();
+            $expense_num = $expense_model->getSN();
+            $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,'',$service_id,session('manager_id'),0,$time_start,$time_end,1);
+        }
+        return $service_info;
     }
 
     /**
@@ -269,37 +364,32 @@ class Index extends Controller
     }*/
 
     /**
-     * 首页转换网址
-     * 验证登录与否
-     * 店铺地址则查表获取该链接是否已购买服务，是否已过期
-     * 非店铺地址则判断地址合法性，爬取数据，得到店铺地址，查表获取
-     * 如果从未购买，则生成记录
-     * @param  string $value [description]
-     * @return [type]        [description]
+     * 首页转换网址,验证登录与否
+     * 验证店铺，判断地址合法性，获取店铺地址（非店铺地址则爬取数据，得到店铺地址）
+     * 查表获取该链接是否已购买服务，是否已过期
+     * 如果从未购买，则生成体验记录，默认3天，生成服务记录，返回短链接
+     * 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
+     * 暂时先验证，之后再迁移到账号体系，index模块下，改前后分离
+     * @return [type] [description]
      */
     public function getShortUrl()
     {
         $url = input('post.url')?input('post.url'):'';
         // echo $url;
-        if (!$url) { //非空检验
-            // return array('code'=>0,'url'=>'','msg'=>'网址不为空');
-            dump(array('code'=>0,'url'=>'','msg'=>'网址不为空'));
+        $checkUrl = $this->checkUrl($url);
+        if (!$checkUrl['code']) {
+            dump($checkUrl);
             return;
         }
-        if(!preg_match('/http:\/\/[\w.]+[\w\/]*[\w.]*\??[\w=&\+\%]*/is',$url)){
-            dump(array('code'=>0,'url'=>'','msg'=>'网址不合法'));
-            return;
-        }
-
         //mc 判断是否登录
-        
+        echo config('ExperienceTime');
         if (strstr($url,'tmall.com')) { //天猫
             if (strstr($url, 'tmall.com/shop')) { //天猫店铺
                 // echo "天猫网址<br/><br/>";
                 if (!strstr($url, '.m.')) { //PC转移动端
                     $url = preg_replace('/.+(\w+).tmall.com\/shop\/view_shop\.htm.+/','https://'.'$1'.'.m.tmall.com',$url);
                 }
-                $this->getShopData($url);
+                $this->getShopShortUrlInfo($url);
                 dump(array('code'=>1,'url'=>$url));
                 // return array('code'=>1,'url'=>$url);
             }else{
@@ -310,9 +400,9 @@ class Index extends Controller
         }elseif (strstr($url, 'taobao')) { //淘宝
             if (preg_match('/shop\d+\.taobao/', $url)){ //淘宝店铺pc端
                 $url = str_replace('taobao.com', 'm.taobao.com', $url);
-                $this->getShopData($url);
+                $this->getShopShortUrlInfo($url);
             }elseif (preg_match('/shop\d+\.m\.taobao/', $url)) { //淘宝店铺移动端
-                $this->getShopData($url);
+                $this->getShopShortUrlInfo($url);
             }else{
                 //待定
                 // return array('code'=>0,'msg'=>'非淘宝店铺网址');
@@ -323,50 +413,20 @@ class Index extends Controller
             dump(array('code'=>0,'msg'=>'非淘宝天猫网址'));
         }
     }
-    private function saveShopData($data=array()){
-        dump($data);
-        $err_msg = '';
-        if (empty($data)) {
-            return array('code'=>0,'msg'=>'无数据');
-        }
-        foreach ($data as $k => $v) {
-            $v = preg_replace('/^mtopjsonp\d\(([\s\S]+)\)/','$1', $v);
-            $v = json_decode($v,true);
-            var_dump($v);
-            if ($v['ret'][0]=="SUCCESS::调用成功"){
-                if ($k==0){ //第一个接口
-                    $data=$v['data']['data'];
-                    $view=$v['data']['view'];
-                }else{
-                    $data = $v['data'];
-                    $view = array();
-                }
 
-                $has_add = model('ShopApi')->saveShopData(1,$v['api'],json_encode($data),json_encode($view));
-                if (!$has_add) {
-                    $err_msg .='添加数据失败；';
-                }
-            }else{
-                $err_msg .='获取数据失败；';
-            }
-        }
-        if ($err_msg) {
-            return array('code'=>0,'msg'=>$err_msg);
-        }else{
-            return array('code'=>1,'msg'=>'获取数据成功');
-        }
-    }
-
-    private function getServiceInfo($url)
+    private function checkUrl($url='')
     {
-        $service_info = model('Services')->getServicesByShopUrl($url);
-        if (empty($service_info)) {
-            $o = new ShortUrl();
-            $shop_url_str = $o->getShortUrl();
-            $service_id = model('Services')->saveServices(session('manager_id'),$url,$shop_url_str,time(),strtotime("+3 day"));
-            $service_info = model('Services')->getServicesByShopUrl($service_id);
+        if (!$url) { //非空检验
+            // return array('code'=>0,'url'=>'','msg'=>'网址不为空');
+            return array('code'=>0,'url'=>'','msg'=>'网址不为空');
         }
 
-        return $service_info;
+        if(!preg_match('/https?:\/\/[\w.]+[\w\/]*[\w.]*[\w=&\+\%.\-\_?]*/is',$url)){
+            return array('code'=>0,'url'=>'','msg'=>'网址不合法');
+        }
+        if (!strstr($url, 'taobao') && !strstr($url, 'tmall')) {
+            return array('code'=>0,'url'=>'','msg'=>'非淘宝天猫链接');
+        }
+        return array('code'=>1,'url'=>$url,'msg'=>'');
     }
 }

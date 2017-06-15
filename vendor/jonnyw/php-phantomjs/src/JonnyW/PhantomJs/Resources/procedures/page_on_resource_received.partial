@@ -1,0 +1,6 @@
+
+if(!response.status) {
+    response = resource;
+    response.urls = urls;
+}
+
