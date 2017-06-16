@@ -5,7 +5,7 @@
  * +----------------------------------------------------------------------
  * | Internal procedure is strictly prohibited.
  * +----------------------------------------------------------------------
- * | Filename: Services.php
+ * | Filename: ShopServices.php
  * | Description: 店铺服务数据
  * +----------------------------------------------------------------------
  * | Created by equinox at 2017-6-15 15:00 
@@ -18,14 +18,14 @@
 namespace app\common\model;
 use think\Db;
 
-class Services extends Base
+class ShopServices extends Base
 {
     public function getServicesByShopUrl($shop_url='',$manager_id='')
     {
         if (!$shop_url) {
             return array();
         }
-        $res = Db::table('wj_services')->where('shop_url',$shop_url)->where('manager_id',$manager_id)->where('is_deleted',0)->find();
+        $res = Db::table('wj_shop_services')->where('shop_url',$shop_url)->where('manager_id',$manager_id)->where('is_deleted',0)->find();
         return $res?$res:array();
     }
 
@@ -34,7 +34,7 @@ class Services extends Base
         if (!$manager_id) {
             return array();
         }
-        $res = Db::table('wj_services')->where('manager_id',$manager_id)->where('is_deleted',0)->select();
+        $res = Db::table('wj_shop_services')->where('manager_id',$manager_id)->where('is_deleted',0)->select();
         return $res?$res:array();
     }
 
@@ -53,7 +53,7 @@ class Services extends Base
     		'create_time'=> time(),
     		'update_time'=> time(),
     	);
-    	$has_add =Db::table('wj_services')->insertGetId($add_data);
+    	$has_add =Db::table('wj_shop_services')->insertGetId($add_data);
         return $has_add;
     }
 
@@ -62,7 +62,7 @@ class Services extends Base
     	# code...
     }
 }
-/*CREATE TABLE `wj_services` (
+/*CREATE TABLE `wj_shop_services` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `manager_id` int(10) unsigned NOT NULL COMMENT '客户id',
   `shop_url` varchar(255) NOT NULL COMMENT '店铺首页网址',

@@ -300,7 +300,7 @@ class Index extends Controller
     {
         //mc
         session('manager_id',1);
-        $service_info = model('Services')->getServicesByShopUrl($url,session('manager_id'));
+        $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
         //没有服务则表示体验
         if (empty($service_info)) {
             $experience_time = config('ExperienceTime');
@@ -308,8 +308,8 @@ class Index extends Controller
             $time_end = strtotime("+".$experience_time." day");
             $o = new ShortUrl($url);
             $shop_url_str = $o->getSN();
-            $service_id = model('Services')->saveServices(session('manager_id'),$url,$shop_url_str,$time_start,$time_end);
-            $service_info = model('Services')->getServicesByShopUrl($url,session('manager_id'));
+            $service_id = model('ShopServices')->saveServices(session('manager_id'),$url,$shop_url_str,$time_start,$time_end);
+            $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
             //添加消费记录，体验3天
             $expense_model = new ExpenseSN();
             $expense_num = $expense_model->getSN();

@@ -1,5 +1,2 @@
 .idea
-*.log
-/runtime
-database.php
-.gitignore
+/rumtime
