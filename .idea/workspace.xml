@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/database.php" afterPath="$PROJECT_DIR$/application/database.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/index/model/Login.php" afterPath="$PROJECT_DIR$/application/index/model/Login.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config.php" afterPath="$PROJECT_DIR$/application/config.php" />
     </list>
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,7 +29,7 @@
             <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="116">
-                  <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+                  <caret line="218" column="0" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
                   <folding>
                     <element signature="e#958#1148#0#PHP" expanded="false" />
                     <element signature="e#1153#5045#0#PHP" expanded="false" />
@@ -67,22 +65,22 @@
                     <element signature="e#6586#6640#0#PHP" expanded="false" />
                     <element signature="e#6642#7532#0#PHP" expanded="false" />
                     <element signature="e#7539#7715#0#PHP" expanded="false" />
-                    <element signature="e#12248#12322#0#PHP" expanded="false" />
-                    <element signature="e#13991#14252#0#PHP" expanded="false" />
-                    <element signature="e#14421#14505#0#PHP" expanded="false" />
-                    <element signature="e#14573#15901#0#PHP" expanded="false" />
-                    <element signature="e#14622#15233#0#PHP" expanded="false" />
-                    <element signature="e#14725#14903#0#PHP" expanded="false" />
-                    <element signature="e#15075#15233#0#PHP" expanded="false" />
-                    <element signature="e#15243#15776#0#PHP" expanded="false" />
-                    <element signature="e#15294#15766#0#PHP" expanded="false" />
-                    <element signature="e#15483#15608#0#PHP" expanded="false" />
-                    <element signature="e#15608#15766#0#PHP" expanded="false" />
-                    <element signature="e#15776#15901#0#PHP" expanded="false" />
-                    <element signature="e#15913#16476#0#PHP" expanded="false" />
-                    <element signature="e#15962#16118#0#PHP" expanded="false" />
-                    <element signature="e#16128#16276#0#PHP" expanded="false" />
-                    <element signature="e#16285#16415#0#PHP" expanded="false" />
+                    <element signature="e#12142#12216#0#PHP" expanded="false" />
+                    <element signature="e#13885#14146#0#PHP" expanded="false" />
+                    <element signature="e#14315#14399#0#PHP" expanded="false" />
+                    <element signature="e#14467#15795#0#PHP" expanded="false" />
+                    <element signature="e#14516#15127#0#PHP" expanded="false" />
+                    <element signature="e#14619#14797#0#PHP" expanded="false" />
+                    <element signature="e#14969#15127#0#PHP" expanded="false" />
+                    <element signature="e#15137#15670#0#PHP" expanded="false" />
+                    <element signature="e#15188#15660#0#PHP" expanded="false" />
+                    <element signature="e#15377#15502#0#PHP" expanded="false" />
+                    <element signature="e#15502#15660#0#PHP" expanded="false" />
+                    <element signature="e#15670#15795#0#PHP" expanded="false" />
+                    <element signature="e#15807#16370#0#PHP" expanded="false" />
+                    <element signature="e#15856#16012#0#PHP" expanded="false" />
+                    <element signature="e#16022#16170#0#PHP" expanded="false" />
+                    <element signature="e#16179#16309#0#PHP" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -134,7 +132,7 @@
             <entry file="file://$PROJECT_DIR$/application/common/model/ShopApi.php">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="46">
-                  <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+                  <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -589,12 +587,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>315</line>
+          <line>312</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>282</line>
+          <line>279</line>
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -650,22 +648,22 @@
             <element signature="e#6586#6640#0#PHP" expanded="false" />
             <element signature="e#6642#7532#0#PHP" expanded="false" />
             <element signature="e#7539#7715#0#PHP" expanded="false" />
-            <element signature="e#12248#12322#0#PHP" expanded="false" />
-            <element signature="e#13991#14252#0#PHP" expanded="false" />
-            <element signature="e#14421#14505#0#PHP" expanded="false" />
-            <element signature="e#14573#15901#0#PHP" expanded="false" />
-            <element signature="e#14622#15233#0#PHP" expanded="false" />
-            <element signature="e#14725#14903#0#PHP" expanded="false" />
-            <element signature="e#15075#15233#0#PHP" expanded="false" />
-            <element signature="e#15243#15776#0#PHP" expanded="false" />
-            <element signature="e#15294#15766#0#PHP" expanded="false" />
-            <element signature="e#15483#15608#0#PHP" expanded="false" />
-            <element signature="e#15608#15766#0#PHP" expanded="false" />
-            <element signature="e#15776#15901#0#PHP" expanded="false" />
-            <element signature="e#15913#16476#0#PHP" expanded="false" />
-            <element signature="e#15962#16118#0#PHP" expanded="false" />
-            <element signature="e#16128#16276#0#PHP" expanded="false" />
-            <element signature="e#16285#16415#0#PHP" expanded="false" />
+            <element signature="e#12142#12216#0#PHP" expanded="false" />
+            <element signature="e#13885#14146#0#PHP" expanded="false" />
+            <element signature="e#14315#14399#0#PHP" expanded="false" />
+            <element signature="e#14467#15795#0#PHP" expanded="false" />
+            <element signature="e#14516#15127#0#PHP" expanded="false" />
+            <element signature="e#14619#14797#0#PHP" expanded="false" />
+            <element signature="e#14969#15127#0#PHP" expanded="false" />
+            <element signature="e#15137#15670#0#PHP" expanded="false" />
+            <element signature="e#15188#15660#0#PHP" expanded="false" />
+            <element signature="e#15377#15502#0#PHP" expanded="false" />
+            <element signature="e#15502#15660#0#PHP" expanded="false" />
+            <element signature="e#15670#15795#0#PHP" expanded="false" />
+            <element signature="e#15807#16370#0#PHP" expanded="false" />
+            <element signature="e#15856#16012#0#PHP" expanded="false" />
+            <element signature="e#16022#16170#0#PHP" expanded="false" />
+            <element signature="e#16179#16309#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -838,22 +836,22 @@
             <element signature="e#6586#6640#0#PHP" expanded="false" />
             <element signature="e#6642#7532#0#PHP" expanded="false" />
             <element signature="e#7539#7715#0#PHP" expanded="false" />
-            <element signature="e#12248#12322#0#PHP" expanded="false" />
-            <element signature="e#13991#14252#0#PHP" expanded="false" />
-            <element signature="e#14421#14505#0#PHP" expanded="false" />
-            <element signature="e#14573#15901#0#PHP" expanded="false" />
-            <element signature="e#14622#15233#0#PHP" expanded="false" />
-            <element signature="e#14725#14903#0#PHP" expanded="false" />
-            <element signature="e#15075#15233#0#PHP" expanded="false" />
-            <element signature="e#15243#15776#0#PHP" expanded="false" />
-            <element signature="e#15294#15766#0#PHP" expanded="false" />
-            <element signature="e#15483#15608#0#PHP" expanded="false" />
-            <element signature="e#15608#15766#0#PHP" expanded="false" />
-            <element signature="e#15776#15901#0#PHP" expanded="false" />
-            <element signature="e#15913#16476#0#PHP" expanded="false" />
-            <element signature="e#15962#16118#0#PHP" expanded="false" />
-            <element signature="e#16128#16276#0#PHP" expanded="false" />
-            <element signature="e#16285#16415#0#PHP" expanded="false" />
+            <element signature="e#12142#12216#0#PHP" expanded="false" />
+            <element signature="e#13885#14146#0#PHP" expanded="false" />
+            <element signature="e#14315#14399#0#PHP" expanded="false" />
+            <element signature="e#14467#15795#0#PHP" expanded="false" />
+            <element signature="e#14516#15127#0#PHP" expanded="false" />
+            <element signature="e#14619#14797#0#PHP" expanded="false" />
+            <element signature="e#14969#15127#0#PHP" expanded="false" />
+            <element signature="e#15137#15670#0#PHP" expanded="false" />
+            <element signature="e#15188#15660#0#PHP" expanded="false" />
+            <element signature="e#15377#15502#0#PHP" expanded="false" />
+            <element signature="e#15502#15660#0#PHP" expanded="false" />
+            <element signature="e#15670#15795#0#PHP" expanded="false" />
+            <element signature="e#15807#16370#0#PHP" expanded="false" />
+            <element signature="e#15856#16012#0#PHP" expanded="false" />
+            <element signature="e#16022#16170#0#PHP" expanded="false" />
+            <element signature="e#16179#16309#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1144,7 +1142,7 @@
     <entry file="file://$PROJECT_DIR$/application/common/model/ShopApi.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="46">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1160,7 +1158,7 @@
     <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
-          <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+          <caret line="218" column="0" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
           <folding>
             <element signature="e#958#1148#0#PHP" expanded="false" />
             <element signature="e#1153#5045#0#PHP" expanded="false" />
@@ -1196,22 +1194,22 @@
             <element signature="e#6586#6640#0#PHP" expanded="false" />
             <element signature="e#6642#7532#0#PHP" expanded="false" />
             <element signature="e#7539#7715#0#PHP" expanded="false" />
-            <element signature="e#12248#12322#0#PHP" expanded="false" />
-            <element signature="e#13991#14252#0#PHP" expanded="false" />
-            <element signature="e#14421#14505#0#PHP" expanded="false" />
-            <element signature="e#14573#15901#0#PHP" expanded="false" />
-            <element signature="e#14622#15233#0#PHP" expanded="false" />
-            <element signature="e#14725#14903#0#PHP" expanded="false" />
-            <element signature="e#15075#15233#0#PHP" expanded="false" />
-            <element signature="e#15243#15776#0#PHP" expanded="false" />
-            <element signature="e#15294#15766#0#PHP" expanded="false" />
-            <element signature="e#15483#15608#0#PHP" expanded="false" />
-            <element signature="e#15608#15766#0#PHP" expanded="false" />
-            <element signature="e#15776#15901#0#PHP" expanded="false" />
-            <element signature="e#15913#16476#0#PHP" expanded="false" />
-            <element signature="e#15962#16118#0#PHP" expanded="false" />
-            <element signature="e#16128#16276#0#PHP" expanded="false" />
-            <element signature="e#16285#16415#0#PHP" expanded="false" />
+            <element signature="e#12142#12216#0#PHP" expanded="false" />
+            <element signature="e#13885#14146#0#PHP" expanded="false" />
+            <element signature="e#14315#14399#0#PHP" expanded="false" />
+            <element signature="e#14467#15795#0#PHP" expanded="false" />
+            <element signature="e#14516#15127#0#PHP" expanded="false" />
+            <element signature="e#14619#14797#0#PHP" expanded="false" />
+            <element signature="e#14969#15127#0#PHP" expanded="false" />
+            <element signature="e#15137#15670#0#PHP" expanded="false" />
+            <element signature="e#15188#15660#0#PHP" expanded="false" />
+            <element signature="e#15377#15502#0#PHP" expanded="false" />
+            <element signature="e#15502#15660#0#PHP" expanded="false" />
+            <element signature="e#15670#15795#0#PHP" expanded="false" />
+            <element signature="e#15807#16370#0#PHP" expanded="false" />
+            <element signature="e#15856#16012#0#PHP" expanded="false" />
+            <element signature="e#16022#16170#0#PHP" expanded="false" />
+            <element signature="e#16179#16309#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
