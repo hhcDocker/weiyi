@@ -13,7 +13,7 @@
  * +----------------------------------------------------------------------
  */
  
-namespace app\mall_buyer_api\model;
+namespace app\index\model;
 use app\index\model\SMS;
 use think\Model;
 use think\Db;

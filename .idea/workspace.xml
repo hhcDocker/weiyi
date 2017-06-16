@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/application/tags.php" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/common/model/ExpenseRecords.php" afterPath="$PROJECT_DIR$/application/common/model/ExpenseRecords.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/common/model/Services.php" afterPath="$PROJECT_DIR$/application/common/model/Services.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/weibao/controller/Index.php" afterPath="$PROJECT_DIR$/application/weibao/controller/Index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runtime/log/201706/15.log" afterPath="$PROJECT_DIR$/runtime/log/201706/15.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/database.php" afterPath="$PROJECT_DIR$/application/database.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/index/model/Login.php" afterPath="$PROJECT_DIR$/application/index/model/Login.php" />
     </list>
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,14 +24,14 @@
     <favorites_list name="wtiao" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4920836">
+    <splitter split-orientation="horizontal" split-proportion="0.5418672">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="Index.php" pinned="false" current-in-tab="false">
+          <file leaf-file-name="Index.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="170">
-                  <caret line="199" column="31" selection-start-line="199" selection-start-column="20" selection-end-line="199" selection-end-column="31" />
+                <state relative-caret-position="99">
+                  <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
                   <folding>
                     <element signature="e#958#1148#0#PHP" expanded="false" />
                     <element signature="e#1153#5045#0#PHP" expanded="false" />
@@ -91,241 +88,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="App.php" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/thinkphp/library/think/App.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="191">
-                  <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Error.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Error.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="829">
-                  <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ExpenseRecords.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/application/common/model/ExpenseRecords.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="136">
-                  <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Index.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/application/index/controller/Index.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="IndexBak.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/application/weibao/controller/IndexBak.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="344">
-                  <caret line="243" column="0" selection-start-line="243" selection-start-column="0" selection-end-line="243" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#1020#1210#0#PHP" expanded="false" />
-                    <element signature="e#1215#5054#0#PHP" expanded="false" />
-                    <element signature="e#1443#5048#0#PHP" expanded="false" />
-                    <element signature="e#1502#4826#0#PHP" expanded="false" />
-                    <element signature="e#2109#2624#0#PHP" expanded="false" />
-                    <element signature="e#2215#2609#0#PHP" expanded="false" />
-                    <element signature="e#2338#2590#0#PHP" expanded="false" />
-                    <element signature="e#2395#2551#0#PHP" expanded="false" />
-                    <element signature="e#2472#2551#0#PHP" expanded="false" />
-                    <element signature="e#2674#2932#0#PHP" expanded="false" />
-                    <element signature="e#2959#3195#0#PHP" expanded="false" />
-                    <element signature="e#3012#3189#0#PHP" expanded="false" />
-                    <element signature="e#3218#3548#0#PHP" expanded="false" />
-                    <element signature="e#3228#3503#0#PHP" expanded="false" />
-                    <element signature="e#3359#3453#0#PHP" expanded="false" />
-                    <element signature="e#3460#3503#0#PHP" expanded="false" />
-                    <element signature="e#3515#3548#0#PHP" expanded="false" />
-                    <element signature="e#4051#4826#0#PHP" expanded="false" />
-                    <element signature="e#4067#4701#0#PHP" expanded="false" />
-                    <element signature="e#4846#5048#0#PHP" expanded="false" />
-                    <element signature="e#4883#4998#0#PHP" expanded="false" />
-                    <element signature="e#5059#5106#0#PHP" expanded="false" />
-                    <element signature="e#5111#5558#0#PHP" expanded="false" />
-                    <element signature="e#5163#5552#0#PHP" expanded="false" />
-                    <element signature="e#5238#5552#0#PHP" expanded="false" />
-                    <element signature="e#5350#5552#0#PHP" expanded="false" />
-                    <element signature="e#5387#5502#0#PHP" expanded="false" />
-                    <element signature="e#5562#5588#0#PHP" expanded="false" />
-                    <element signature="e#5590#6323#0#PHP" expanded="false" />
-                    <element signature="e#5629#6320#0#PHP" expanded="false" />
-                    <element signature="e#5672#6259#0#PHP" expanded="false" />
-                    <element signature="e#5989#6259#0#PHP" expanded="false" />
-                    <element signature="e#6325#6419#0#PHP" expanded="false" />
-                    <element signature="e#6421#6498#0#PHP" expanded="false" />
-                    <element signature="e#6500#6604#0#PHP" expanded="false" />
-                    <element signature="e#6606#6655#0#PHP" expanded="false" />
-                    <element signature="e#6657#7105#0#PHP" expanded="false" />
-                    <element signature="e#7109#7163#0#PHP" expanded="false" />
-                    <element signature="e#7165#8055#0#PHP" expanded="false" />
-                    <element signature="e#8061#8126#0#PHP" expanded="false" />
-                    <element signature="e#9192#9255#0#PHP" expanded="false" />
-                    <element signature="e#10060#10130#0#PHP" expanded="false" />
-                    <element signature="e#10220#10283#0#PHP" expanded="false" />
-                    <element signature="e#10659#10722#0#PHP" expanded="false" />
-                    <element signature="e#10844#10909#0#PHP" expanded="false" />
-                    <element signature="e#11214#11284#0#PHP" expanded="false" />
-                    <element signature="e#11377#11915#0#PHP" expanded="false" />
-                    <element signature="e#11428#11909#0#PHP" expanded="false" />
-                    <element signature="e#11577#11766#0#PHP" expanded="false" />
-                    <element signature="e#11848#11909#0#PHP" expanded="false" />
-                    <element signature="e#11921#13387#0#PHP" expanded="false" />
-                    <element signature="e#11991#12163#0#PHP" expanded="false" />
-                    <element signature="e#12416#12478#0#PHP" expanded="false" />
-                    <element signature="e#12605#12668#0#PHP" expanded="false" />
-                    <element signature="e#13001#13353#0#PHP" expanded="false" />
-                    <element signature="e#13033#13343#0#PHP" expanded="false" />
-                    <element signature="e#13458#13630#0#PHP" expanded="false" />
-                    <element signature="e#14080#14143#0#PHP" expanded="false" />
-                    <element signature="e#14330#14400#0#PHP" expanded="false" />
-                    <element signature="e#14495#15091#0#PHP" expanded="false" />
-                    <element signature="e#14623#14795#0#PHP" expanded="false" />
-                    <element signature="e#14850#15085#0#PHP" expanded="false" />
-                    <element signature="e#15044#15085#0#PHP" expanded="false" />
-                    <element signature="e#15097#15789#0#PHP" expanded="false" />
-                    <element signature="e#15269#15350#0#PHP" expanded="false" />
-                    <element signature="e#15405#15783#0#PHP" expanded="false" />
-                    <element signature="e#15437#15732#0#PHP" expanded="false" />
-                    <element signature="e#15742#15783#0#PHP" expanded="false" />
-                    <element signature="e#15795#16539#0#PHP" expanded="false" />
-                    <element signature="e#15923#16095#0#PHP" expanded="false" />
-                    <element signature="e#16150#16533#0#PHP" expanded="false" />
-                    <element signature="e#16182#16482#0#PHP" expanded="false" />
-                    <element signature="e#16492#16533#0#PHP" expanded="false" />
-                    <element signature="e#16545#18174#0#PHP" expanded="false" />
-                    <element signature="e#16674#16849#0#PHP" expanded="false" />
-                    <element signature="e#16858#18168#0#PHP" expanded="false" />
-                    <element signature="e#16907#17512#0#PHP" expanded="false" />
-                    <element signature="e#17010#17188#0#PHP" expanded="false" />
-                    <element signature="e#17354#17512#0#PHP" expanded="false" />
-                    <element signature="e#17522#18043#0#PHP" expanded="false" />
-                    <element signature="e#17573#18033#0#PHP" expanded="false" />
-                    <element signature="e#17756#17875#0#PHP" expanded="false" />
-                    <element signature="e#17875#18033#0#PHP" expanded="false" />
-                    <element signature="e#18043#18168#0#PHP" expanded="false" />
-                    <element signature="e#18180#19271#0#PHP" expanded="false" />
-                    <element signature="e#18278#18357#0#PHP" expanded="false" />
-                    <element signature="e#18366#19110#0#PHP" expanded="false" />
-                    <element signature="e#18544#19100#0#PHP" expanded="false" />
-                    <element signature="e#18596#18825#0#PHP" expanded="false" />
-                    <element signature="e#18725#18825#0#PHP" expanded="false" />
-                    <element signature="e#18953#19029#0#PHP" expanded="false" />
-                    <element signature="e#19043#19100#0#PHP" expanded="false" />
-                    <element signature="e#19119#19265#0#PHP" expanded="false" />
-                    <element signature="e#19197#19265#0#PHP" expanded="false" />
-                    <element signature="e#19277#19764#0#PHP" expanded="false" />
-                    <element signature="e#19400#19727#0#PHP" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ShortUrl.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/application/common/utils/SN/ShortUrl.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="215">
-                  <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="route.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/application/route.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="221">
-                  <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="Index.php" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="191">
-                  <caret line="295" column="0" selection-start-line="295" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#958#1148#0#PHP" expanded="false" />
-                    <element signature="e#1153#5045#0#PHP" expanded="false" />
-                    <element signature="e#1381#5039#0#PHP" expanded="false" />
-                    <element signature="e#1440#4817#0#PHP" expanded="false" />
-                    <element signature="e#2047#2562#0#PHP" expanded="false" />
-                    <element signature="e#2153#2547#0#PHP" expanded="false" />
-                    <element signature="e#2276#2528#0#PHP" expanded="false" />
-                    <element signature="e#2333#2489#0#PHP" expanded="false" />
-                    <element signature="e#2410#2489#0#PHP" expanded="false" />
-                    <element signature="e#2612#2914#0#PHP" expanded="false" />
-                    <element signature="e#2941#3177#0#PHP" expanded="false" />
-                    <element signature="e#2994#3171#0#PHP" expanded="false" />
-                    <element signature="e#3200#3530#0#PHP" expanded="false" />
-                    <element signature="e#3210#3485#0#PHP" expanded="false" />
-                    <element signature="e#3341#3435#0#PHP" expanded="false" />
-                    <element signature="e#3442#3485#0#PHP" expanded="false" />
-                    <element signature="e#3497#3530#0#PHP" expanded="false" />
-                    <element signature="e#4042#4817#0#PHP" expanded="false" />
-                    <element signature="e#4058#4692#0#PHP" expanded="false" />
-                    <element signature="e#4837#5039#0#PHP" expanded="false" />
-                    <element signature="e#4874#4989#0#PHP" expanded="false" />
-                    <element signature="e#5048#5064#0#PHP" expanded="false" />
-                    <element signature="e#5066#5799#0#PHP" expanded="false" />
-                    <element signature="e#5105#5796#0#PHP" expanded="false" />
-                    <element signature="e#5148#5735#0#PHP" expanded="false" />
-                    <element signature="e#5465#5735#0#PHP" expanded="false" />
-                    <element signature="e#5802#5896#0#PHP" expanded="false" />
-                    <element signature="e#5898#5975#0#PHP" expanded="false" />
-                    <element signature="e#5977#6081#0#PHP" expanded="false" />
-                    <element signature="e#6083#6132#0#PHP" expanded="false" />
-                    <element signature="e#6134#6582#0#PHP" expanded="false" />
-                    <element signature="e#6586#6640#0#PHP" expanded="false" />
-                    <element signature="e#6642#7532#0#PHP" expanded="false" />
-                    <element signature="e#12150#12224#0#PHP" expanded="false" />
-                    <element signature="e#13893#14154#0#PHP" expanded="false" />
-                    <element signature="e#14323#14407#0#PHP" expanded="false" />
-                    <element signature="e#14475#15803#0#PHP" expanded="false" />
-                    <element signature="e#14524#15135#0#PHP" expanded="false" />
-                    <element signature="e#14627#14805#0#PHP" expanded="false" />
-                    <element signature="e#14977#15135#0#PHP" expanded="false" />
-                    <element signature="e#15145#15678#0#PHP" expanded="false" />
-                    <element signature="e#15196#15668#0#PHP" expanded="false" />
-                    <element signature="e#15385#15510#0#PHP" expanded="false" />
-                    <element signature="e#15510#15668#0#PHP" expanded="false" />
-                    <element signature="e#15678#15803#0#PHP" expanded="false" />
-                    <element signature="e#15815#16378#0#PHP" expanded="false" />
-                    <element signature="e#15864#16020#0#PHP" expanded="false" />
-                    <element signature="e#16030#16178#0#PHP" expanded="false" />
-                    <element signature="e#16187#16317#0#PHP" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="Connection.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/thinkphp/library/think/db/Connection.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="179">
+                <state relative-caret-position="108">
                   <caret line="484" column="0" selection-start-line="484" selection-start-column="0" selection-end-line="484" selection-end-column="0" />
                   <folding />
                 </state>
@@ -335,8 +101,8 @@
           <file leaf-file-name="Query.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/thinkphp/library/think/db/Query.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="173">
-                  <caret line="2365" column="0" selection-start-line="2365" selection-start-column="0" selection-end-line="2365" selection-end-column="0" />
+                <state relative-caret-position="-3275">
+                  <caret line="2086" column="0" selection-start-line="2086" selection-start-column="0" selection-end-line="2086" selection-end-column="0" />
                   <folding>
                     <marker date="1495428026387" expanded="true" signature="9488:9528" ph="SELECT * FRO... ${$this-&gt;getTable()}" />
                   </folding>
@@ -344,11 +110,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ShopApi.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/application/common/model/ShopApi.php">
+          <file leaf-file-name="Request.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Request.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="182">
-                  <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+                <state relative-caret-position="14">
+                  <caret line="173" column="0" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -357,8 +123,18 @@
           <file leaf-file-name="Loader.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Loader.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="179">
-                  <caret line="382" column="0" selection-start-line="382" selection-start-column="0" selection-end-line="382" selection-end-column="0" />
+                <state relative-caret-position="-708">
+                  <caret line="380" column="0" selection-start-line="380" selection-start-column="0" selection-end-line="380" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ShopApi.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/application/common/model/ShopApi.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="46">
+                  <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -369,6 +145,40 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="306">
                   <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="helper.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/thinkphp/helper.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="65">
+                  <caret line="295" column="0" selection-start-line="295" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ShortUrl.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/application/common/utils/SN/ShortUrl.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="62">
+                  <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="ExpenseRecords.php" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/application/common/model/ExpenseRecords.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="108">
+                  <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -392,8 +202,8 @@
         <option value="$PROJECT_DIR$/application/common/model/Services.php" />
         <option value="$PROJECT_DIR$/application/weibao/controller/IndexBak.php" />
         <option value="$PROJECT_DIR$/application/common/utils/SN/ShortUrl.php" />
-        <option value="$PROJECT_DIR$/application/common/model/ExpenseRecords.php" />
         <option value="$PROJECT_DIR$/application/weibao/controller/Index.php" />
+        <option value="$PROJECT_DIR$/application/common/model/ExpenseRecords.php" />
       </list>
     </option>
   </component>
@@ -411,10 +221,10 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="529" />
+    <option name="y" value="159" />
+    <option name="width" value="1396" />
+    <option name="height" value="887" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -703,18 +513,18 @@
       <workItem from="1497342467886" duration="5227000" />
       <workItem from="1497428242476" duration="6991000" />
       <workItem from="1497510205044" duration="11652000" />
-      <workItem from="1497576083048" duration="2737000" />
+      <workItem from="1497576083048" duration="4496000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26607000" />
+    <option name="totallyTimeSpent" value="28366000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="529" y="159" width="1396" height="887" extended-state="1" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15921193" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22346786" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28432432" sideWeight="0.5021299" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -724,7 +534,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32324323" sideWeight="0.4978701" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.50132275" sideWeight="0.4978701" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -763,24 +573,9 @@
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>302</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>310</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/index/controller/Index.php</url>
           <line>34</line>
           <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>315</line>
-          <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/thinkphp/library/think/db/Connection.php</url>
@@ -794,24 +589,24 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>210</line>
-          <option name="timeStamp" value="48" />
+          <line>315</line>
+          <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>317</line>
-          <option name="timeStamp" value="49" />
+          <line>282</line>
+          <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>221</line>
-          <option name="timeStamp" value="50" />
+          <line>257</line>
+          <option name="timeStamp" value="53" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="51" />
+      <option name="time" value="54" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1264,18 +1059,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/thinkphp/helper.php">
+    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Response.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="168" column="0" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
+        <state relative-caret-position="179">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Error.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="829">
+          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/App.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/common/utils/SN/ShortUrl.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
+        <state relative-caret-position="62">
           <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/thinkphp/helper.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="65">
+          <caret line="295" column="0" selection-start-line="295" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1290,49 +1109,49 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/common/model/ExpenseRecords.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Loader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="382" column="0" selection-start-line="382" selection-start-column="0" selection-end-line="382" selection-end-column="0" />
+        <state relative-caret-position="108">
+          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/thinkphp/library/think/db/Query.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="2365" column="0" selection-start-line="2365" selection-start-column="0" selection-end-line="2365" selection-end-column="0" />
+        <state relative-caret-position="-3275">
+          <caret line="2086" column="0" selection-start-line="2086" selection-start-column="0" selection-end-line="2086" selection-end-column="0" />
           <folding>
             <marker date="1495428026387" expanded="true" signature="9488:9528" ph="SELECT * FRO... ${$this-&gt;getTable()}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/common/model/ShopApi.php">
+    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Request.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+        <state relative-caret-position="14">
+          <caret line="173" column="0" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Response.php">
+    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Loader.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+        <state relative-caret-position="-708">
+          <caret line="380" column="0" selection-start-line="380" selection-start-column="0" selection-end-line="380" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/common/model/ShopApi.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/thinkphp/library/think/db/Connection.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
+        <state relative-caret-position="108">
           <caret line="484" column="0" selection-start-line="484" selection-start-column="0" selection-end-line="484" selection-end-column="0" />
           <folding />
         </state>
@@ -1340,8 +1159,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="199" column="31" selection-start-line="199" selection-start-column="20" selection-end-line="199" selection-end-column="31" />
+        <state relative-caret-position="99">
+          <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
           <folding>
             <element signature="e#958#1148#0#PHP" expanded="false" />
             <element signature="e#1153#5045#0#PHP" expanded="false" />
@@ -1394,22 +1213,6 @@
             <element signature="e#16030#16178#0#PHP" expanded="false" />
             <element signature="e#16187#16317#0#PHP" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Error.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="829">
-          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/App.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
