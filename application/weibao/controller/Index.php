@@ -153,7 +153,8 @@ class Index extends Controller
     }
 	public function tmShopCommodityList()
     {
-        return $this->fetch('tm_shop_commodity_list');
+        $shopUrl=session('shopUrl');
+        return $this->fetch('tm_shop_commodity_list',array('shopUrl'=>$shopUrl));
     }
 	/**
      * 获取天猫评价数据
@@ -199,6 +200,7 @@ class Index extends Controller
      */
     public function getShopData() {
         $url = input('param.url') ? input('param.url'):'';
+		session('shopUrl',$url);
         $flag = input('param.flag') ? input('param.flag'):0;
         $checkUrl = $this->checkUrl($url);
         if (!$checkUrl['code']) {
@@ -246,7 +248,7 @@ class Index extends Controller
             //dump($response->getConsole());
             $data=$response->getUrlData();
             //end
-
+			$shopOtherData=$response->getShopOtherData();
             if (!$data) {
                 echo json_encode($response->getConsole());
                 return;
@@ -289,7 +291,6 @@ class Index extends Controller
                 }
             }
         }
-
 		return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
     }
 

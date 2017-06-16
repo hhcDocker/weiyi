@@ -105,7 +105,14 @@ phantom.onError = function(msg, trace) {
  */
 page.open ('{{ input.getUrl() }}', '{{ input.getMethod() }}', '{{ input.getBody() }}', function (status) {
     [[ engine.load('page_body_styles') ]]
-     
+    response.shopOtherData = page.evaluate(function(){
+	    var obj={
+	    	shopName:document.querySelector('.name').innerHTML,
+	    	collectCounter:document.querySelector('.collect-counter').innerHTML,
+	    	logo:document.querySelector('.logo img').src,
+	    };
+    	return obj;
+    });
     window.setTimeout(function () { 
         procedure.execute(status);
     }, {{ input.getTimeout() - 200 }});

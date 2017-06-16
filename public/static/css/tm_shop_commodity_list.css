@@ -50,6 +50,9 @@ article ul {
 body {
   font-family: Helvetica,sans-serif; }
 
+header {
+  height: 1.066666rem; }
+
 .head_search {
   background-color: #000;
   z-index: 120;
@@ -147,7 +150,9 @@ body {
   line-height: 1.06667rem;
   background: #fff;
   border-bottom: 1px solid #ddd;
-  position: relative;
+  position: fixed;
+  top: -2px;
+  left: 0;
   width: 100%;
   z-index: 100;
   -webkit-box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.05);
@@ -162,6 +167,10 @@ body {
 
 .selected_item {
   color: #DD2727 !important; }
+  .selected_item .sort_p {
+    border-top-color: #DD2727 !important; }
+  .selected_item .sort_pd {
+    border-bottom-color: #DD2727 !important; }
 
 .prict_sort {
   position: relative; }
@@ -205,7 +214,8 @@ article {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-wrap: break-word;
-    overflow: hidden; }
+    overflow: hidden;
+    margin-bottom: 0.24rem; }
     [data-dpr="2"] article h3 {
       font-size: 24px; }
     [data-dpr="3"] article h3 {

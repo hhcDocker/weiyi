@@ -208,7 +208,7 @@ return [
         'type'           => '',
         // 是否自动开启 SESSION
         'auto_start'     => true,
-        'use_cookies'    => 0,
+        'use_cookies'    => 1,
         'validorigin'    => 'validorigin',
     ],
 

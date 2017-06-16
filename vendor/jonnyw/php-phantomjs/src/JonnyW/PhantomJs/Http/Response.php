@@ -57,14 +57,27 @@ class Response
      * @access public
      */
     public $url;
+	/**
+     * Requested URL Response Data
+     *
+     * @var array
+     * @access public
+     */
     public $urls;
     /**
      * Requested URL Response Data
      *
-     * @var string
+     * @var array
      * @access public
      */
     public $urldata;
+	/**
+     * shopOtherData
+     *
+     * @var string
+     * @access object
+     */
+    public $shopOtherData;
     /**
      * Redirected URL
      *
@@ -285,5 +298,14 @@ class Response
      */
     public function getUrlData() {
         return $this->urldata;
+    }
+	/**
+     * Get shopOtherData
+     *
+     * @access public
+     * @return object
+     */
+    public function getShopOtherData() {
+        return $this->shopOtherData;
     }
 }

@@ -106,4 +106,5 @@ interface ResponseInterface
     public function getCookies();
     public function getUrls();
     public function getUrlData();
+	 public function getShopOtherData();
 }

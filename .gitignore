@@ -1,2 +1,6 @@
 .idea
 /rumtime
+.project
+runtime
+public/static/css/*.scss
+public/static/css/*.map
