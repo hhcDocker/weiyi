@@ -198,22 +198,19 @@ class Index extends Controller
      * @return [type]        [description]
      */
     public function getShopData() {
-        echo "string201";
         $url = input('param.url') ? input('param.url'):'';
         $flag = input('param.flag') ? input('param.flag'):0;
         $checkUrl = $this->checkUrl($url);
-        var_dump($checkUrl);
         if (!$checkUrl['code']) {
-            dump($checkUrl);
+            echo json_encode($checkUrl);
             return;
         }
         //mc 暂时
         //加上判断是否过期
         //考虑短链接情况，查表获取真实链接
         $url_info = $this->getShopShortUrlInfo($url);
-        var_dump($url_info);
         if (empty($url_info)){
-            echo "获取真实链接失败";
+            echo json_encode(array('code'=>0,'msg'=>'获取真实链接失败'));
             return;
         }
         $service_id = $url_info['id'];
@@ -284,7 +281,7 @@ class Index extends Controller
                 }
             }
             if ($flag_error) {
-                echo "获取数据失败";
+                echo json_encode(array('code'=>0,'msg'=>'获取数据失败'));
                 return;
             }else{
                 //软删除之前记录
@@ -303,9 +300,7 @@ class Index extends Controller
     {
         //mc
         session('manager_id',1);
-        echo "string";
         $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
-        echo "string";
         //没有服务则表示体验
         if (empty($service_info)) {
             $experience_time = config('ExperienceTime');
