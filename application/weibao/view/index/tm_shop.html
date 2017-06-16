@@ -99,8 +99,21 @@
 				</ul>
 			</section>
 			<section class="enhenced" v-if="enhenced"> 
-				<ul>
-					<li v-for="item in enhenced.data.list" @click="toDetailByEnhenced(item)">
+				<div class="title_container_itemsearch" v-if="enhenced.title">
+					<span>{{enhenced.title}}</span>
+				</div>
+				<ul v-if='enhenced.list.length>1' class="girdList">
+					<li v-for="item in enhenced.list" @click="toDetailByEnhenced(item)">
+						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
+						<h2 v-text="item.title"></h2>
+						<p>
+							<span>￥{{item.priceYuan}}</span><span class="priceFen">.00</span><del>￥{{item.price}}</del>
+						</p>
+					</li>
+					
+				</ul>
+				<ul v-else>
+					<li v-for="item in enhenced.list" @click="toDetailByEnhenced(item)">
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
 						<h2 v-text="item.title"></h2>
 						<p>
@@ -155,7 +168,7 @@
 					<span>-为你推荐-</span>
 				</div>
 				<ul class="data_grid">
-					<li v-for="item in individuationData[0].data.list" @click='toDeatail(item)'>
+					<li v-for="item in individuationData[0].list" @click='toDeatail(item)'>
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
 						<h2 v-text="item.title"></h2>
 						<p><span>￥{{item.priceYuan}}</span><span class="priceFen">.00</span></p>
@@ -183,11 +196,11 @@
 					enhenced=apiData;
 				}else if(data[i].api_url=="mtop.taobao.rankingListRecommendService.getItemLists"){
 					getItemLists=apiData;
-					rankingData=getItemLists.data.favoredByDiamonds;
+					console.log(apiData)
+					rankingData=getItemLists.favoredByDiamonds;
 				}else if(data[i].api_url=="mtop.taobao.shop.individuation"){
 					individuationData.push(apiData);
 				}
-				console.log(apiData)
 			}
 			(function(){
 				var len1=shopData.data.view.subViews.length;
@@ -296,11 +309,11 @@
 					selectRinking:function(index){
 						this.rinkingIndex=index;
 						if(index==0){
-							this.rankingData=getItemLists.data.favoredByDiamonds;
+							this.rankingData=getItemLists.favoredByDiamonds;
 						}else if(index==1){
-							this.rankingData=getItemLists.data.totalCollect;
+							this.rankingData=getItemLists.totalCollect;
 						}else if(index==2){
-							this.rankingData=getItemLists.data.totalSold;
+							this.rankingData=getItemLists.totalSold;
 						}
 					},
 					toDeatail:function(item){
