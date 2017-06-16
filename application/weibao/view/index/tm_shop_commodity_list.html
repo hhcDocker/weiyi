@@ -26,7 +26,7 @@
 			</header>
 			<article>
 				<ul>
-					<li v-for='item in cmdList'>
+					<li v-for='item in cmdList' @click="teDetail(item)">
 						<div class="img_wrap"><img v-if="$index<=5" :src="item.img" :alt="item.title"  class="cmd_item"/><img v-else :data-src="item.img" src="data:image/webp;base64,UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA==" :tiele="item.title" class="cmd_item"/>
 						</div>
 						<div class="ti_info">
@@ -98,7 +98,16 @@
             			},
             			sortByPrice:function(item){
             				
-            			}
+            			},
+            			teDetail:function(item){
+            				var id = this.getQueryString('id',item.url.slice(item.url.indexOf("?")))
+            				location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+            			},
+            			getQueryString:function (name,url) { 
+							var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+							var r = url.substr(1).match(reg); 
+							if (r != null) return unescape(r[2]); return null; 
+						},
             		}
             	})
             function jsonp(a){

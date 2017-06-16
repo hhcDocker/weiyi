@@ -90,7 +90,7 @@
 					<span>{{item['title'+($index+1)]}}</span>
 				</div>
 				<ul class="data_grid" v-if="$index==0">
-					<li v-for="items in item.list" @click="toDetailGird(items,$index)">
+					<li v-for="items in item.list" @click="toDetailGird(items,$parent.$index)">
 							<a href="javascript:void(0)"><img :src="items.item1.imgUrl" alt="" /></a>
 							<h2 v-text="items.item1.title"></h2>
 							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
@@ -368,7 +368,6 @@
 					},
 					toDetailGird:function(item,index){
 						if(index==0){
-							
 							var id = item['item1'].nid;
 						}else if(index==1){
 							var id = item['item2'].nid;
