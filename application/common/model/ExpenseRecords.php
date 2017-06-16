@@ -34,7 +34,7 @@ class ExpenseRecords extends Base
     */
     public function addExpense($expense_num='', $payment_method=0,$trade_num='',$service_id=0,$manager_id=0,$payment_amount=0,$service_start_time=0,$service_end_time=0,$trade_status=0)
     {
-        if (!$expense_num ||!$payment_method ||!$service_id ||!$manager_id ||!$service_start_time ||!$service_end_time) {
+        if (!$expense_num ||!$service_id ||!$manager_id ||!$service_start_time ||!$service_end_time) {
           return 0;
         }
         $expense_data = [

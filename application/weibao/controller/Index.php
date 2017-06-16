@@ -214,82 +214,85 @@ class Index extends Controller
             return;
         }
         $service_id = $url_info['id'];
-
+        $api_info= array();
         //不获取最新数据
         if (!$flag) {
+            //判断服务是否过期
             $api_info = model('ShopApi')->getShopDataByShopUrl($url);
             if (!empty($api_info)) {
-                return $api_info;
+                $shop_data = $api_info;
             }
         }
+        if (empty($api_info)){
+            //把这块剥离为服务层，私有化
+            $client = Client::getInstance();
+            $client->getProcedureCompiler()->clearCache();
+            $client->getEngine()->setPath($_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe');
+            $client->isLazy();
+            /**
+             * @see JonnyW\PhantomJs\Http\Request
+             **/
+            $request = $client->getMessageFactory()->createRequest($url, 'GET');
+            //$request->setDelay(1000);
+            /**
+             * @see JonnyW\PhantomJs\Http\Response
+             **/
+            $request->setTimeout(80000);
+            $response = $client->getMessageFactory()->createResponse();
 
-        //把这块剥离为服务层，私有化
-        $client = Client::getInstance();
-        $client->getProcedureCompiler()->clearCache();
-        $client->getEngine()->setPath($_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe');
-        $client->isLazy();
-        /** 
-         * @see JonnyW\PhantomJs\Http\Request
-         **/
-        $request = $client->getMessageFactory()->createRequest($url, 'GET');
-        //$request->setDelay(1000);
-        /** 
-         * @see JonnyW\PhantomJs\Http\Response 
-         **/
-		$request->setTimeout(80000);
-        $response = $client->getMessageFactory()->createResponse();
-    
-         // Send the request
-        $client->send($request, $response);
-        //dump( $response->getUrls());
-        //dump($response->getConsole());
-        $data=$response->getUrlData();
-        //end
-        
-        if (!$data) {
-            echo "获取数据失败";
-            return;
-        }
+            // Send the request
+            $client->send($request, $response);
+            //dump( $response->getUrls());
+            //dump($response->getConsole());
+            $data=$response->getUrlData();
+            //end
 
-        $shop_data=array();
-        $flag_error =0;
-        //校验是否全部获取到
-        foreach ($data as $k => $v) {
-            $v = preg_replace('/^mtopjsonp\d\(([\s\S]+)\)/','$1', $v);
-            $v = json_decode($v,true);
-            if ($v['ret'][0]!="SUCCESS::调用成功"){
-                $flag_error=1;
-                break;
-            }else{
-                if ($k==0){ //第一个接口
-                    $data=$v['data']['data'];
-                    $view=$v['data']['view'];
+            if (!$data) {
+                echo json_encode($response->getConsole());
+                return;
+            }
+
+            $shop_data=array();
+            $flag_error =0;
+            //校验是否全部获取到
+            foreach ($data as $k => $v) {
+                $v = preg_replace('/^mtopjsonp\d\(([\s\S]+)\)/','$1', $v);
+                $v = json_decode($v,true);
+                if ($v['ret'][0]!="SUCCESS::调用成功"){
+                    $flag_error=1;
+                    break;
                 }else{
-                    $data = $v['data'];
-                    $view = array();
+                    if ($k==0){ //第一个接口
+                        $data=$v['data']['data'];
+                        $view=$v['data']['view'];
+                    }else{
+                        $data = $v['data'];
+                        $view = array();
+                    }
+                    $shop_data[]=array(
+                        'shop_url'=> $url,
+                        'api_url'=> $v['api'],
+                        'api_data'=> json_encode($data),
+                        'api_view'=> json_encode($view),
+                        'is_deleted'=> 0,
+                        'create_time'=> time(),
+                        'update_time'=> time(),
+                    );
                 }
-                $shop_data[]=array(
-                    'shop_url'=> $url,
-                    'api_url'=> $v['api'],
-                    'api_data'=> json_encode($data),
-                    'api_view'=> json_encode($view),
-                    'is_deleted'=> 0,
-                    'create_time'=> time(),
-                    'update_time'=> time(),
-                );
+            }
+            if ($flag_error) {
+                echo "获取数据失败";
+                return;
+            }else{
+                //软删除之前记录
+                model('ShopApi')->softDeleteShopDataByShopUrl($url);
+                $has_add = model('ShopApi')->batchAddShopData($shop_data);
+                if (!$has_add) {
+                    //mc 记录日志或者发送警报，不推送给前端
+                }
             }
         }
-        if ($flag_error) {
-            echo "获取数据失败";
-            return;
-        }else{
-            //软删除之前记录
-            model('ShopApi')->softDeleteShopDataByShopUrl($url);
-            $has_add = model('ShopApi')->batchAddShopData($shop_data);
-            if (!$has_add) {
-                //mc 记录日志或者发送警报，不推送给前端
-            }
-        }
+
 		return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
     }
 

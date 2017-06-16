@@ -44,6 +44,7 @@ class Services extends Base
     		return 0;
     	}
     	$add_data = array(
+        'manager_id'=>$manager_id,
     		'shop_url'=> $shop_url,
     		'transformed_url'=> $transformed_url,
     		'service_start_time'=> $service_start_time,
