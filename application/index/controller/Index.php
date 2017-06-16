@@ -191,7 +191,7 @@ class Index extends APIController
 
         $query_manager = model('Managers')->getManagerInfo($mobilephone, $old_password);
         if (empty($query_manager)) {
-            throw new Exception();
+            throw new APIException(10015);
             
         }
         if($query_manager['is_locked']) {
@@ -200,7 +200,7 @@ class Index extends APIController
 
         $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
         if (!$has_update) {
-            throw new APIException(10050);
+            throw new APIException(10014);
             
         }
        session('weitiao_sms_tag', null);
