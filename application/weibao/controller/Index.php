@@ -300,7 +300,9 @@ class Index extends Controller
     {
         //mc
         session('manager_id',1);
+        echo "string";
         $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
+        echo "string";
         //没有服务则表示体验
         if (empty($service_info)) {
             $experience_time = config('ExperienceTime');
