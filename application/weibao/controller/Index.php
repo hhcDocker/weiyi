@@ -198,9 +198,11 @@ class Index extends Controller
      * @return [type]        [description]
      */
     public function getShopData() {
+        echo "string201";
         $url = input('param.url') ? input('param.url'):'';
         $flag = input('param.flag') ? input('param.flag'):0;
         $checkUrl = $this->checkUrl($url);
+        var_dump($checkUrl);
         if (!$checkUrl['code']) {
             dump($checkUrl);
             return;
@@ -209,6 +211,7 @@ class Index extends Controller
         //加上判断是否过期
         //考虑短链接情况，查表获取真实链接
         $url_info = $this->getShopShortUrlInfo($url);
+        var_dump($url_info)
         if (empty($url_info)){
             echo "获取真实链接失败";
             return;
