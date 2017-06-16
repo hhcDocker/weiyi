@@ -162,11 +162,11 @@ class Index extends APIController
 
             $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
             if (!$has_update) {
-                throw new Exception(10014);
+                throw new APIException(10014);
             }
            session('weitiao_sms_tag', null);
        }else{
-            throw new Exception(10005);
+            throw new APIException(10005);
        }
     }
 
@@ -200,7 +200,7 @@ class Index extends APIController
 
         $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
         if (!$has_update) {
-            throw new Exception(10050);
+            throw new APIException(10050);
             
         }
        session('weitiao_sms_tag', null);
