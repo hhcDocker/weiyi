@@ -38,7 +38,7 @@ class Managers extends Base
         return $query_manager;
     }
 
-    public function updateManagerInfo($uid, $client_ip = '')
+    public function updateManagerLoginInfo($uid, $client_ip = '')
     {
         if (!$uid) {
             return 0;

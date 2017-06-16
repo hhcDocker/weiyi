@@ -201,7 +201,7 @@ class Index extends Controller
     public function getShopData() {
         $url = input('param.url') ? input('param.url'):'';
 		session('shopUrl',$url);
-        $flag = input('param.flag') ? input('param.flag'):0;
+        $flag = input('param.flag') ? input('param.flag'):1;
         $checkUrl = $this->checkUrl($url);
         if (!$checkUrl['code']) {
             echo json_encode($checkUrl);
@@ -239,7 +239,7 @@ class Index extends Controller
             /**
              * @see JonnyW\PhantomJs\Http\Response
              **/
-            $request->setTimeout(80000);
+            $request->setTimeout(100000);
             $response = $client->getMessageFactory()->createResponse();
 
             // Send the request
@@ -265,14 +265,14 @@ class Index extends Controller
                     break;
                 }else{
                     if ($k==0){ //第一个接口
-                        $data=array('data'=>$v['data']['data'],'view'=>$v['data']['view']);
+                        $_data=array('data'=>$v['data']['data'],'view'=>$v['data']['view'],'shop_other_data'=>$shopOtherData);
                     }else{
-                        $data = $v['data'];
+                        $_data = $v['data'];
                     }
                     $shop_data[]=array(
                         'shop_url'=> $url,
                         'api_url'=> $v['api'],
-                        'api_data'=> json_encode($data),
+                        'api_data'=> json_encode($_data),
                         'is_deleted'=> 0,
                         'create_time'=> time(),
                         'update_time'=> time(),
@@ -285,9 +285,12 @@ class Index extends Controller
             }else{
                 //软删除之前记录
                 model('ShopApi')->softDeleteShopDataByShopUrl($url);
-                $has_add = model('ShopApi')->batchAddShopData($shop_data);
-                if (!$has_add) {
-                    //mc 记录日志或者发送警报，不推送给前端
+                foreach ($shop_data as $k1 => $v1) {
+                    //
+                    $has_add = model('ShopApi')->saveShopData($v1['shop_url'],$v1['api_url'],$v1['api_data']);
+                    if (!$has_add) {
+                        //mc 记录日志或者发送警报，不推送给前端
+                    }
                 }
             }
         }

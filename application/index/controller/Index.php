@@ -56,7 +56,7 @@ class Index extends APIController
             session('manager_uid', $query_manager['uid']);
             session('manager_mobilephone', $query_manager['mobilephone']);
             // 更新用户登录信息
-            $update_result = model('Managers')->updateManagerInfo($query_manager['uid'], $client_ip);
+            $update_result = model('Managers')->updateManagerLoginInfo($query_manager['uid'], $client_ip);
         } else{
             throw new APIException(10004);
         }
