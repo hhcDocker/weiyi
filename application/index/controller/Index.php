@@ -36,12 +36,30 @@ class Index extends APIController
         if(!empty($authkey)) {
             throw new APIException(10007);
         }
+        $client_ip = request()->ip();
         $mobilephone = noempty_input('mobilephone', '/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
         $password = noempty_input('password');
         if(!preg_match('/[0-9a-z]{32}/',$password)) {
            $password = md5($password); 
         }
-        $res = model("login")->getUserInfo($mobilephone, $password, 0);
+
+        if (($mobilephone !== '' ) && ($password !== '')) {
+            $query_manager = model('Managers')->getManagerInfo($mobilephone, $password);
+            if(empty($query_manager)) {
+                throw new APIException(10003);
+            }
+            if($query_manager['is_locked']) {
+                throw new APIException(10008);
+            }
+            // 存储session
+            session('manager_id',$query_manager['id']);
+            session('manager_uid', $query_manager['uid']);
+            session('manager_mobilephone', $query_manager['mobilephone']);
+            // 更新用户登录信息
+            $update_result = model('Managers')->updateManagerInfo($query_manager['uid'], $client_ip);
+        } else{
+            throw new APIException(10004);
+        }
         $authkey = ["mobilephone"=>$mobilephone, "password"=>$password];
         session("authkey", $authkey);
         return $this->format_ret($res);

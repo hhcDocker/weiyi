@@ -263,17 +263,14 @@ class Index extends Controller
                     break;
                 }else{
                     if ($k==0){ //第一个接口
-                        $data=$v['data']['data'];
-                        $view=$v['data']['view'];
+                        $data=array('data'=>$v['data']['data'],'view'=>$v['data']['view']);
                     }else{
                         $data = $v['data'];
-                        $view = array();
                     }
                     $shop_data[]=array(
                         'shop_url'=> $url,
                         'api_url'=> $v['api'],
                         'api_data'=> json_encode($data),
-                        'api_view'=> json_encode($view),
                         'is_deleted'=> 0,
                         'create_time'=> time(),
                         'update_time'=> time(),

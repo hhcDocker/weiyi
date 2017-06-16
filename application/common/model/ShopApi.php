@@ -43,7 +43,7 @@ class ShopApi extends Base
      * @param  string  $api_view [description]
      * @return [type]            [description]
      */
-    public function saveShopData($shop_url='',$api_url='',$api_data='',$api_view='')
+    public function saveShopData($shop_url='',$api_url='',$api_data='')
     {
     	if (!$shop_url ||!$api_url ||!$api_data) {
     		return 0;
@@ -53,7 +53,6 @@ class ShopApi extends Base
     		'shop_url'=> $shop_url,
     		'api_url'=> $api_url,
     		'api_data'=> $api_data,
-    		'api_view'=> $api_view,
     		'is_deleted'=> 0,
     		'create_time'=> time(),
     		'update_time'=> time(),

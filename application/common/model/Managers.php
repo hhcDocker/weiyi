@@ -19,77 +19,39 @@ namespace app\common\model;
 use think\Db;
 
 class Managers extends Base
-{   
+{ 
     /**
-     * 通过shop_url获取api接口数据
-     * @param  integer $shop_url [description]
-     * @return [type]            [description]
+     * 根据手机和密码 查询客户信息
+     * @return [type] [description]
      */
-    public function getShopDataByShopUrl($shop_url='')
+    public function getManagerInfo($mobilephone, $password)
     {
-        if (!$shop_url) {
-            return array();
+        $query_manager = array();
+        if(!empty($mobilephone) && !empty($password))
+        {
+            $query_manager = Db::name('managers')
+                            ->where('mobilephone', $mobilephone)
+                            ->where('password', $password)
+                            ->where('is_deleted', 0)
+                            ->find();
         }
-        $shop_url = trim($shop_url);
-        $api_info = Db::table('wj_shop_api')->where('shop_url',$shop_url)->where('is_deleted',0)->select();
-        return $api_info;
+        return $query_manager;
     }
 
-    /**
-     * 保存店铺api店铺数据
-     * @param  integer $shop_url [description]
-     * @param  string  $api_url  [description]
-     * @param  string  $api_data [description]
-     * @param  string  $api_view [description]
-     * @return [type]            [description]
-     */
-    public function saveShopData($shop_url='',$api_url='',$api_data='',$api_view='')
+    public function updateManagerInfo($uid, $client_ip = '')
     {
-    	if (!$shop_url ||!$api_url ||!$api_data) {
-    		return 0;
-    	}
-        $shop_url = trim($shop_url);
-    	$add_data = array(
-    		'shop_url'=> $shop_url,
-    		'api_url'=> $api_url,
-    		'api_data'=> $api_data,
-    		'api_view'=> $api_view,
-    		'is_deleted'=> 0,
-    		'create_time'=> time(),
-    		'update_time'=> time(),
-    	);
-    	$has_add =Db::table('wj_shop_api')->insertGetId($add_data);
-        return $has_add;
-    }
-
-    /**
-     * 批量添加店铺接口数据
-     * @param  [type] $data [description]
-     * @return [type]       [description]
-     */
-    public function batchAddShopData($data=array())
-    {
-        if (empty($data)) {
+        if (!$uid) {
             return 0;
         }
-        $has_add = Db::table('wj_shop_api')->insertAll($data);
-        return $has_add;
+        $has_update = Db::name('managers')
+                            ->where('uid', $uid)
+                            ->update([
+                                    'last_login_time'  => ['exp', 'now()'],
+                                    'last_login_ip'    => $client_ip,
+                                 ]);
+        return $has_update;
     }
 
-    /**
-     * 根据链接软删除接口数据
-     * @param  string $shop_url [description]
-     * @return [type]           [description]
-     */
-    public function softDeleteShopDataByShopUrl($shop_url='')
-    {
-        if (!$shop_url) {
-            return 0;
-        }
-        $shop_url = trim($shop_url);
-        $has_delete = Db::table('wj_shop_api')->where('shop_url',$shop_url)->update(array('is_deleted'=>1,'delete_time'=>time()));
-        return $has_delete;
-    }
 }
 
 /*CREATE TABLE `wj_managers` (
