@@ -240,4 +240,5 @@ return [
     ],
 
     'ExperienceTime' =>3,
+    'PhantomjsPath' =>'/usr/bin/phantomjs'
 ];
