@@ -201,7 +201,7 @@ class Index extends Controller
     public function getShopData() {
         $url = input('param.url') ? input('param.url'):'';
 		session('shopUrl',$url);
-        $flag = input('param.flag') ? input('param.flag'):1;
+        $flag = input('param.flag') ? input('param.flag'):0;
         $checkUrl = $this->checkUrl($url);
         if (!$checkUrl['code']) {
             echo json_encode($checkUrl);
@@ -286,7 +286,6 @@ class Index extends Controller
                 //软删除之前记录
                 model('ShopApi')->softDeleteShopDataByShopUrl($url);
                 foreach ($shop_data as $k1 => $v1) {
-                    //
                     $has_add = model('ShopApi')->saveShopData($v1['shop_url'],$v1['api_url'],$v1['api_data']);
                     if (!$has_add) {
                         //mc 记录日志或者发送警报，不推送给前端
