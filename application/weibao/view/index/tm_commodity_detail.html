@@ -26,7 +26,7 @@
 				<h1 v-text="commodityData.commodityName">
 				</h1>
 				<div class="commodity_price">
-					<p>￥<span v-text="commodityData.price"></span></p>
+					<p>￥<span v-text="cmdPrice"></span></p>
 					<div class="del_price">
 						<span>价格：</span>
 						<span>￥</span>
@@ -35,8 +35,8 @@
 				</div>
 				<div class="titletab">
 					<p >快递:<span v-text="commodityData.freight"></span></p>
-					<p>月销<span v-text="commodityData.num"></span>笔</p>
-					<p v-text="commodityData.area"></p>
+					<p>月销<span v-text="dataMdsKig.defaultModel.sellCountDO.sellCount"></span>笔</p>
+					<p v-text="dataMdsKig.defaultModel.deliveryDO.deliveryAddress"></p>
 				</div>
 				<div v-if="colorTypeFlag" class="choosedsku" @click="showFlag=!showFlag">
 					请选择 颜色分类 
@@ -125,12 +125,15 @@
 			<section>
 				<div class='rate_single'>
 					<ul>
-						<li v-for='item in commodityData.assessInfo'>
+						<li v-for='item in assessInfo' v-if="assessInfo.length>0">
 							<h2><img src='/static/images/TB1yeWeIFXXXXX5XFXXuAZJYXXX-210-210.png_40x40.jpg'/><span v-text='item.displayUserNick'></span></h2>
 							<p v-html='item.rateContent'></p>
 							<p v-if="item.reply" class="reply"v-text="item.reply"></p>
 							<span v-text='item.rateDate'></span>
 							<div class='assess_img'><img v-for='img in item.pics' v-bind:src='img'/></div>
+						</li>
+						<li v-else style="text-align: center;">
+							该商品暂无评价
 						</li>
 					</ul>
 				</div>
@@ -168,7 +171,7 @@
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
 		<script type="text/javascript">
 			try{
-				var data={$data};
+				var data={$data},dataMdsKig,cmdPrice;
 			}catch(e){
 				alert(e+"</br>请求数据失败，请尝试刷新网页");
 			}
@@ -193,18 +196,19 @@
 			}catch(e){
 				console.log(e+"请求数据_DATA_Mdskip失败，请尝试刷新网页");
 			}
+			if(_DATA_Mdskip){
+				dataMdsKig=_DATA_Mdskip;
+			}
 			if(_DATA_Detail){
 				commodityData.lunboImageUrl=data.imgUrl;
 				commodityData.commodityName=_DATA_Detail.itemDO.title;
-				commodityData.price=data.price;
 				commodityData.delPrice=data.delPrice;
+				cmdPrice=parseInt(data.delPrice);
 				commodityData.freight="0.00";
-				commodityData.area=data.area;
-				commodityData.num=data.sold;
 				commodityData.shopInfo.name=data.shopName;
 				commodityData.shopInfo.head_picture=_DATA_Detail.itemDO.shopIcon;
 				commodityData.newAttraction=_DATA_Detail.itemDO.newAttraction;
-				commodityData.allCommodity="/weibao/index/getShopCommodity?shopId="+_DATA_Detail.itemDO.userId+"&shopURL="+data.shopUrl;
+				commodityData.allCommodity="/weibao/index/tmShopCommodityList";
 				commodityData.shopUrl="/weibao/index/getShopData?shopURL=https:"+data.shopUrl;
 				commodityData.score=data.score;
 			}
@@ -244,7 +248,7 @@
 			}
 			//尝试得到商品详情
 			try{
-				console.log(_DATA_Detail.api);
+				console.log(_DATA_Detail);
 				if(_DATA_Detail.api.newWapDescJson){
 					_DATA_Detail.api.newWapDescJson.forEach(function(item,index){
 						if(item.moduleName=='商品图片'){
@@ -262,11 +266,15 @@
 			try{
 				if(data.cd_parameter){
 					commodityData.cd_parameter=JSON.parse(data.cd_parameter);
+				console.log(commodityData.cd_parameter);
 				}
 			}catch(e){
 				console.log(e);
 			}
-			
+			function jsonp3(a){
+				vm.assessInfo=a.rateDetail.rateList;
+				console.log(a)
+			}
 			//构建Vue实例，
 			var vm = new Vue({
 				el:"#body_container",
@@ -279,6 +287,10 @@
 			  		skuPrice:skuPrice,
 			  		skuPics:skuPics,
 			  		skuName:skuName,
+			  		dataMdsKig:dataMdsKig,
+			  		cmdPrice:cmdPrice,
+			  		accessPage:0,
+			  		assessInfo:[],
 					tabs: [   
 					    {       
 					       name: '基本信息',   
@@ -295,8 +307,35 @@
 				    ],
 				    commodityData:commodityData
 				},
-				
+				created:function(){
+					try{
+						var minPrice=1000000;
+						var maxPrice=0;
+						for(var a in this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo){
+							if(this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo[a].promotionList[0].price>maxPrice){
+								maxPrice=this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo[a].promotionList[0].price;
+							}
+							if(this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo[a].promotionList[0].price<minPrice){
+								minPrice=this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo[a].promotionList[0].price;
+							}
+						}
+						this.cmdPrice=minPrice+' - '+maxPrice;
+					}catch(e){
+						//TODO handle the exception
+					}
+					this.getAccess();
+				},
 				methods:{
+					getAccess:function(){
+						this.accessPage++;
+						var scriptAccess = document.createElement('script');
+						scriptAccess.src = "https://rate.tmall.com/list_detail_rate.htm?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId+"&order=3&append=0&content=0&currentPage="+this.accessPage+"&pageSize=10&tagId=&_ksTS=1497609808623_680&callback=jsonp3"
+			           // scriptAccess.src = "https://rate.tmall.com/list_detail_rate.htm?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId+"&order=3&append=0&content=0&currentPage="+this.accessPage+"&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp3";
+			            document.body.appendChild(scriptAccess);
+			            setTimeout(function(){
+			            	scriptAccess.parentNode.removeChild(scriptAccess);
+			            },1000);
+					},
 					tab:function(i,v){
 						 this.active = i;
   						 if(i==1){
@@ -328,13 +367,24 @@
 						this.showFlag=true;
 					},
 					selecyColor:function(i,v,e){
-						var id=';'+_DATA_Detail.valItemInfo.skuList[i].pvs+';';
-						this.skuStock=commodityData.valItemInfo.skuMap[id].stock;
-				  		this.skuPrice=commodityData.valItemInfo.skuMap[id].price;
-				  		this.skuName=v;
-				  		if(commodityData.valItemInfo.skuPics[id]){
-				  			this.skuPics=commodityData.valItemInfo.skuPics[id];
-				  		}
+							var id=';'+_DATA_Detail.valItemInfo.skuList[i].pvs+';';
+							this.skuStock=commodityData.valItemInfo.skuMap[id].stock;
+							
+							try{
+								console.log(this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo)
+								if(this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo){
+								var ids=_DATA_Detail.valItemInfo.skuList[i].skuId;
+								this.skuPrice=this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo[ids].promotionList[0].price;
+								}else{
+									this.skuPrice=commodityData.valItemInfo.skuMap[ids].price;
+								}
+							}catch(e){
+								this.skuPrice=commodityData.valItemInfo.skuMap[id].price;
+							}
+					  		this.skuName=v;
+					  		if(commodityData.valItemInfo.skuPics[id]){
+					  			this.skuPics=commodityData.valItemInfo.skuPics[id];
+					  		}
 						$(e.target).css({
 							"border-color": "#b10000",
 							"color": "#000"
@@ -349,7 +399,7 @@
 					lookDetail:function (event,index,item){
 				  		if(commodityData.recommend[index].url.indexOf("tmall")>0){
 				  			var isTm=1;
-				  						location.href='/weibao/index/processUrl?isTm='+isTm+'&itemId='+item.id+'&price='+item.price+'&sold=--&area=--';
+				  			location.href='/weibao/index/processUrl?isTm='+isTm+'&itemId='+item.id+'&price='+item.price+'&sold=--&area=--';
 				  		}else{
 				  			var isTm=0;
 				  			location.href='/weibao/index/processUrl?isTm='+isTm+'&itemId='+item.id;
@@ -358,44 +408,7 @@
 				  	}
 				}
 			})
-			var accessFlag=true;
-			var page=1;
-			function getAccess(){
-				if(accessFlag){
-					page++;
-					var getAccess={
-				 		"isTm":data.isTm,
-				 		"sellerID":_DATA_Detail.itemDO.userId,
-				 		"itemID":_DATA_Detail.itemDO.itemId,
-				 		'page':page
-				 	};
-				 	$.ajax({
-				 		type:"post",
-				 		url:"/weibao/index/GetAccessData",
-				 		async:true,
-				 		data:getAccess,
-				 		success:function(res){
-				 			if(JSON.parse(res).rateDetail.rateList){
-				 				commodityData.assessInfo=JSON.parse(res).rateDetail.rateList;
-				 				accessFlag=false;
-				 			}else{
-				 				getAccess();
-				 			}
-				 		},
-				 		error:function(err){
-				 			alert('请求评价数据失败');
-				 			accessFlag=true;
-		                }
-				 	});
-				}
-				
-			}
-			/*scriptAccess = document.createElement('script');
-            scriptAccess.src = "https://rate.tmall.com/list_detail_rate.htm?itemId='.$_POST['itemID'].'&sellerId='.$_POST['sellerID'].'&order=3&append=0&content=0&currentPage='.$_POST['page'].'&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp3";
-            document.body.appendChild(scriptAccess);
-            setTimeout(function(){
-            	scriptAccess.parentNode.removeChild(scriptAccess);
-            },1000)*/
+			
 		</script>
 		<script type="text/javascript">
 			
@@ -412,9 +425,7 @@
             function jsonp2(a){
             	console.log(a);
             }
-            function jsonp3(a){
-            	console.log(a);
-            }
+            
             $url='https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444';
 		$url2='https://detailskip.taobao.com/json/wap/tmallH5Desc.do?_ksTS=1489820826429_496&callback=setMdskip&itemId='.$_GET['itemId'].'&sellerId='.$_GET['sellerId'].'&isPreview=false&isg=AuDgXeh1rO_KJxDslDcORQ7Gse4-_2Aoq6eCMlrxrPuOVYB_AvmUQ7Zjn0eq&isg2=AsjIpAa3XVo%2FHf0FqOwc%2FzrXGC3acSx7';*/
 			function getRecommend(){
@@ -442,7 +453,6 @@
 				
 			}
 			getRecommend();
-			getAccess();
 		</script>
 		<script type="text/javascript">
 			document.getElementById("J_DroplistMask").ontouchmove=function(e){

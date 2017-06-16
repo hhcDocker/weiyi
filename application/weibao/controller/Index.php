@@ -41,9 +41,9 @@ class Index extends Controller
         if ($this->request->method() == 'GET') 
         {
         	if($_GET['isTm']){
-        		$arr['price']=$_GET['price'];
-				$arr['sold']=$_GET['sold'];
-				$arr['area']=$_GET['area'];
+//      		$arr['price']=$_GET['price'];
+//				$arr['sold']=$_GET['sold'];
+//				$arr['area']=$_GET['area'];
 				$arr['isTm']=$_GET['isTm'];
 				$url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$_GET["itemId"].'&scm=1007.12913.42100.100200300000000';
 	           	$html =file_get_html($url);
@@ -99,12 +99,11 @@ class Index extends Controller
 				}catch(Exception  $e){
 					
 				}
-
-				
 				//得到店铺名
 				$arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
 				
 				$arr['shopUrl']=iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href);
+				session('shopUrl',$arr['shopUrl']);
 				//mc 加上校验
 				$arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
            		return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
