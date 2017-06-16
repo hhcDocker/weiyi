@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/weibao/controller/Index.php" afterPath="$PROJECT_DIR$/application/weibao/controller/Index.php" />
-    </list>
+    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="" />
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -424,15 +422,15 @@
       <workItem from="1497342467886" duration="5227000" />
       <workItem from="1497428242476" duration="6991000" />
       <workItem from="1497510205044" duration="11652000" />
-      <workItem from="1497576083048" duration="6377000" />
+      <workItem from="1497576083048" duration="6973000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30247000" />
+    <option name="totallyTimeSpent" value="30843000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15921193" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -485,7 +483,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/index/controller/Index.php</url>
-          <line>34</line>
+          <line>82</line>
           <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint type="php">

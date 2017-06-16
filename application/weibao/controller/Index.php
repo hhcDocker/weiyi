@@ -229,7 +229,7 @@ class Index extends Controller
             //把这块剥离为服务层，私有化
             $client = Client::getInstance();
             $client->getProcedureCompiler()->clearCache();
-            $client->getEngine()->setPath($_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe');
+            $client->getEngine()->setPath(config('PhantomjsPath'));
             $client->isLazy();
             /**
              * @see JonnyW\PhantomJs\Http\Request
