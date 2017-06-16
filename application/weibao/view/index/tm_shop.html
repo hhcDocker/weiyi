@@ -88,11 +88,18 @@
 			</section>
 			<section class="commodity_contain_itemsearch" v-if='itemSearch' v-for="item in itemSearch">
 				<div class="title_container_itemsearch">
-					<span>{{item.data['title'+($index+1)]}}</span>
+					<span>{{item['title'+($index+1)]}}</span>
 				</div>
-				<ul class="data_grid">
-					<li v-for="items in item.data.list">
-							<a href=""><img :src="items.item1.imgUrl" alt="" /></a>
+				<ul class="data_grid" v-if="$index==0">
+					<li v-for="items in item.list" @click="toDetailGird(items,$index)">
+							<a href="javascript:void(0)"><img :src="items.item1.imgUrl" alt="" /></a>
+							<h2 v-text="items.item1.title"></h2>
+							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
+					</li>
+				</ul>
+				<ul class="data_grid" v-else>
+					<li v-for="items in item.list" @click="toDetailGird(items,$index)">
+							<a href="javascript:void(0)"><img :src="items.item2.imgUrl" alt="" /></a>
 							<h2 v-text="items.item1.title"></h2>
 							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
 					</li>
@@ -192,11 +199,11 @@
 					conponData=apiData;
 				}else if(data[i].api_url=="mtop.taobao.shop.itemSearch"){
 					itemSearch.push(apiData);
+					console.log(apiData)
 				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get"){
 					enhenced=apiData;
 				}else if(data[i].api_url=="mtop.taobao.rankingListRecommendService.getItemLists"){
 					getItemLists=apiData;
-					console.log(apiData)
 					rankingData=getItemLists.favoredByDiamonds;
 				}else if(data[i].api_url=="mtop.taobao.shop.individuation"){
 					individuationData.push(apiData);
@@ -349,6 +356,15 @@
 					},
 					toCommodityList:function(){
 						location.href="/weibao/index/tmShopCommodityList";
+					},
+					toDetailGird:function(item,index){
+						if(index==0){
+							
+							var id = item['item1'].nid;
+						}else if(index==1){
+							var id = item['item2'].nid;
+						}
+						location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
 					}
 				}
 			})
