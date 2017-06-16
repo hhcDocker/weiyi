@@ -215,7 +215,7 @@ class Index extends APIController
      */
     private function checkExistsMobilephone($mobilephone='')
     {
-        $res = modle('Managers')->hasManagerMobilephone($mobilephone);
+        $res = model('Managers')->hasManagerMobilephone($mobilephone);
 
         return $res?true:false;
     }
