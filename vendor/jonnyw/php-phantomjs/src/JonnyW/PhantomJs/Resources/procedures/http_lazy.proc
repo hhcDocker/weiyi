@@ -110,6 +110,7 @@ page.open ('{{ input.getUrl() }}', '{{ input.getMethod() }}', '{{ input.getBody(
 	    	shopName:document.querySelector('.name').innerHTML,
 	    	collectCounter:document.querySelector('.collect-counter').innerHTML,
 	    	logo:document.querySelector('.logo img').src,
+	    	backImage:document.querySelector('.shop-back-img img').src,
 	    };
     	return obj;
     });

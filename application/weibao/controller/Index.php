@@ -200,7 +200,7 @@ class Index extends Controller
     public function getShopData() {
         $url = input('param.url') ? input('param.url'):'';
 		session('shopUrl',$url);
-        $flag = input('param.flag') ? input('param.flag'):0;
+        $flag = input('param.flag') ? input('param.flag'):1;
         $checkUrl = $this->checkUrl($url);
         if (!$checkUrl['code']) {
             echo json_encode($checkUrl);

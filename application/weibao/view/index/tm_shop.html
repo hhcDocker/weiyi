@@ -12,25 +12,24 @@
 			<header>
 				<section class="shop_header">
 					<div class="header_img">
-						<img :src="shopData.data.data.shopsign_image_url"/>
+						<img :src="shopData.data.shop_other_data.backImage"/>
 					</div>
 					<div class="header_info">
 						<a href="#" class="shop_logo">
-							<img src="//gw1.alicdn.com/bao/uploaded//ba/f7/TB1U0P1GVXXXXXrXXXXSutbFXXX.jpg"/>
+							<img :src="shopData.data.shop_other_data.logo"/>
 						</a>
 						<div class="collect_wrapper">
 	                
 			                <div class="collect_item">收藏</div>
 			                <div class="collect_item collect_counter">
-			                    <p>
-			                        3.8万
+			                    <p v-text="shopData.data.shop_other_data.collectCounter">
 			                    </p>
 			                    <p>粉丝</p>
 			                </div>
 			            </div>
 						<div class="tm_contact">
 			                <div class="tm_ctn">
-			                    <span class="name">艾琳汽车用品专营店</span>
+			                    <span class="name" v-text="shopData.data.shop_other_data.shopName"></span>
 			                </div>
 			                
 			            </div>
@@ -266,27 +265,37 @@
 												//alert(e)
 											}
 										}else if(shopData.data.view.subViews[k].subViews[i].subViews[l].type=='container'){
-											if(shopData.data.view.subViews[k].subViews[i].subViews[l].events){
-												var len5=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions.length;
-												for(j=0;j<len5;j++){
-													if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
-														var openUrl=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
+											try{
+												if(shopData.data.view.subViews[k].subViews[i].subViews[l].events){
+													var len5=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions.length;
+													for(j=0;j<len5;j++){
+														if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
+															var openUrl=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
+														}
+													}
+													if(l>0&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=="image"){
+														var obj={
+															dataBinding:openUrl,
+														}
+														modelData[0].label.push(obj);
 													}
 												}
-												if(l>0&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=="image"){
-													var obj={
-														dataBinding:openUrl,
-													}
-													modelData[0].label.push(obj);
-												}
+											}catch(e){
+												//TODO handle the exception
+												//alert(e)
 											}
 										}else if(shopData.data.view.subViews[k].subViews[i].subViews[l].type=='label'&&isLabel){
-											var obj={
-												dataBinding:shopData.data.view.subViews[k].subViews[i].subViews[l].dataBinding.value.replace('$',''),
-												styleBinding:shopData.data.view.subViews[k].subViews[i].subViews[l].styleBinding,
+											try{
+												var obj={
+													dataBinding:shopData.data.view.subViews[k].subViews[i].subViews[l].dataBinding.value.replace('$',''),
+													styleBinding:shopData.data.view.subViews[k].subViews[i].subViews[l].styleBinding,
+												}
+												console.log(modelData)
+												modelData[0].label.push(obj);
+											}catch(e){
+												//TODO handle the exception
+												//alert(e)
 											}
-											console.log(modelData)
-											modelData[0].label.push(obj);
 											
 										}
 									}
