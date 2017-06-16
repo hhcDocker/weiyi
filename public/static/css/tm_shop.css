@@ -19,7 +19,7 @@
   -webkit-animation-name: my_rotate;
   animation-name: my_rotate; }
 
-.data_grid, .ranking_nav, .ranking_data {
+.data_grid, .ranking_nav, .ranking_data, .enhenced ul {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -27,7 +27,7 @@
   -webkit-align-items: center;
   align-items: center; }
 
-.data_grid li, .ranking_nav div, .ranking_data .ranking_left {
+.data_grid li, .ranking_nav div, .ranking_data .ranking_left, .enhenced li {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
   flex: 1;
@@ -394,5 +394,48 @@ body {
       font-size: 32px; }
     [data-dpr="3"] .enhenced h2 {
       font-size: 48px; }
+  .enhenced ul {
+    flex-wrap: wrap; }
+  .enhenced .girdList h2 {
+    font-size: 15px;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    height: 1.066666rem; }
+    [data-dpr="2"] .enhenced .girdList h2 {
+      font-size: 30px; }
+    [data-dpr="3"] .enhenced .girdList h2 {
+      font-size: 45px; }
+  .enhenced .girdList span {
+    font-size: 12px; }
+    [data-dpr="2"] .enhenced .girdList span {
+      font-size: 24px; }
+    [data-dpr="3"] .enhenced .girdList span {
+      font-size: 36px; }
+  .enhenced .girdList .priceFen {
+    font-size: 10px; }
+    [data-dpr="2"] .enhenced .girdList .priceFen {
+      font-size: 20px; }
+    [data-dpr="3"] .enhenced .girdList .priceFen {
+      font-size: 30px; }
+  .enhenced .girdList del {
+    font-size: 9px;
+    color: #999999; }
+    [data-dpr="2"] .enhenced .girdList del {
+      font-size: 18px; }
+    [data-dpr="3"] .enhenced .girdList del {
+      font-size: 27px; }
+  .enhenced .girdList li {
+    margin-bottom: 0.266666rem;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    flex-basis: 50%; }
+  .enhenced .girdList li:nth-of-type(2n) {
+    padding-left: 0.133333rem; }
+  .enhenced .girdList li:nth-of-type(2n+1) {
+    padding-right: 0.133333rem; }
 
 /*# sourceMappingURL=tm_shop.css.map */
