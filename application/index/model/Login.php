@@ -28,65 +28,24 @@ class Login extends Model {
      * @param int  @buyer_type buyer type defalut 0
      * @return array
      */ 
-    public function getUserInfo($mobilephone='', $password='', $buyer_type=0) {
+    public function getUserInfo($mobilephone='', $password='') {
+
         if (($mobilephone !== '' ) && ($password !== '')) {
-            $query_manager = array();
-			$flag = 1;
-			$table = "BeautyShop";
-            $client_ip = request()->ip();
-            if ($buyer_type == 1) {
-                $query_manager = model('BeautyShop')->getBeautyUserInfo($mobilephone,$password);
-            }elseif ($buyer_type == 2) {
-                $query_manager = model('EcommerceShop')->getEcommerceUserInfo($mobilephone,$password);
-				$flag = 2;
-				$table = "EcommerceShop";
-            }else{
-                $query_manager = model('BeautyShop')->getBeautyUserInfo($mobilephone,$password);
-                if (!empty($query_manager)) {
-                    $buyer_type=1;
-                }else{
-                    $query_manager = model('EcommerceShop')->getEcommerceUserInfo($mobilephone,$password);
-                    $buyer_type=2;
-					$flag = 2;
-					$table = "EcommerceShop";
-                }
-            }
+            $query_manager = Db::name('managers')
+                            ->where('mobilephone', $mobilephone)
+                            ->where('password', $password)
+                            ->where('is_deleted', 0)
+                            ->find();
 			if(empty($query_manager)) {
 			    throw new APIException(10003);
 			}
-			if($query_manager['role_id'] != "201") {
-                throw new APIException(10058);
+			if($query_manager['is_locked']) {
+                throw new APIException(10008);
             }
-			$result = model($table)->getShopStatusByBossuid($query_manager['boss_uid']);
-			if(empty($result)) {
-				throw new APIException(10059);
-			}
-			$allow_login = false;
-			foreach($result as $row){
-				if($row['review_status'] == "审核通过") {
-					$allow_login = true;
-					break;
-				}
-			}
-			if(!$allow_login) {
-				throw new APIException(10060);
-			}
-            $query_blacklist = model('Users')->getBlackListUserInfo($mobilephone);
-			if(!empty($query_blacklist)) {
-				throw new APIException(10061);
-			}
 			// 存储session
-            session("buyer_manager_status", 1);
-			session('buyer_manager_id',$query_manager['id']);
-			session('buyer_manager_uid', $query_manager['uid']);
-			session('buyer_boss_uid', $query_manager['boss_uid']);
-			session('buyer_company_id', $query_manager['company_id']);
-			session('buyer_manager_username', $query_manager['username']);
-			session('buyer_manager_headimg', $query_manager['headimg']);
-			session('buyer_manager_mobilephone', $query_manager['mobilephone']);
-			session('buyer_manager_name', $query_manager['manager_name']);
-			session('buyer_manager_role_id',$query_manager['role_id']);
-			session('buyer_type',$buyer_type);
+			session('manager_id',$query_manager['id']);
+			session('manager_uid', $query_manager['uid']);
+			session('manager_mobilephone', $query_manager['mobilephone']);
 			// 更新用户登录信息
 			$update_result = model('Users')->updateUserInfo($query_manager['uid'], $client_ip, $flag);
         } else{
@@ -348,3 +307,19 @@ class Login extends Model {
         return 0;
     }
 }
+
+
+/*CREATE TABLE `wj_managers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` char(32) NOT NULL COMMENT 'md5生成的随机定长字符串',
+  `mobilephone` char(16) DEFAULT NULL,
+  `password` char(64) DEFAULT NULL,
+  `create_time` int(11) unsigned NOT NULL,
+  `register_ip` char(16) DEFAULT NULL,
+  `last_login_time` datetime DEFAULT NULL,
+  `last_login_ip` char(16) DEFAULT NULL,
+  `update_time` int(11) unsigned NOT NULL,
+  `delete_time` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微跳客户信息表';*/
+

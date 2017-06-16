@@ -1,0 +1,25 @@
+@import url(_base.css);
+.my_rotate {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both; }
+
+@-webkit-keyframes my_rotate {
+  0% {
+    -webkit-transform: rotate3D(0, 0, 1, 0deg); }
+  100% {
+    -webkit-transform: rotate3D(0, 0, 1, 360deg); } }
+@keyframes my_rotate {
+  0% {
+    transform: rotate3D(0, 0, 1, 0deg); }
+  100% {
+    transform: rotate3D(0, 0, 1, 360deg); } }
+.my_rotate {
+  -webkit-animation-name: my_rotate;
+  animation-name: my_rotate; }
+
+body {
+  font-family: helvetica, arial, "Microsoft YaHei"; }
+
+/*# sourceMappingURL=tm_shop.css.map */
