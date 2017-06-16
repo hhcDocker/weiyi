@@ -24,26 +24,49 @@ class Managers extends Base
      * 根据手机和密码 查询客户信息
      * @return [type] [description]
      */
-    public function getManagerInfo($mobilephone, $password)
+    public function getManagerInfo($mobilephone='', $password='')
     {
         $query_manager = array();
-        if(!empty($mobilephone) && !empty($password))
+        if($mobilephone && $password)
         {
-            $query_manager = Db::name('managers')
+            $query_manager = Db::table('wj_managers')
                             ->where('mobilephone', $mobilephone)
                             ->where('password', $password)
-                            ->where('is_deleted', 0)
+                            // ->where('is_deleted', 0)
                             ->find();
         }
         return $query_manager;
     }
 
+    /**
+     * 根据手机和密码 查询客户信息
+     * @return [type] [description]
+     */
+    public function getManagerInfoByMobilephone($mobilephone='')
+    {
+        $query_manager = array();
+        if($mobilephone && $password)
+        {
+            $query_manager = Db::table('wj_managers')
+                            ->where('mobilephone', $mobilephone)
+                            // ->where('is_deleted', 0)
+                            ->find();
+        }
+        return $query_manager;
+    }
+
+    /**
+     * 更新登录信息
+     * @param  [type] $uid       [description]
+     * @param  string $client_ip [description]
+     * @return [type]            [description]
+     */
     public function updateManagerLoginInfo($uid, $client_ip = '')
     {
         if (!$uid) {
             return 0;
         }
-        $has_update = Db::name('managers')
+        $has_update = Db::table('wj_managers')
                             ->where('uid', $uid)
                             ->update([
                                     'last_login_time'  => ['exp', 'now()'],
@@ -52,6 +75,61 @@ class Managers extends Base
         return $has_update;
     }
 
+    /**
+     * 查询该手机号是否注册过
+     * @param  [type]  $mobilephone [description]
+     * @return boolean              [description]
+     */
+    public function hasManagerMobilephone($mobilephone='')
+    {
+        $count = -1;
+        if($mobilephone)
+        {
+            $count = Db::table('wj_managers')
+                            ->where('mobilephone', $mobilephone)
+                            ->where('is_deleted', 0)
+                            ->count();
+        }
+        return $count;
+    }
+
+    /**
+     * 添加哦那个湖信息
+     * @param string $uid         [description]
+     * @param string $mobilephone [description]
+     * @param string $password    [description]
+     * @param string $register_ip [description]
+     */
+    public function addManagerInfo($uid='',$mobilephone='',$password='',$register_ip='')
+    {
+        if (!$uid || !$mobilephone || !$password || !$register_ip) {
+            return 0;
+        }
+        $manager_id = Db::name('seller_managers')->insertGetId([
+                    'uid' => $uid,
+                    'mobilephone' => $mobilephone,
+                    'password' => $password,
+                    'is_locked' =>0,
+                    'create_time' => time(),
+                    'register_ip' => $register_ip,
+                    'update_time' => time()
+            ]);
+        return $manager_id;
+    }
+
+    public function updateManagerPassword($mobilephone='',$password='')
+    {
+        if (!$mobilephone || !$password) {
+            return 0;
+        }
+        $has_update = Db::table('wj_managers')
+                            ->where('mobilephone', $mobilephone)
+                            ->update([
+                                    'password'  => $password,
+                                    'update_time'    => time(),
+                                 ]);
+        return $has_update;
+    }
 }
 
 /*CREATE TABLE `wj_managers` (

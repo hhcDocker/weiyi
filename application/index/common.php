@@ -22,7 +22,7 @@ use api\APIException;
  */
 function noemptyvalid($str, $name){
    if(trim($str) === "") {
-        throw new APIException(10016, ['name'=>$name]);
+        throw new APIException(10001, ['name'=>$name]);
     } else {
         return trim($str);
     } 
