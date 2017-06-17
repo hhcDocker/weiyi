@@ -27,7 +27,6 @@ class Index extends APIController
      * @return array
      */ 
     public function getRegisterCode(){
-        aksdfjal();
         $mobilephone = noempty_input('mobilephone', '/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
         if ($this->checkExistsMobilephone($mobilephone)) {
                throw new APIException(10002);
