@@ -121,7 +121,7 @@ class Index extends APIController
      * @return array
      */ 
     public function logout(){
-        session_destroy();
+        session(null);
         return $this->format_ret();
     }
     
@@ -206,8 +206,8 @@ class Index extends APIController
         if (!$has_update) {
             throw new APIException(10014);
         }
-        
-        session_destroy();
+
+        session(null);
         return $this->format_ret();
     }
 
