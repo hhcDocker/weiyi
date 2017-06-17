@@ -14,10 +14,12 @@
  */
 
 namespace app\index\controller;
+use app\index\model\SMS;
 use api\APIController;
 use api\APIException;
-use think\captcha\Captcha;
 use think\Config;
+use think\Request;
+
 
 class Index extends APIController
 {
@@ -45,6 +47,7 @@ class Index extends APIController
         $mobilephone =  noempty_input('mobilephone','/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
         $password = noempty_input('password');
         $re_password = noempty_input('re_password');
+
         if ($this->checkExistsMobilephone($mobilephone)) {
             throw new APIException(10002);
         }
@@ -58,19 +61,18 @@ class Index extends APIController
             $time = date("Y-m-d H:i:s");
             $uid = md5(uniqid(rand(), true));
             $password_md5 = md5($password);
-            $manager_id = model('Managers')->addManagerInfo($uid,$mobilephone,$password,$client_ip);
+            $manager_id = model('Managers')->addManagerInfo($uid,$mobilephone,$password_md5,$client_ip);
             if (!$manager_id) {
-                throw new \Exception();
+                throw new APIException(10006);
             }
             session('manager_id', $manager_id);// 当前用户id
             session('manager_uid', $uid);// 当前用户uid
             session('manager_mobilephone',$mobilephone);
             return $this->format_ret();
         } else {
-            throw new  APIException(10006);
+            throw new APIException(10006);
         }
     }
-
 
     /**
      * 微跳客户登录
@@ -110,7 +112,8 @@ class Index extends APIController
         }
         $authkey = ["mobilephone"=>$mobilephone, "password"=>$password];
         session("authkey", $authkey);
-        return $this->format_ret();
+        $login_info = array('manager_mobilephone'=>session('manager_mobilephone'),'is_login'=>1);
+        return $login_info;
     }
     
     /**
@@ -118,7 +121,7 @@ class Index extends APIController
      * @return array
      */ 
     public function logout(){
-        session_destroy();
+        session(null);
         return $this->format_ret();
     }
     
@@ -129,7 +132,7 @@ class Index extends APIController
     public function getResetCode(){
        $mobilephone = noempty_input('mobilephone', '/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/'); 
        if (!$this->checkExistsMobilephone($mobilephone)) {
-          throw new \APIException(10013);
+          throw new APIException(10013);
        }
        $this->getSmsCode($mobilephone);
        session('find_pwd_mobilephone',$mobilephone);
@@ -140,7 +143,7 @@ class Index extends APIController
      * 找回密码
      * @return [type] [description]
      */
-    public function setnewpasswd()
+    public function setNewPasswd()
     {
         $mobilephone = session('find_pwd_mobilephone');
         $password = noempty_input('password');
@@ -149,22 +152,18 @@ class Index extends APIController
             throw new APIException(10006);
         }
         if (session('weitiao_sms_tag')) {
-            if (!$this->checkExistsMobilephone($mobilephone)) {
-               throw new APIException(10013);
+            $mobilephone_info =$this->checkMobilephone($mobilephone);
+            if ($mobilephone_info==0) {
+                throw new APIException(10013);
+            }elseif ($mobilephone_info==1) {
+                $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
+                if (!$has_update) {
+                    throw new APIException(10014);
+                }
+               session('weitiao_sms_tag', null);
+            }else{
+                return $this->format_ret($mobilephone_info);
             }
-            $query_manager = model('Managers')->getManagerInfoByMobilephone($mobilephone);
-            if($query_manager['is_locked']) {
-                throw new APIException(10009);
-            }
-            if ($query_manager['is_deleted']) {
-                throw new APIException(10010);
-            }
-
-            $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
-            if (!$has_update) {
-                throw new APIException(10014);
-            }
-           session('weitiao_sms_tag', null);
        }else{
             throw new APIException(10005);
        }
@@ -174,7 +173,7 @@ class Index extends APIController
      * 修改密码
      * @return array
      */ 
-    public function resetpasswd() {
+    public function resetPasswd() {
         $mobilephone = session('manager_mobilephone');
         $old_password = noempty_input('old_password');
         $password = noempty_input('password');
@@ -188,7 +187,9 @@ class Index extends APIController
         if(!preg_match('/[0-9a-z]{32}/',$old_password)) {
            $old_password = md5($old_password); 
         }
-
+        if ($old_password==$password) {
+            throw new APIException(10017);
+        }
         $query_manager = model('Managers')->getManagerInfo($mobilephone, $old_password);
         if (empty($query_manager)) {
             throw new APIException(10015);
@@ -197,14 +198,30 @@ class Index extends APIController
         if($query_manager['is_locked']) {
             throw new APIException(10008);
         }
+        if ($query_manager['is_deleted']) {
+            throw new APIException(10010);
+        }
 
         $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
         if (!$has_update) {
             throw new APIException(10014);
-            
         }
-       session('weitiao_sms_tag', null);
-       return $this->format_ret();
+
+        session(null);
+        return $this->format_ret();
+    }
+
+    /**
+     * 获取用户的登录信息,用户账号,登录状态
+     * @return [type] [description]
+     */
+    public function getLoginInfo()
+    {
+        if(!is_login()) {
+            throw new APIException(10018);
+        }
+        $login_info = array('manager_mobilephone'=>session('manager_mobilephone'),'is_login'=>1);
+        return $login_info;
     }
 
     /********************************************* 公用函数 ********************************************/
@@ -215,6 +232,9 @@ class Index extends APIController
      */
     private function checkExistsMobilephone($mobilephone='')
     {
+        if (!$mobilephone) {
+            throw new APIException(10001);
+        }
         $res = model('Managers')->hasManagerMobilephone($mobilephone);
 
         return $res?true:false;
@@ -225,7 +245,10 @@ class Index extends APIController
      * @param  [type] $mobilephone  [description]
      * @return [type]               [description]
      */
-    public function getSmsCode($mobilephone) {
+    public function getSmsCode($mobilephone='') {
+        if (!$mobilephone) {
+            throw new \Exception("mobilephone参数错误");
+        }
         $time_elapsed = time() - session('weitiao_sms_code_time');
         if ($time_elapsed >= 60) {
             $sms = new SMS();
@@ -235,6 +258,12 @@ class Index extends APIController
                     'mobile'  => $mobilephone,
                     'template'  => 'SMS_71215766',
             ]);
+
+            /*$sms_result = $sms->sms([
+                'param'  => ['code'=>$code, 'product'=>'大胖子车装联盟'],
+                'mobile'  => $mobilephone,
+                'template'  => 'SMS_6215201',
+            ]);*/
             if($sms_result !== true){
                 throw new APIException(10003);
             }
@@ -263,4 +292,26 @@ class Index extends APIController
         }
     }
     
+    /**
+     * 检查手机
+     * @param  [type] $mobilephone [description]
+     * @return [type]              [description]
+     */
+    public function checkMobilephone($mobilephone='')
+    {
+        if (!$mobilephone) {
+            throw new \Exception("mobilephone参数错误");
+        }
+        $query_manager = model('Managers')->getManagerInfoByMobilephone($mobilephone);
+        if (empty($query_manager)) {
+            return 0;
+        }
+        if($query_manager['is_locked']) {
+            throw new APIException(10009);
+        }
+        if ($query_manager['is_deleted']) {
+            throw new APIException(10010);
+        }
+        return 1;
+    }
 }

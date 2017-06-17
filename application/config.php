@@ -154,7 +154,7 @@ return [
     // 显示错误信息
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle
-    'exception_handle'       => 'api\APIExceptionHandler',
+    'exception_handle'       => '',
 
     // +----------------------------------------------------------------------
     // | 日志设置
@@ -162,11 +162,14 @@ return [
 
     'log'                    => [
         // 日志记录方式，内置 file socket 支持扩展
-        'type'  => 'File',
+        'type'  => 'socket',
         // 日志保存目录
         'path'  => LOG_PATH,
         // 日志记录级别
         'level' => [],
+        'host' => 'test2.dapangzi.com',
+        'port' =>1116,
+        'allow_client_ids'=>['equinox']
     ],
 
     // +----------------------------------------------------------------------
@@ -209,7 +212,6 @@ return [
         // 是否自动开启 SESSION
         'auto_start'     => true,
         'use_cookies'    => 1,
-        'validorigin'    => 'validorigin',
     ],
 
     // +----------------------------------------------------------------------
@@ -240,5 +242,6 @@ return [
     ],
 
     'ExperienceTime' =>3,
-    'PhantomjsPath' =>'/usr/bin/phantomjs'
+    // 'PhantomjsPath' =>'/usr/bin/phantomjs'
+    'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe'
 ];

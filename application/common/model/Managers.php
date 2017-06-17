@@ -105,7 +105,7 @@ class Managers extends Base
         if (!$uid || !$mobilephone || !$password || !$register_ip) {
             return 0;
         }
-        $manager_id = Db::name('seller_managers')->insertGetId([
+        $manager_id = Db::table('wj_managers')->insertGetId([
                     'uid' => $uid,
                     'mobilephone' => $mobilephone,
                     'password' => $password,
@@ -117,6 +117,12 @@ class Managers extends Base
         return $manager_id;
     }
 
+    /**
+     * 更新密码
+     * @param  string $mobilephone [description]
+     * @param  string $password    [description]
+     * @return [type]              [description]
+     */
     public function updateManagerPassword($mobilephone='',$password='')
     {
         if (!$mobilephone || !$password) {
