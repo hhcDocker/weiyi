@@ -188,7 +188,7 @@ class Index extends APIController
            $old_password = md5($old_password); 
         }
         if ($old_password==$password) {
-            throw new APIException(10006);
+            throw new APIException(10017);
         }
         $query_manager = model('Managers')->getManagerInfo($mobilephone, $old_password);
         if (empty($query_manager)) {
