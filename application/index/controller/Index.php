@@ -47,7 +47,7 @@ class Index extends APIController
         $mobilephone =  noempty_input('mobilephone','/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
         $password = noempty_input('password');
         $re_password = noempty_input('re_password');
-        
+
         if ($this->checkExistsMobilephone($mobilephone)) {
             throw new APIException(10002);
         }
@@ -142,7 +142,7 @@ class Index extends APIController
      * 找回密码
      * @return [type] [description]
      */
-    public function setnewpasswd()
+    public function setNewPasswd()
     {
         $mobilephone = session('find_pwd_mobilephone');
         $password = noempty_input('password');
@@ -172,7 +172,7 @@ class Index extends APIController
      * 修改密码
      * @return array
      */ 
-    public function resetpasswd() {
+    public function resetPasswd() {
         $mobilephone = session('manager_mobilephone');
         $old_password = noempty_input('old_password');
         $password = noempty_input('password');
@@ -208,6 +208,19 @@ class Index extends APIController
         }
        session('weitiao_sms_tag', null);
        return $this->format_ret();
+    }
+
+    /**
+     * 获取用户的登录信息,用户账号,登录状态
+     * @return [type] [description]
+     */
+    public function getLoginInfo()
+    {
+        if(!is_login()) {
+            throw new APIException(10018);
+        }
+        $login_info = array('manager_mobilephone'=>session('manager_mobilephone'),'is_login'=>1);
+        return $login_info;
     }
 
     /********************************************* 公用函数 ********************************************/

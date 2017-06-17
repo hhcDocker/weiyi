@@ -28,8 +28,8 @@ use api\APIException;
 abstract class  APIAuthController extends Controller{
     public function __construct(){
          parent::__construct();
-        /*if(!is_login()) {
-            throw new APIException(40007);
-        }*/
+        if(!is_login()) {
+            throw new APIException(10018);
+        }
     }
 }

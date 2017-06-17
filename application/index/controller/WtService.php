@@ -14,11 +14,11 @@
  */
 
 namespace app\index\controller;
-use api\APIController;
+use api\APIAuthController;
 use api\APIException;
 use think\Config;
 
-class WtService extends APIController
+class WtService extends APIAuthController
 {
     /**
      * post请求

@@ -31,7 +31,7 @@ class AlertMail {
             $mail->Password = 'Zl.bj@2017';                           
             $mail->Port = 587;                                   
             $mail->setFrom('alert@purplethunder.cn', 'Alert');
-            $mail->addAddress('equinoxsun@purplethunder.cn', 'qujunwei');   
+            $mail->addAddress('equinoxsun@purplethunder.cn', 'ganhuola');   
             $mail->isHTML(true);
             $subject = config("alert_mail_subject");  
             if(empty($subject)) {
