@@ -104,12 +104,12 @@
 					</li>
 				</ul>
 			</section>
-			<section class="enhenced" v-if="enhenced"> 
-				<div class="title_container_itemsearch" v-if="enhenced.title">
-					<span>{{enhenced.title}}</span>
+			<section class="enhenced" v-if="enhenced" v-for="models in enhenced"> 
+				<div class="title_container_itemsearch" v-if="titleArr[$index]">
+					<span>{{titleArr[$index]}}</span>
 				</div>
-				<ul v-if='enhenced.list.length>1' class="girdList">
-					<li v-for="item in enhenced.list" @click="toDetailByEnhenced(item)">
+				<ul v-if='models.list.length>1' class="girdList">
+					<li v-for="item in models.list" @click="toDetailByEnhenced(item)">
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
 						<h2 v-text="item.title"></h2>
 						<p>
@@ -118,8 +118,8 @@
 					</li>
 					
 				</ul>
-				<ul v-else>
-					<li v-for="item in enhenced.list" @click="toDetailByEnhenced(item)">
+				<ul  v-if='models.list.length==1'>
+					<li v-for="item in models.list" @click="toDetailByEnhenced(item)">
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
 						<h2 v-text="item.title"></h2>
 						<p>
@@ -186,7 +186,7 @@
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
 		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
 		<script type="text/javascript">
-			var data={$data},shopData={},conponData,itemSearch=[],rankingData,getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced;
+			var data={$data},shopData={},conponData,itemSearch=[],titleArr=[],rankingData,getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced=[];
 			for(var i=0;i<data.length;i++){
 				var apiData=JSON.parse(data[i].api_data);
 				if(data[i].api_url=="mtop.tmall.shop.page.get"){
@@ -200,7 +200,7 @@
 					itemSearch.push(apiData);
 					console.log(apiData)
 				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get"){
-					enhenced=apiData;
+					enhenced.push(apiData);
 				}else if(data[i].api_url=="mtop.taobao.rankingListRecommendService.getItemLists"){
 					getItemLists=apiData;
 					rankingData=getItemLists.favoredByDiamonds;
@@ -271,8 +271,11 @@
 													for(j=0;j<len5;j++){
 														if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
 															var openUrl=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
+															var title=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title.replace('$','');
+															
 														}
 													}
+													titleArr.push(shopData.data.data[title]);
 													if(l>0&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=="image"){
 														var obj={
 															dataBinding:openUrl,
@@ -320,6 +323,10 @@
 					rankingData:rankingData,
 					getItemLists:getItemLists,
 					enhenced:enhenced,
+					titleArr:titleArr,
+				},
+				created:function(){
+					document.title=this.shopData.data.shop_other_data.shopName;
 				},
 				methods:{
 					selectRinking:function(index){

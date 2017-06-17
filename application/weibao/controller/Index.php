@@ -245,7 +245,7 @@ class Index extends Controller
             /**
              * @see JonnyW\PhantomJs\Http\Response
              **/
-            $request->setTimeout(100000);
+            $request->setTimeout(10000);
             $response = $client->getMessageFactory()->createResponse();
 
             // Send the request
@@ -299,6 +299,7 @@ class Index extends Controller
                 }
             }
         }
+		//return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
 		return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
     }
 
