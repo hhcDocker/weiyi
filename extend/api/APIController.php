@@ -25,4 +25,23 @@ abstract class APIController {
     public function __construct(){
         
     }
+    
+    /**
+     * default return value for api
+     * @param  array   $ret 
+     * @param  string  $message the tips for errcode
+     * @return array   return value for api
+     */
+    public function format_ret($ret = [], $message = ""){
+        if(isset($ret['errcode'])) {
+            return $ret;
+        } else {
+            if($ret === null) {
+                $ret = [];
+            }
+            $apiret = array("errcode"=>0, "message"=>$message, "result"=>$ret);
+            return $apiret;
+        }
+    }
+    
 }

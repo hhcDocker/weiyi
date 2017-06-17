@@ -28,7 +28,7 @@ class SMS extends Model
 	public static $sms_config = [
 		'appkey'		=> '23485661',//阿里大于APPKEY
 		'secretKey' 	=> '971955c6d9734418d98a26bfb346f723',//阿里大于secretKey
-		'FreeSignName' 	=> '大胖子车装联盟',//短信签名，大胖子2
+		'FreeSignName' 	=> '微跳',//短信签名，大胖子2
 	];
 
 	public function sms($data=[])
