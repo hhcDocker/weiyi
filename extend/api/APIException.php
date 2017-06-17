@@ -6,7 +6,7 @@
  * | Filename: APIException.php
  * | Description: The exception for api calls
  * +----------------------------------------------------------------------
- * | Created by junweiqu at 2017-04-27 19:57 
+ * | Created by junweiqu at 2017-04-27 19:57
  * | Email: junweiqu@purplethunder.cn
  * +----------------------------------------------------------------------
  * | Version 1.0
@@ -16,7 +16,7 @@
 namespace api;
 
 class APIException extends \Exception {
-    
+
     /* the errcode and message map array */
     public static $code_array = [
        /*===================================================================*/
@@ -47,10 +47,10 @@ class APIException extends \Exception {
           10045 => '',
           10046 => '',
           11999 => '自定义提示',
-      /*===================================================================*/ 
+      /*===================================================================*/
           20001 => "没有此接口",
           20002 => "协议不合法",
-      /*===================================================================*/ 
+      /*===================================================================*/
           30001 => "请输入完整链接！",
           30002 => '链接不合法',
           30003 => '链接不可访问',
@@ -66,7 +66,7 @@ class APIException extends \Exception {
           31997 => '待完善',
           31998 => '待完善，非天猫店铺网址',
           31999 => '待完善，非淘宝店铺网址',
-      /*===================================================================*/    
+      /*===================================================================*/
           40001 => "用户ID不能为空",
           40002 => "凭据不合法或者已过期",
           40003 => "凭据不能为空",
@@ -81,14 +81,14 @@ class APIException extends \Exception {
         if(is_array($code)) {
             $this->errmap = $code;
             if(isset($code['errcode'], $code['message'])) {
-                parent::__construct($code['message'], $code['errcode']); 
+                parent::__construct($code['message'], $code['errcode']);
             } else {
-                parent::__construct(); 
+                parent::__construct();
             }
             return;
         }
         if(in_array($code, array_keys(self::$code_array))) {
-            parent::__construct(self::$code_array[$code], $code); 
+            parent::__construct(self::$code_array[$code], $code);
             $this->errmap = array("errcode"=>$code, "message"=>self::$code_array[$code], "result"=>$ret);
         } else {
             parent::__construct("oh, message is empty", $code);

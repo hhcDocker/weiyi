@@ -8,7 +8,7 @@
  * | Filename: Index.php
  * | Description: 微信端获取微跳数据
  * +----------------------------------------------------------------------
- * | Created by equinox at 2017-06-15 11:00 
+ * | Created by equinox at 2017-06-15 11:00
  * | Email: equinoxsun@purplethunder.cn
  * +----------------------------------------------------------------------
  * | Version 1.0
@@ -35,11 +35,11 @@ class Index extends Controller
     public function processUrl()
     {
         vendor('simple_html_dom.simple_html_dom');
-        set_time_limit(0); 
+        set_time_limit(0);
         header("Connection:Keep-Alive");
         header("Proxy-Connection:Keep-Alive");
 		$arr = array();
-        if ($this->request->method() == 'GET') 
+        if ($this->request->method() == 'GET')
         {
         	if($_GET['isTm']){
 //      		$arr['price']=$_GET['price'];
@@ -54,7 +54,7 @@ class Index extends Controller
 				//得到商品图片url
 				foreach($html->find('section#s-showcase') as $pic_contain)
 	            {
-	            	
+
 	                foreach($pic_contain->find('div.scroller') as $itembox)
 	                {
 	                	$imgflag=1;
@@ -68,7 +68,7 @@ class Index extends Controller
 	                	}
 	                }
 	            };
-	            
+
 	            //得到dataDetail对象
 				foreach($html->find('script') as $key => $script){
                 //if($key==6){
@@ -80,14 +80,14 @@ class Index extends Controller
 				};print_r($arr['dataOther']);
                         exit;
 				//得到店铺score
-				
+
 				foreach ($html ->find('ul.score') as  $score) {
 					foreach($score->find('li') as $key => $li){
 						$arr['score'][$key]['className']=$li->find('b',0)->class;
 						$arr['score'][$key]['text']=$li->find('b',0)->innertext;
 					}
 				}
-				
+
 				//得到商品信息
 				try{
 					if($html ->find('div.mdv-standardItemProps',0)){
@@ -98,13 +98,13 @@ class Index extends Controller
 					}else{
 						$arr['cd_parameter']="";
 					}
-					
+
 				}catch(Exception  $e){
-					
+
 				}
 				//得到店铺名
 				$arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
-				
+
 				$arr['shopUrl']=iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href);
 				session('shopUrl',$arr['shopUrl']);
 				//mc 加上校验
@@ -139,7 +139,7 @@ class Index extends Controller
 	 */
 	public function GetCommodityData(){
 			if(isset($_POST["commodityName"])){
-			
+
 			if(!isset($_POST["sortType"])){
 				$url='https://s.m.taobao.com/search?event_submit_do_new_search_auction=1&_input_charset=utf-8&topSearch=1&atype=b&searchfrom=1&action=home%3Aredirect_app_action&from=1&q='.$_POST['commodityName'].'&sst=1&n=20&buying=buyitnow&m=api4h5&abtest=22&wlsort=22&page='.$_POST['page'];
 			}else{
@@ -168,7 +168,7 @@ class Index extends Controller
      * @return [data]
      */
 	public function GetAccessData(){
-		
+
 		$url='https://rate.tmall.com/list_detail_rate.htm?itemId='.$_POST['itemID'].'&sellerId='.$_POST['sellerID'].'&order=3&append=0&content=0&currentPage='.$_POST['page'].'&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp';
 		$data = file_get_contents($url);
 		$data = str_replace('jsonp(','',$data);
@@ -176,7 +176,7 @@ class Index extends Controller
 		$data=mb_convert_encoding($data, 'utf-8', 'gbk');
 		echo $data;
 	}
-	
+
 	/**
      * 获取天猫看了又看，其他数据
      * @return [data]
@@ -184,7 +184,7 @@ class Index extends Controller
 	public function GetTMRecommend(){
 		$url='https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444';
 		$url2='https://detailskip.taobao.com/json/wap/tmallH5Desc.do?_ksTS=1489820826429_496&callback=setMdskip&itemId='.$_GET['itemId'].'&sellerId='.$_GET['sellerId'].'&isPreview=false&isg=AuDgXeh1rO_KJxDslDcORQ7Gse4-_2Aoq6eCMlrxrPuOVYB_AvmUQ7Zjn0eq&isg2=AsjIpAa3XVo%2FHf0FqOwc%2FzrXGC3acSx7';
-		
+
 		$str=file_get_contents($url);
 		$str2=file_get_contents($url2);
 		$str = mb_convert_encoding($str, 'utf-8', 'gbk');
@@ -197,7 +197,7 @@ class Index extends Controller
 		$arr[]=$str2;
 		echo json_encode($arr);
 	}
-	
+
     /**
      * 接收并处理跳转淘宝店铺、天猫店铺等链接
      * 之后考虑短链接情况
@@ -306,7 +306,7 @@ class Index extends Controller
     }
 
     /**
-     * 
+     *
      * @param  [type] $url [description]
      * @return [type]      [description]
      */
@@ -314,7 +314,9 @@ class Index extends Controller
     {
         //mc
         session('manager_id',1);
-        $has_info = model('')
+        throw new ApiException(31997);
+
+        // $has_info = model('')
         $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
         //没有服务则表示体验
         if (empty($service_info)) {
@@ -349,7 +351,7 @@ class Index extends Controller
         }
 
         //mc 判断是否登录
-        
+
         if (strstr($url,'tmall.com')) { //天猫
             if (strstr($url, 'tmall.com/shop')) { //天猫店铺
                 // echo "天猫网址<br/><br/>";
