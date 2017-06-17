@@ -26,14 +26,11 @@ class ShortUrl extends RandBase {
     
     public function __construct($url=''){
     	if (!$url) {
-    		// throw new Exception("参数url参数错误", 1);
+            throw new APIException(9999);
     	}
     	if (!strstr($url, 'm.taobao.com') && !strstr($url, 'm.tmall.com')) {
-    		// throw new Exception("非淘宝天猫店铺", 1);
+            throw new APIException(30007);
     	}
-    	if(!preg_match('/http:\/\/[\w.]+[\w\/]*[\w.]*\??[\w=&\+\%]*/is',$url)){
-    		// throw new Exception("网址不合法", 1);
-        }
         $this->url = $url;
     }
 

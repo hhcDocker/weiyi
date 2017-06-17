@@ -14,6 +14,9 @@
  */
 
 namespace app\index\controller;
+use app\common\utils\SN\ShortUrl;
+use app\common\utils\SN\ExpenseSN;
+use JonnyW\PhantomJs\Client;
 use api\APIAuthController;
 use api\APIException;
 use think\Config;
@@ -40,37 +43,43 @@ class WtService extends APIAuthController
         }
         $url = str_replace('http://', '', $url);
         $url = str_replace('https://', '', $url);
-        $checkUrl = $this->checkUrl($url,0);
-
+        $full_url = $this->checkUrl($url,0);
+        $is_shop = 1;//店铺链接
         //mc 判断是否登录
-        if (!session('manager_id')) {
-            
+        if(!is_login()) {
+            throw new APIException(10018);
         }
-        if (strpos($url,'tmall.com')) { //天猫
-            if (strpos($url, 'tmall.com/shop')) { //天猫店铺
-                if (!strpos($url, '.m.')) { //PC转移动端
-                    $url = preg_replace('/.+(\w+).tmall.com\/shop\/view_shop\.htm.+/','$1'.'.m.tmall.com',$url);
-                }
-                $service_info = $this->getShopShortUrlInfo($url);
-                return $this->format_ret($service_info);
+
+        if (strpos($full_url,'tmall.com')) { //天猫
+            if (strpos($full_url, 'tmall.com/shop')){
+                $full_url = preg_replace('(/.+\w+)[.m]?.tmall.com\/shop\/view_shop\.htm.+/','$1'.'.m.tmall.com',$full_url);
+            }elseif (preg_match('/\w+[.\w]+tmall.com/',$full_url)) {
+                 $full_url = preg_replace('/(.+\w+)[.m]?.tmall.com.+/','$1'.'.m.tmall.com',$full_url);
             }else{
+                $is_shop=0;
                 //待定
-                // return array('code'=>0,'msg'=>'非天猫店铺网址');
-                dump(array('code'=>0,'msg'=>'非天猫店铺网址'));
+                throw new APIException(31998);
+                //mc
+                //拿到url
             }
-        }elseif (strpos($url, 'taobao')) { //淘宝
-            if (preg_match('/shop\d+\.taobao/', $url)){ //淘宝店铺pc端
-                $url = str_replace('taobao.com', 'm.taobao.com', $url);
-                $service_info = $this->getShopShortUrlInfo($url);
-                return $this->format_ret($service_info);
-            }elseif (preg_match('/shop\d+\.m\.taobao/', $url)) { //淘宝店铺移动端
-                $service_info = $this->getShopShortUrlInfo($url);
-                return $this->format_ret($service_info);
+            $service_info = $this->getShopShortUrlInfo($full_url);
+            return $service_info;
+        }elseif (strpos($full_url, 'taobao')) { //淘宝
+            if (preg_match('/shop\d+\.taobao/', $full_url)){ //淘宝店铺pc端
+                $full_url = preg_replace('/(.+\w+).taobao.com.+/', '$1'.'m.taobao.com',$full_url);
+            }elseif (preg_match('/shop\d+\.m\.taobao/', $full_url)) { //淘宝店铺移动端
+                $full_url = preg_replace('/(.+\w+).taobao.com.+/', '$1'.'m.taobao.com',$full_url);
+            }elseif (strpos($full_url, 'shop.m.taobao.com')) { //淘宝店铺移动端
+                $full_url = preg_replace('/(.+\w+).taobao.com.+/', '$1'.'m.taobao.com',$full_url);
             }else{
+                $is_shop=0;
                 //待定
-                // return array('code'=>0,'msg'=>'非淘宝店铺网址');
-                dump(array('code'=>0,'msg'=>'非淘宝店铺网址'));
+                throw new APIException(31998);
             }
+
+            $service_info = $this->getShopShortUrlInfo($full_url);
+            return $service_info;
+
         }else{
         	throw new APIException(30004);
         }
@@ -89,6 +98,8 @@ class WtService extends APIAuthController
         	throw new APIException(10001);
         }
         $url = strtolower($url);
+        $url = str_replace('http://', '', $url);
+        $url = str_replace('https://', '', $url);
         $url = 'https://'.$url;
         try
         {
@@ -127,6 +138,7 @@ class WtService extends APIAuthController
         		throw new APIException(30005);
 	    	}
         }
+        return $url;
     }
 
     /**
@@ -137,21 +149,19 @@ class WtService extends APIAuthController
     private function getShopShortUrlInfo($url='')
     {
         $url = strtolower($url);
-    	$this->checkUrl($url,1);
-        //mc
-        session('manager_id',1);
-        $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
+        $full_url = $this->checkUrl($url,1);
+        $service_info = model('ShopServices')->getServicesByShopUrl($full_url,session('manager_id'));
         //没有服务则表示体验
         if (empty($service_info)) {
             $experience_time = config('ExperienceTime');
             $time_start = time();
             $time_end = strtotime("+".$experience_time." day");
             //mc 改用tp路由
-            $o = new ShortUrl($url);
+            $o = new ShortUrl($full_url);
             $shop_url_str = $o->getSN();
             //mc
-            $service_id = model('ShopServices')->saveServices(session('manager_id'),$url,$shop_url_str,$time_start,$time_end);
-            $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
+            $service_id = model('ShopServices')->saveServices(session('manager_id'),$full_url,$shop_url_str,$time_start,$time_end);
+            $service_info = model('ShopServices')->getServicesByShopUrl($full_url,session('manager_id'));
             //添加消费记录，体验3天
             $expense_model = new ExpenseSN();
             $expense_num = $expense_model->getSN();

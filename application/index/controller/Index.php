@@ -112,7 +112,8 @@ class Index extends APIController
         }
         $authkey = ["mobilephone"=>$mobilephone, "password"=>$password];
         session("authkey", $authkey);
-        return $this->format_ret();
+        $login_info = array('manager_mobilephone'=>session('manager_mobilephone'),'is_login'=>1);
+        return $login_info;
     }
     
     /**
