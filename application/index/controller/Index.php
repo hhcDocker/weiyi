@@ -243,11 +243,11 @@ class Index extends APIController
                     'template'  => 'SMS_71215766',
             ]);
 
-            $sms_result = $sms->sms([
+            /*$sms_result = $sms->sms([
                 'param'  => ['code'=>$code, 'product'=>'大胖子车装联盟'],
                 'mobile'  => $mobilephone,
                 'template'  => 'SMS_6215201',
-            ]);
+            ]);*/
             if($sms_result !== true){
                 throw new APIException(10003);
             }
