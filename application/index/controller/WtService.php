@@ -26,13 +26,13 @@ use think\Config;
 class WtService extends APIAuthController
 {
     /**
-     * post请求
-     * 首页转换网址,验证登录与否
-     * 验证店铺，判断地址合法性，获取店铺地址（非店铺地址则爬取数据，得到店铺地址）
-     * 查表获取该链接是否已购买服务，是否已过期
-     * 如果从未购买，则生成体验记录，默认3天，生成服务记录，返回短链接
+     * 首页转换网址
+     * 1.判断链接合法性与否
+     * 2.验证登录与否
+     * 3.判断天猫or淘宝，店铺or商品详情，调用不同函数，天猫取得shopId，淘宝取得userId
+     * 4.查表获取该链接所属店铺是否已购买服务，是否已过期
+     * 5.如果从未购买，则生成体验记录，默认3天，生成服务记录，返回短链接
      * 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-     * 暂时先验证，之后再迁移到账号体系，index模块下，改前后分离
      * 短链接全部由路由定义
      * @return [type] [description]
      */
@@ -47,6 +47,7 @@ class WtService extends APIAuthController
         $url = str_replace('https://', '', $url);
         $full_url = $this->checkUrl($url,0);
         $is_shop = 1;//店铺链接
+
         //mc 判断是否登录
         if(!is_login()) {
             throw new APIException(10018);

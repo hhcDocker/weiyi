@@ -23,7 +23,7 @@ use think\Controller;
 use think\Request;
 use think\Db;
 
-class Index extends Controller
+class Index1 extends Controller
 {
     /**
      * 接收并处理淘宝、天猫等链接
@@ -31,7 +31,7 @@ class Index extends Controller
      * 天猫商品详情：https://detail.m.tmall.com/item.htm?ft=t&id=544094926521
      * @return [type]
      */
-    public function processUrl()
+    public function getGoodsDetail()
     {
         vendor('simple_html_dom.simple_html_dom');
         set_time_limit(0); 
@@ -41,83 +41,17 @@ class Index extends Controller
         if ($this->request->method() == 'GET') 
         {
         	if($_GET['isTm']){
-//      		$arr['price']=$_GET['price'];
-//				$arr['sold']=$_GET['sold'];
-//				$arr['area']=$_GET['area'];
-				$arr['isTm']=$_GET['isTm'];
-				$url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$_GET["itemId"].'&scm=1007.12913.42100.100200300000000';
-	           	$html =file_get_html($url);
-				$assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$_GET["itemId"];
-				$assessFlag='{'.file_get_contents($assessFlag).'}';
-				$arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
-				//得到商品图片url
-				foreach($html->find('section#s-showcase') as $pic_contain)
-	            {
-	            	
-	                foreach($pic_contain->find('div.scroller') as $itembox)
-	                {
-	                	$imgflag=1;
-	                	foreach ($itembox ->find('div.itbox') as $item) {
-							if($imgflag==1){
-								$arr['imgUrl'][]=$item->find('img',0)->src;
-							}else{
-								$arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
-							}
-							$imgflag++;
-	                	}
-	                }
-	            };
-	            
-	            //得到dataDetail对象
-				foreach($html->find('script') as $key => $script){
-                //if($key==6){
-                //	$arr['dataDetail']=iconv("GB2312//IGNORE","UTF-8",$script->innertext);;
-                //}else{
-						$arr['dataOther'][]=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
-
-                //}
-				};print_r($arr['dataOther']);
-                        exit;
-				//得到店铺score
-				
-				foreach ($html ->find('ul.score') as  $score) {
-					foreach($score->find('li') as $key => $li){
-						$arr['score'][$key]['className']=$li->find('b',0)->class;
-						$arr['score'][$key]['text']=$li->find('b',0)->innertext;
-					}
-				}
-				
-				//得到商品信息
-				try{
-					if($html ->find('div.mdv-standardItemProps',0)){
-						$string=$html ->find('div.mdv-standardItemProps',0)->attr['mdv-cfg'];
-						if($string){
-							$arr['cd_parameter']=mb_convert_encoding($string, 'utf-8', 'gbk');
-						}
-					}else{
-						$arr['cd_parameter']="";
-					}
-					
-				}catch(Exception  $e){
-					
-				}
-				//得到店铺名
-				$arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
-				
-				$arr['shopUrl']=iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href);
+                //$arr['price']=$_GET['price'];
+                //$arr['sold']=$_GET['sold'];
+                //$arr['area']=$_GET['area'];
+                $wei_bao_data = new WeiBaoData();
+                $arr =$wei_bao_data->processUrl(1,$_GET["itemId"],0);
 				session('shopUrl',$arr['shopUrl']);
-				//mc 加上校验
-				$arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
            		return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
         	}else{
-        		$url='https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$_GET["itemId"].'%22%7D';
-        		$data=file_get_contents($url);
-                $data=json_decode($data);
-                echo "<pre>";
-                var_dump($data);
-                echo "<pre/>";
-                exit;
-        		//$data=$_GET['itemId'];
+        		/*$url='https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$_GET["itemId"].'%22%7D';
+        		//$data=file_get_contents($url);*/
+        		$data=$_GET['itemId'];
            		return $this->fetch('tb_commodity_detail',array('data' => $data ));
         	}
 
@@ -306,7 +240,6 @@ class Index extends Controller
     {
         //mc
         session('manager_id',1);
-        $has_info = model('')
         $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
         //没有服务则表示体验
         if (empty($service_info)) {
