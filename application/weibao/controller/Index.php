@@ -292,8 +292,8 @@ class Index extends Controller
                 }
             }
         }
-		return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
-		//return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
+		//return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
+		return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
     }
 
     private function getShopShortUrlInfo($url)
