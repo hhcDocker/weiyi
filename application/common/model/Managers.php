@@ -105,7 +105,7 @@ class Managers extends Base
         if (!$uid || !$mobilephone || !$password || !$register_ip) {
             return 0;
         }
-        $manager_id = Db::name('seller_managers')->insertGetId([
+        $manager_id = Db::name('wj_managers')->insertGetId([
                     'uid' => $uid,
                     'mobilephone' => $mobilephone,
                     'password' => $password,

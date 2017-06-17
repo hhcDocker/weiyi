@@ -47,6 +47,7 @@ class Index extends APIController
         $mobilephone =  noempty_input('mobilephone','/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
         $password = noempty_input('password');
         $re_password = noempty_input('re_password');
+        
         if ($this->checkExistsMobilephone($mobilephone)) {
             throw new APIException(10002);
         }
