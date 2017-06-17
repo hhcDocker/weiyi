@@ -29,12 +29,12 @@ abstract class APIBase extends Controller {
     
     private $version = null;
     
-    /*public function __construct(){
+    public function __construct(){
         parent::__construct();
-        $sname = config('session.var_session_id');
+        /*$sname = config('session.var_session_id');
         $token = $this->request->header("$sname");
-        /* guarantee api token */
-        /*if(empty($sname) || !$token){
+        // guarantee api token 
+        if(empty($sname) || !$token){
             throw new APIException(40002);
         }
         $_REQUEST[$sname] = $token;
@@ -43,12 +43,8 @@ abstract class APIBase extends Controller {
         if(session('validorigin') !== $validorigin) {
             session_destroy();
             throw new APIException(40002);
-        }
-        $this->version = $this->request->header("X-Version");
-        if (strpos($this->request->header('USER_AGENT'), 'MicroMessenger') === false) {
-			//throw new APIException(10057);
-	    }
-    }*/
+        }*/
+    }
     
     /**
      * default return value for api

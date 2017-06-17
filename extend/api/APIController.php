@@ -21,8 +21,8 @@ use api\APIBase;
  * Please change this class if you have requirements of adding common 
  * functions for class which subclass it.
  */
-abstract class APIController extends APIBase {
+abstract class APIController {
     public function __construct(){
-        parent::__construct();
+        
     }
 }

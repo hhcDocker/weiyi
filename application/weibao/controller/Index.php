@@ -103,6 +103,7 @@ class Index extends Controller
 				$arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
 				
 				$arr['shopUrl']=iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href);
+                
 				session('shopUrl',$arr['shopUrl']);
 				//mc 加上校验
 				$arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
@@ -200,7 +201,7 @@ class Index extends Controller
     public function getShopData() {
         $url = input('param.url') ? input('param.url'):'';
 		session('shopUrl',$url);
-        $flag = input('param.flag') ? input('param.flag'):0;
+        $flag = input('param.flag') ? input('param.flag'):1;
         $checkUrl = $this->checkUrl($url);
         if (!$checkUrl['code']) {
             echo json_encode($checkUrl);
@@ -257,7 +258,7 @@ class Index extends Controller
             $flag_error =0;
             //校验是否全部获取到
             foreach ($data as $k => $v) {
-                $v = preg_replace('/^mtopjsonp\d\(([\s\S]+)\)/','$1', $v);
+                $v = preg_replace('/^mtopjsonp\d+\(([\s\S]+)\)/','$1', $v);
                 $v = json_decode($v,true);
                 if ($v['ret'][0]!="SUCCESS::调用成功"){
                     $flag_error=1;
@@ -364,57 +365,6 @@ class Index extends Controller
             dump(array('code'=>0,'msg'=>'非淘宝天猫网址'));
         }
     }*/
-
-    /**
-     * 首页转换网址,验证登录与否
-     * 验证店铺，判断地址合法性，获取店铺地址（非店铺地址则爬取数据，得到店铺地址）
-     * 查表获取该链接是否已购买服务，是否已过期
-     * 如果从未购买，则生成体验记录，默认3天，生成服务记录，返回短链接
-     * 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-     * 暂时先验证，之后再迁移到账号体系，index模块下，改前后分离
-     * @return [type] [description]
-     */
-    public function getShortUrl()
-    {
-        $url = input('post.url')?input('post.url'):'';
-        // echo $url;
-        $checkUrl = $this->checkUrl($url);
-        if (!$checkUrl['code']) {
-            dump($checkUrl);
-            return;
-        }
-        //mc 判断是否登录
-        echo config('ExperienceTime');
-        if (strstr($url,'tmall.com')) { //天猫
-            if (strstr($url, 'tmall.com/shop')) { //天猫店铺
-                // echo "天猫网址<br/><br/>";
-                if (!strstr($url, '.m.')) { //PC转移动端
-                    $url = preg_replace('/.+(\w+).tmall.com\/shop\/view_shop\.htm.+/','https://'.'$1'.'.m.tmall.com',$url);
-                }
-                $this->getShopShortUrlInfo($url);
-                dump(array('code'=>1,'url'=>$url));
-                // return array('code'=>1,'url'=>$url);
-            }else{
-                //待定
-                // return array('code'=>0,'msg'=>'非天猫店铺网址');
-                dump(array('code'=>0,'msg'=>'非天猫店铺网址'));
-            }
-        }elseif (strstr($url, 'taobao')) { //淘宝
-            if (preg_match('/shop\d+\.taobao/', $url)){ //淘宝店铺pc端
-                $url = str_replace('taobao.com', 'm.taobao.com', $url);
-                $this->getShopShortUrlInfo($url);
-            }elseif (preg_match('/shop\d+\.m\.taobao/', $url)) { //淘宝店铺移动端
-                $this->getShopShortUrlInfo($url);
-            }else{
-                //待定
-                // return array('code'=>0,'msg'=>'非淘宝店铺网址');
-                dump(array('code'=>0,'msg'=>'非淘宝店铺网址'));
-            }
-        }else{
-            // return array('code'=>0,'msg'=>'非淘宝天猫网址');
-            dump(array('code'=>0,'msg'=>'非淘宝天猫网址'));
-        }
-    }
 
     private function checkUrl($url='')
     {

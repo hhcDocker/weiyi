@@ -21,8 +21,7 @@ class AlertMail {
         $this->content = $content;
     }
     public function send(){
-        exit;
-        if(config("extconfig.alert_turn_on") && !empty($this->content)){
+        if(config("alert_turn_on") && !empty($this->content)){
             $mail = new \PHPMailer;
             $mail->CharSet = "UTF-8";
             $mail->isSMTP();                                      
@@ -32,9 +31,9 @@ class AlertMail {
             $mail->Password = 'Zl.bj@2017';                           
             $mail->Port = 587;                                   
             $mail->setFrom('alert@purplethunder.cn', 'Alert');
-            $mail->addAddress('equinox@purplethunder.cn', 'qujunwei');   
+            $mail->addAddress('equinoxsun@purplethunder.cn', 'qujunwei');   
             $mail->isHTML(true);
-            $subject = config("extconfig.alert_mail_subject");  
+            $subject = config("alert_mail_subject");  
             if(empty($subject)) {
                 $subject = "Alert";
             }   

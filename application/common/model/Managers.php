@@ -117,6 +117,12 @@ class Managers extends Base
         return $manager_id;
     }
 
+    /**
+     * 更新密码
+     * @param  string $mobilephone [description]
+     * @param  string $password    [description]
+     * @return [type]              [description]
+     */
     public function updateManagerPassword($mobilephone='',$password='')
     {
         if (!$mobilephone || !$password) {

@@ -154,7 +154,7 @@ return [
     // 显示错误信息
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle
-    'exception_handle'       => 'api\APIExceptionHandler',
+    'exception_handle'       => '',
 
     // +----------------------------------------------------------------------
     // | 日志设置
@@ -209,7 +209,6 @@ return [
         // 是否自动开启 SESSION
         'auto_start'     => true,
         'use_cookies'    => 1,
-        'validorigin'    => 'validorigin',
     ],
 
     // +----------------------------------------------------------------------
@@ -240,5 +239,6 @@ return [
     ],
 
     'ExperienceTime' =>3,
-    'PhantomjsPath' =>'/usr/bin/phantomjs'
+    // 'PhantomjsPath' =>'/usr/bin/phantomjs'
+    'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe'
 ];

@@ -20,7 +20,7 @@ class OptionsMethod {
         if(Request::instance()->method() == "OPTIONS") {
            header('Access-Control-Allow-Origin: *');
            header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT');
-           // header('Access-Control-Allow-Headers: X-Token, Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie');
+           //header('Access-Control-Allow-Headers: X-Token, Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie');
            exit;
         }
     }
