@@ -17,8 +17,9 @@ namespace app\index\controller;
 use app\index\model\SMS;
 use api\APIController;
 use api\APIException;
-use think\captcha\Captcha;
 use think\Config;
+use think\Request;
+
 
 class Index extends APIController
 {
@@ -217,7 +218,7 @@ class Index extends APIController
     private function checkExistsMobilephone($mobilephone='')
     {
         if (!$mobilephone) {
-            throw new \Exception("mobilephone参数错误");
+            throw new APIException(10001);
         }
         $res = model('Managers')->hasManagerMobilephone($mobilephone);
 

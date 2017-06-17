@@ -14,16 +14,19 @@
  */
 
 namespace api;
+use think\Controller;
 use api\APIBase;
+use think\Request;
+use api\APIException;
 
 /**
  * This class should be inherited by others which aren't required login.
  * Please change this class if you have requirements of adding common 
  * functions for class which subclass it.
  */
-abstract class APIController {
+abstract class APIController extends Controller{
     public function __construct(){
-        
+        parent::__construct();
     }
     
     /**

@@ -16,6 +16,7 @@
  */
 
 namespace api;
+use think\Controller;
 use api\APIBase;
 use api\APIException;
 
@@ -24,9 +25,9 @@ use api\APIException;
  *  Please change this class if you have requirements of adding common 
  *  functions for class which subclass it.
  */
-abstract class  APIAuthController {
+abstract class  APIAuthController extends Controller{
     public function __construct(){
-        // parent::__construct();
+         parent::__construct();
         /*if(!is_login()) {
             throw new APIException(40007);
         }*/
