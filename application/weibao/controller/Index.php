@@ -238,7 +238,7 @@ class Index extends Controller
             /**
              * @see JonnyW\PhantomJs\Http\Response
              **/
-            $request->setTimeout(100000);
+            $request->setTimeout(10000);
             $response = $client->getMessageFactory()->createResponse();
 
             // Send the request
@@ -257,7 +257,7 @@ class Index extends Controller
             $flag_error =0;
             //校验是否全部获取到
             foreach ($data as $k => $v) {
-                $v = preg_replace('/^mtopjsonp\d\(([\s\S]+)\)/','$1', $v);
+                $v = preg_replace('/^mtopjsonp\d+\(([\s\S]+)\)/','$1', $v);
                 $v = json_decode($v,true);
                 if ($v['ret'][0]!="SUCCESS::调用成功"){
                     $flag_error=1;
@@ -292,7 +292,8 @@ class Index extends Controller
                 }
             }
         }
-		return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
+		return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
+		//return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
     }
 
     private function getShopShortUrlInfo($url)

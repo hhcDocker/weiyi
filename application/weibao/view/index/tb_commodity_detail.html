@@ -48,7 +48,7 @@
 			<div class="rate_header">
 				<h3>宝贝评价(<span v-text="commodityData.assessmentNum"></span>)</h3>
 			</div>
-			<div class="rate_tags" >
+			<div class="rate_tags" v-if="commodityData.label">
 				<p v-for="item in commodityData.label"><span v-text="item.word"></span><span>+</span><span v-text="item.count"></span></p>
 			</div>
 			<div class="shop_header">
@@ -117,15 +117,21 @@
 		<script type="text/javascript">
 			var vm=null,data=null,scriptDetail=null,scriptAccess=null;
 			function jsonp(d){
-	        	data=d;
-	        	if(data.data.apiStack[0].value){
-			  		try{
-			  			var apiStackValue = JSON.parse(data.data.apiStack[0].value);
-			  		}catch(e){
-			  			console.log(e);
-			  		}
-			  		
-			  	}
+				console.log(data.data)
+				data=d;
+	        	if(data.data.apiStack){
+	        		if(data.data.apiStack[0].value){
+				  		try{
+				  			var apiStackValue = JSON.parse(data.data.apiStack[0].value);
+				  		}catch(e){
+				  			console.log(e);
+				  		}
+				  		
+				  	}
+	        	}else{
+	        		alert("请求数据失败")
+	        		return false;
+	        	}
 			  	if(data.data.mockData){
 			  		try{
 			  			var mockData =JSON.parse(data.data.mockData);
@@ -157,7 +163,9 @@
 					commodityData.num=apiStackValue.item.sellCount;
 					commodityData.area=apiStackValue.delivery.from;
 					commodityData.labelExtra=apiStackValue.consumerProtection.items;
-					commodityData.label=data.data.rate.keywords;
+					if(data.data.rate){
+					 	commodityData.label=data.data.rate.keywords;
+					}
 					commodityData.assessmentNum=data.data.item.commentCount;
 					commodityData.shopInfo=data.data.seller;
 					commodityData.shopUrl= getShopUrl(commodityData.shopInfo.shopUrl);
@@ -280,11 +288,14 @@
 							props:['comdata'],
 							template:"<div class='rate_single'>"+
 								"<ul>"+
-									"<li v-for='item in comdata.assessInfo'>"+
+									"<li v-for='item in comdata.assessInfo' v-if='comdata.assessInfo.length>0'>"+
 										"<h2><img src='/static/images/TB1yeWeIFXXXXX5XFXXuAZJYXXX-210-210.png_40x40.jpg'/><span v-text='item.user.nick'></span></h2>"+
 										"<p v-text='item.content'></p>"+
 										"<span v-text='item.date'></span>"+
 										"<div class='assess_img'><img v-for='img in item.photos' v-bind:src='img.thumbnail'/></div>"+
+									"</li>"+
+									"<li v-else>"+
+										"<div style='text-align:center;'>暂无评价</div>"+
 									"</li>"+
 								"</ul>"+
 							"</div>"

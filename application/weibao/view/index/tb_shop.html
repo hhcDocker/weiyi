@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="/static/css/tm_shop.css"/>
+		<link rel="stylesheet" type="text/css" href="/static/css/swiper-3.4.1.min.css"/>
+		<script type="text/javascript" src="/static/build/flexible.js" ></script>
+	</head>
+	<body>
+		<div id="tbShopCt" v-cloak>
+			<header>
+				<section class="shop_header">
+					<div class="header_img">
+						<img :src="queryShopInfo.shopSignLogoUrl"/>
+					</div>
+					<div class="header_info">
+						<a href="#" class="shop_logo">
+							<img :src="queryShopInfo.shopLogo"/>
+						</a>
+						<div class="collect_wrapper">
+			                <div class="collect_item collect_counter">
+			                    <p v-text="queryShopInfo.fansNum">
+			                    </p>
+			                    <p>粉丝数</p>
+			                </div>
+			            </div>
+						<div class="tm_contact">
+			                <div class="tm_ctn">
+			                    <span class="name" v-text="queryShopInfo.shopName"></span>
+			                	<img :src="queryShopInfo.rankLevelPic" alt="" />
+			                </div>
+			            </div>
+					</div>
+				</section>
+			</header>
+			<section class="nav_tab">
+				<a href="#"><i></i><span>店铺首页</span></a>
+				<a href="#"><i></i><span>全部宝贝</span></a>
+				<a href="#"><i></i><span>新品上架</span></a>
+				<a href="#"><i></i><span>微淘动态</span></a>
+			</section>
+			<!--<section>
+				<div class="tm_search">
+	                <span class="icon_search"></span>
+	                在店铺内搜索
+	            </div>
+			</section>-->
+			<section class="section_swiper" v-if='banner[0]'>
+				<div class="swiper-container"  id="swiper1">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide " v-for='item in banner[0].bannerArrData.banner_array'>
+				        	<img :src="item.image"/>
+				        </div>
+				    </div>
+				</div>
+			</section>
+			<section  class="section_swiper" v-if="conponQueryData.count>0">
+				 <div class="swiper-container"  id="conponList">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide " v-for='item in conponQueryData.couponList'>
+				        	<img src="//gw.alicdn.com/tps/i1/TB1NavLKpXXXXcgaXXXkmBt9FXX-342-192.png_300x300.jpg_.webp"/>
+				        	<p class="price">￥{{item.amount}}</p>
+				        	<p class="title">本店{{item.thresholdDesc}}</p>
+				        	<p class="time" >{{item.startTime}}前有效</p>
+				        </div>
+				    </div>
+				</div>
+			</section>
+			<section class="shopCmdImageList" v-if='images.length>0'>
+				<div v-for='item in images' v-if='item.length>0'  >
+					<span v-if="items.styleBinding.width" v-for="items in item" @click="toDetailByItemSearch(items,$index)" :style="{width:items.styleBinding.width*1.155/75 + 'rem',height:items.styleBinding.height*1.155/75 + 'rem'}">
+						<img :src="items.imageUrl"/>
+					</span>
+					<span v-if="!items.styleBinding.width" class="flexBox" v-for="items in item" @click="toDetailByItemSearch(items,$index)" :style="{height:items.styleBinding.height*1.155/75 + 'rem'}">
+						<img :src="items.imageUrl"/>
+					</span>
+				</div>
+			</section>
+			<section class="section_swiper" v-if='banner[1]'>
+				<div class="swiper-container" id="swiper2">
+				    <div class="swiper-wrapper">
+				       <div class="swiper-slide " v-for='item in banner[1].bannerArrData'>
+				        	<img :src="item.image"/>
+				        </div>
+				    </div>
+				</div>
+			</section>
+			<section class="commodity_contain_itemsearch" v-if='itemSearch' v-for="item in itemSearch">
+				<div class="title_container_itemsearch">
+					<span>{{item['title'+($index+1)]}}</span>
+				</div>
+				<ul class="data_grid" v-if="$index==0">
+					<li v-for="items in item.list" @click="toDetailGird(items,$parent.$index)">
+							<a href="javascript:void(0)"><img :src="items.item1.imgUrl" alt="" /></a>
+							<h2 v-text="items.item1.title"></h2>
+							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
+					</li>
+				</ul>
+				<ul class="data_grid" v-else>
+					<li v-for="items in item.list" @click="toDetailGird(items,$index)">
+							<a href="javascript:void(0)"><img :src="items.item2.imgUrl" alt="" /></a>
+							<h2 v-text="items.item1.title"></h2>
+							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
+					</li>
+				</ul>
+			</section>
+			<section class="getItemLists" v-if="getItemLists">
+				<h3>排行榜</h3>
+				<div class="ranking_nav">
+					<div :class="{'selected_ranking':rinkingIndex==0}" @click="selectRinking(0)">会员最爱</div>
+					<div :class="{'selected_ranking':rinkingIndex==1}" @click="selectRinking(1)">收藏排行</div>
+					<div :class="{'selected_ranking':rinkingIndex==2}" @click="selectRinking(2)">销量排行</div>
+				</div>
+				<div class="ranking_data">
+					<div class="ranking_left" @click="toDetailByRank(0)">
+						<span class="topImg">
+							<img src="//gw.alicdn.com/tps/i1/TB1YeF.GXXXXXc4XFXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+						</span>
+						<img :src="rankingData[0].imgUrl"/>
+						<p class="solePrice">
+							已售 {{rankingData[0].totalSold}}
+							<span>￥{{rankingData[0].price}}</span>
+						</p>
+					</div>
+					<div class="ranking_right">
+						<div @click="toDetailByRank(1)">
+							<span class="topImg">
+								<img src="//gw.alicdn.com/tps/i2/TB1HHOjGXXXXXa8XXXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+							</span>
+							<img :src="rankingData[1].imgUrl"/>>
+							<p class="solePrice">
+								已售 {{rankingData[0].totalSold}}
+							</p>
+						</div>
+						<div @click="toDetailByRank(2)">
+							<span class="topImg">
+								<img src="//gw.alicdn.com/tps/i3/TB1XmB.GXXXXXX5XVXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+							</span>
+							<img :src="rankingData[2].imgUrl"/>
+							<p class="solePrice">
+								已售 {{rankingData[0].totalSold}}
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="enhenced" v-if="enhenced" v-for="models in enhenced"> 
+				<div class="title_container_itemsearch" v-if="titleArr[$index]">
+					<span>{{titleArr[$index]}}</span>
+				</div>
+				<ul class="girdList">
+					<li v-for="item in models.list" @click="toDetailByEnhenced(item)">
+						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
+						<h2 v-text="item.title"></h2>
+						<p>
+							<span>￥{{item.priceYuan}}</span><span class="priceFen">.00</span><del v-if="parseInt(item.reservePrice)>parseInt(item.priceYuan)">￥{{item.reservePrice}}</del>
+						</p>
+					</li>
+				</ul>
+			</section>
+			<section class="shop_commodity_contain" v-if="ndividuationData[0].list.length>0">
+				<div class="big_title_container">
+					<span>-为你推荐-</span>
+				</div>
+				<ul class="data_grid">
+					<li v-for="item in individuationData[0].list" @click='toDeatail(item)'>
+						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
+						<h2 v-text="item.title"></h2>
+						<p><span>￥{{item.priceYuan}}</span><span class="priceFen">.00</span></p>
+					</li>
+				</ul>
+			</section>
+			<section v-if="text_content"style="padding: 0 0.4rem 0.266666rem;border-bottom:0.05rem dashed rgb(149, 149, 149)">
+				{{text_content}}
+			</section>
+		</div>
+		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
+		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
+		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
+		<script type="text/javascript">
+			var data={$data},shopData={},queryShopInfo,conponData,itemSearch=[],text_content,rankingData,titleArr=[],getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced=[];
+			for(var i=0;i<data.length;i++){
+				var apiData=JSON.parse(data[i].api_data);
+				if(data[i].api_url=="mtop.geb.view.getPageView"){
+					shopData.data=apiData;
+				console.log(shopData)
+				}else if(data[i].api_url=="mtop.taobao.geb.shopinfo.queryshopinfo"){
+					queryShopInfo=apiData;
+				}else if(data[i].api_url=="com.taobao.shop.getConpon1111"){
+					conponData=apiData;
+				}else if(data[i].api_url=="mtop.shop.decorate.coupon.query"){
+					conponQueryData=apiData;
+				}else if(data[i].api_url=="mtop.taobao.shop.itemSearch"){
+					itemSearch.push(apiData);
+				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get"){
+					enhenced.push(apiData);
+				}else if(data[i].api_url=="mtop.taobao.geb.rankinglist.rankingListInfo"){
+					getItemLists=apiData;
+					rankingData=getItemLists.favoredByDiamonds;
+				}else if(data[i].api_url=="mtop.taobao.shop.individuation"){
+					individuationData.push(apiData);
+				}
+			}
+			(function(){
+				var len1=shopData.data.view.subViews[0].subViews.length;
+					for(k=0;k<len1;k++){
+						if(shopData.data.view.subViews[0].subViews[k].viewId=='shop_decorate_area'){
+							var len2=shopData.data.view.subViews[0].subViews[k].subViews.length;
+							for(var i=0;i<len2;i++){
+								if(shopData.data.view.subViews[0].subViews[k].subViews[i].type=='sliderView'){
+									try{
+										var name=shopData.data.view.subViews[0].subViews[k].subViews[i].foreach.array.replace('$','');
+											name=name.replace('.banner_array','');
+										var obj={
+											bannerArrName:name,
+											bannerArrData:shopData.data.data[name]
+										}
+										banner.push(obj);
+									}catch(e){
+										//TODO handle the exception
+										alert(e)
+									}
+								}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].type=='container'&&shopData.data.view.subViews[0].subViews[k].subViews[i].viewId!='coupon_info'){
+									var length=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews.length;
+									var modelData=[];
+									var isLabel=false;
+									for(var l=0;l<length;l++){
+										if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].type=='image'){
+											try{
+												var name=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].dataBinding.url.replace('$','');
+												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events){
+											console.log(l);
+													var len3=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions.length;
+													for(j=0;j<len3;j++){
+														if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
+															var openUrl=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
+																openUrl=openUrl.split(".")[0];
+														}
+													}
+													var obj={
+														bannerArrName:name,
+														imageUrl:shopData.data.data[name.split('.')[0]][name.split('.')[1]],
+														cmdId:shopData.data.data[openUrl].clickUrl,
+														styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding
+													};
+													modelData.push(obj)
+													isLabel=false;
+												}else{
+													if(shopData.data.data[name.split(".")[0]].single_image_url){
+														imageUrl=shopData.data.data[name.split(".")[0]].single_image_url
+													}else if(typeof shopData.data.data[name.split(".")[0]]=='string'){
+														imageUrl = shopData.data.data[name.split(".")[0]]
+													}
+													var obj={
+														label:[],
+														bannerArrName:name,
+														imageUrl:imageUrl,
+														styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding
+													};
+													modelData.push(obj)
+													isLabel=true;
+												}
+												
+											}catch(e){
+												//TODO handle the exception
+												//alert(e)
+											}
+										}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].type=='container'){
+											try{
+												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events){
+													var len5=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions.length;
+													for(j=0;j<len5;j++){
+														if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
+															var openUrl=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
+															
+														}
+													}
+													if(shopData.data.data[openUrl.split('.')[0]].title){
+														titleArr.push(shopData.data.data[openUrl.split('.')[0]].title);
+													}
+													if(l>0&&shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l-1].type=="image"){
+														var obj={
+															dataBinding:openUrl,
+														}
+														modelData[0].label.push(obj);
+													}
+												}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value){
+													titleArr.push(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
+												}
+											}catch(e){
+												//TODO handle the exception
+												//alert(e)
+											}
+										}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].type=='label'&&isLabel){
+											try{
+												var obj={
+													dataBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].dataBinding.value.replace('$',''),
+													styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding,
+												}
+												console.log(modelData)
+												modelData[0].label.push(obj);
+											}catch(e){
+												//TODO handle the exception
+												//alert(e)
+											}
+											
+										}
+									}
+									imagesModel.push(modelData);
+								}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].type=='label'){
+									try{
+										if(shopData.data.view.subViews[0].subViews[k].subViews[i].dataBinding.value){
+											var arr = shopData.data.view.subViews[0].subViews[k].subViews[i].dataBinding.value.replace('$','').split('.');
+											 text_content=shopData.data.data[arr[0]][arr[1]];
+										}
+									}catch(e){
+										//TODO handle the exception
+									}
+								}
+							}
+						}
+						
+					}
+			})();
+			var vm=new Vue({
+				el:"#tbShopCt",
+				data:{
+					shopData:shopData,
+					queryShopInfo:queryShopInfo,
+					conponData:conponData,
+					conponQueryData:conponQueryData,
+					individuationData:individuationData,
+					itemSearch:itemSearch,
+					banner:banner,
+					images:imagesModel,
+					rinkingIndex:0,
+					rankingData:rankingData,
+					getItemLists:getItemLists,
+					enhenced:enhenced,
+					text_content:text_content,
+					titleArr:titleArr,
+				},
+				methods:{
+					selectRinking:function(index){
+						this.rinkingIndex=index;
+						if(index==0){
+							this.rankingData=getItemLists.favoredByDiamonds;
+						}else if(index==1){
+							this.rankingData=getItemLists.totalCollect;
+						}else if(index==2){
+							this.rankingData=getItemLists.totalSold;
+						}
+					},
+					toDeatail:function(item){
+						location.href='/weibao/index/processUrl?isTm=0&itemId='+item.nid;
+					},
+					toDetailByRank:function(index){
+						location.href='/weibao/index/processUrl?isTm=0&itemId='+this.rankingData[index].id;
+					},
+					getQueryString:function (name,url) { 
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+						var r = url.substr(1).match(reg); 
+						if (r != null) return unescape(r[2]); return null; 
+					},
+					toDetailByEnhenced:function(item){
+						location.href='/weibao/index/processUrl?isTm=0&itemId='+item.nid;
+					},
+					toDetailByItemSearch:function(item,index){
+						console.log(item);return false;
+						if(item.cmdId){
+							var url = item.cmdId.slice(item.cmdId.indexOf('?')); 
+							var id=this.getQueryString('id',url);
+							if(!id){
+								return false;
+							}
+							location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+						}else if(item.label){
+							var keys = item.label[index].dataBinding.replace("title",'url');
+							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
+							var id=this.getQueryString('id',urls);
+							location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+						}
+						
+					},
+					toCommodityList:function(){
+						location.href="/weibao/index/tmShopCommodityList";
+					},
+					toDetailGird:function(item,index){
+						if(index==0){
+							var id = item['item1'].nid;
+						}else if(index==1){
+							var id = item['item2'].nid;
+						}
+						location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+					}
+				}
+			})
+			
+			//借用swiper插件，图片轮播
+			var mySwiper = new Swiper ('#swiper1', {
+			    direction: 'horizontal',
+			    loop: true,
+			})
+			var mySwiper2 = new Swiper ('#swiper2', {
+			    direction: 'horizontal',
+			    loop: true,
+			})
+			var recommend_swiper = new Swiper ('#conponList', {
+			    direction: 'horizontal',
+			    loop: false,
+			    slidesPerView:2, //分组显示 
+			    spaceBetween:10
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>淘宝店铺</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/tm_shop.css"/>
+		<link rel="stylesheet" type="text/css" href="/static/css/swiper-3.4.1.min.css"/>
+		<script type="text/javascript" src="/static/build/flexible.js" ></script>
+	</head>
+	<body>
+		<div id="tbShopCt">
+			<header>
+				<section class="shop_header">
+					<div class="header_img">
+						<img :src="queryShopInfo.shopSignLogoUrl"/>
+					</div>
+					<div class="header_info">
+						<a href="#" class="shop_logo">
+							<img :src="queryShopInfo.shopLogo"/>
+						</a>
+						<div class="collect_wrapper">
+			                <div class="collect_item collect_counter">
+			                    <p v-text="queryShopInfo.fansNum">
+			                    </p>
+			                    <p>粉丝数</p>
+			                </div>
+			            </div>
+						<div class="tm_contact">
+			                <div class="tm_ctn">
+			                    <span class="name" v-text="queryShopInfo.shopName"></span>
+			                	<img :src="queryShopInfo.rankLevelPic" alt="" />
+			                </div>
+			            </div>
+					</div>
+				</section>
+			</header>
+			<section class="nav_tab">
+				<a href="#"><i></i><span>店铺首页</span></a>
+				<a href="#" ><i></i><span>全部宝贝</span></a>
+				<a href="#"><i></i><span>新品上架</span></a>
+				<a href="#"><i></i><span>店铺活动</span></a>
+			</section>
+			<section class="section_swiper" v-if='banner[0]'>
+				<div class="swiper-container"  id="swiper1">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide " v-for='item in banner[0].bannerArrData'>
+				        	<img :src="item.image"/>
+				        </div>
+				    </div>
+				</div>
+			</section>
+			<section  class="section_swiper" v-if="conponQueryData.data.count>0">
+				 <div class="swiper-container"  id="conponList">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide " v-for='item in conponQueryData.data.couponList'>
+				        	<img src="//gw.alicdn.com/tps/i1/TB1NavLKpXXXXcgaXXXkmBt9FXX-342-192.png_300x300.jpg_.webp"/>
+				        	<p class="price">￥{{item.amount}}</p>
+				        	<p class="title">本店{{item.thresholdDesc}}</p>
+				        	<p class="time" >{{item.startTime}}前有效</p>
+				        </div>
+				    </div>
+				</div>
+			</section>
+			<section class="shopCmdImageList" v-if='images.length>0'>
+				<div v-for='item in images' v-if='item.length>0'  >
+					<span v-for="items in item" @click="toDetailByItemSearch(items,$index)" :style="{width:items.styleBinding.width*1.155/75 + 'rem',height:items.styleBinding.height*1.155/75 + 'rem'}">
+						<img :src="items.imageUrl"/>
+					</span>
+				</div>
+			</section>
+			<section class="section_swiper" v-if='banner[1]'>
+				<div class="swiper-container" id="swiper2">
+				    <div class="swiper-wrapper">
+				       <div class="swiper-slide " v-for='item in banner[1].bannerArrData'>
+				        	<img :src="item.image"/>
+				        </div>
+				    </div>
+				</div>
+			</section>
+			<section class="commodity_contain_itemsearch" v-if='itemSearch' v-for="item in itemSearch">
+				<div class="title_container_itemsearch">
+					<span>{{item['title'+($index+1)]}}</span>
+				</div>
+				<ul class="data_grid" v-if="$index==0">
+					<li v-for="items in item.list" @click="toDetailGird(items,$parent.$index)">
+							<a href="javascript:void(0)"><img :src="items.item1.imgUrl" alt="" /></a>
+							<h2 v-text="items.item1.title"></h2>
+							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
+					</li>
+				</ul>
+				<ul class="data_grid" v-else>
+					<li v-for="items in item.list" @click="toDetailGird(items,$index)">
+							<a href="javascript:void(0)"><img :src="items.item2.imgUrl" alt="" /></a>
+							<h2 v-text="items.item1.title"></h2>
+							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
+					</li>
+				</ul>
+			</section>
+			<section class="enhenced" v-if="enhenced"> 
+				<div class="title_container_itemsearch" v-if="enhenced.title">
+					<span>{{enhenced.title}}</span>
+				</div>
+				<ul v-if='enhenced.list.length>1' class="girdList">
+					<li v-for="item in enhenced.list" @click="toDetailByEnhenced(item)">
+						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
+						<h2 v-text="item.title"></h2>
+						<p>
+							<span>￥{{item.priceYuan}}</span><span class="priceFen">.00</span><del>￥{{item.price}}</del>
+						</p>
+					</li>
+					
+				</ul>
+				<ul v-else>
+					<li v-for="item in enhenced.list" @click="toDetailByEnhenced(item)">
+						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
+						<h2 v-text="item.title"></h2>
+						<p>
+							<span>￥{{item.priceYuan}}</span><span class="priceFen">.00</span><del>￥{{item.price}}</del>
+							<span class="sold">月销量{{item.sold30daysQuantity}}</span>
+						</p>
+					</li>
+				</ul>
+			</section>
+			<section class="getItemLists" v-if="getItemLists">
+				<h3>排行榜</h3>
+				<div class="ranking_nav">
+					<div :class="{'selected_ranking':rinkingIndex==0}" @click="selectRinking(0)">会员最爱</div>
+					<div :class="{'selected_ranking':rinkingIndex==1}" @click="selectRinking(1)">收藏排行</div>
+					<div :class="{'selected_ranking':rinkingIndex==2}" @click="selectRinking(2)">销量排行</div>
+				</div>
+				<div class="ranking_data">
+					<div class="ranking_left" @click="toDetailByRank(0)">
+						<span class="topImg">
+							<img src="//gw.alicdn.com/tps/i1/TB1YeF.GXXXXXc4XFXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+						</span>
+						<img :src="rankingData[0].imgUrl"/>
+						<p class="solePrice">
+							已售 {{rankingData[0].totalSold}}
+							<span>￥{{rankingData[0].price}}</span>
+						</p>
+					</div>
+					<div class="ranking_right">
+						<div @click="toDetailByRank(1)">
+							<span class="topImg">
+								<img src="//gw.alicdn.com/tps/i2/TB1HHOjGXXXXXa8XXXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+							</span>
+							<img :src="rankingData[1].imgUrl"/>>
+							<p class="solePrice">
+								已售 {{rankingData[0].totalSold}}
+							</p>
+						</div>
+						<div @click="toDetailByRank(2)">
+							<span class="topImg">
+								<img src="//gw.alicdn.com/tps/i3/TB1XmB.GXXXXXX5XVXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+							</span>
+							<img :src="rankingData[2].imgUrl"/>
+							<p class="solePrice">
+								已售 {{rankingData[0].totalSold}}
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="shop_commodity_contain">
+				<div class="big_title_container">
+					<span>-为你推荐-</span>
+				</div>
+				<ul class="data_grid">
+					<li v-for="item in individuationData[0].list" @click='toDeatail(item)'>
+						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
+						<h2 v-text="item.title"></h2>
+						<p><span>￥{{item.priceYuan}}</span><span class="priceFen">.00</span></p>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</body>
+	<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
+	<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
+	<script type="text/javascript" src="/static/js/vue.min.js" ></script>
+	<script type="text/javascript">
+		var data={$data},shopData={},queryShopInfo,conponData,conponQueryData,itemSearch=[],enhenced=[],getItemLists,rankingData,individuationData=[];
+		console.log(data)
+		for(var i=0;i<data.length;i++){
+			var apiData=JSON.parse(data[i].api_data);
+			if(data[i].api_url=="mtop.geb.view.getPageView"){
+				shopData.data=apiData;
+			}else if(data[i].api_url=="mtop.taobao.geb.shopinfo.queryshopinfo"){
+				queryShopInfo=apiData;
+			}else if(data[i].api_url=="com.taobao.shop.getConpon1111"){
+				conponData=apiData;
+			}else if(data[i].api_url=="mtop.shop.decorate.coupon.query"){
+				conponQueryData=apiData;
+			}else if(data[i].api_url=="mtop.taobao.shop.itemSearch"){
+				itemSearch.push(apiData);
+			}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get"){
+				enhenced.push(apiData);
+			}else if(data[i].api_url=="mtop.taobao.rankingListRecommendService.getItemLists"){
+				getItemLists=apiData;
+				rankingData=getItemLists.favoredByDiamonds;
+			}else if(data[i].api_url=="mtop.taobao.shop.individuation"){
+				individuationData.push(apiData);
+			}
+			console.log(apiData)
+		}
+		var vm=new Vue({
+				el:"#tbShopCt",
+				data:{
+					shopData:shopData,
+					queryShopInfo:queryShopInfo,
+					conponData:conponData,
+					conponQueryData:conponQueryData,
+					itemSearch:itemSearch,
+					enhenced:enhenced,
+					individuationData:individuationData,
+				},
+				created:function(){
+					document.title=this.queryShopInfo.shopName;
+				},
+				methods:{
+					selectRinking:function(index){
+						this.rinkingIndex=index;
+						if(index==0){
+							this.rankingData=getItemLists.favoredByDiamonds;
+						}else if(index==1){
+							this.rankingData=getItemLists.totalCollect;
+						}else if(index==2){
+							this.rankingData=getItemLists.totalSold;
+						}
+					},
+					toDeatail:function(item){
+						location.href='/weibao/index/processUrl?isTm=1&itemId='+item.nid;
+					},
+					toDetailByRank:function(index){
+						location.href='/weibao/index/processUrl?isTm=1&itemId='+this.rankingData[index].id;
+					},
+					getQueryString:function (name,url) { 
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+						var r = url.substr(1).match(reg); 
+						if (r != null) return unescape(r[2]); return null; 
+					},
+					toDetailByEnhenced:function(item){
+						location.href='/weibao/index/processUrl?isTm=1&itemId='+item.nid;
+					},
+					toDetailByItemSearch:function(item,index){
+						if(item.cmdId){
+							if(shopData.data.data[item.cmdId].indexOf('catId')>-1){
+								console.log('跳转商品列表')
+							}else if(shopData.data.data[item.cmdId].indexOf('id')>-1){
+								var url = shopData.data.data[item.cmdId].slice(shopData.data.data[item.cmdId].indexOf('?')); 
+								var id=this.getQueryString('id',url);
+								location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+							}
+						}else if(item.label){
+							var keys = item.label[index].dataBinding.replace("title",'url');
+							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
+							var id=this.getQueryString('id',urls);
+							location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+						}
+						
+					},
+					toCommodityList:function(){
+						location.href="/weibao/index/tmShopCommodityList";
+					},
+					toDetailGird:function(item,index){
+						if(index==0){
+							var id = item['item1'].nid;
+						}else if(index==1){
+							var id = item['item2'].nid;
+						}
+						location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+					}
+				}
+			})
+	</script>
+</html>
