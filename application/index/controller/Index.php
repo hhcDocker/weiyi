@@ -205,10 +205,10 @@ class Index extends APIController
         $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
         if (!$has_update) {
             throw new APIException(10014);
-            
         }
-       session('weitiao_sms_tag', null);
-       return $this->format_ret();
+        
+        session_destroy();
+        return $this->format_ret();
     }
 
     /**
