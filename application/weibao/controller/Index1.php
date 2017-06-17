@@ -6,9 +6,10 @@
  * | Internal procedure is strictly prohibited.
  * +----------------------------------------------------------------------
  * | Filename: Index.php
+ * | Description: 微信端获取微跳数据
  * +----------------------------------------------------------------------
  * | Created by equinox at 2017-06-15 11:00 
- * | Email: equinox@purplethunder.cn
+ * | Email: equinoxsun@purplethunder.cn
  * +----------------------------------------------------------------------
  * | Version 1.0
  * +----------------------------------------------------------------------
@@ -26,7 +27,7 @@ use think\Db;
 class Index1 extends Controller
 {
     /**
-     * 接收并处理淘宝、天猫等链接
+     * 接收并处理淘宝、天猫等链接,获取并显示数据
      * 淘宝搜索商品结果列表：https://s.m.taobao.com/h5?q=%E5%A4%B9%E5%85%8B
      * 天猫商品详情：https://detail.m.tmall.com/item.htm?ft=t&id=544094926521
      * @return [type]

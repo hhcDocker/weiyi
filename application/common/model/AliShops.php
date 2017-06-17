@@ -49,6 +49,20 @@ class AliShops extends Base
     }
 
     /**
+     * [getShopInfoByIdUrl description]
+     * @param  string  $shop_url    [description]
+     * @param  integer $ali_shop_id [description]
+     * @return [type]               [description]
+     */
+    public function getShopInfoByIdUrl($shop_url='',$ali_shop_id=0)
+    {
+        if (!$ali_shop_id || !$shop_url) {
+            return array();
+        }
+        $res = Db::table('wj_shop_services')->where('ali_shop_id',$ali_shop_id)->whereOr('ali_shop_id',$ali_shop_id)->find();
+        return $res?$res:array();
+    }
+    /**
      * 保存链接信息
      * @param  integer $manager_id         [description]
      * @param  string  $shop_url           [description]

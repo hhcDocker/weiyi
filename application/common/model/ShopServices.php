@@ -20,12 +20,26 @@ use think\Db;
 
 class ShopServices extends Base
 {
-    public function getServicesByShopUrl($shop_url='',$manager_id='')
+    public function getServicesByShopId($shop_id='',$manager_id='')
     {
-        if (!$shop_url) {
+        if (!$shop_id) {
             return array();
         }
-        $res = Db::table('wj_shop_services')->where('shop_url',$shop_url)->where('manager_id',$manager_id)->where('is_deleted',0)->find();
+        $res = Db::table('wj_shop_services')->where('shop_id',$shop_id)->where('manager_id',$manager_id)->where('is_deleted',0)->find();
+        return $res?$res:array();
+    }
+
+    /**
+     * [getServicesById description]
+     * @param  integer $id [description]
+     * @return [type]      [description]
+     */
+    public function getServicesById($id=0)
+    {
+        if (!$id) {
+            return array();
+        }
+        $res = Db::table('wj_shop_services')->where('id',$id)->where('is_deleted',0)->find();
         return $res?$res:array();
     }
 
@@ -38,14 +52,14 @@ class ShopServices extends Base
         return $res?$res:array();
     }
 
-    public function saveServices($manager_id=0,$shop_url='',$transformed_url='',$service_start_time=0,$service_end_time=0)
+    public function saveServices($manager_id=0,$shop_id='',$transformed_url='',$service_start_time=0,$service_end_time=0)
     {
-    	if (!$manager_id ||!$shop_url ||!$transformed_url ||!$service_start_time ||!$service_end_time) {
+    	if (!$manager_id ||!$shop_id ||!$transformed_url ||!$service_start_time ||!$service_end_time) {
     		return 0;
     	}
     	$add_data = array(
         'manager_id'=>$manager_id,
-    		'shop_url'=> $shop_url,
+    		'shop_id'=> $shop_id,
     		'transformed_url'=> $transformed_url,
     		'service_start_time'=> $service_start_time,
         'service_end_time'=>$service_end_time,
@@ -61,11 +75,12 @@ class ShopServices extends Base
     {
     	# code...
     }
+    
 }
 /*CREATE TABLE `wj_shop_services` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `manager_id` int(10) unsigned NOT NULL COMMENT '客户id',
-  `shop_url` varchar(255) NOT NULL COMMENT '店铺首页网址',
+  `shop_id` int(10) unsigned NOT NULL COMMENT '对应店铺表id',
   `transformed_url` varchar(255) DEFAULT NULL COMMENT '本站转换链接',
   `service_start_time` int(11) unsigned NOT NULL COMMENT '服务开始时间，当前时间所在服务的开始时间',
   `service_end_time` int(11) unsigned NOT NULL COMMENT '服务结束时间',
@@ -74,5 +89,5 @@ class ShopServices extends Base
   `update_time` int(11) unsigned DEFAULT NULL,
   `delete_time` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;*/
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COMMENT='微跳服务信息';*/
 

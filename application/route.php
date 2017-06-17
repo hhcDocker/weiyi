@@ -18,4 +18,6 @@ return [
         ':name' => ['index/hello', ['method' => 'post']],
     ],
 
+    // "item/:goods_id" => "mall_seller/seller_commodity/getCommodityDetail",
+
 ];
