@@ -61,7 +61,7 @@ class Index extends APIController
             $time = date("Y-m-d H:i:s");
             $uid = md5(uniqid(rand(), true));
             $password_md5 = md5($password);
-            $manager_id = model('Managers')->addManagerInfo($uid,$mobilephone,$password,$client_ip);
+            $manager_id = model('Managers')->addManagerInfo($uid,$mobilephone,$password_md5,$client_ip);
             if (!$manager_id) {
                 throw new APIException(10006);
             }
