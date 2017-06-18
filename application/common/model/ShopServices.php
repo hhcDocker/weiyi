@@ -8,13 +8,13 @@
  * | Filename: ShopServices.php
  * | Description: 店铺服务数据
  * +----------------------------------------------------------------------
- * | Created by equinox at 2017-6-15 15:00 
+ * | Created by equinox at 2017-6-15 15:00
  * | Email: equinox@purplethunder.cn
  * +----------------------------------------------------------------------
  * | Version 1.0
  * +----------------------------------------------------------------------
  */
- 
+
 namespace app\common\model;
 use think\Db;
 
@@ -43,6 +43,11 @@ class ShopServices extends Base
         return $res?$res:array();
     }
 
+    /**
+     * [getServicesByManagerId description]
+     * @param  integer $manager_id [description]
+     * @return [type]              [description]
+     */
     public function getServicesByManagerId($manager_id=0)
     {
         if (!$manager_id) {
@@ -52,17 +57,40 @@ class ShopServices extends Base
         return $res?$res:array();
     }
 
+    /**
+     * [getServicesByUrlStr description]
+     * @param  integer $url_str [description]
+     * @return [type]              [description]
+     */
+    public function getServicesByUrlStr($url_str='')
+    {
+        if (!$url_str) {
+            return array();
+        }
+        $res = Db::table('wj_shop_services')->where('transformed_url',$url_str)->where('is_deleted',0)->find();
+        return $res?$res:array();
+    }
+
+    /**
+     * [saveServices description]
+     * @param  integer $manager_id         [description]
+     * @param  string  $shop_id            [description]
+     * @param  string  $transformed_url    [description]
+     * @param  integer $service_start_time [description]
+     * @param  integer $service_end_time   [description]
+     * @return [type]                      [description]
+     */
     public function saveServices($manager_id=0,$shop_id='',$transformed_url='',$service_start_time=0,$service_end_time=0)
     {
     	if (!$manager_id ||!$shop_id ||!$transformed_url ||!$service_start_time ||!$service_end_time) {
     		return 0;
     	}
     	$add_data = array(
-        'manager_id'=>$manager_id,
+            'manager_id'=>$manager_id,
     		'shop_id'=> $shop_id,
     		'transformed_url'=> $transformed_url,
     		'service_start_time'=> $service_start_time,
-        'service_end_time'=>$service_end_time,
+            'service_end_time'=>$service_end_time,
     		'is_deleted'=> 0,
     		'create_time'=> time(),
     		'update_time'=> time(),
@@ -71,11 +99,24 @@ class ShopServices extends Base
         return $has_add;
     }
 
+    /**
+     * [ExistShortUrl description]
+     * @param string $short_url [description]
+     */
+    public function ExistShortUrl($transformed_url='')
+    {
+        if (!$transformed_url) {
+            return -1;
+        }
+        $res = Db::table('wj_shop_services')->where('transformed_url',$transformed_url)->where('is_deleted',0)->count();
+        return $res;
+    }
+
     public function softDeleteShopData($url='')
     {
     	# code...
     }
-    
+
 }
 /*CREATE TABLE `wj_shop_services` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',

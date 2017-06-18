@@ -12,7 +12,7 @@
  * | Version 1.0
  * +----------------------------------------------------------------------
  */
- 
+
 namespace app\index;
 
 class AlertMail {
@@ -24,22 +24,22 @@ class AlertMail {
         if(config("alert_turn_on") && !empty($this->content)){
             $mail = new \PHPMailer;
             $mail->CharSet = "UTF-8";
-            $mail->isSMTP();                                      
-            $mail->Host = 'smtp.purplethunder.cn';  
-            $mail->SMTPAuth = true;                           
-            $mail->Username = 'alert@purplethunder.cn';                 
-            $mail->Password = 'Zl.bj@2017';                           
-            $mail->Port = 587;                                   
+            $mail->isSMTP();
+            $mail->Host = 'smtp.purplethunder.cn';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'alert@purplethunder.cn';
+            $mail->Password = 'Zl.bj@2017';
+            $mail->Port = 587;
             $mail->setFrom('alert@purplethunder.cn', 'Alert');
-            $mail->addAddress('equinoxsun@purplethunder.cn', 'ganhuola');   
+            $mail->addAddress('equinoxsun@purplethunder.cn', 'ganhuola');
             $mail->isHTML(true);
-            $subject = config("alert_mail_subject");  
+            $subject = config("alert_mail_subject");
             if(empty($subject)) {
                 $subject = "Alert";
-            }   
+            }
             $mail->Subject = $subject;
             $mail->Body = $this->content;
-            // $mail->send();
+            $mail->send();
         }
     }
 }

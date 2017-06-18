@@ -8,49 +8,47 @@
  * | Filename: ShopApi.php
  * | Description: 店铺接口数据
  * +----------------------------------------------------------------------
- * | Created by equinox at 2017-6-15 15:00 
+ * | Created by equinox at 2017-6-15 15:00
  * | Email: equinox@purplethunder.cn
  * +----------------------------------------------------------------------
  * | Version 1.0
  * +----------------------------------------------------------------------
  */
- 
+
 namespace app\common\model;
 use think\Db;
 
 class ShopApi extends Base
-{   
+{
     /**
-     * 通过shop_url获取api接口数据
-     * @param  integer $shop_url [description]
+     * 通过shop_id获取api接口数据
+     * @param  integer $shop_id [description]
      * @return [type]            [description]
      */
-    public function getShopDataByShopUrl($shop_url='')
+    public function getShopDataByShopId($shop_id='')
     {
-        if (!$shop_url) {
+        if (!$shop_id) {
             return array();
         }
-        $shop_url = trim($shop_url);
-        $api_info = Db::table('wj_shop_api')->where('shop_url',$shop_url)->where('is_deleted',0)->select();
+        $api_info = Db::table('wj_shop_api')->where('shop_id',$shop_id)->where('is_deleted',0)->select();
         return $api_info;
     }
 
     /**
      * 保存店铺api店铺数据
-     * @param  integer $shop_url [description]
+     * @param  integer $shop_id [description]
      * @param  string  $api_url  [description]
      * @param  string  $api_data [description]
      * @param  string  $api_view [description]
      * @return [type]            [description]
      */
-    public function saveShopData($shop_url='',$api_url='',$api_data='')
+    public function saveShopData($shop_id='',$api_url='',$api_data='')
     {
-    	if (!$shop_url ||!$api_url ||!$api_data) {
+    	if (!$shop_id ||!$api_url ||!$api_data) {
     		return 0;
     	}
-        $shop_url = trim($shop_url);
     	$add_data = array(
-    		'shop_url'=> $shop_url,
+    		'shop_id'=> $shop_id,
     		'api_url'=> $api_url,
     		'api_data'=> $api_data,
     		'is_deleted'=> 0,
@@ -77,30 +75,29 @@ class ShopApi extends Base
 
     /**
      * 根据链接软删除接口数据
-     * @param  string $shop_url [description]
+     * @param  string $shop_id [description]
      * @return [type]           [description]
      */
-    public function softDeleteShopDataByShopUrl($shop_url='')
+    public function softDeleteShopDataByShopUrl($shop_id='')
     {
-        if (!$shop_url) {
+        if (!$shop_id) {
             return 0;
         }
-        $shop_url = trim($shop_url);
-        $has_delete = Db::table('wj_shop_api')->where('shop_url',$shop_url)->update(array('is_deleted'=>1,'delete_time'=>time()));
+        $has_delete = Db::table('wj_shop_api')->where('shop_id',$shop_id)->update(array('is_deleted'=>1,'delete_time'=>time()));
         return $has_delete;
     }
 }
 
 /*CREATE TABLE `wj_shop_api` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `shop_url` varchar(255) NOT NULL COMMENT '对应店铺链接',
+  `shop_id` int(10) unsigned NOT NULL COMMENT '对应店铺表主键id',
   `api_url` varchar(255) NOT NULL COMMENT '请求的api接口链接',
-  `api_data` text NOT NULL COMMENT 'api请求到的data串',
-  `api_view` text COMMENT '第一个api请求到的view串，决定了页面排版',
+  `api_data` mediumtext NOT NULL COMMENT 'api请求到的data串',
   `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `create_time` int(11) unsigned DEFAULT NULL,
   `update_time` int(11) unsigned DEFAULT NULL,
   `delete_time` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COMMENT='淘宝天猫店铺主页接口数据';
+  PRIMARY KEY (`id`),
+  KEY `shop_id` (`shop_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=424 DEFAULT CHARSET=utf8 COMMENT='淘宝天猫店铺主页接口数据';
 */

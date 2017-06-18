@@ -39,7 +39,7 @@ class ExceptionProcess {
             $this->errmap = array('errcode'=>9999, 'message'=>'内部错误', 'result'=>new \stdClass);
         }
     }
-    
+
     // send exception to client
     public function send(){
         header("Content-Type: application/json; charset=utf-8");
@@ -51,7 +51,7 @@ class ExceptionProcess {
 }
 
 class APIExceptionHandler extends Handle {
-    
+
     public function report(\Exception $exception) {
         $data = [
             'file'    => $exception->getFile(),
@@ -83,7 +83,7 @@ class APIExceptionHandler extends Handle {
             $mail->send();
         }
     }
-    
+
     public function render(\Exception $e) {
         return new ExceptionProcess($e);
     }

@@ -42,9 +42,9 @@ class Index extends Controller
         if ($this->request->method() == 'GET')
         {
         	if($_GET['isTm']){
-//      		$arr['price']=$_GET['price'];
-//				$arr['sold']=$_GET['sold'];
-//				$arr['area']=$_GET['area'];
+      		    //$arr['price']=$_GET['price'];
+				//$arr['sold']=$_GET['sold'];
+				//$arr['area']=$_GET['area'];
 				$arr['isTm']=$_GET['isTm'];
 				$url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$_GET["itemId"].'&scm=1007.12913.42100.100200300000000';
 	           	$html =file_get_html($url);
@@ -201,6 +201,7 @@ class Index extends Controller
     /**
      * 接收并处理跳转淘宝店铺、天猫店铺等链接
      * 之后考虑短链接情况
+     * 测试时保留，最后要删掉，微信端只能通过短链接查看效果
      * @param  string  $url  [链接]
      * @param  integer $flag [是否获取最新数据，默认否]
      * @return [type]        [description]
@@ -335,53 +336,6 @@ class Index extends Controller
         return $service_info;
     }
 
-    /**
-     * 转换链接入口
-     * error
-     * @return [type] [description]
-     */
-    /* public function getDataByUrl()
-    {
-        $url = input('post.shop_url')?input('post.shop_url'):'';
-        echo $url;
-        if (!$url) { //非空检验
-            // return array('code'=>0,'url'=>'','msg'=>'网址不为空');
-            dump(array('code'=>0,'url'=>'','msg'=>'网址不为空'));
-            return;
-        }
-
-        //mc 判断是否登录
-
-        if (strstr($url,'tmall.com')) { //天猫
-            if (strstr($url, 'tmall.com/shop')) { //天猫店铺
-                // echo "天猫网址<br/><br/>";
-                if (!strstr($url, '.m.')) { //PC转移动端
-                    $url = preg_replace('/.+(\w+).tmall.com\/shop\/view_shop\.htm.+/','https://'.'$1'.'.m.tmall.com',$url);
-                }
-                $this->getShopData($url);
-                dump(array('code'=>1,'url'=>$url));
-                // return array('code'=>1,'url'=>$url);
-            }else{
-                //待定
-                // return array('code'=>0,'msg'=>'非天猫店铺网址');
-                dump(array('code'=>0,'msg'=>'非天猫店铺网址'));
-            }
-        }elseif (strstr($url, 'taobao')) { //淘宝
-            if (preg_match('/shop\d+\.taobao/', $url)){ //淘宝店铺pc端
-                $url = str_replace('taobao.com', 'm.taobao.com', $url);
-                $this->getShopData($url);
-            }elseif (preg_match('/shop\d+\.m\.taobao/', $url)) { //淘宝店铺移动端
-                $this->getShopData($url);
-            }else{
-                //待定
-                // return array('code'=>0,'msg'=>'非淘宝店铺网址');
-                dump(array('code'=>0,'msg'=>'非淘宝店铺网址'));
-            }
-        }else{
-            // return array('code'=>0,'msg'=>'非淘宝天猫网址');
-            dump(array('code'=>0,'msg'=>'非淘宝天猫网址'));
-        }
-    }*/
 
     private function checkUrl($url='')
     {
@@ -397,5 +351,83 @@ class Index extends Controller
             return array('code'=>0,'url'=>'','msg'=>'非淘宝天猫链接');
         }
         return array('code'=>1,'url'=>$url,'msg'=>'');
+    }
+
+
+
+
+
+
+
+
+    /***********************************正式使用****************************************/
+    /**
+     * 通过短链接访问，短链接长度为6个字符
+     * @return [type] [description]
+     */
+    public function getShopDataByShortUrl()
+    {
+        $str_url = input('param.str_url') ? input('param.str_url') : '';
+        if (!$str_url) {
+            echo "链接不存在";
+            return;
+        }
+        //查询是否存在且未过期
+        $service_info = model('ShopServices')->getServicesByUrlStr($str_url);
+        if (empty($service_info)) {
+            echo "链接不存在";
+            return;
+        }
+        if ($service_info['service_end_time']>=time()) {//服务未过期
+            //获取接口
+            $shop_data = model('ShopApi')->getShopDataByShopId($service_info['shop_id']);
+            if (empty($shop_data)) {
+                //获取链接
+                $shop_info = model('AliShops')->getShopInfoById($service_info['shop_id']);
+                if (empty($shop_info) || !isset($shop_info['shop_url'])) {
+                    echo "链接不存在";
+                    return;
+                }
+                $wei_bao = new WeiBaoData();
+                $res = $wei_bao->getShopDataByUrl($shop_info['shop_url']);
+
+                if ($res['errcode']) {
+                    var_dump($res);
+                    return;
+                }
+
+                //添加店铺数据记录
+                $shop_data = $res['shop_data'];
+                $flag_error=0;
+                foreach ($shop_data as $k1 => $v1) {
+                    $has_add = model('ShopApi')->saveShopData($wj_shop_id,$v1['api_url'],$v1['api_data']);
+                    if (!$has_add) {
+                        $flag_error=1;
+                        break;
+                    }
+                }
+                if ($flag_error) {
+                    throw new APIException(30010);
+                }
+            }
+            $is_tmall =0;
+            foreach ($shop_data as $k => $v) {
+                if (strpos($v['api_url'],'taobao')) {
+                    $is_tmall =0;
+                    break;
+                }elseif (strpos($v['api_url'],'tmall')) {
+                    $is_tmall =1;
+                    break;
+                }
+            }
+            if ($is_tmall) {
+                return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
+            }else{
+                return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
+            }
+        }else {//已过期
+            echo "该服务已过期，请联系管理员";
+            return;
+        }
     }
 }

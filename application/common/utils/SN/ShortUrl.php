@@ -24,20 +24,20 @@ use app\common\utils\SN\RandBase;
  */
 class ShortUrl extends RandBase {
     
-    public function __construct($url=''){
-    	if (!$url) {
+    public function __construct($shop_id=0,$manager_id=0,$time=''){
+    	if (!$shop_id || !$manager_id) {
             throw new APIException(9999);
     	}
-    	if (!strstr($url, 'm.taobao.com') && !strstr($url, 'm.tmall.com')) {
-            throw new APIException(30007);
-    	}
-        $this->url = $url;
+        $this->shop_id = $shop_id;
+		$this->manager_id = $manager_id;
+		$this->time = $time;
     }
 
     public function getSN()
     {
-	    $url=crc32($this->url); 
-	    $result=sprintf("%u",$url);
+		$string =$this->shop_id . $this->manager_id .$this->time;
+		$string=crc32($string);
+	    $result=sprintf("%u",$string);
 	    return $this->code62($result);
     }
 
