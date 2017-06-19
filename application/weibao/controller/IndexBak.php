@@ -240,6 +240,10 @@ class IndexBak extends Controller
         //dump( $response->getUrls());
         //dump($response->getConsole());
         $data=$response->getUrlData();
+        if (!$data || empty($data)) {
+            echo "获取数据失败";
+            return;
+        }
         $is_tmall=1;
 		foreach ($data as $key => &$value) {
             $value=preg_replace('/^mtopjsonp\d+\(/','', $value);
