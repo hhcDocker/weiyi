@@ -240,6 +240,7 @@ class IndexBak extends Controller
         //dump( $response->getUrls());
         //dump($response->getConsole());
         $data=$response->getUrlData();
+
         if (!$data || empty($data)) {
             echo "获取数据失败";
             return;
@@ -262,7 +263,6 @@ class IndexBak extends Controller
         }else{
             return $this->fetch('tb_shop',array('data' => json_encode($data)));
         }
-
     }
 
 	/**

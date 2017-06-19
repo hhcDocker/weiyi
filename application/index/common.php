@@ -36,7 +36,7 @@ function noemptyvalid($str, $name){
  * @return string return trimed value
  */ 
 function noempty_input($name, $filter = "", $default = ""){
-    $ret = input($name, $default, $filter);    
+    $ret = input($name, $default, $filter);  
     return noemptyvalid($ret, $name);
 }
 

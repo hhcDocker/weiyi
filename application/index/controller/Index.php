@@ -51,6 +51,7 @@ class Index extends APIController
         if ($this->checkExistsMobilephone($mobilephone)) {
             throw new APIException(10002);
         }
+        $this->checkPassword($password);
 
         $time_elapsed = time() - session('weitiao_sms_code_time');
         if($sms_code != session('weitiao_sms_code') || $mobilephone != session('weitiao_sms_mobilephone') || $time_elapsed > 600) {
@@ -148,6 +149,8 @@ class Index extends APIController
         $mobilephone = session('find_pwd_mobilephone');
         $password = noempty_input('password');
         $re_password = noempty_input('re_password');
+
+        $this->checkPassword($password);
         if ($password !==$re_password) {
             throw new APIException(10006);
         }
@@ -178,6 +181,8 @@ class Index extends APIController
         $old_password = noempty_input('old_password');
         $password = noempty_input('password');
         $re_password = noempty_input('re_password');
+
+        $this->checkPassword($password);
         if ($password !==$re_password) {
             throw new APIException(10006);
         }
@@ -221,6 +226,7 @@ class Index extends APIController
             throw new APIException(10018);
         }
         $login_info = array('manager_mobilephone'=>session('manager_mobilephone'),'is_login'=>1);
+        // return $this->format_ret($login_info);
         return $login_info;
     }
 
@@ -313,5 +319,23 @@ class Index extends APIController
             throw new APIException(10010);
         }
         return 1;
+    }
+
+    /**
+     * [checkPassword description]
+     * @param  string $password [description]
+     * @return [type]           [description]
+     */
+    public function checkPassword($password='')
+    {
+        if (!$password) {
+            throw new \Exception("password");
+        }
+        if (strlen($password)<6) {
+            throw new APIException(10020);
+        }
+        if (strlen($password)>16) {
+            throw new APIException(10021);
+        }
     }
 }

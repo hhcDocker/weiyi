@@ -362,6 +362,7 @@ class Index extends Controller
 
 
     /***********************************正式使用****************************************/
+
     /**
      * 通过短链接访问，短链接长度为6个字符
      * @return [type] [description]
@@ -433,4 +434,123 @@ class Index extends Controller
             return;
         }
     }
+
+    /**
+     * [getGoodsDetail description]
+     * @return [type] [description]
+     */
+    public function getGoodsDetail()
+    {
+        $isTm = input('param.isTm') ? input('param.isTm') : '';
+        if (!$isTm) {
+            echo "链接不存在";
+            return;
+        }
+
+        $item_id = input('param.item_id') ? input('param.item_id') : '';
+        if (!$item_id) {
+            echo "链接不存在";
+            return;
+        }
+
+        vendor('simple_html_dom.simple_html_dom');
+        set_time_limit(0);
+        header("Connection:Keep-Alive");
+        header("Proxy-Connection:Keep-Alive");
+        $arr = array();
+        if ($this->request->method() == 'GET')
+        {
+            if($isTm){
+                //$arr['price']=$_GET['price'];
+                //$arr['sold']=$_GET['sold'];
+                //$arr['area']=$_GET['area'];
+                $arr['isTm']=$isTm;
+                $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
+                $html =file_get_html($url);
+                $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
+                $assessFlag='{'.file_get_contents($assessFlag).'}';
+                $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
+                //得到商品图片url
+                foreach($html->find('section#s-showcase') as $pic_contain)
+                {
+
+                    foreach($pic_contain->find('div.scroller') as $itembox)
+                    {
+                        $imgflag=1;
+                        foreach ($itembox ->find('div.itbox') as $item) {
+                            if($imgflag==1){
+                                $arr['imgUrl'][]=$item->find('img',0)->src;
+                            }else{
+                                $arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
+                            }
+                            $imgflag++;
+                        }
+                    }
+                };
+
+                //得到dataDetail对象
+                foreach($html->find('script') as $key => $script){
+                //if($key==6){
+                //  $arr['dataDetail']=iconv("GB2312//IGNORE","UTF-8",$script->innertext);;
+                //}else{
+                        $arr['dataOther'][]=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+
+                //}
+                };print_r($arr['dataOther']);
+                        exit;
+                //得到店铺score
+
+                foreach ($html ->find('ul.score') as  $score) {
+                    foreach($score->find('li') as $key => $li){
+                        $arr['score'][$key]['className']=$li->find('b',0)->class;
+                        $arr['score'][$key]['text']=$li->find('b',0)->innertext;
+                    }
+                }
+
+                //得到商品信息
+                try{
+                    if($html ->find('div.mdv-standardItemProps',0)){
+                        $string=$html ->find('div.mdv-standardItemProps',0)->attr['mdv-cfg'];
+                        if($string){
+                            $arr['cd_parameter']=mb_convert_encoding($string, 'utf-8', 'gbk');
+                        }
+                    }else{
+                        $arr['cd_parameter']="";
+                    }
+
+                }catch(Exception  $e){
+
+                }
+                //得到店铺名
+                $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
+
+                $arr['shopUrl']=iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href);
+                session('shopUrl',$arr['shopUrl']);
+                //mc 加上校验
+                $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
+                return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
+            }else{
+                $url='https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$item_id.'%22%7D';
+                $data=file_get_contents($url);
+                $data=json_decode($data);
+                echo "<pre>";
+                var_dump($data);
+                echo "<pre/>";
+                exit;
+                //$data=$_GET['itemId'];
+                return $this->fetch('tb_commodity_detail',array('data' => $data ));
+            }
+
+        }
+        else
+        {
+            $result = [
+                'code' => 400,
+                'msg'  => '请求参数错误！',
+                'data' => '{}',
+            ];
+            return json($result, 400);
+        }
+    }
+
 }
