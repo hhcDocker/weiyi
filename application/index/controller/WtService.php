@@ -438,6 +438,7 @@ class WtService extends APIAuthController
      */
     private function AddShopShortUrlInfo($wj_shop_id=0,$shop_id='')
     {
+        $service_type =0; //服务类型：0-体验3天，1-已购买，2-已过期
         if (!$wj_shop_id || !$shop_id) {
             throw new APIException(30010);
         }

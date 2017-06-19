@@ -445,14 +445,9 @@ class Index extends Controller
     public function getGoodsDetail()
     {
         $isTm = input('param.isTm') ? input('param.isTm') : '';
-        if (!$isTm) {
-            echo "链接不存在";
-            return;
-        }
-
         $item_id = input('param.item_id') ? input('param.item_id') : '';
         if (!$item_id) {
-            echo "链接不存在";
+            echo "item_id参数错误不存在";
             return;
         }
 
@@ -470,6 +465,8 @@ class Index extends Controller
                 $arr['isTm']=$isTm;
                 $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
                 $html =file_get_html($url);
+                //先获取shopid验证服务是否存在，是否过期
+                
                 $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
                 $assessFlag='{'.file_get_contents($assessFlag).'}';
                 $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
@@ -496,11 +493,12 @@ class Index extends Controller
                 //if($key==6){
                 //  $arr['dataDetail']=iconv("GB2312//IGNORE","UTF-8",$script->innertext);;
                 //}else{
-                        $arr['dataOther'][]=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+                        $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+                        $arr['dataOther'][]=$v;
+
 
                 //}
-                };print_r($arr['dataOther']);
-                        exit;
+                };
                 //得到店铺score
 
                 foreach ($html ->find('ul.score') as  $score) {
