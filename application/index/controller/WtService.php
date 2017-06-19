@@ -147,7 +147,7 @@ class WtService extends APIAuthController
                     }else{
                         $wj_shop_id =$shop_info['id'];
                         if ($shop_info['shop_url'] && $shop_info['shop_url']!=$full_url) {
-                            throw new APIException(30013);
+                            throw new APIException(30015);
                         }
                         $has_update = model('AliShops')->updateShopUrl($shop_id,$full_url);
                         if (!$has_update) {
@@ -214,7 +214,7 @@ class WtService extends APIAuthController
                         }else{
                             $wj_shop_id =$shop_info['id'];
                             if ($shop_info['shop_url'] && $shop_info['shop_url']!=$full_url) {
-                                throw new APIException(30013);
+                                throw new APIException(30015);
                             }
                             $has_update = model('AliShops')->updateShopUrl($shop_id,$full_url);
                             if (!$has_update) {
