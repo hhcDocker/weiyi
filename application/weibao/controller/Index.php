@@ -77,8 +77,7 @@ class Index extends Controller
 						$arr['dataOther'][]=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
 
                 //}
-				};print_r($arr['dataOther']);
-                        exit;
+				};
 				//得到店铺score
 
 				foreach ($html ->find('ul.score') as  $score) {
