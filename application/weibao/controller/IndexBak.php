@@ -591,7 +591,6 @@ class IndexBak extends Controller
         $wei_bao = new WeiBaoData();
         $res = $wei_bao->getShopDataByUrl($url);
         $shop_data = $res['shop_data'];
-        
         $is_tmall =0;
         foreach ($shop_data as $k => $v) {
             if (strpos($v['api_url'],'taobao')) {
