@@ -28,7 +28,8 @@
         "topthink/think-queue": "^1.0",
         "topthink/think-angular": "^1.0",
         "phpmailer/phpmailer": "^5.2",
-        "jonnyw/php-phantomjs": "4.*"
+        "jonnyw/php-phantomjs": "4.*",
+        "endroid/qrcode": "^2.2"
     },
     "extra": {
         "think-path": "thinkphp"
