@@ -183,7 +183,7 @@ class WtService extends APIAuthController
                     }else{
                         //抓取店铺信息,调用服务
                         $wei_bao = new WeiBaoData();
-                        $res = $wei_bao->getShopDataByUrl($full_url);
+                        $res = $wei_bao->getShopDataByUrl($shop_url);
                         if ($res['errcode']) {
                             throw new APIException($res['errcode']);
                         }
@@ -192,7 +192,7 @@ class WtService extends APIAuthController
                         $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
                         if (empty($shop_info)) {
                             //添加店铺表记录
-                            $wj_shop_id = model('AliShops')->saveShopInfo($shop_id,$full_url);
+                            $wj_shop_id = model('AliShops')->saveShopInfo($shop_id,$shop_url);
                             if (!$wj_shop_id) {
                                 throw new APIException(30010);
                             }
@@ -213,10 +213,10 @@ class WtService extends APIAuthController
                             $service_info=array();
                         }else{
                             $wj_shop_id =$shop_info['id'];
-                            if ($shop_info['shop_url'] && $shop_info['shop_url']!=$full_url) {
+                            if ($shop_info['shop_url'] && $shop_info['shop_url']!=$shop_url) {
                                 throw new APIException(30015);
                             }
-                            $has_update = model('AliShops')->updateShopUrl($shop_id,$full_url);
+                            $has_update = model('AliShops')->updateShopUrl($shop_id,$shop_url);
                             if (!$has_update) {
                                 throw new APIException(30010);
                             }
