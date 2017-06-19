@@ -55,7 +55,7 @@ class WeiBaoData {
         $data=$response->getUrlData();
         //end
         if (!$data ||empty($data)) {
-            return array('errcode'=>30007);
+            return array('errcode'=>30012);
             //echo json_encode($response->getConsole());
             //return;
         }

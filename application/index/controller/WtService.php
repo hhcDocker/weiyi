@@ -110,7 +110,7 @@ class WtService extends APIAuthController
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
                 return $this->format_ret($res);
             }elseif (strpos($full_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$full_url)){ //店铺
-                $full_url = preg_replace('/(.+\w+)[.m]?.tmall.com.+/','$1'.'.m.tmall.com',$full_url);
+                $full_url = preg_replace('/(\w+)[\.m]*\.tmall.com.*/','$1'.'.m.tmall.com',$full_url);
 
                 $shop_info = model('AliShops')->getShopInfoByUrl($full_url);
                 if (empty($shop_info)) { //表示从来没抓取过该店铺数据，或者信息不全
