@@ -242,6 +242,6 @@ return [
     ],
 
     'ExperienceTime' =>3,
-    //'PhantomjsPath' =>'/usr/bin/phantomjs'
-    'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe'
+    'PhantomjsPath' =>'/usr/bin/phantomjs'
+    //'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe'
 ];
