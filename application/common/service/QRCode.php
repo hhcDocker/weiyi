@@ -69,6 +69,7 @@ class QRCode
         if (!$url) {
            return '';
         }
+        $url = $_SERVER['DOCUMENT_ROOT'].'/../'.$url;
         //生成当前的二维码
         $qrCode = new \Endroid\QrCode\QrCode();
         $qrCode
