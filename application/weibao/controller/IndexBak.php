@@ -222,7 +222,7 @@ class IndexBak extends Controller
 		$url = $_GET['shopURL'];
         $client = Client::getInstance();
         $client->getProcedureCompiler()->clearCache();
-        $client->getEngine()->setPath($_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe');
+        $client->getEngine()->setPath(config('PhantomjsPath'));
         $client->isLazy();
         /** 
          * @see JonnyW\PhantomJs\Http\Request
@@ -246,6 +246,7 @@ class IndexBak extends Controller
 		}
 		return $this->fetch('tm_shop',array('data' => json_encode($data)));
     }
+    
 	/**
      * 通过天猫店铺URL获取店铺首页数据
      * @return [shop_data]

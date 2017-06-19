@@ -409,6 +409,7 @@ class Index extends Controller
                     }
                 }
                 if ($flag_error) {
+                    echo "获取数据失败";
                     throw new APIException(30010);
                 }
             }
