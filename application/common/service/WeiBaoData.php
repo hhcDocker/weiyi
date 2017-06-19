@@ -35,8 +35,6 @@ class WeiBaoData {
 
         $client = Client::getInstance();
         $client->getProcedureCompiler()->clearCache();
-        echo config('PhantomjsPath');
-        echo file_exists(config('PhantomjsPath'));
         $client->getEngine()->setPath(config('PhantomjsPath'));
         $client->isLazy();
         /**
