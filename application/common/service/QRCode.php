@@ -34,6 +34,7 @@ class QRCode
            return '';
         }
         // $url = $_SERVER['HTTP_HOST'].$url;
+        $url = $_SERVER['HTTP_HOST'];
         //生成当前的二维码
         $qrCode = new \Endroid\QrCode\QrCode();
         $qrCode
