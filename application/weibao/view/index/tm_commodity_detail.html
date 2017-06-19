@@ -125,7 +125,7 @@
 			<section>
 				<div class='rate_single'>
 					<ul>
-						<li v-for='item in assessInfo' v-if="assessInfo.length>0">
+						<li v-for='item in commodityData.assessInfo' v-if="commodityData.assessInfo.length>0">
 							<h2><img src='/static/images/TB1yeWeIFXXXXX5XFXXuAZJYXXX-210-210.png_40x40.jpg'/><span v-text='item.displayUserNick'></span></h2>
 							<p v-html='item.rateContent'></p>
 							<p v-if="item.reply" class="reply"v-text="item.reply"></p>
@@ -323,19 +323,8 @@
 					}catch(e){
 						//TODO handle the exception
 					}
-					this.getAccess();
 				},
 				methods:{
-					getAccess:function(){
-						this.accessPage++;
-						var scriptAccess = document.createElement('script');
-						scriptAccess.src = "https://rate.tmall.com/list_detail_rate.htm?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId+"&order=3&append=0&content=0&currentPage="+this.accessPage+"&pageSize=10&tagId=&_ksTS=1497609808623_680&callback=jsonp3"
-			           // scriptAccess.src = "https://rate.tmall.com/list_detail_rate.htm?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId+"&order=3&append=0&content=0&currentPage="+this.accessPage+"&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp3";
-			            document.body.appendChild(scriptAccess);
-			            setTimeout(function(){
-			            	scriptAccess.parentNode.removeChild(scriptAccess);
-			            },1000);
-					},
 					tab:function(i,v){
 						 this.active = i;
   						 if(i==1){
@@ -349,6 +338,7 @@
 						 		"-webkit-transform":"translate3d("+2*doEclientWidth+"px, 0px, 0px)",
 						 		"transform":"translate3d("+2*doEclientWidth+"px, 0px)"
 						 	});
+						 	getAccess();
   						 }else{
   						 	$("arcitle").css({
 						 		"-webkit-transform":"translate3d(0px, 0px, 0px)",
@@ -408,7 +398,39 @@
 				  	}
 				}
 			})
-			
+			var accessFlag=true;
+			var page=0;
+			function getAccess(){
+				if(accessFlag){
+					page++;
+					var getAccess={
+				 		"isTm":data.isTm,
+				 		"sellerID":_DATA_Detail.itemDO.userId,
+				 		"itemID":_DATA_Detail.itemDO.itemId,
+				 		'page':page
+				 	};
+				 	$.ajax({
+				 		type:"post",
+				 		url:"/weibao/index/GetAccessData",
+				 		async:true,
+				 		data:getAccess,
+				 		success:function(res){
+				 			if(JSON.parse(res).rateDetail.rateList){
+				 				commodityData.assessInfo=JSON.parse(res).rateDetail.rateList;
+				 				accessFlag=false;
+				 			}else{
+				 				getAccess();
+				 			}
+				 		},
+				 		error:function(err){
+				 			alert('请求评价数据失败,请尝试点击重新获取数据');
+				 			accessFlag=true;
+		                }
+				 	});
+				}
+				
+			};
+			getAccess();
 		</script>
 		<script type="text/javascript">
 			
@@ -446,7 +468,6 @@
 				 			},1000);
 				 		},
 				 		error:function(err){
-				 			alert('请求评价数据失败，可以尝试点击评价继续请求');
 				 			accessFlag=true;
 		                }
 				 	});

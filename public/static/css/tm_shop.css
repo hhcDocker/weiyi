@@ -189,7 +189,8 @@ body {
 
 #tmShopCt, #tbShopCt {
   background-color: #eeeeee;
-  margin-bottom: 0.533333rem; }
+  margin-bottom: 0.533333rem;
+  overflow: hidden; }
 
 .shop_commodity_contain {
   background-color: #fff;
@@ -469,5 +470,16 @@ body {
     padding-left: 0.133333rem; }
   .enhenced .girdList li:nth-of-type(2n+1) {
     padding-right: 0.133333rem; }
+
+.lookAllCmd {
+  margin-bottom: 0.2666rem;
+  line-height: 1.333333rem;
+  font-size: 20px;
+  text-align: center;
+  background-color: white; }
+  [data-dpr="2"] .lookAllCmd {
+    font-size: 40px; }
+  [data-dpr="3"] .lookAllCmd {
+    font-size: 60px; }
 
 /*# sourceMappingURL=tm_shop.css.map */
