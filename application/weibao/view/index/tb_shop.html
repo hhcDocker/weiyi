@@ -230,18 +230,18 @@
 											try{
 												var name=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].dataBinding.url.replace('$','');
 												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events){
-											console.log(l);
 													var len3=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions.length;
 													for(j=0;j<len3;j++){
 														if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
 															var openUrl=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
-																openUrl=openUrl.split(".")[0];
+																openUrl=openUrl.split(".");
 														}
 													}
+													console.log(openUrl);
 													var obj={
 														bannerArrName:name,
 														imageUrl:shopData.data.data[name.split('.')[0]][name.split('.')[1]],
-														cmdId:shopData.data.data[openUrl].clickUrl,
+														cmdId:shopData.data.data[openUrl[0]][openUrl[1]],
 														styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding
 													};
 													modelData.push(obj)
@@ -367,7 +367,6 @@
 						location.href='/weibao/index/processUrl?isTm=0&itemId='+item.nid;
 					},
 					toDetailByItemSearch:function(item,index){
-						console.log(item);return false;
 						if(item.cmdId){
 							var url = item.cmdId.slice(item.cmdId.indexOf('?')); 
 							var id=this.getQueryString('id',url);

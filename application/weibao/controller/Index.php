@@ -250,7 +250,10 @@ class Index extends Controller
             $request->setTimeout(10000);
             $response = $client->getMessageFactory()->createResponse();
 
-            // Send the request
+            // Send the request 
+            /*
+			 *大概耗费10秒时间
+			 * */
             $client->send($request, $response);
             //dump( $response->getUrls());
             //dump($response->getConsole());
