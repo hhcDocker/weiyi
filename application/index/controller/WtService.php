@@ -108,7 +108,7 @@ class WtService extends APIAuthController
                 $qrcode_url ='/weibao/index/processUrl/isTm/1/itemId/'.$item_id;
                 $res =$this->manageServiceInfo($service_info,$qrcode_url,$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                return $res;
+                return $this->format_ret($res);
             }elseif (strpos($full_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$full_url)){ //店铺
                 $full_url = preg_replace('/(.+\w+)[.m]?.tmall.com.+/','$1'.'.m.tmall.com',$full_url);
 
@@ -163,7 +163,7 @@ class WtService extends APIAuthController
                 //链接从$service_info取短链拼接而成，指向店铺数据，路由映射
                 $res =$this->manageServiceInfo($service_info,'',$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                return $res;
+                return $this->format_ret($res);
             }
         }elseif (strpos($full_url, 'taobao')) { //淘宝
             if (preg_match('/shop[.\d\w]+.taobao.com/',$full_url)){ //店铺链接
@@ -261,12 +261,6 @@ class WtService extends APIAuthController
                     }else{
                         $wj_shop_id = $shop_info['id'];
                         $service_info =model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
-                        if (!empty($service_info)) { //存在服务记录
-                            //设置路由，获取服务对应的链接，生成二维码
-                            //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                            throw new APIException(31997);
-                        }
-                        //表示无服务记录
                     }
                 }else{
                     throw new APIException(30001);
@@ -275,7 +269,7 @@ class WtService extends APIAuthController
                 //链接从$service_info取短链拼接而成，指向店铺数据，路由映射
                 $res =$this->manageServiceInfo($service_info,'',$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                return $res;
+                return $this->format_ret($res);
             }elseif (strpos($full_url,'item.htm') || strpos($full_url,'detail.html')) { //商品详情
                 preg_match('/[?&](?:id=)(\d+)/',$full_url,$m);
                 if (empty($m) || !isset($m[1])){
@@ -308,7 +302,7 @@ class WtService extends APIAuthController
                 $qrcode_url ='/weibao/index/processUrl/isTm/0/itemId/'.$item_id;
                 $res =$this->manageServiceInfo($service_info,$qr_code_url,$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                return $res;
+                return $this->format_ret($res);
             }else{
                 throw new APIException(30014);
             }
