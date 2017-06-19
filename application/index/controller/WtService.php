@@ -106,9 +106,9 @@ class WtService extends APIAuthController
                 }
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
                 $qrcode_url ='/weibao/index/processUrl/isTm/1/itemId/'.$item_id;
-                $res =$this->manageServiceInfo($service_info,$qr_code_url,$wj_shop_id);
+                $res =$this->manageServiceInfo($service_info,$qrcode_url,$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                return $res;
+                return $this->format_ret($res);
             }elseif (strpos($full_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$full_url)){ //店铺
                 $full_url = preg_replace('/(.+\w+)[.m]?.tmall.com.+/','$1'.'.m.tmall.com',$full_url);
 
@@ -147,7 +147,7 @@ class WtService extends APIAuthController
                     }else{
                         $wj_shop_id =$shop_info['id'];
                         if ($shop_info['shop_url'] && $shop_info['shop_url']!=$full_url) {
-                            throw new APIException(30013);
+                            throw new APIException(30015);
                         }
                         $has_update = model('AliShops')->updateShopUrl($shop_id,$full_url);
                         if (!$has_update) {
@@ -163,7 +163,7 @@ class WtService extends APIAuthController
                 //链接从$service_info取短链拼接而成，指向店铺数据，路由映射
                 $res =$this->manageServiceInfo($service_info,'',$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                return $res;
+                return $this->format_ret($res);
             }
         }elseif (strpos($full_url, 'taobao')) { //淘宝
             if (preg_match('/shop[.\d\w]+.taobao.com/',$full_url)){ //店铺链接
@@ -183,7 +183,7 @@ class WtService extends APIAuthController
                     }else{
                         //抓取店铺信息,调用服务
                         $wei_bao = new WeiBaoData();
-                        $res = $wei_bao->getShopDataByUrl($full_url);
+                        $res = $wei_bao->getShopDataByUrl($shop_url);
                         if ($res['errcode']) {
                             throw new APIException($res['errcode']);
                         }
@@ -192,7 +192,7 @@ class WtService extends APIAuthController
                         $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
                         if (empty($shop_info)) {
                             //添加店铺表记录
-                            $wj_shop_id = model('AliShops')->saveShopInfo($shop_id,$full_url);
+                            $wj_shop_id = model('AliShops')->saveShopInfo($shop_id,$shop_url);
                             if (!$wj_shop_id) {
                                 throw new APIException(30010);
                             }
@@ -213,10 +213,10 @@ class WtService extends APIAuthController
                             $service_info=array();
                         }else{
                             $wj_shop_id =$shop_info['id'];
-                            if ($shop_info['shop_url'] && $shop_info['shop_url']!=$full_url) {
-                                throw new APIException(30013);
+                            if ($shop_info['shop_url'] && $shop_info['shop_url']!=$shop_url) {
+                                throw new APIException(30015);
                             }
-                            $has_update = model('AliShops')->updateShopUrl($shop_id,$full_url);
+                            $has_update = model('AliShops')->updateShopUrl($shop_id,$shop_url);
                             if (!$has_update) {
                                 throw new APIException(30010);
                             }
@@ -261,12 +261,6 @@ class WtService extends APIAuthController
                     }else{
                         $wj_shop_id = $shop_info['id'];
                         $service_info =model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
-                        if (!empty($service_info)) { //存在服务记录
-                            //设置路由，获取服务对应的链接，生成二维码
-                            //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                            throw new APIException(31997);
-                        }
-                        //表示无服务记录
                     }
                 }else{
                     throw new APIException(30001);
@@ -275,7 +269,7 @@ class WtService extends APIAuthController
                 //链接从$service_info取短链拼接而成，指向店铺数据，路由映射
                 $res =$this->manageServiceInfo($service_info,'',$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                return $res;
+                return $this->format_ret($res);
             }elseif (strpos($full_url,'item.htm') || strpos($full_url,'detail.html')) { //商品详情
                 preg_match('/[?&](?:id=)(\d+)/',$full_url,$m);
                 if (empty($m) || !isset($m[1])){
@@ -308,7 +302,7 @@ class WtService extends APIAuthController
                 $qrcode_url ='/weibao/index/processUrl/isTm/0/itemId/'.$item_id;
                 $res =$this->manageServiceInfo($service_info,$qr_code_url,$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-                return $res;
+                return $this->format_ret($res);
             }else{
                 throw new APIException(30014);
             }
@@ -388,19 +382,19 @@ class WtService extends APIAuthController
         $img ='';
         if (empty($service_info)){
             //新增体验服务
-            //$experience_time = config('ExperienceTime');
+            $experience_time = config('ExperienceTime');
             $time_start = time();
             $time_end = strtotime("+".$experience_time." day");
 
             //mc 改用shop_id+manager_id
-            $o = new ShortUrl($shop_id,session('manager_id'));
+            $o = new ShortUrl($wj_shop_id,session('manager_id'));
             $shop_url_str = $o->getSN();
             //查询短链接是否存在
             $i=1;
             $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-            while (!empty($res) || str_len($shop_url_str)!=6) {
+            while (!empty($res) || strlen($shop_url_str)!=6) {
                 //mc 改用shop_id+manager_id
-                $o = new ShortUrl($shop_id,session('manager_id'),time());
+                $o = new ShortUrl($wj_shop_id,session('manager_id'),time());
                 $shop_url_str = $o->getSN();
                 //查询短链接是否存在
                 $res = model('ShopServices')->ExistShortUrl($shop_url_str);
@@ -433,7 +427,7 @@ class WtService extends APIAuthController
         }else {//已过期
              $qrcode_url='';
         }
-        $res_data =array('service_info'=>$service_info,'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
+        $res_data =array('service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $res_data;
     }
 

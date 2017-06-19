@@ -15,7 +15,6 @@
 
 namespace api;
 use think\Controller;
-use api\APIBase;
 use think\Request;
 use api\APIException;
 

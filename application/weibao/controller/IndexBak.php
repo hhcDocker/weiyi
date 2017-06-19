@@ -219,11 +219,10 @@ class IndexBak extends Controller
      * @return [shop_data]
      */
     public function getShopData() {
-        echo "string";
-		$url = $_GET['shopURL'];
+		$url = input('param.shopURL');
         $client = Client::getInstance();
         $client->getProcedureCompiler()->clearCache();
-        $client->getEngine()->setPath($_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe');
+        $client->getEngine()->setPath(config('PhantomjsPath'));
         $client->isLazy();
         /** 
          * @see JonnyW\PhantomJs\Http\Request
@@ -241,12 +240,31 @@ class IndexBak extends Controller
         //dump( $response->getUrls());
         //dump($response->getConsole());
         $data=$response->getUrlData();
+        if (!$data || empty($data)) {
+            echo "获取数据失败";
+            return;
+        }
+        $is_tmall=1;
 		foreach ($data as $key => &$value) {
-			$value=preg_replace('/^mtopjsonp\d\(/','', $value);
-			$value= trim($value,')');
+            $value=preg_replace('/^mtopjsonp\d+\(/','', $value);
+            $value= trim($value,')');
+            $value_array = json_decode($value,true);
+            if (strpos($value_array['api'],'taobao')) {
+                $is_tmall=0;
+                break;
+            }elseif (strpos($value_array['api'],'tmall')) {
+                $is_tmall=1;
+                break;
+            }
 		}
-		return $this->fetch('tm_shop',array('data' => json_encode($data)));
+        if ($is_tmall) {
+            return $this->fetch('tm_shop',array('data' => json_encode($data)));
+        }else{
+            return $this->fetch('tb_shop',array('data' => json_encode($data)));
+        }
+
     }
+
 	/**
      * 通过天猫店铺URL获取店铺首页数据
      * @return [shop_data]
