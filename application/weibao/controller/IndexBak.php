@@ -23,6 +23,9 @@ use think\Controller;
 use think\Request;
 use think\Db;
 
+
+
+use app\common\service\WeiBaoData;
 class IndexBak extends Controller
 {
     /**
@@ -246,10 +249,10 @@ class IndexBak extends Controller
             return;
         }
         $is_tmall=1;
-		foreach ($data as $key => &$value) {
-            $value=preg_replace('/^mtopjsonp\d+\(/','', $value);
-            $value= trim($value,')');
-            $value_array = json_decode($value,true);
+		foreach ($data as $key => $value) {
+            $v=preg_replace('/^mtopjsonp\d+\(/','', $value);
+            $v= trim($v,')');
+            $value_array = json_decode($v,true);
             if (strpos($value_array['api'],'taobao')) {
                 $is_tmall=0;
                 break;
@@ -580,4 +583,29 @@ class IndexBak extends Controller
 
         return $service_info;
     }
+
+
+    public function testUrl()
+    {
+        $url = input('param.shopURL');
+        $wei_bao = new WeiBaoData();
+        $res = $wei_bao->getShopDataByUrl($url);
+        $shop_data = $res['shop_data'];
+        
+        $is_tmall =0;
+        foreach ($shop_data as $k => $v) {
+            if (strpos($v['api_url'],'taobao')) {
+                $is_tmall =0;
+                break;
+            }elseif (strpos($v['api_url'],'tmall')) {
+                $is_tmall =1;
+                break;
+            }
+        }
+        if ($is_tmall) {
+            return $this->fetch('tm_shop',array('data' => json_encode($shop_data)));
+        }else{
+            return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
+        }
+    }   
 }
