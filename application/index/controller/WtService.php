@@ -105,7 +105,7 @@ class WtService extends APIAuthController
                     $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                 }
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
-                $qrcode_url ='/weibao/index/processUrl/isTm/1/itemId/'.$item_id;
+                $qrcode_url ='/weibao/index/getGoodsDetail?isTm/1/itemId/'.$item_id;
                 $res =$this->manageServiceInfo($service_info,$qrcode_url,$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
                 return $this->format_ret($res);
@@ -282,6 +282,7 @@ class WtService extends APIAuthController
                 if(!$data || $data['ret'][0] !="SUCCESS::调用成功" || !isset($data['data']['seller'])){
                     throw new APIException(30009);
                 }
+                
                 $seller_info = $data['data']['seller'];
                 $shop_id = intval($seller_info['shopId']);
                 $user_id = intval($seller_info['userId']);
@@ -299,7 +300,7 @@ class WtService extends APIAuthController
                     $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                 }
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
-                $qrcode_url ='/weibao/index/processUrl/isTm/0/itemId/'.$item_id;
+                $qrcode_url ='/weibao/index/getGoodsDetail?isTm/0/itemId/'.$item_id;
                 $res =$this->manageServiceInfo($service_info,$qr_code_url,$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
                 return $this->format_ret($res);
