@@ -76,14 +76,21 @@ class WeiBaoData {
                     $_data=array('data'=>$v['data']['data'],'view'=>$v['data']['view'],'shop_other_data'=>$shopOtherData);
                     if (isset($v['data']['data']['shopId'])){ //taobao
                         $shopId = $v['data']['data']['shopId'];
-                        $userId = isset($v['data']['data']['_we_request']['user_id'])? $v['data']['data']['_we_request']['user_id'] :0;
+                        if (isset($v['data']['data']['_we_request']['user_id'])){
+                            $userId =$v['data']['data']['_we_request']['user_id'];
+                        }elseif(isset($v['data']['data']['_we_system']['userId'])){
+                            $userId =$v['data']['data']['_we_system']['userId'];
+                        }else{
+                            $userId=0;
+                        }
                     }else{ //tmall
                         $shopId =$v['data']['data']['_we_request']['shopId'];
                         $userId =0;//mc
                     }
 
                     if (!$shopId) {
-                        throw new \Exception("shopid is error", 1);
+                        $flag_error=1;
+                        break;
                     }
                 }else{
                     $_data = $v['data'];

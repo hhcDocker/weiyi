@@ -219,7 +219,6 @@ class IndexBak extends Controller
      * @return [shop_data]
      */
     public function getShopData() {
-        echo "string";
 		$url = $_GET['shopURL'];
         $client = Client::getInstance();
         $client->getProcedureCompiler()->clearCache();

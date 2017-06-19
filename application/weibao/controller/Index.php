@@ -233,6 +233,7 @@ class Index extends Controller
                 $shop_data = $api_info;
             }
         }
+
         if (empty($api_info)){
             //把这块剥离为服务层，私有化
             $client = Client::getInstance();
@@ -378,6 +379,7 @@ class Index extends Controller
             echo "链接不存在";
             return;
         }
+
         if ($service_info['service_end_time']>=time()) {//服务未过期
             //获取接口
             $shop_data = model('ShopApi')->getShopDataByShopId($service_info['shop_id']);
@@ -400,7 +402,7 @@ class Index extends Controller
                 $shop_data = $res['shop_data'];
                 $flag_error=0;
                 foreach ($shop_data as $k1 => $v1) {
-                    $has_add = model('ShopApi')->saveShopData($wj_shop_id,$v1['api_url'],$v1['api_data']);
+                    $has_add = model('ShopApi')->saveShopData($service_info['shop_id'],$v1['api_url'],$v1['api_data']);
                     if (!$has_add) {
                         $flag_error=1;
                         break;

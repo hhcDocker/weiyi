@@ -106,7 +106,7 @@ class WtService extends APIAuthController
                 }
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
                 $qrcode_url ='/weibao/index/processUrl/isTm/1/itemId/'.$item_id;
-                $res =$this->manageServiceInfo($service_info,$qr_code_url,$wj_shop_id);
+                $res =$this->manageServiceInfo($service_info,$qrcode_url,$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
                 return $res;
             }elseif (strpos($full_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$full_url)){ //店铺
@@ -388,19 +388,19 @@ class WtService extends APIAuthController
         $img ='';
         if (empty($service_info)){
             //新增体验服务
-            //$experience_time = config('ExperienceTime');
+            $experience_time = config('ExperienceTime');
             $time_start = time();
             $time_end = strtotime("+".$experience_time." day");
 
             //mc 改用shop_id+manager_id
-            $o = new ShortUrl($shop_id,session('manager_id'));
+            $o = new ShortUrl($wj_shop_id,session('manager_id'));
             $shop_url_str = $o->getSN();
             //查询短链接是否存在
             $i=1;
             $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-            while (!empty($res) || str_len($shop_url_str)!=6) {
+            while (!empty($res) || strlen($shop_url_str)!=6) {
                 //mc 改用shop_id+manager_id
-                $o = new ShortUrl($shop_id,session('manager_id'),time());
+                $o = new ShortUrl($wj_shop_id,session('manager_id'),time());
                 $shop_url_str = $o->getSN();
                 //查询短链接是否存在
                 $res = model('ShopServices')->ExistShortUrl($shop_url_str);
