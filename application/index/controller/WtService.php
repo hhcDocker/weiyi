@@ -433,7 +433,7 @@ class WtService extends APIAuthController
         }else {//已过期
              $qrcode_url='';
         }
-        $res_data =array('service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_end_time,'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
+        $res_data =array('service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $res_data;
     }
 
