@@ -30,6 +30,25 @@ class ShopServices extends Base
     }
 
     /**
+     * [getServicesByShopId description]
+     * @param  string $shop_id    [description]
+     * @param  string $manager_id [description]
+     * @return [type]             [description]
+     */
+    public function getServicesByAliShopId($ali_shop_id='')
+    {
+        if (!$ali_shop_id) {
+            return array();
+        }
+        $res = Db::table('wj_shop_services w')
+                ->join('wj_ali_shops a','a.id =w.shop_id','left')
+                ->where('a.ali_shop_id',$ali_shop_id)
+                ->where('w.is_deleted',0)
+                ->select();
+        return $res?$res:array();
+    }
+
+    /**
      * [getServicesById description]
      * @param  integer $id [description]
      * @return [type]      [description]

@@ -106,8 +106,7 @@ class Index extends Controller
 				$arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
 
 				$arr['shopUrl']=iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href);
-				session('shopUrl',$arr['shopUrl']);
-				//mc 加上校验
+
 				$arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
            		return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
         	}else{
@@ -467,8 +466,10 @@ class Index extends Controller
                     echo "获取数据失败";
                     return;
                 }
+                //店铺链接
+                $shop_url=trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
                 //先获取shopid,验证服务是否存在，是否过期
-                
+                $shop_id = 0;
                 //得到dataDetail对象
                 foreach($html->find('script') as $key => $script){
                 //if($key==6){
@@ -476,11 +477,37 @@ class Index extends Controller
                 //}else{
                         $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
                         $arr['dataOther'][]=$v;
-
-
+                        if (strpos($v,'_DATA_Detail')!==false){
+                            preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
+                            $id_str = $id_str[0];
+                            $shop_id = str_replace('"rstShopId":','',$id_str);
+                        }
                 //}
                 };
+                if (!$shop_url || !$shop_id) {
+                    echo "获取数据失败";
+                    return;
+                }
+                //查询服务
+                $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
+                if (empty($service_info)) {
+                    echo "该店铺无购买服务，请到微跳上购买";
+                    return;
+                }else{
+                    $is_time_out =1;
+                    foreach ($service_info as $k => $v) {
+                        if ($v['service_end_time'] > time()) {
+                            $is_time_out =0;
+                            break;
+                        }
+                    }
+                    if ($is_time_out) {
+                        echo "该店铺所购买服务已过期，请到微跳上续费";
+                        return;
+                    }
+                }
 
+                $arr['shopUrl']=$shop_url;
                 $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
                 $assessFlag='{'.file_get_contents($assessFlag).'}';
                 $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
@@ -503,7 +530,6 @@ class Index extends Controller
                 };
 
                 //得到店铺score
-
                 foreach ($html ->find('ul.score') as  $score) {
                     foreach($score->find('li') as $key => $li){
                         $arr['score'][$key]['className']=$li->find('b',0)->class;
@@ -523,25 +549,52 @@ class Index extends Controller
                     }
 
                 }catch(Exception  $e){
-
+                    echo "获取数据失败";
+                    return;
                 }
                 //得到店铺名
                 $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
 
-                $arr['shopUrl']=iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href);
-                session('shopUrl',$arr['shopUrl']);
-                //mc 加上校验
                 $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
                 return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
             }else{
                 $url='https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$item_id.'%22%7D';
                 $data=file_get_contents($url);
-                $data=json_decode($data);
-                echo "<pre>";
-                var_dump($data);
-                echo "<pre/>";
-                exit;
-                //$data=$_GET['itemId'];
+                $data=json_decode($data,true);
+
+                if(!$data || $data['ret'][0] !="SUCCESS::调用成功" || !isset($data['data']['seller'])){
+                    echo "获取数据失败";
+                    return;
+                }
+
+                //获取shopid,验证服务是否存在，是否过期
+                $seller_info = $data['data']['seller'];
+                $shop_id = intval($seller_info['shopId']);
+                // $user_id = intval($seller_info['userId']);
+                // $shop_url ='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
+
+                if (!$shop_id) {
+                    echo "获取数据失败";
+                    return;
+                }
+                //查询服务
+                $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
+                if (empty($service_info)) {
+                    echo "该店铺无购买服务，请到微跳上购买";
+                    return;
+                }else{
+                    $is_time_out =1;
+                    foreach ($service_info as $k => $v) {
+                        if ($v['service_end_time'] > time()) {
+                            $is_time_out =0;
+                            break;
+                        }
+                    }
+                    if ($is_time_out) {
+                        echo "该店铺所购买服务已过期，请到微跳上续费";
+                        return;
+                    }
+                }
                 return $this->fetch('tb_commodity_detail',array('data' => $data ));
             }
 

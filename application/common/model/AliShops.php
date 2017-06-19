@@ -130,4 +130,3 @@ class AliShops extends Base
   `delete_-time` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;*/
-
