@@ -273,7 +273,7 @@ class WtService extends APIAuthController
                 $res =$this->manageServiceInfo($service_info,'',$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
                 return $this->format_ret($res);
-            }elseif (strpos($full_url,'item.htm') || strpos($full_url,'detail.html')) { //商品详情
+            }elseif (strpos($full_url,'item.htm') || strpos($full_url,'detail.htm')) { //商品详情
                 preg_match('/[?&](?:id=)(\d+)/',$full_url,$m);
                 if (empty($m) || !isset($m[1])){
                     throw new APIException(30001,['url'=>$full_url]);
@@ -304,7 +304,7 @@ class WtService extends APIAuthController
                 }
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
                 $qrcode_url ='/weibao/index/getGoodsDetail?isTm=0&item_id='.$item_id;
-                $res =$this->manageServiceInfo($service_info,$qr_code_url,$wj_shop_id);
+                $res =$this->manageServiceInfo($service_info,$qrcode_url,$wj_shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
                 return $this->format_ret($res);
             }else{
@@ -748,8 +748,9 @@ class WtService extends APIAuthController
      */
     public function getShopService()
     {
-        $page_index = input('post.page_index') ? intval(input('post.page_index')):1;
-        $page_size = input('post.page_size') ? intval(input('post.page_size')):5;
+        $page_index = input('param.page_index') ? intval(input('param.page_index')):1;
+        $page_size = input('param.page_size') ? intval(input('param.page_size')):5;
+
         $service_list = model('ShopServices')->getServicesByManagerId(session('manager_id'),$page_index, $page_size);
         return $this->format_ret($service_list);
 
