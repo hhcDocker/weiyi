@@ -74,8 +74,10 @@ class ShopServices extends Base
         }
         $offset = ($pageIndex-1)*$pageSize;
         $res = Db::table('wj_shop_services')
+                ->field('id,transformed_url,shop_name,shop_url,service_start_time,service_end_time,service_end_time>unix_timestamp(now()) as within_time')
                 ->where('manager_id',$manager_id)
                 ->where('is_deleted',0)
+                ->where('shop_url','not null')
                 ->limit($offset, $pageSize)
                 ->select();
         return $res;
