@@ -132,7 +132,7 @@
 							<span v-text='item.rateDate'></span>
 							<div class='assess_img'><img v-for='img in item.pics' v-bind:src='img'/></div>
 						</li>
-						<li v-else style="text-align: center;">
+						<li style="text-align: center;" v-if='commodityData.assessInfo.length==0'>
 							该商品暂无评价
 						</li>
 					</ul>
@@ -334,6 +334,7 @@
 						 		"-webkit-transform":"translate3d("+2*doEclientWidth+"px, 0px, 0px)",
 						 		"transform":"translate3d("+2*doEclientWidth+"px, 0px)"
 						 	});
+						 	getAccess();
   						 }else{
   						 	$("arcitle").css({
 						 		"-webkit-transform":"translate3d(0px, 0px, 0px)",
