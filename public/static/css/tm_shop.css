@@ -124,13 +124,13 @@ body {
   width: auto;
   height: 0.373333rem; }
 #tbShopCt .nav_tab span {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.64rem;
   margin-top: 0; }
   [data-dpr="2"] #tbShopCt .nav_tab span {
-    font-size: 36px; }
+    font-size: 32px; }
   [data-dpr="3"] #tbShopCt .nav_tab span {
-    font-size: 54px; }
+    font-size: 48px; }
 #tbShopCt .nav_tab a {
   padding-bottom: 0; }
 #tbShopCt .enhenced {
