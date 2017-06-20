@@ -62,7 +62,7 @@
 				 <div class="swiper-container"  id="conponList">
 				    <div class="swiper-wrapper">
 				        <div class="swiper-slide " v-for='item in conponQueryData.couponList'>
-				        	<img src="//gw.alicdn.com/tps/i1/TB1NavLKpXXXXcgaXXXkmBt9FXX-342-192.png_300x300.jpg_.webp"/>
+				        	<img src="/static/images/conponBg.jpg"/>
 				        	<p class="price">￥{{item.amount}}</p>
 				        	<p class="title">本店{{item.thresholdDesc}}</p>
 				        	<p class="time" >{{item.startTime}}前有效</p>
@@ -146,7 +146,7 @@
 				<div class="ranking_data">
 					<div class="ranking_left" @click="toDetailByRank(0)">
 						<span class="topImg">
-							<img src="//gw.alicdn.com/tps/i1/TB1YeF.GXXXXXc4XFXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+							<img src="/static/images/topOneTm.jpg"/>
 						</span>
 						<img :src="rankingData[0].imgUrl"/>
 						<p class="solePrice">
@@ -157,7 +157,7 @@
 					<div class="ranking_right">
 						<div @click="toDetailByRank(1)">
 							<span class="topImg">
-								<img src="//gw.alicdn.com/tps/i2/TB1HHOjGXXXXXa8XXXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+								<img src="/static/images/topTwoTm.jpg"/>
 							</span>
 							<img :src="rankingData[1].imgUrl"/>>
 							<p class="solePrice">
@@ -166,7 +166,7 @@
 						</div>
 						<div @click="toDetailByRank(2)">
 							<span class="topImg">
-								<img src="//gw.alicdn.com/tps/i3/TB1XmB.GXXXXXX5XVXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+								<img src="/static/images/topThreeTm.jpg"/>
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
 							<p class="solePrice">
