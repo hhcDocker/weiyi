@@ -50,9 +50,9 @@ class WtService extends APIAuthController
         $is_shop = 1;//店铺链接
 
         //mc 判断是否登录
-        if(!is_login()) {
+        /*if(!is_login()) {
             throw new APIException(10018);
-        }
+        }*/
 
         if (strpos($full_url,'tmall.com')) { //天猫
             $key_word_arr =array('list.','shouji.','www.tmall.com','pages.tmall.com');//天猫各种列表关键字
@@ -312,6 +312,251 @@ class WtService extends APIAuthController
         }
     }
 
+    /**
+     * [AddShopService description]
+     * 购买服务未付费成功，时间保留，付费成功后再修改时间
+     * @param string $value [description]
+     */
+    public function buyShopService()
+    {
+        $shop_url = noempty_input('shop_url','/^http/'); //客户填写的网址
+        $shop_name = noempty_input('shop_name');
+        $service_start_time = noempty_input('service_start_time');
+        $service_time = noempty_input('service_time','/\d+/');
+        $_payment_amount = config('service_cost');//每年支付费用
+        $payment_amount = $service_time * $_payment_amount;
+        $payment_method = noempty_input('payment_method','/\d/');//1-微信，2-支付宝
+
+        //校验
+        //校验网址
+        $shop_url = strtolower($shop_url);
+        if (strpos($shop_url,'http://')===false && strpos($shop_url,'https://')===false){
+            throw new APIException(30001);
+        }
+        $shop_url = str_replace('http://', '', $shop_url);
+        $shop_url = str_replace('https://', '', $shop_url);
+        $shop_url = $this->checkUrl($shop_url,0);
+
+        //店铺名称
+        
+        //服务时长
+        if ($service_time>3 || $service_time<1) {
+            throw new APIException(30016);
+        }
+        
+        //服务开始时间，格式yyyy-mm-dd,换算为time
+        $_service_start_time =explode('-', $service_start_time);
+        $_year = $_service_start_time[0];
+        $_month = $_service_start_time[1];
+        $_day = $_service_start_time[2];
+        if ($_year <date("Y") || $_month<date("m") || $_month>12 || $_day<date("d") ||$_day>31) {
+            throw new APIException(30017);
+        }
+        // $service_start_time = mktime(hour, minute, second, month, day, year);
+        $service_start_time = mktime(0, 0, 0, $_day, $_month, $_year);
+        $service_end_time = mktime(23, 59, 59, $_day, $_month, $_year+$service_time);
+
+        $service_info = array();
+        //检测是否在alishop表中
+        //天猫店铺
+        if (strpos($shop_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$shop_url)){ //店铺
+            $ali_shop_url = preg_replace('/(\w+)[\.m]*\.tmall.com.*/','$1'.'.m.tmall.com',$shop_url);//获取数据的网址
+
+            $shop_info = model('AliShops')->getShopInfoByUrl($ali_shop_url);
+            if (empty($shop_info)) { //表示从来没抓取过该店铺数据，或者信息不全
+                //抓取店铺信息,调用服务
+                $wei_bao = new WeiBaoData();
+                $res = $wei_bao->getShopDataByUrl($ali_shop_url);
+                if ($res['errcode']) {
+                    throw new APIException($res['errcode']);
+                }
+                $shop_id = $res['shop_id'];
+                //检查对比url和shopid，没有则添加;有则修改
+                $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
+                if (empty($shop_info)) {
+                    //添加店铺表记录
+                    $wj_shop_id = model('AliShops')->saveShopInfo($shop_id,$ali_shop_url);
+                    if (!$wj_shop_id) {
+                        throw new APIException(30010);
+                    }
+                    //添加店铺数据记录
+                    $shop_data = $res['shop_data'];
+                    $flag_error=0;
+                    foreach ($shop_data as $k1 => $v1) {
+                        $has_add = model('ShopApi')->saveShopData($wj_shop_id,$v1['api_url'],$v1['api_data']);
+                        if (!$has_add) {
+                            $flag_error=1;
+                            break;
+                        }
+                    }
+                    if ($flag_error) {
+                        throw new APIException(30010);
+                    }
+                    //表示没有服务
+                    $service_info=array();
+                }else{
+                    $wj_shop_id = $shop_info['id'];
+                    if ($shop_info['shop_url'] && $shop_info['shop_url']!=$ali_shop_url) {
+                        throw new APIException(30015);
+                    }
+                    $has_update = model('AliShops')->updateShopUrl($shop_id,$ali_shop_url);
+                    if (!$has_update) {
+                        throw new APIException(30010);
+                    }
+                    $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
+                }
+            }else{
+                $wj_shop_id = $shop_info['id'];
+                $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
+            }
+            if (!empty($service_info)){
+                if ($service_info['service_end_time'] - time()>3*60*60*24) { //不是体验服务
+                    throw new APIException(30020);
+                }
+            }
+        }elseif (strpos($shop_url, 'shop.m.taobao.com')) { //淘宝店铺移动端1
+            //获取userid
+            preg_match('/(?:user_id=)(\d+)/',$shop_url,$m);
+            if (empty($m) || !isset($m[1])){
+                throw new APIException(30001,['url'=>$shop_url]);
+            }
+            $user_id =$m[1];
+            $ali_shop_url='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
+            //查询店铺
+            $shop_info = model('AliShops')->getShopInfoByUrl($ali_shop_url);
+            if (!empty($shop_info)) {
+                $wj_shop_id =$shop_info['id'];
+                $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
+            }else{
+                //抓取店铺信息,调用服务
+                $wei_bao = new WeiBaoData();
+                $res = $wei_bao->getShopDataByUrl($ali_shop_url);
+                if ($res['errcode']) {
+                    throw new APIException($res['errcode']);
+                }
+                $shop_id = $res['shop_id'];
+                //检查对比url和shopid，没有则添加;有则修改
+                $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
+                if (empty($shop_info)) {
+                    //添加店铺表记录
+                    $wj_shop_id = model('AliShops')->saveShopInfo($shop_id,$ali_shop_url);
+                    if (!$wj_shop_id) {
+                        throw new APIException(30010);
+                    }
+                    //添加店铺数据记录
+                    $shop_data = $res['shop_data'];
+                    $flag_error=0;
+                    foreach ($shop_data as $k1 => $v1) {
+                        $has_add = model('ShopApi')->saveShopData($wj_shop_id,$v1['api_url'],$v1['api_data']);
+                        if (!$has_add) {
+                            $flag_error=1;
+                            break;
+                        }
+                    }
+                    if ($flag_error) {
+                        throw new APIException(30010);
+                    }
+                    //表示没有服务
+                    $service_info=array();
+                }else{
+                    $wj_shop_id =$shop_info['id'];
+                    if ($shop_info['shop_url'] && $shop_info['shop_url']!=$ali_shop_url) {
+                        throw new APIException(30015);
+                    }
+                    $has_update = model('AliShops')->updateShopUrl($shop_id,$ali_shop_url);
+                    if (!$has_update) {
+                        throw new APIException(30010);
+                    }
+                    $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
+                }
+            }
+        }elseif (preg_match('/shop\d+\.taobao/', $shop_url)){
+            $shop_id = preg_replace('/.+shop(\d+).+/','\1',$shop_url);
+            //根据shopid查表
+            $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
+            $ali_shop_url = "https://shop".$shop_id.'.m.taobao.com';
+            if (empty($shop_info)) {
+                //抓取店铺信息,调用服务
+                $wei_bao = new WeiBaoData();
+                $res = $wei_bao->getShopDataByUrl($ali_shop_url);
+                if ($res['errcode']) {
+                    throw new APIException($res['errcode']);
+                }
+                $user_id = $res['user_id'];
+                $ali_shop_url='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
+
+                //添加店铺表记录
+                $wj_shop_id = model('AliShops')->saveShopInfo($shop_id,$ali_shop_url);
+                if (!$wj_shop_id) {
+                    throw new APIException(30010);
+                }
+                //添加店铺数据记录
+                $shop_data = $res['shop_data'];
+                $flag_error=0;
+                foreach ($shop_data as $k1 => $v1) {
+                    $has_add = model('ShopApi')->saveShopData($wj_shop_id,$v1['api_url'],$v1['api_data']);
+                    if (!$has_add) {
+                        $flag_error=1;
+                        break;
+                    }
+                }
+                if ($flag_error) {
+                    throw new APIException(30010);
+                }
+                //表示没有服务
+                $service_info=array();
+            }else{
+                $wj_shop_id = $shop_info['id'];
+                $service_info =model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
+            }
+        }else{
+            throw new APIException(30001);
+        }
+
+        if (!empty($service_info)){
+            if ($service_info['service_end_time'] - time()>3*60*60*24) { //不是体验服务
+                throw new APIException(30020);
+            }else{
+                 //更新服务信息
+                $service_id = $service_info['id'];
+                $has_update = model('ShopServices')->updateShopNameUrl($service_id,$shop_name,$shop_url);
+                if (!$has_update) {
+                    throw new APIException(30010);
+                }
+            }
+        }else{ //添加服务信息
+             //短链接
+            $o = new ShortUrl($wj_shop_id,session('manager_id'));
+            $shop_url_str = $o->getSN();
+            //查询短链接是否存在
+            $i=1;
+            $res = model('ShopServices')->ExistShortUrl($shop_url_str);
+            while (!empty($res) || strlen($shop_url_str)!=6) {
+                //mc 改用shop_id+manager_id
+                $o = new ShortUrl($wj_shop_id,session('manager_id'),time());
+                $shop_url_str = $o->getSN();
+                //查询短链接是否存在
+                $res = model('ShopServices')->ExistShortUrl($shop_url_str);
+                if ($i>100) {
+                    throw new APIException(30010);
+                }
+                $i++;
+            }
+
+            $service_id = model('ShopServices')-> addServices(session('manager_id'),$wj_shop_id,$shop_url_str,$shop_name,$shop_url);
+            if (!$service_id) {
+                throw new APIException(30010);
+            }
+        }
+        //增加消费记录
+        $expense_model = new ExpenseSN();
+        $expense_num = $expense_model->getSN();
+        $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,'',$service_id,session('manager_id'),$payment_amount ,$service_start_time,$service_end_time,0);
+        if (!$has_add) {
+             throw new APIException(30010);
+        }
+    }
+
     // **********************************公有函数******************************************************
 
     /**
@@ -377,13 +622,14 @@ class WtService extends APIAuthController
      */
     public function manageServiceInfo($service_info='',$qrcode_url='',$wj_shop_id=0)
     {
+        $service_type =0; //服务类型：1-体验3天，2-已购买，3-服务未开始,4-已过期
         if (!$wj_shop_id) {
             throw new APIException(30010);
         }
         $img ='';
         if (empty($service_info)){
             //新增体验服务
-            $experience_time = config('ExperienceTime');
+            $experience_time = config('experience_time');
             $time_start = time();
             $time_end = strtotime("+".$experience_time." day");
 
@@ -416,19 +662,29 @@ class WtService extends APIAuthController
             $expense_model = new ExpenseSN();
             $expense_num = $expense_model->getSN();
             $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,'',$service_id,session('manager_id'),0,$time_start,$time_end,1);
+            $service_type =1;
         }
 
-        if ($service_info['service_end_time']>=time()) { //服务未过期
+        if ($service_info['service_start_time']<=time() && $service_info['service_end_time']>=time()) { //服务未过期
             //设置路由，获取链接，生成二维码
             //mc 路由映射短链
             $qrcode_url = $qrcode_url?$qrcode_url:'/weibao/index/getShopDataByShortUrl/str_url/'.$service_info['transformed_url'];
+            $qrcode_url = 'http://'.$_SERVER['HTTP_HOST'].$qrcode_url;
             //二维码
             $QRCode = new QRCode;
             $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+            $service_type =2;
+        }elseif ($service_info['service_start_time']>time()) { //服务未开始
+            $qrcode_url='';
+            $service_type =3;
         }else {//已过期
-             $qrcode_url='';
+            $qrcode_url='';
+            $service_type =4;
         }
-        $res_data =array('service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
+        if ($service_info['service_end_time'] - $service_info['service_start_time']= 259200) {
+            $service_type =1;
+        }
+        $res_data =array('service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img,'service_type'=>$service_type);
         return $res_data;
     }
 
@@ -439,12 +695,11 @@ class WtService extends APIAuthController
      */
     private function AddShopShortUrlInfo($wj_shop_id=0,$shop_id='')
     {
-        $service_type =0; //服务类型：0-体验3天，1-已购买，2-已过期
         if (!$wj_shop_id || !$shop_id) {
             throw new APIException(30010);
         }
 
-        $experience_time = config('ExperienceTime');
+        $experience_time = config('experience_time');
         $time_start = time();
         $time_end = strtotime("+".$experience_time." day");
 

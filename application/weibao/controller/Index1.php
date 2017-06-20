@@ -244,7 +244,7 @@ class Index1 extends Controller
         $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
         //没有服务则表示体验
         if (empty($service_info)) {
-            $experience_time = config('ExperienceTime');
+            $experience_time = config('experience_time');
             $time_start = time();
             $time_end = strtotime("+".$experience_time." day");
             $o = new ShortUrl($url);

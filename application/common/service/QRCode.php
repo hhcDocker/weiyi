@@ -34,7 +34,7 @@ class QRCode
            return '';
         }
         //mc 如果转为https记得改这里
-        $url = 'http://'.$_SERVER['HTTP_HOST'].$url;
+        // $url = 'http://'.$_SERVER['HTTP_HOST'].$url;
         //生成当前的二维码
         $qrCode = new \Endroid\QrCode\QrCode();
         $qrCode

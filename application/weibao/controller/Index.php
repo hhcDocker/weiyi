@@ -317,13 +317,14 @@ class Index extends Controller
     {
         //mc
         session('manager_id',1);
-        throw new ApiException(31997);
+        echo "error";
+        exit;
 
         // $has_info = model('')
         $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
         //没有服务则表示体验
         if (empty($service_info)) {
-            $experience_time = config('ExperienceTime');
+            $experience_time = config('experience_time');
             $time_start = time();
             $time_end = strtotime("+".$experience_time." day");
             $o = new ShortUrl($url);
@@ -385,13 +386,14 @@ class Index extends Controller
         if ($service_info['service_end_time']>=time()) {//服务未过期
             //获取接口
             $shop_data = model('ShopApi')->getShopDataByShopId($service_info['shop_id']);
+            //获取链接
+            $shop_info = model('AliShops')->getShopInfoById($service_info['shop_id']);
+            if (empty($shop_info) || !isset($shop_info['shop_url'])) {
+                echo "链接不存在";
+                return;
+            }
+            session('shopUrl',$shop_info['shop_url']);
             if (empty($shop_data)) {
-                //获取链接
-                $shop_info = model('AliShops')->getShopInfoById($service_info['shop_id']);
-                if (empty($shop_info) || !isset($shop_info['shop_url'])) {
-                    echo "链接不存在";
-                    return;
-                }
                 $wei_bao = new WeiBaoData();
                 $res = $wei_bao->getShopDataByUrl($shop_info['shop_url']);
 
@@ -415,6 +417,7 @@ class Index extends Controller
                     throw new APIException(30010);
                 }
             }
+
             $is_tmall =0;
             foreach ($shop_data as $k => $v) {
                 if (strpos($v['api_url'],'taobao')) {
@@ -510,6 +513,7 @@ class Index extends Controller
                 }
 
                 $arr['shopUrl']=$shop_url;
+                session('shopUrl',$shop_url);
                 $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
                 $assessFlag='{'.file_get_contents($assessFlag).'}';
                 $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);

@@ -4,7 +4,7 @@
  * | Copyright (C) 2016-2017 深圳市紫雷科技有限公司 All rights reserved.
  * +----------------------------------------------------------------------
  * | Filename: common.php
- * | Description: the common functions for mall_buyer_api module
+ * | Description: the common functions 
  * +----------------------------------------------------------------------
  * | Created by junweiqu at 2017-04-29 17:57
  * | Email: junweiqu@purplethunder.cn
