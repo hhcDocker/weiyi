@@ -82,16 +82,21 @@ class WtService extends APIAuthController
                     throw new APIException(30009);
                 }
                 //店铺链接
-                $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
-                foreach($html->find('script') as $key => $script){
-                    $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
-                    if (strpos($v,'_DATA_Detail')!==false){
-                        preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
-                        $id_str = $id_str[0];
-                        $shop_id = str_replace('"rstShopId":','',$id_str);
-                        break;
-                    }
-                };
+                try{
+                    $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
+                
+                    foreach($html->find('script') as $key => $script){
+                        $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+                        if (strpos($v,'_DATA_Detail')!==false){
+                            preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
+                            $id_str = $id_str[0];
+                            $shop_id = str_replace('"rstShopId":','',$id_str);
+                            break;
+                        }
+                    };
+                }catch (\Exception $e){
+                    throw new APIException(30009);
+                }
                 if (!$shop_url || !$shop_id) {
                     throw new APIException(30009);
                 }
