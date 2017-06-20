@@ -741,7 +741,17 @@ class WtService extends APIAuthController
         //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝链接
         return $this->format_ret($response_data);
     }
+
+    /**
+     * [getShopService description]
+     * @return [type] [description]
+     */
+    public function getShopService()
+    {
+        # code...
+    }
     
+    // **********************************支付相关******************************************************
     /**
      * 微信订单异步通知
      */
