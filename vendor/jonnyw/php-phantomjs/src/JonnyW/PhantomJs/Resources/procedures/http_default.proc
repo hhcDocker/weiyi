@@ -10,7 +10,10 @@ var page       = require('webpage').create(),
     response   = {},
     debug      = [],
     logs       = [],
-    procedure  = {};
+    procedure  = {},
+    resources  = 0,
+    timeout;
+	var urls=[];
 
 /**
  * Global variables
@@ -32,6 +35,7 @@ var page       = require('webpage').create(),
  */
 [[ engine.load('page_viewport_size') ]]
 
+
 /**
  * Define custom headers.
  */
@@ -43,11 +47,6 @@ var page       = require('webpage').create(),
 [[ engine.load('page_settings') ]]
 
 /**
- * Page cookies
- */
-[[ engine.load('page_cookies') ]]
-
-/**
  * On resource timeout
  */
 page.onResourceTimeout = function (error) {
@@ -57,15 +56,34 @@ page.onResourceTimeout = function (error) {
 /**
  * On resource requested
  */
-page.onResourceRequested = function (resource, networkRequest) {
+page.onResourceRequested = function (req) {
+    
     [[ engine.load('page_on_resource_requested') ]]
+    urls.push(req.url);
+    resources++;
+    window.clearTimeout(timeout);
 };
 
 /**
  * On resource received
  */
-page.onResourceReceived = function (resource) {
+page.onResourceReceived = function (res) {
+    
+    var resource = res; // To be removed in version 5.0
+    
     [[ engine.load('page_on_resource_received') ]]
+    
+    if(!res.stage || res.stage === 'end') {
+        
+        resources--;
+        
+        if (resources === 0) {
+            
+            timeout = window.setTimeout(function() {
+                procedure.execute('success');
+            }, 300);
+        }
+    }
 };
 
 /**
@@ -87,13 +105,53 @@ phantom.onError = function(msg, trace) {
  */
 page.open ('{{ input.getUrl() }}', '{{ input.getMethod() }}', '{{ input.getBody() }}', function (status) {
     [[ engine.load('page_body_styles') ]]
-    [[ engine.load('page_open') ]]
+    response.shopOtherData = page.evaluate(function(){
+	    var obj={
+	    	shopName:document.querySelector('.name').innerHTML,
+	    	collectCounter:document.querySelector('.collect-counter').innerHTML,
+	    	logo:document.querySelector('.logo img').src,
+	    	backImage:document.querySelector('.shop-back-img img').src,
+	    };
+    	return obj;
+    });
+    window.setTimeout(function () { 
+        procedure.execute(status);
+    }, {{ input.getTimeout() - 200 }});
 });
 
 /**
  * Execute procedure
  */
 procedure.execute = function (status) {
+	function Fn(url) {
+		var arrData=[];
+		var falg=false;
+		for(var i=0;i<url.length;i++){
+			if((url[i].indexOf('getitemdescx')>-1)){
+				if(falg){
+					var xhr = new XMLHttpRequest(); 
+				    if(xhr){ 
+			    		var urlToken=url[i];
+				        xhr.withCredentials = true;
+				        xhr.onreadystatechange = function(){  
+				            if(xhr.readyState == 4){  
+				                if(xhr.status == 200){  
+				                	arrData.push(xhr.response);
+				                } 
+				            }  
+				        }  
+				        xhr.open("GET", urlToken, false);  
+				        xhr.send(null);  
+				    } 
+				}
+				falg=true;
+			}
+			
+		}
+        return  arrData;
+    }
+	var urldata = page.evaluate(Fn,urls);
+    response.urldata = urldata;
     [[ engine.load( 'procedure_' ~ procedure_type ) ]]
 };
 

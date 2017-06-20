@@ -71,7 +71,7 @@
 				</div>
 			</section>
 			<section class="shopCmdImageList" v-if='images.length>0'>
-				<div v-for='item in images' v-if='item.length>0'  >
+				<div v-for='item in images' v-if='item.length>0&&item[0].imageUrl' >
 					<span v-for="items in item" @click="toDetailByItemSearch(items,$index)" :style="{width:items.styleBinding.width*1.155/75 + 'rem',height:items.styleBinding.height*1.155/75 + 'rem'}">
 						<img :src="items.imageUrl"/>
 					</span>
@@ -161,7 +161,7 @@
 							</span>
 							<img :src="rankingData[1].imgUrl"/>>
 							<p class="solePrice">
-								已售 {{rankingData[0].totalSold}}
+								已售 {{rankingData[1].totalSold}}
 							</p>
 						</div>
 						<div @click="toDetailByRank(2)">
@@ -170,7 +170,7 @@
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
 							<p class="solePrice">
-								已售 {{rankingData[0].totalSold}}
+								已售 {{rankingData[2].totalSold}}
 							</p>
 						</div>
 					</div>
@@ -284,7 +284,9 @@
 															
 															if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].type=='image'){
 																var url = shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].dataBinding.url
-																objImage.arr.push(url);
+																if(url.indexOf('$')<0){
+																	objImage.arr.push(url);
+																}
 															}
 															
 														}

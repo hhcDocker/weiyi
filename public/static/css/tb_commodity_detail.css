@@ -272,6 +272,8 @@ arcitle {
     width: 100%; }
   .infomain_tab .detail, .infomain_tab .parameter {
     border-top: .32rem solid #eee; }
+    .infomain_tab .detail img, .infomain_tab .parameter img {
+      height: 7rem; }
   .infomain_tab .parameter dl {
     display: -webkit-box;
     display: -ms-flexbox;

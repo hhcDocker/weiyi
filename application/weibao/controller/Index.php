@@ -26,6 +26,33 @@ use think\Db;
 
 class Index extends Controller
 {
+	public function getTBCmdPidWordDetail()
+    {
+    	$itemId=$_GET['itemId'];
+    	$cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
+    	$client = Client::getInstance();
+        $client->getEngine()->setPath($_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe');
+        /**
+         * @see JonnyW\PhantomJs\Http\Request
+         **/
+        $request = $client->getMessageFactory()->createRequest($cmd_url, 'GET');
+        //$request->setDelay(1000);
+        /**
+         * @see JonnyW\PhantomJs\Http\Response
+         **/
+        $response = $client->getMessageFactory()->createResponse();
+
+        // Send the request
+        $client->send($request, $response);
+        /*dump($response->getUrls());
+        dump($response->getConsole());*/
+
+        $data=$response->getUrlData();
+		$value=preg_replace('/^mtopjsonp\d\(/','', $data[0]);
+        $value= trim($value,')');
+		$value=json_decode($value,true);
+		echo json_encode($value);
+	}
     /**
      * 接收并处理淘宝、天猫等链接,获取并显示数据
      * 淘宝搜索商品结果列表：https://s.m.taobao.com/h5?q=%E5%A4%B9%E5%85%8B
