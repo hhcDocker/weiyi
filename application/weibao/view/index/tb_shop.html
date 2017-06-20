@@ -108,7 +108,7 @@
 			<section class="getItemLists" v-if="getItemLists">
 				<h3>排行榜</h3>
 				<div class="ranking_nav">
-					<div :class="{'selected_ranking':rinkingIndex==0}" @click="selectRinking(0)">钻石买家最爱</div>
+					<div :class="{'selected_ranking':rinkingIndex==0}" @click="selectRinking(0)">会员最爱</div>
 					<div :class="{'selected_ranking':rinkingIndex==1}" @click="selectRinking(1)">收藏排行</div>
 					<div :class="{'selected_ranking':rinkingIndex==2}" @click="selectRinking(2)">销量排行</div>
 				</div>
@@ -277,7 +277,6 @@
 														}
 													}
 													if(shopData.data.data[openUrl.split('.')[0]].title){
-														console.log(shopData.data.data[openUrl.split('.')[0]].title)
 														titleArr.push(shopData.data.data[openUrl.split('.')[0]].title);
 													}
 													if(l>0&&shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l-1].type=="image"){
@@ -286,7 +285,7 @@
 														}
 														modelData[0].label.push(obj);
 													}
-												}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value&&shopData.data.view.subViews[0].subViews[k].subViews[i].dataBinding.apiName=='mtop.taobao.geb.enhenced.itemList.get'){
+												}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value&&shopData.data.view.subViews[0].subViews[k].subViews[i].dataBinding.aipName=="mtop.taobao.geb.enhenced.itemList.get"){
 													titleArr.push(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
 												}
 											}catch(e){
