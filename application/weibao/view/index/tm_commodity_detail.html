@@ -419,7 +419,6 @@
 				 			}
 				 		},
 				 		error:function(err){
-				 			alert('请求评价数据失败,请尝试点击重新获取数据');
 				 			accessFlag=true;
 		                }
 				 	});
@@ -447,27 +446,26 @@
             $url='https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444';
 		$url2='https://detailskip.taobao.com/json/wap/tmallH5Desc.do?_ksTS=1489820826429_496&callback=setMdskip&itemId='.$_GET['itemId'].'&sellerId='.$_GET['sellerId'].'&isPreview=false&isg=AuDgXeh1rO_KJxDslDcORQ7Gse4-_2Aoq6eCMlrxrPuOVYB_AvmUQ7Zjn0eq&isg2=AsjIpAa3XVo%2FHf0FqOwc%2FzrXGC3acSx7';*/
 			function getRecommend(){
-				 	$.ajax({
-				 		type:"get",
-				 		url:"/weibao/index/GetTMRecommend?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId,
-				 		async:true,
-				 		success:function(res){
-				 			commodityData.recommend=JSON.parse(JSON.parse(res)[0]).list;
-				 			commodityData.ortherData=JSON.parse(JSON.parse(res)[1]);
-				 			setTimeout(function(){
-				 				var recommend_swiper = new Swiper ('#recommend_swiper', {
-								    direction: 'horizontal',
-								    loop: false,
-								    slidesPerView:3, //分组显示 
-								    spaceBetween:30
-								});
-				 			},1000);
-				 		},
-				 		error:function(err){
-				 			accessFlag=true;
-		                }
-				 	});
-				
+			 	$.ajax({
+			 		type:"get",
+			 		url:"/weibao/index/GetTMRecommend?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId,
+			 		async:true,
+			 		success:function(res){
+			 			commodityData.recommend=JSON.parse(JSON.parse(res)[0]).list;
+			 			commodityData.ortherData=JSON.parse(JSON.parse(res)[1]);
+			 			setTimeout(function(){
+			 				var recommend_swiper = new Swiper ('#recommend_swiper', {
+							    direction: 'horizontal',
+							    loop: false,
+							    slidesPerView:3, //分组显示 
+							    spaceBetween:30
+							});
+			 			},1000);
+			 		},
+			 		error:function(err){
+			 			accessFlag=true;
+	                }
+			 	});
 			}
 			getRecommend();
 		</script>
