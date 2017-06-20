@@ -3,7 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/common/model/ShopServices.php" afterPath="$PROJECT_DIR$/application/common/model/ShopServices.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/common/service/QRCode.php" afterPath="$PROJECT_DIR$/application/common/service/QRCode.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config.php" afterPath="$PROJECT_DIR$/application/config.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/index/common.php" afterPath="$PROJECT_DIR$/application/index/common.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/index/controller/WtService.php" afterPath="$PROJECT_DIR$/application/index/controller/WtService.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/weibao/controller/Index.php" afterPath="$PROJECT_DIR$/application/weibao/controller/Index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/weibao/controller/Index1.php" afterPath="$PROJECT_DIR$/application/weibao/controller/Index1.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/extend/api/APIException.php" afterPath="$PROJECT_DIR$/extend/api/APIException.php" />
     </list>
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,8 +34,8 @@
       <file leaf-file-name="Index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-85">
-              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+            <state relative-caret-position="340">
+              <caret line="542" column="21" selection-start-line="542" selection-start-column="21" selection-end-line="542" selection-end-column="21" />
               <folding>
                 <element signature="e#6#727#0#PHP" expanded="true" />
                 <element signature="e#762#796#0#PHP" expanded="true" />
@@ -42,22 +49,29 @@
                 <element signature="e#2363#2519#0#PHP" expanded="false" />
                 <element signature="e#2440#2519#0#PHP" expanded="false" />
                 <element signature="e#2629#2931#0#PHP" expanded="false" />
-                <element signature="e#21292#23401#0#PHP" expanded="false" />
-                <element signature="e#16054#23629#0#PHP" expanded="false" />
-                <element signature="e#23421#23623#0#PHP" expanded="false" />
-                <element signature="e#23458#23573#0#PHP" expanded="false" />
+                <element signature="e#2954#3190#0#PHP" expanded="false" />
+                <element signature="e#3007#3184#0#PHP" expanded="false" />
+                <element signature="e#3209#3529#0#PHP" expanded="false" />
+                <element signature="e#3219#3494#0#PHP" expanded="false" />
+                <element signature="e#3350#3444#0#PHP" expanded="false" />
+                <element signature="e#3451#3494#0#PHP" expanded="false" />
+                <element signature="e#3501#3529#0#PHP" expanded="false" />
+                <element signature="e#21368#23477#0#PHP" expanded="false" />
+                <element signature="e#23497#23699#0#PHP" expanded="false" />
+                <element signature="e#23534#23649#0#PHP" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WtService.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="WtService.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="935">
-              <caret line="74" column="33" selection-start-line="74" selection-start-column="33" selection-end-line="74" selection-end-column="33" />
+            <state relative-caret-position="183">
+              <caret line="334" column="59" selection-start-line="334" selection-start-column="59" selection-end-line="334" selection-end-column="59" />
               <folding>
-                <element signature="e#20129#21738#0#PHP" expanded="false" />
+                <element signature="e#1226#15793#0#PHP" expanded="false" />
+                <element signature="e#28139#31086#0#PHP" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -99,8 +113,10 @@
         <entry file="file://$PROJECT_DIR$/application/index/common.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-              <folding />
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+              <folding>
+                <marker date="1497882499350" expanded="false" signature="9:614" ph=" +---------------------------------------------------------------------- ..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -123,11 +139,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Index.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/index/controller/Index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+            <state relative-caret-position="90">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding>
                 <element signature="e#810#859#0#PHP" expanded="false" />
                 <element signature="e#865#1195#0#PHP" expanded="false" />
@@ -230,10 +246,10 @@
         <option value="$PROJECT_DIR$/application/common/model/ShopServices.php" />
         <option value="$PROJECT_DIR$/application/common/utils/SN/ShortUrl.php" />
         <option value="$PROJECT_DIR$/application/common/model/AliShops.php" />
-        <option value="$PROJECT_DIR$/application/weibao/controller/Index.php" />
         <option value="$PROJECT_DIR$/application/weibao/controller/IndexBak.php" />
         <option value="$PROJECT_DIR$/application/common/service/WeiBaoData.php" />
         <option value="$PROJECT_DIR$/application/index/controller/WtService.php" />
+        <option value="$PROJECT_DIR$/application/weibao/controller/Index.php" />
       </list>
     </option>
   </component>
@@ -359,16 +375,16 @@
       <workItem from="1497576083048" duration="8709000" />
       <workItem from="1497663541888" duration="16189000" />
       <workItem from="1497755242780" duration="25066000" />
-      <workItem from="1497836514999" duration="15539000" />
+      <workItem from="1497836514999" duration="16849000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89373000" />
+    <option name="totallyTimeSpent" value="90683000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28843337" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -379,7 +395,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6497297" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37513512" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -420,7 +436,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>513</line>
+          <line>517</line>
           <option name="timeStamp" value="131" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -458,11 +474,21 @@
           <line>44</line>
           <option name="timeStamp" value="148" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/application/index/controller/WtService.php</url>
+          <line>321</line>
+          <option name="timeStamp" value="150" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/application/index/controller/WtService.php</url>
+          <line>326</line>
+          <option name="timeStamp" value="151" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="149" />
+      <option name="time" value="152" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -499,10 +525,16 @@
             <element signature="e#2363#2519#0#PHP" expanded="false" />
             <element signature="e#2440#2519#0#PHP" expanded="false" />
             <element signature="e#2629#2931#0#PHP" expanded="false" />
-            <element signature="e#21292#23401#0#PHP" expanded="false" />
-            <element signature="e#16054#23629#0#PHP" expanded="false" />
-            <element signature="e#23421#23623#0#PHP" expanded="false" />
-            <element signature="e#23458#23573#0#PHP" expanded="false" />
+            <element signature="e#2954#3190#0#PHP" expanded="false" />
+            <element signature="e#3007#3184#0#PHP" expanded="false" />
+            <element signature="e#3209#3529#0#PHP" expanded="false" />
+            <element signature="e#3219#3494#0#PHP" expanded="false" />
+            <element signature="e#3350#3444#0#PHP" expanded="false" />
+            <element signature="e#3451#3494#0#PHP" expanded="false" />
+            <element signature="e#3501#3529#0#PHP" expanded="false" />
+            <element signature="e#21368#23477#0#PHP" expanded="false" />
+            <element signature="e#23497#23699#0#PHP" expanded="false" />
+            <element signature="e#23534#23649#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -791,8 +823,10 @@
     <entry file="file://$PROJECT_DIR$/application/index/common.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding>
+            <marker date="1497882499350" expanded="false" signature="9:614" ph=" +---------------------------------------------------------------------- ..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -802,31 +836,6 @@
           <caret line="594" column="42" selection-start-line="594" selection-start-column="42" selection-end-line="594" selection-end-column="42" />
           <folding>
             <element signature="e#19811#20298#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding>
-            <element signature="e#6#727#0#PHP" expanded="true" />
-            <element signature="e#762#796#0#PHP" expanded="true" />
-            <element signature="e#988#1186#0#PHP" expanded="false" />
-            <element signature="e#1191#5175#0#PHP" expanded="false" />
-            <element signature="e#1418#5169#0#PHP" expanded="false" />
-            <element signature="e#1476#4947#0#PHP" expanded="false" />
-            <element signature="e#2091#2592#0#PHP" expanded="false" />
-            <element signature="e#2183#2577#0#PHP" expanded="false" />
-            <element signature="e#2306#2558#0#PHP" expanded="false" />
-            <element signature="e#2363#2519#0#PHP" expanded="false" />
-            <element signature="e#2440#2519#0#PHP" expanded="false" />
-            <element signature="e#2629#2931#0#PHP" expanded="false" />
-            <element signature="e#21292#23401#0#PHP" expanded="false" />
-            <element signature="e#16054#23629#0#PHP" expanded="false" />
-            <element signature="e#23421#23623#0#PHP" expanded="false" />
-            <element signature="e#23458#23573#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -863,20 +872,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
+    <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="74" column="33" selection-start-line="74" selection-start-column="33" selection-end-line="74" selection-end-column="33" />
+        <state relative-caret-position="340">
+          <caret line="542" column="21" selection-start-line="542" selection-start-column="21" selection-end-line="542" selection-end-column="21" />
           <folding>
-            <element signature="e#20129#21738#0#PHP" expanded="false" />
+            <element signature="e#6#727#0#PHP" expanded="true" />
+            <element signature="e#762#796#0#PHP" expanded="true" />
+            <element signature="e#988#1186#0#PHP" expanded="false" />
+            <element signature="e#1191#5175#0#PHP" expanded="false" />
+            <element signature="e#1418#5169#0#PHP" expanded="false" />
+            <element signature="e#1476#4947#0#PHP" expanded="false" />
+            <element signature="e#2091#2592#0#PHP" expanded="false" />
+            <element signature="e#2183#2577#0#PHP" expanded="false" />
+            <element signature="e#2306#2558#0#PHP" expanded="false" />
+            <element signature="e#2363#2519#0#PHP" expanded="false" />
+            <element signature="e#2440#2519#0#PHP" expanded="false" />
+            <element signature="e#2629#2931#0#PHP" expanded="false" />
+            <element signature="e#2954#3190#0#PHP" expanded="false" />
+            <element signature="e#3007#3184#0#PHP" expanded="false" />
+            <element signature="e#3209#3529#0#PHP" expanded="false" />
+            <element signature="e#3219#3494#0#PHP" expanded="false" />
+            <element signature="e#3350#3444#0#PHP" expanded="false" />
+            <element signature="e#3451#3494#0#PHP" expanded="false" />
+            <element signature="e#3501#3529#0#PHP" expanded="false" />
+            <element signature="e#21368#23477#0#PHP" expanded="false" />
+            <element signature="e#23497#23699#0#PHP" expanded="false" />
+            <element signature="e#23534#23649#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/index/controller/Index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+        <state relative-caret-position="90">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding>
             <element signature="e#810#859#0#PHP" expanded="false" />
             <element signature="e#865#1195#0#PHP" expanded="false" />
@@ -949,6 +979,17 @@
             <element signature="e#10781#10854#0#PHP" expanded="false" />
             <element signature="e#10863#10942#0#PHP" expanded="false" />
             <element signature="e#10951#11031#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="334" column="59" selection-start-line="334" selection-start-column="59" selection-end-line="334" selection-end-column="59" />
+          <folding>
+            <element signature="e#1226#15793#0#PHP" expanded="false" />
+            <element signature="e#28139#31086#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -241,7 +241,8 @@ return [
         'list_rows' => 15,
     ],
 
-    'ExperienceTime' =>3,
-    'PhantomjsPath' =>'/usr/bin/phantomjs'
-    //'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe'
+    'experience_time' =>3,//免费体验时间
+    'PhantomjsPath' =>'/usr/bin/phantomjs', //执行文件位置
+    // 'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe',
+    'service_cost' =>66,
 ];

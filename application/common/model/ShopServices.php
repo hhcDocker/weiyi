@@ -91,6 +91,26 @@ class ShopServices extends Base
     }
 
     /**
+     * [getServicesExpenseByShopId description]
+     * @param  [type] $shop_id    [description]
+     * @param  string $manager_id [description]
+     * @return [type]             [description]
+     */
+    public function getServicesExpenseByShopId($shop_id=0,$manager_id=0)
+    {
+        if (!$shop_id ||!$manager_id) {
+            return array();
+        }
+        $res = Db::table('wj_shop_services w')
+                ->join('wj_expense_records r','r.service_id = w.id and r.trade_status=1 and r.is_deleted=0','left')
+                ->where('w.shop_id',$shop_id)
+                ->where('w.is_deleted',0)
+                ->order('r.id desc')
+                ->find();
+        return $res?$res:array();
+    }
+
+    /**
      * [saveServices description]
      * @param  integer $manager_id         [description]
      * @param  string  $shop_id            [description]
@@ -114,8 +134,78 @@ class ShopServices extends Base
     		'create_time'=> time(),
     		'update_time'=> time(),
     	);
-    	$has_add =Db::table('wj_shop_services')->insertGetId($add_data);
+    	$has_add = Db::table('wj_shop_services')->insertGetId($add_data);
         return $has_add;
+    }
+
+    /**
+     * [addServices description]
+     * @param  integer $manager_id         [description]
+     * @param  string  $shop_id            [description]
+     * @param  string  $transformed_url    [description]
+     * @param  integer $shop_name          [description]
+     * @param  integer $shop_url           [description]
+     * @return [type]                      [description]
+     */
+    public function addServices($manager_id=0,$shop_id='',$transformed_url='',$shop_name='',$shop_url='')
+    {
+        if (!$manager_id ||!$shop_id ||!$transformed_url ||!$shop_name ||!$shop_url) {
+            return 0;
+        }
+        $add_data = array(
+            'manager_id'=>$manager_id,
+            'shop_id'=> $shop_id,
+            'transformed_url'=> $transformed_url,
+            'shop_name'=> $shop_name,
+            'shop_url'=>$shop_url,
+            'is_deleted'=> 0,
+            'create_time'=> time(),
+            'update_time'=> time(),
+        );
+        $has_add = Db::table('wj_shop_services')->insertGetId($add_data);
+        return $has_add;
+    }
+
+    /**
+     * [updateShopNameUrl description]
+     * @param  integer $id        [description]
+     * @param  string  $shop_name [description]
+     * @param  string  $shop_url  [description]
+     * @return [type]             [description]
+     */
+    public function updateShopNameUrl($id=0,$shop_name='',$shop_url='')
+    {
+        if (!$id) {
+            return 0;
+        }
+        $update_data = array(
+            'shop_name' =>$shop_name,
+            'shop_url' =>$shop_url,
+            'update_time'=>time()
+        );
+        $has_update = Db::table('wj_shop_services')->where('id',$id)->update($update_data);
+        return $has_update;
+    }
+
+    /**
+     * [updateShopNameUrl description]
+     * @param  integer $id        [description]
+     * @param  string  $shop_name [description]
+     * @param  string  $shop_url  [description]
+     * @return [type]             [description]
+     */
+    public function updateShopServiceTime($id=0,$service_start_time='',$service_end_time='')
+    {
+        if (!$id ||!$service_start_time ||!$service_end_time) {
+            return 0;
+        }
+        $update_data = array(
+            'service_start_time' =>$service_start_time,
+            'service_end_time' =>$service_end_time,
+            'update_time'=>time()
+        );
+        $has_update = Db::table('wj_shop_services')->where('id',$id)->update($update_data);
+        return $has_update;
     }
 
     /**
@@ -142,6 +232,8 @@ class ShopServices extends Base
   `manager_id` int(10) unsigned NOT NULL COMMENT '客户id',
   `shop_id` int(10) unsigned NOT NULL COMMENT '对应店铺表id',
   `transformed_url` varchar(255) DEFAULT NULL COMMENT '本站转换链接',
+  `shop_name` varchar(255) DEFAULT NULL COMMENT '客户填写的店铺名称',
+  `shop_url` varchar(255) DEFAULT NULL COMMENT '客户填写的店铺首页网址',
   `service_start_time` int(11) unsigned NOT NULL COMMENT '服务开始时间，当前时间所在服务的开始时间',
   `service_end_time` int(11) unsigned NOT NULL COMMENT '服务结束时间',
   `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -149,5 +241,6 @@ class ShopServices extends Base
   `update_time` int(11) unsigned DEFAULT NULL,
   `delete_time` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COMMENT='微跳服务信息';*/
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8 COMMENT='微跳服务信息';
+*/
 
