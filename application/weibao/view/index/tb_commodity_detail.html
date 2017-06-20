@@ -12,7 +12,7 @@
 			<div class="back">
 				
 			</div>
-			<div class="swiper-container">
+			<div class="swiper-container" id="shopBigPic_swiper">
 			    <div class="swiper-wrapper">
 			        <div class="swiper-slide " v-for="item in commodityData.lunboImageUrl">
 			        	<img v-bind:src="item"/>
@@ -211,8 +211,6 @@
 					//TODO handle the exception
 					console.log(e);
 				}
-				
-				
 				//构建Vue实例，
 				 vm = new Vue({
 					el:"#body_container",
@@ -302,7 +300,16 @@
 						}
 					}
 				});
-				
+				var mySwiper = new Swiper ('#shopBigPic_swiper', {
+				    direction: 'horizontal',
+				    loop: true,
+				    
+				    // 如果需要分页器
+				    pagination: '.swiper-pagination',
+				    
+				    // 如果需要滚动条
+				    scrollbar: '.swiper-scrollbar',
+				});
 				scriptAccess = document.createElement('script');
 	            scriptAccess.src = "https://rate.taobao.com/feedRateList.htm?userNumId="+data.data.seller.shopId+"&auctionNumId="+data.data.item.itemId+"&currentPageNum=1&callback=jsonp2";
 	            document.body.appendChild(scriptAccess);
@@ -390,17 +397,7 @@
 		</script>
 		<script type="text/javascript">
 		//借用swiper插件，图片轮播
-		var mySwiper = new Swiper ('.swiper-container', {
-		    direction: 'horizontal',
-		    loop: true,
-		    
-		    // 如果需要分页器
-		    pagination: '.swiper-pagination',
-		    
-		    // 如果需要滚动条
-		    scrollbar: '.swiper-scrollbar',
-		})
-		  
+		
 		//添加scroll事件,监听页面滚动
 	  	window.addEventListener('scroll',winScroll);
 	  	var scrollFlag=true;

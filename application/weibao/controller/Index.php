@@ -116,7 +116,8 @@ class Index extends Controller
 //              var_dump($data);
 //              echo "<pre/>";
 //              exit;
-        		$data=$_GET['itemId'];
+        		//$data=$_GET['itemId'];
+        		$data='534618777936';
            		return $this->fetch('tb_commodity_detail',array('data' => $data ));
         	}
 
