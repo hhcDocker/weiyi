@@ -55,6 +55,18 @@
 				    </div>
 				</div>
 			</section>
+			<section  class="section_swiper" v-if="conponQueryData.count>0">
+				 <div class="swiper-container"  id="conponList">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide " v-for='item in conponQueryData.couponList'>
+				        	<img src="/static/images/conponBg.jpg"/>
+				        	<p class="price">￥{{item.amount}}</p>
+				        	<p class="title">本店{{item.thresholdDesc}}</p>
+				        	<p class="time" >{{item.startTime}}前有效</p>
+				        </div>
+				    </div>
+				</div>
+			</section>
 			<section class="shopCmdImageList" v-if='images.length>0'>
 				<div v-for='item in images' v-if='item.length>0'  >
 					<span v-if="items.styleBinding.width" v-for="items in item" @click="toDetailByItemSearch(items,$index)" :style="{width:items.styleBinding.width*1.155/75 + 'rem',height:items.styleBinding.height*1.155/75 + 'rem'}">
