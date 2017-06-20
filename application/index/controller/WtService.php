@@ -348,7 +348,7 @@ class WtService extends APIAuthController
         }
 
         //服务开始时间，格式yyyy-mm-dd,换算为time
-        $_service_start_time =explode('-', $service_start_time);
+        $_service_start_time = explode('-', $service_start_time);
         $_year = $_service_start_time[0];
         $_month = $_service_start_time[1];
         $_day = $_service_start_time[2];
@@ -356,8 +356,8 @@ class WtService extends APIAuthController
             throw new APIException(30017);
         }
         // $service_start_time = mktime(hour, minute, second, month, day, year);
-        $service_start_time = mktime(0, 0, 0, $_day, $_month, $_year);
-        $service_end_time = mktime(23, 59, 59, $_day, $_month, $_year+$service_time);
+        $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
+        $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
 
         //支付方式
         if ($payment_method!=1 &&$payment_method!=2) {
@@ -547,7 +547,7 @@ class WtService extends APIAuthController
             ]);
             
             if(!$result['code']){
-                throw new APIException(30019, ['msg'=>$name]);
+                throw new APIException(30019, ['msg'=>$result['msg']]);
                 // return $this->error($result['msg']);
             }else{
                 //生成微信支付二维码
@@ -648,15 +648,6 @@ class WtService extends APIAuthController
             throw new APIException(30018);
         }
 
-        $service_info = model('ShopServices')->getServicesById($service_id);
-        if (empty($service_info)) {
-            throw new APIException(30021);
-        }
-        if ($service_info['service_end_time'] >time()) { //还未过期
-            $service_start_time = $service_info['service_start_time'];
-            $todaytime=strtotime("today");
-            $service_start_time = date("Y-m-d",$todaytime);
-        }
         //服务开始时间，格式yyyy-mm-dd,换算为time
         $_service_start_time =explode('-', $service_start_time);
         $_year = $_service_start_time[0];
@@ -666,10 +657,91 @@ class WtService extends APIAuthController
             throw new APIException(30017);
         }
         // $service_start_time = mktime(hour, minute, second, month, day, year);
-        $service_start_time = mktime(0, 0, 0, $_day, $_month, $_year);
-        $service_end_time = mktime(23, 59, 59, $_day, $_month, $_year+$service_time);
+        $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
+        $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
 
+        $service_info = model('ShopServices')->getServicesById($service_id);
+        if (empty($service_info)) {
+            throw new APIException(30021);
+        }
+        if ($service_info['service_end_time'] >time()) { //还未过期
+            //续费开始时间比之前结束时间多出至少一天
+            if ($service_start_time - $service_info['service_end_time'] > 24*60*60) {
+                throw new APIException(30022);
+            }elseif ($service_end_time - $service_info['service_end_time'] < 364*24*60*60) { //续费结束时间和当前服务结束时间相差不到1年，表示重复付费
+                throw new APIException(30022);
+            }
+        }
+
+        //发起微信或支付宝支付，微信则取得链接，生成二维码，支付宝则取得链接
+        $expense_model = new ExpenseSN();
+        $expense_num = $expense_model->getSN();
+
+        if ($payment_method==1) { //微信
+            //发起支付
+            $wxPay = new WxPay;
+            $result = $wxPay->wxPay([
+                'body' => '微跳-服务续费',
+                'attach' => '微跳-服务续费',
+                'out_trade_no' => $expense_num,
+                'total_fee' => $payment_amount*100,//订单金额，单位为分，如果你的订单是100元那么此处应该为 100*100
+                'time_start' => date("YmdHis"),//交易开始时间
+                'time_expire' => date("YmdHis", time() + 604800),//一周过期
+                'goods_tag' => '服务续费',
+                'notify_url' => request()->domain().'/index/wt_service/WeixinNotify',
+                'trade_type' => 'NATIVE',
+                'product_id' => rand(1,999999),
+            ]);
+            
+            if(!$result['code']){
+                throw new APIException(30019, ['msg'=>$result['msg']]);
+                // return $this->error($result['msg']);
+            }else{
+                //生成微信支付二维码
+                $QRCode = new QRCode;
+                $response_data = base64_encode($QRCode->createQRCodeImg($result['msg']));
+                
+                /*vendor('wxpay.phpqrcode');
+                $response_data =\QRcode::png(urldecode($result['msg']));*/
+            }
+        }elseif ($payment_method==2) { //支付宝
+            //发起支付
+            $aliPay = new AliPay;
+            $result = $aliPay->alipay([
+                'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
+                'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
+                'out_trade_no' => $expense_num,
+                'subject' => "微跳-服务续费",
+                'total_fee' => $payment_amount,//订单金额，单位为元
+                'body' => "微跳",
+            ]);
+            if(!$result['code']){
+                throw new APIException(30019, ['msg'=>$result['msg']]);
+                // return $this->error($result['msg']);
+            }else{
+                //生成支付宝支付html
+                $response_data = $result['msg'];
+            }
+        }
+        if (!$response_data){
+            throw new APIException(30019);
+        }
+        Db::startTrans();
+        try{
+            //无须更新服务信息
+            $service_id = $service_info['id'];
+            //增加消费记录
+            $expense_id = model('ExpenseRecords')->addExpense($expense_num,$payment_method,$service_id,session('manager_id'),$payment_amount ,$service_start_time,$service_end_time,0);
+            Db::commit();
+        } catch(\Exception $e){
+            Db::rollback();
+            throw new APIException(30019);
+        }
+
+        //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝链接
+        return $this->format_ret($response_data);
     }
+    
     /**
      * 微信订单异步通知
      */
@@ -716,7 +788,11 @@ class WtService extends APIAuthController
         $aliPay = new AliPay;
     
         $result = $aliPay->notify_alipay();
-        exit($result);
+        if (!$result) {
+            echo "失败";
+        }else{
+            exit($result);
+        }
     }
     
     /**
