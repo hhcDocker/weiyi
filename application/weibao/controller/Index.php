@@ -31,7 +31,7 @@ class Index extends Controller
     	$itemId=$_GET['itemId'];
     	$cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
     	$client = Client::getInstance();
-        $client->getEngine()->setPath($_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe');
+        $client->getEngine()->setPath(config('PhantomjsPath'));
         /**
          * @see JonnyW\PhantomJs\Http\Request
          **/
