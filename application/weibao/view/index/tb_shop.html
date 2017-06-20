@@ -145,11 +145,11 @@
 					</div>
 				</div>
 			</section>
-			<section class="enhenced" v-if="enhenced" v-for="models in enhenced"> 
+			<section class="enhenced" v-if="enhenced&&models.list.length>0" v-for="models in enhenced"> 
 				<div class="title_container_itemsearch" v-if="titleArr[$index]">
 					<span>{{titleArr[$index]}}</span>
 				</div>
-				<ul class="girdList">
+				<ul class="girdList" >
 					<li v-for="item in models.list" @click="toDetailByEnhenced(item)">
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
 						<h2 v-text="item.title"></h2>

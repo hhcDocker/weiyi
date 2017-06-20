@@ -482,4 +482,12 @@ body {
   [data-dpr="3"] .lookAllCmd {
     font-size: 60px; }
 
+.objImages {
+  margin-bottom: 0.266rem;
+  position: relative; }
+  .objImages div {
+    position: absolute;
+    top: 0;
+    left: 0; }
+
 /*# sourceMappingURL=tm_shop.css.map */
