@@ -684,7 +684,7 @@ class WtService extends APIAuthController
         if ($service_info['service_end_time'] - $service_info['service_start_time']= 259200) {
             $service_type =1;
         }
-        $res_data =array('service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img,'service_type'=>$service_type);
+        $res_data =array('service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'service_type'=>$service_type,'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $res_data;
     }
 
