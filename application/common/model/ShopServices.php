@@ -45,7 +45,7 @@ class ShopServices extends Base
                 ->where('a.ali_shop_id',$ali_shop_id)
                 ->where('w.is_deleted',0)
                 ->select();
-        return $res?$res:array();
+        return $res;
     }
 
     /**
@@ -67,13 +67,18 @@ class ShopServices extends Base
      * @param  integer $manager_id [description]
      * @return [type]              [description]
      */
-    public function getServicesByManagerId($manager_id=0)
+    public function getServicesByManagerId($manager_id=0,$pageIndex=1, $pageSize=5)
     {
         if (!$manager_id) {
             return array();
         }
-        $res = Db::table('wj_shop_services')->where('manager_id',$manager_id)->where('is_deleted',0)->select();
-        return $res?$res:array();
+        $offset = ($pageIndex-1)*$pageSize;
+        $res = Db::table('wj_shop_services')
+                ->where('manager_id',$manager_id)
+                ->where('is_deleted',0)
+                ->limit($offset, $pageSize)
+                ->select();
+        return $res;
     }
 
     /**
