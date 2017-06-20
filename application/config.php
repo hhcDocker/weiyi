@@ -250,7 +250,7 @@ return [
     ],
 
     'experience_time' =>3,//免费体验时间
-    'PhantomjsPath' =>'/usr/bin/phantomjs', //执行文件位置
-    // 'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe',
+    // 'PhantomjsPath' =>'/usr/bin/phantomjs', //执行文件位置
+    'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe',
     'service_cost' =>1.01,
 ];

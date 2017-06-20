@@ -164,7 +164,9 @@ class AlipayNotify {
 		}else{
 			$isSign = $this->getSignVeryfy($_GET, $_GET["sign"]);
 			$responseTxt = 'false';
-			if (! empty($_GET["notify_id"])) {$responseTxt = $this->getResponse($_GET["notify_id"]);}
+			if (! empty($_GET["notify_id"])) {
+			    $responseTxt = $this->getResponse($_GET["notify_id"]);
+			}
 			if (preg_match("/true$/i",$responseTxt) && $isSign) {
 				return true;
 			} else {
