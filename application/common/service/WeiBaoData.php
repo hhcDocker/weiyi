@@ -34,7 +34,6 @@ class WeiBaoData {
         }
 
         $client = Client::getInstance();
-        $client->getProcedureCompiler()->clearCache();
         $client->getEngine()->setPath(config('PhantomjsPath'));
         $client->isLazy();
         /**

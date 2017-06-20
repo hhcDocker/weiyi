@@ -14,7 +14,7 @@
  */
 
 namespace app\index\controller;
-use app\index\model\SMS;
+use app\common\service\SMS;
 use api\APIController;
 use api\APIException;
 use think\Config;
