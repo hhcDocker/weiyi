@@ -58,7 +58,7 @@ class WtService extends APIAuthController
         }*/
 
         if (strpos($full_url,'tmall.com')) { //天猫
-            $key_word_arr =array('list.','shouji.','www.tmall.com','pages.tmall.com');//天猫各种列表关键字
+            $key_word_arr =array('list.','shouji.','www.tmall.com','pages.tmall.com','chaoshi');//天猫各种列表关键字
             foreach ($key_word_arr as $k => $v) {
                 if (strpos($full_url, $v)) {
                     throw new APIException(30011);
@@ -82,7 +82,7 @@ class WtService extends APIAuthController
                     throw new APIException(30009);
                 }
                 //店铺链接
-                $shop_url='https://'.trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
+                $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
                 foreach($html->find('script') as $key => $script){
                     $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
                     if (strpos($v,'_DATA_Detail')!==false){
