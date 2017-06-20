@@ -494,28 +494,28 @@ class Index extends Controller
                 $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
                 try{
                     $html = file_get_html($url);
+                    //店铺链接
+                    $shop_url=trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
+                    //先获取shopid,验证服务是否存在，是否过期
+                    $shop_id = 0;
+                    //得到dataDetail对象
+                    foreach($html->find('script') as $key => $script){
+                    //if($key==6){
+                    //  $arr['dataDetail']=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+                    //}else{
+                            $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+                            $arr['dataOther'][]=$v;
+                            if (strpos($v,'_DATA_Detail')!==false){
+                                preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
+                                $id_str = $id_str[0];
+                                $shop_id = str_replace('"rstShopId":','',$id_str);
+                            }
+                    //}
+                    };
                 }catch (Exception $e){
                     echo "获取数据失败";
                     return;
                 }
-                //店铺链接
-                $shop_url=trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
-                //先获取shopid,验证服务是否存在，是否过期
-                $shop_id = 0;
-                //得到dataDetail对象
-                foreach($html->find('script') as $key => $script){
-                //if($key==6){
-                //  $arr['dataDetail']=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
-                //}else{
-                        $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
-                        $arr['dataOther'][]=$v;
-                        if (strpos($v,'_DATA_Detail')!==false){
-                            preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
-                            $id_str = $id_str[0];
-                            $shop_id = str_replace('"rstShopId":','',$id_str);
-                        }
-                //}
-                };
                 if (!$shop_url || !$shop_id) {
                     echo "获取数据失败";
                     return;
@@ -580,15 +580,14 @@ class Index extends Controller
                     }else{
                         $arr['cd_parameter']="";
                     }
+                    //得到店铺名
+                    $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
 
+                    $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
                 }catch(Exception  $e){
                     echo "获取数据失败";
                     return;
                 }
-                //得到店铺名
-                $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
-
-                $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
                 return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
             }else{
                 $url='https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$item_id.'%22%7D';
@@ -628,7 +627,7 @@ class Index extends Controller
                         return;
                     }
                 }
-                return $this->fetch('tb_commodity_detail',array('data' => $data ));
+                return $this->fetch('tb_commodity_detail',array('data' => $item_id ));
             }
 
         }
