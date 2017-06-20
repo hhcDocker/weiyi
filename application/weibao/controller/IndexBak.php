@@ -590,6 +590,11 @@ class IndexBak extends Controller
         $url = input('param.shopURL');
         $wei_bao = new WeiBaoData();
         $res = $wei_bao->getShopDataByUrl($url);
+
+        if ($res['error']) {
+            echo "获取数据失败；";
+            exit;
+        }
         $shop_data = $res['shop_data'];
         $is_tmall =0;
         foreach ($shop_data as $k => $v) {

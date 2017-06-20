@@ -241,8 +241,16 @@ return [
         'list_rows' => 15,
     ],
 
+    //微信支付公共配置函数
+    'wx_config' => [
+        'WXPAY_APPID'       => 'wx2e5e0bc7a21dc9d3',//微信公众号APPID
+        'WXPAY_MCHID'       => '1322116201',//微信商户号MCHID
+        'WXPAY_KEY'         => 'j665Gf5489PD09fW234k5X9oG434fb9n',//微信商户自定义32位KEY
+        'WXPAY_APPSECRET'   => '7813490da6f1265e4901ffb80afaa36f',//微信公众号appsecret
+    ],
+
     'experience_time' =>3,//免费体验时间
     'PhantomjsPath' =>'/usr/bin/phantomjs', //执行文件位置
     // 'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe',
-    'service_cost' =>66,
+    'service_cost' =>1.01,
 ];

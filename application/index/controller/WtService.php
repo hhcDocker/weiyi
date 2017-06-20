@@ -16,13 +16,16 @@
 namespace app\index\controller;
 
 use app\common\utils\SN\ExpenseSN;
+use app\common\utils\SN\ShortUrl;
 use app\common\service\WeiBaoData;
 use app\common\service\QRCode;
-use app\common\utils\SN\ShortUrl;
+use app\common\service\WxPay;
+use app\common\service\AliPay;
 use JonnyW\PhantomJs\Client;
 use api\APIAuthController;
 use api\APIException;
 use think\Config;
+use think\Db;
 
 class WtService extends APIAuthController
 {
@@ -343,7 +346,7 @@ class WtService extends APIAuthController
         if ($service_time>3 || $service_time<1) {
             throw new APIException(30016);
         }
-        
+
         //服务开始时间，格式yyyy-mm-dd,换算为time
         $_service_start_time =explode('-', $service_start_time);
         $_year = $_service_start_time[0];
@@ -355,6 +358,11 @@ class WtService extends APIAuthController
         // $service_start_time = mktime(hour, minute, second, month, day, year);
         $service_start_time = mktime(0, 0, 0, $_day, $_month, $_year);
         $service_end_time = mktime(23, 59, 59, $_day, $_month, $_year+$service_time);
+
+        //支付方式
+        if ($payment_method!=1 &&$payment_method!=2) {
+            throw new APIException(30018);
+        }
 
         $service_info = array();
         //检测是否在alishop表中
@@ -513,48 +521,219 @@ class WtService extends APIAuthController
             throw new APIException(30001);
         }
 
-        if (!empty($service_info)){
-            if ($service_info['service_end_time'] - time()>3*60*60*24) { //不是体验服务
-                throw new APIException(30020);
+        //校验服务，防止重复购买
+        if (!empty($service_info) && ($service_info['service_end_time'] - time()>3*60*60*24)){
+            throw new APIException(30020);
+        }
+
+        //发起微信或支付宝支付，微信则取得链接，生成二维码，支付宝则取得链接
+        $expense_model = new ExpenseSN();
+        $expense_num = $expense_model->getSN();
+
+        if ($payment_method==1) { //微信
+            //发起支付
+            $wxPay = new WxPay;
+            $result = $wxPay->wxPay([
+                'body' => '微跳-购买服务',
+                'attach' => '微跳-购买服务',
+                'out_trade_no' => $expense_num,
+                'total_fee' => $payment_amount*100,//订单金额，单位为分，如果你的订单是100元那么此处应该为 100*100
+                'time_start' => date("YmdHis"),//交易开始时间
+                'time_expire' => date("YmdHis", time() + 604800),//一周过期
+                'goods_tag' => '购买服务',
+                'notify_url' => request()->domain().'/index/wt_service/WeixinNotify',
+                'trade_type' => 'NATIVE',
+                'product_id' => rand(1,999999),
+            ]);
+            
+            if(!$result['code']){
+                throw new APIException(30019, ['msg'=>$name]);
+                // return $this->error($result['msg']);
             }else{
-                 //更新服务信息
+                //生成微信支付二维码
+                $QRCode = new QRCode;
+                $response_data = base64_encode($QRCode->createQRCodeImg($result['msg']));
+                
+                /*vendor('wxpay.phpqrcode');
+                $response_data =\QRcode::png(urldecode($result['msg']));*/
+            }
+        }elseif ($payment_method==2) { //支付宝
+            //发起支付
+            $aliPay = new AliPay;
+            $result = $aliPay->alipay([
+                'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
+                'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
+                'out_trade_no' => $expense_num,
+                'subject' => "微跳-购买服务",
+                'total_fee' => $payment_amount,//订单金额，单位为元
+                'body' => "微跳",
+            ]);
+            if(!$result['code']){
+                throw new APIException(30019, ['msg'=>$result['msg']]);
+                // return $this->error($result['msg']);
+            }else{
+                //生成支付宝支付html
+                $response_data = $result['msg'];
+            }
+        }
+        if (!$response_data){
+            throw new APIException(30019);
+        }
+        Db::startTrans();
+        try{
+            //生成或修改服务记录
+            if (empty($service_info)) {
+                //短链接
+                $o = new ShortUrl($wj_shop_id,session('manager_id'));
+                $shop_url_str = $o->getSN();
+                //查询短链接是否存在
+                $i=1;
+                $res = model('ShopServices')->ExistShortUrl($shop_url_str);
+                while (!empty($res) || strlen($shop_url_str)!=6) {
+                    //shop_id+manager_id+time()
+                    $o = new ShortUrl($wj_shop_id,session('manager_id'),time());
+                    $shop_url_str = $o->getSN();
+                    //查询短链接是否存在
+                    $res = model('ShopServices')->ExistShortUrl($shop_url_str);
+                    if ($i>100) {
+                        throw new APIException(30010);
+                    }
+                    $i++;
+                }
+
+                $service_id = model('ShopServices')->addServices(session('manager_id'),$wj_shop_id,$shop_url_str,$shop_name,$shop_url);
+                if (!$service_id) {
+                    throw new APIException(30010);
+                }
+            }else{
+                //更新服务信息
                 $service_id = $service_info['id'];
                 $has_update = model('ShopServices')->updateShopNameUrl($service_id,$shop_name,$shop_url);
                 if (!$has_update) {
                     throw new APIException(30010);
                 }
             }
-        }else{ //添加服务信息
-             //短链接
-            $o = new ShortUrl($wj_shop_id,session('manager_id'));
-            $shop_url_str = $o->getSN();
-            //查询短链接是否存在
-            $i=1;
-            $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-            while (!empty($res) || strlen($shop_url_str)!=6) {
-                //mc 改用shop_id+manager_id
-                $o = new ShortUrl($wj_shop_id,session('manager_id'),time());
-                $shop_url_str = $o->getSN();
-                //查询短链接是否存在
-                $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-                if ($i>100) {
-                    throw new APIException(30010);
-                }
-                $i++;
-            }
+            //增加消费记录
+            $expense_id = model('ExpenseRecords')->addExpense($expense_num,$payment_method,$service_id,session('manager_id'),$payment_amount ,$service_start_time,$service_end_time,0);
+            Db::commit();
+        } catch(\Exception $e){
+            Db::rollback();
+            throw new APIException(30019);
+        }
 
-            $service_id = model('ShopServices')-> addServices(session('manager_id'),$wj_shop_id,$shop_url_str,$shop_name,$shop_url);
-            if (!$service_id) {
-                throw new APIException(30010);
+        //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝链接
+        return $this->format_ret($response_data);
+    }
+
+    /**
+     * [renewalShopService description]
+     * @return [type] [description]
+     */
+    public function renewalShopService()
+    {
+        $service_id = noempty_input('service_id','/\d+/');
+        $service_start_time = noempty_input('service_start_time');
+        $service_time = noempty_input('service_time','/\d+/');
+        $_payment_amount = config('service_cost');//每年支付费用
+        $payment_amount = $service_time * $_payment_amount;
+        $payment_method = noempty_input('payment_method','/\d/');//1-微信，2-支付宝
+        
+        //服务时长
+        if ($service_time>3 || $service_time<1) {
+            throw new APIException(30016);
+        }
+
+        //支付方式
+        if ($payment_method!=1 &&$payment_method!=2) {
+            throw new APIException(30018);
+        }
+
+        $service_info = model('ShopServices')->getServicesById($service_id);
+        if (empty($service_info)) {
+            throw new APIException(30021);
+        }
+        if ($service_info['service_end_time'] >time()) { //还未过期
+            $service_start_time = $service_info['service_start_time'];
+            $todaytime=strtotime("today");
+            $service_start_time = date("Y-m-d",$todaytime);
+        }
+        //服务开始时间，格式yyyy-mm-dd,换算为time
+        $_service_start_time =explode('-', $service_start_time);
+        $_year = $_service_start_time[0];
+        $_month = $_service_start_time[1];
+        $_day = $_service_start_time[2];
+        if ($_year <date("Y") || $_month<date("m") || $_month>12 || $_day<date("d") ||$_day>31) {
+            throw new APIException(30017);
+        }
+        // $service_start_time = mktime(hour, minute, second, month, day, year);
+        $service_start_time = mktime(0, 0, 0, $_day, $_month, $_year);
+        $service_end_time = mktime(23, 59, 59, $_day, $_month, $_year+$service_time);
+
+    }
+    /**
+     * 微信订单异步通知
+     */
+    public function WeixinNotify()
+    {
+        $notify_data = file_get_contents("php://input");//获取由微信传来的数据
+        if(!$notify_data){
+            $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
+        }
+        if(!$notify_data){
+            exit('');
+        }
+        $wxPay = new WxPay;
+        $result = $wxPay->notify_wxpay($notify_data,1);//调用模型中的异步通知函数
+        exit($result);
+    }
+
+    /**
+     * 查询微信订单结果
+     * @return \think\response\Json
+     */
+    public function queryWxOrder()
+    {
+        if(input('post.expense_num'))
+        {
+            $expense_num = input('post.expense_num');
+            $wxPay = new WxPay;
+            $result = $wxPay->queryOrder($expense_num);
+            if ($result) {
+                return json(['code'=>1]);
             }
+            return json(['code'=>0]);
+        } else {
+            return json(['code'=>0]);
         }
-        //增加消费记录
-        $expense_model = new ExpenseSN();
-        $expense_num = $expense_model->getSN();
-        $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,'',$service_id,session('manager_id'),$payment_amount ,$service_start_time,$service_end_time,0);
-        if (!$has_add) {
-             throw new APIException(30010);
-        }
+    }
+
+    /**
+     * 支付宝支付结果通知
+     * @return [type] [description]
+     */
+    public function AlipayNotifyUrl()
+    {
+        $aliPay = new AliPay;
+    
+        $result = $aliPay->notify_alipay();
+        exit($result);
+    }
+    
+    /**
+     * 支付宝支付结果通知 return_url
+     * @return [type] [<description>]
+     */
+    public function AlipayReturnUrl()
+    {
+        $aliPay = new AliPay;
+        $result = $aliPay->return_alipay();
+        exit($result);
+    }
+
+    /** //mc */
+    public function wxRechargeNotify(){
+        $notify = new WxRechargeNotifyCallBack();
+        $notify->Handle(false);
     }
 
     // **********************************公有函数******************************************************
@@ -620,7 +799,7 @@ class WtService extends APIAuthController
      * @param  string $qrcode_url   [description]
      * @return [type]               [链接二维码，短链接，有效期（不返回具体数据，只返回链接）]
      */
-    public function manageServiceInfo($service_info='',$qrcode_url='',$wj_shop_id=0)
+    private function manageServiceInfo($service_info='',$qrcode_url='',$wj_shop_id=0)
     {
         $service_type =0; //服务类型：1-体验3天，2-已购买，3-服务未开始,4-已过期
         if (!$wj_shop_id) {
@@ -661,7 +840,7 @@ class WtService extends APIAuthController
             //添加消费记录，体验3天
             $expense_model = new ExpenseSN();
             $expense_num = $expense_model->getSN();
-            $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,'',$service_id,session('manager_id'),0,$time_start,$time_end,1);
+            $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,$service_id,session('manager_id'),0,$time_start,$time_end,1);
             $service_type =1;
         }
 
@@ -684,54 +863,19 @@ class WtService extends APIAuthController
         if ($service_info['service_end_time'] - $service_info['service_start_time']= 259200) {
             $service_type =1;
         }
-        $res_data =array('service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'service_type'=>$service_type,'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
+        $res_data =array('service_id'=>$service_info['id'],'service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'service_type'=>$service_type,'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $res_data;
     }
 
+    
     /**
-     * 新增记录，体验三天
-     * @param  [type] $url [description]
-     * @return [type]      [description]
+     * 支付成功
+     * @return [type]
      */
-    private function AddShopShortUrlInfo($wj_shop_id=0,$shop_id='')
+    public function payBuyerSuccess()
     {
-        if (!$wj_shop_id || !$shop_id) {
-            throw new APIException(30010);
-        }
-
-        $experience_time = config('experience_time');
-        $time_start = time();
-        $time_end = strtotime("+".$experience_time." day");
-
-        //mc 改用shop_id+manager_id
-        $o = new ShortUrl($shop_id,session('manager_id'));
-        $shop_url_str = $o->getSN();
-        //查询短链接是否存在
-        $i=1;
-        $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-        while (!empty($res) || str_len($shop_url_str)!=6) {
-            //mc 改用shop_id+manager_id
-            $o = new ShortUrl($shop_id,session('manager_id'),time());
-            $shop_url_str = $o->getSN();
-            //查询短链接是否存在
-            $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-            if ($i>100) {
-                throw new APIException(30010);
-            }
-            $i++;
-        }
-
-        //新增服务
-        $service_id = model('ShopServices')->saveServices(session('manager_id'),$wj_shop_id,$shop_url_str,$time_start,$time_end);
-        $service_info = model('ShopServices')->getServicesById($service_id);
-        if (empty($service_info)) {
-            throw new APIException(30010);
-        }
-
-        //添加消费记录，体验3天
-        $expense_model = new ExpenseSN();
-        $expense_num = $expense_model->getSN();
-        $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,'',$service_id,session('manager_id'),0,$time_start,$time_end,1);
-        return $service_info;
+        $num = parent::getCartNum();
+        return $this->fetch('order_pay_success',array('title'=>'支付成功', 'shoping_cart_num'=>$num));
     }
+    
 }

@@ -17,9 +17,9 @@ namespace app\index\service;
 use wxpay\WxPayNotify;
 use wxpay\WxPayOrderQuery;
 use wxpay\WxPayApi;
-use app\index\model\WxPay;
 
 class WxPayNotifyCallBack extends WxPayNotify {
+	
     //查询订单
 	public function Queryorder($transaction_id)	{
 		$input = new WxPayOrderQuery();

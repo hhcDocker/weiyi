@@ -24,7 +24,6 @@ class ExpenseRecords extends Base
     * 添加消费记录
     * @param string  $expense_num        [消费记录编号]
     * @param integer $payment_method     [支付方式]
-    * @param string  $trade_num          [支付宝交易单号]
     * @param integer $service_id         [与此消费对应的服务id]
     * @param integer $manager_id         [客户主键id]
     * @param integer $payment_amount     [消费金额]
@@ -32,7 +31,7 @@ class ExpenseRecords extends Base
     * @param integer $service_end_time   [购买服务结束时间]
     * @param integer $trade_status       [交易状态，0待支付、1已支付]
     */
-    public function addExpense($expense_num='', $payment_method=0,$trade_num='',$service_id=0,$manager_id=0,$payment_amount=0,$service_start_time=0,$service_end_time=0,$trade_status=0)
+    public function addExpense($expense_num='', $payment_method=0,$service_id=0,$manager_id=0,$payment_amount=0,$service_start_time=0,$service_end_time=0,$trade_status=0)
     {
         if (!$expense_num ||!$service_id ||!$manager_id ||!$service_start_time ||!$service_end_time) {
           return 0;
@@ -40,7 +39,7 @@ class ExpenseRecords extends Base
         $expense_data = [
             'expense_num' => $expense_num, //消费记录编号
             'payment_method'=>$payment_method, //支付方式，0-免费体验，1-微信，2-支付宝，
-            'trade_num'=>$trade_num, //支付宝交易单号、银行转账单号等
+            // 'trade_num'=>$trade_num, //支付宝交易单号、银行转账单号等
             'service_id'=>$service_id, //与此消费对应的服务id
             'manager_id' => $manager_id, //客户主键id
             'payment_amount' => $payment_amount, //消费金额

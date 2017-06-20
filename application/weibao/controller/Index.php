@@ -26,7 +26,7 @@ use think\Db;
 
 class Index extends Controller
 {
-	public function getTBCmdPidWordDetail()
+	public function getTBCmdPicWordDetail()
     {
     	$itemId=$_GET['itemId'];
     	$cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
