@@ -433,13 +433,21 @@
 							}else if(shopData.data.data[item.cmdId].indexOf('id')>-1){
 								var url = shopData.data.data[item.cmdId].slice(shopData.data.data[item.cmdId].indexOf('?')); 
 								var id=this.getQueryString('id',url);
-								location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+								if(id){
+									location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+								}else{
+									console.log('跳转商品列表')
+								}
 							}
 						}else if(item.label){
 							var keys = item.label[index].dataBinding.replace("title",'url');
 							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
 							var id=this.getQueryString('id',urls);
-							location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+							if(id){
+								location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+							}else{
+								console.log('跳转商品列表')
+							}
 						}
 						
 					},
