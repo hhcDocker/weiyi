@@ -628,7 +628,7 @@ class Index extends Controller
                         return;
                     }
                 }
-                return $this->fetch('tb_commodity_detail',array('data' => $data ));
+                return $this->fetch('tb_commodity_detail',array('data' => $item_id ));
             }
 
         }
