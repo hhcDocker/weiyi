@@ -132,7 +132,7 @@
 							<span v-text='item.rateDate'></span>
 							<div class='assess_img'><img v-for='img in item.pics' v-bind:src='img'/></div>
 						</li>
-						<li v-else style="text-align: center;">
+						<li style="text-align: center;" v-if='commodityData.assessInfo.length==0'>
 							该商品暂无评价
 						</li>
 					</ul>
@@ -270,10 +270,6 @@
 				}
 			}catch(e){
 				console.log(e);
-			}
-			function jsonp3(a){
-				vm.assessInfo=a.rateDetail.rateList;
-				console.log(a)
 			}
 			//构建Vue实例，
 			var vm = new Vue({

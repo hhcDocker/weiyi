@@ -71,7 +71,7 @@
 				</div>
 			</section>
 			<section class="shopCmdImageList" v-if='images.length>0'>
-				<div v-for='item in images' v-if='item.length>0'  >
+				<div v-for='item in images' v-if='item.length>0&&item[0].imageUrl' >
 					<span v-for="items in item" @click="toDetailByItemSearch(items,$index)" :style="{width:items.styleBinding.width*1.155/75 + 'rem',height:items.styleBinding.height*1.155/75 + 'rem'}">
 						<img :src="items.imageUrl"/>
 					</span>
@@ -85,6 +85,12 @@
 				        </div>
 				    </div>
 				</div>
+			</section>
+			<section class="objImages" v-for="item in objImages">
+					<img :src="items" v-for='items in item.arr'/>
+					<div v-for="clickItem in item.clickUrl"  @click="toDetailByItemSearch(clickItem,$index)"  :style="{width:clickItem.style.width*1.15/75+'rem',height:clickItem.style.height*1.15/75+'rem',marginTop:clickItem.style.marginTop*1.15/75+'rem',marginLeft:clickItem.style.marginLeft*1.15/75+'rem'}">
+					
+					</div>
 			</section>
 			<section class="commodity_contain_itemsearch" v-if='itemSearch' v-for="item in itemSearch">
 				<div class="title_container_itemsearch">
@@ -155,7 +161,7 @@
 							</span>
 							<img :src="rankingData[1].imgUrl"/>>
 							<p class="solePrice">
-								已售 {{rankingData[0].totalSold}}
+								已售 {{rankingData[1].totalSold}}
 							</p>
 						</div>
 						<div @click="toDetailByRank(2)">
@@ -164,7 +170,7 @@
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
 							<p class="solePrice">
-								已售 {{rankingData[0].totalSold}}
+								已售 {{rankingData[2].totalSold}}
 							</p>
 						</div>
 					</div>
@@ -190,12 +196,11 @@
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
 		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
 		<script type="text/javascript">
-			var data={$data},shopData={},conponData,itemSearch=[],titleArr=[],rankingData,getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced=[];
+			var data={$data},shopData={},conponData,itemSearch=[],titleArr=[],rankingData,objImages=[],objImagesIndex=0,objImagesClick=[],getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced=[];
 			for(var i=0;i<data.length;i++){
 				var apiData=JSON.parse(data[i].api_data);
 				if(data[i].api_url=="mtop.tmall.shop.page.get"){
 					shopData.data=apiData;
-				console.log(shopData)
 				}else if(data[i].api_url=="mtop.shop.decorate.coupon.query"){
 					conponQueryData=apiData;
 				}else if(data[i].api_url=="com.taobao.shop.getConpon1111"){
@@ -270,15 +275,58 @@
 											}
 										}else if(shopData.data.view.subViews[k].subViews[i].subViews[l].type=='container'){
 											try{
+												if(shopData.data.view.subViews[k].subViews[i].subViews[l-1]&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=='label'){
+													
+													if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews instanceof Array){
+														var objImage={};
+														objImage.arr=[];
+														for(var g=0;g<shopData.data.view.subViews[k].subViews[i].subViews[l].subViews.length;g++){
+															
+															if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].type=='image'){
+																var url = shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].dataBinding.url
+																if(url.indexOf('$')<0){
+																	objImage.arr.push(url);
+																}
+															}
+															
+														}
+														if(objImage.arr.length>0){
+															objImage.clickUrl=[];
+															continue;
+														}
+													}
+												}
+													
+												try{
+													if(typeof shopData.data.view.subViews[k].subViews[i].subViews[l].events&&objImage.clickUrl){
+														var len5=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions.length;
+														for(var j=0;j<len5;j++){
+															if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
+																var openUrl=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
+																var newObj={
+																	cmdId:shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$',''),
+																	style:shopData.data.view.subViews[k].subViews[i].subViews[l].styleBinding,
+																}
+																objImage.clickUrl.push(newObj)
+															}
+														}
+													}
+												}catch(e){
+													//TODO handle the exception
+												}
 												if(shopData.data.view.subViews[k].subViews[i].subViews[l].events){
+													
 													var len5=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions.length;
 													for(j=0;j<len5;j++){
 														if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
 															var openUrl=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
-															var title=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title.replace('$','');
+															if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title){
+																var title=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title.replace('$','');
+															}
 															
 														}
 													}
+													
 													titleArr.push(shopData.data.data[title]);
 													if(l>0&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=="image"){
 														var obj={
@@ -286,15 +334,23 @@
 														}
 														modelData[0].label.push(obj);
 													}
-												}else if(typeof shopData.data.view.subViews[k].subViews[i].subViews[l].subViews=='object'){
-													for(var g=0;g<shopData.data.view.subViews[k].subViews[i].subViews[l].subViews.length;g++){
-														
-														if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].type=='image'){
-															console.log(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].dataBinding.url)
-														}
-													}
 													
+												}else if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews instanceof Array){
+													try{
+														titleArr.push(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
+													}catch(e){
+														//TODO handle the exception
+													}
 												}
+												if(shopData.data.view.subViews[k].subViews[i].subViews[l].conditions){
+													try{
+														var titleEcho=shopData.data.view.subViews[k].subViews[i].subViews[l].conditions[0].left.replace("$",'');
+														titleArr.push(hopData.data.data[titleEcho]);
+													}catch(e){
+														//TODO handle the exception
+													}
+												}
+												
 											}catch(e){
 												//TODO handle the exception
 												//alert(e)
@@ -305,7 +361,6 @@
 													dataBinding:shopData.data.view.subViews[k].subViews[i].subViews[l].dataBinding.value.replace('$',''),
 													styleBinding:shopData.data.view.subViews[k].subViews[i].subViews[l].styleBinding,
 												}
-												console.log(modelData)
 												modelData[0].label.push(obj);
 											}catch(e){
 												//TODO handle the exception
@@ -313,8 +368,12 @@
 											}
 											
 										}
+										
 									}
 									imagesModel.push(modelData);
+									if(objImage){
+										objImages.push(objImage);
+									}
 								}
 							}
 						}
@@ -336,6 +395,8 @@
 					getItemLists:getItemLists,
 					enhenced:enhenced,
 					titleArr:titleArr,
+					objImages,objImages,
+					objImagesClick,objImagesClick,
 				},
 				created:function(){
 					document.title=this.shopData.data.shop_other_data.shopName;
@@ -372,13 +433,21 @@
 							}else if(shopData.data.data[item.cmdId].indexOf('id')>-1){
 								var url = shopData.data.data[item.cmdId].slice(shopData.data.data[item.cmdId].indexOf('?')); 
 								var id=this.getQueryString('id',url);
-								location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+								if(id){
+									location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+								}else{
+									console.log('跳转商品列表')
+								}
 							}
 						}else if(item.label){
 							var keys = item.label[index].dataBinding.replace("title",'url');
 							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
 							var id=this.getQueryString('id',urls);
-							location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+							if(id){
+								location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+							}else{
+								console.log('跳转商品列表')
+							}
 						}
 						
 					},

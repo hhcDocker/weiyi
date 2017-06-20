@@ -124,13 +124,13 @@ body {
   width: auto;
   height: 0.373333rem; }
 #tbShopCt .nav_tab span {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.64rem;
   margin-top: 0; }
   [data-dpr="2"] #tbShopCt .nav_tab span {
-    font-size: 40px; }
+    font-size: 32px; }
   [data-dpr="3"] #tbShopCt .nav_tab span {
-    font-size: 60px; }
+    font-size: 48px; }
 #tbShopCt .nav_tab a {
   padding-bottom: 0; }
 #tbShopCt .enhenced {
@@ -437,7 +437,7 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
     -webkit-line-clamp: 2;
-    height: 1.066666rem; }
+    height: 1.266666rem; }
     [data-dpr="2"] .enhenced .girdList h2 {
       font-size: 30px; }
     [data-dpr="3"] .enhenced .girdList h2 {
@@ -481,5 +481,13 @@ body {
     font-size: 40px; }
   [data-dpr="3"] .lookAllCmd {
     font-size: 60px; }
+
+.objImages {
+  margin-bottom: 0.266rem;
+  position: relative; }
+  .objImages div {
+    position: absolute;
+    top: 0;
+    left: 0; }
 
 /*# sourceMappingURL=tm_shop.css.map */

@@ -12,7 +12,7 @@
 			<div class="back">
 				
 			</div>
-			<div class="swiper-container">
+			<div class="swiper-container" id="shopBigPic_swiper">
 			    <div class="swiper-wrapper">
 			        <div class="swiper-slide " v-for="item in commodityData.lunboImageUrl">
 			        	<img v-bind:src="item"/>
@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			<div class="titletab">
-				<p >快递:<span v-text="commodityData.freight"></span></p>
+				<p ><span v-text="commodityData.freight"></span></p>
 				<p>月销<span v-text="commodityData.num"></span>笔</p>
 				<p v-text="commodityData.area"></p>
 			</div>
@@ -148,12 +148,12 @@
 					commodityData.labelExtra=[];
 					commodityData.commodityParameter=[];
 					commodityData.pictureDetail=[
-						{src:"/static/images/577a22deN8423f185.jpg"},
-						{src:"/static/images/577a22deN8423f185.jpg"},
-						{src:"/static/images/577a22deN8423f185.jpg"},
-						{src:"/static/images/577a22deN8423f185.jpg"},
-						{src:"/static/images/577a22deN8423f185.jpg"},
-						{src:"/static/images/577a22deN8423f185.jpg"}
+						'//gw.alicdn.com/tfscom/TB1AfYzJVXXXXcxXFXXorbaIVXX-80-80.jpg_q75',
+						'//gw.alicdn.com/tfscom/TB1AfYzJVXXXXcxXFXXorbaIVXX-80-80.jpg_q75',
+						'//gw.alicdn.com/tfscom/TB1AfYzJVXXXXcxXFXXorbaIVXX-80-80.jpg_q75',
+						'//gw.alicdn.com/tfscom/TB1AfYzJVXXXXcxXFXXorbaIVXX-80-80.jpg_q75',
+						'//gw.alicdn.com/tfscom/TB1AfYzJVXXXXcxXFXXorbaIVXX-80-80.jpg_q75',
+						'//gw.alicdn.com/tfscom/TB1AfYzJVXXXXcxXFXXorbaIVXX-80-80.jpg_q75',
 					];
 					commodityData.lunboImageUrl=data.data.item.images;
 					commodityData.commodityName=data.data.item.title;
@@ -168,8 +168,6 @@
 					}
 					commodityData.assessmentNum=data.data.item.commentCount;
 					commodityData.shopInfo=data.data.seller;
-					commodityData.shopUrl= getShopUrl(commodityData.shopInfo.shopUrl);
-					
 				}catch(e){
 					//TODO handle the exception
 					console.log(e);
@@ -211,8 +209,6 @@
 					//TODO handle the exception
 					console.log(e);
 				}
-				
-				
 				//构建Vue实例，
 				 vm = new Vue({
 					el:"#body_container",
@@ -249,9 +245,6 @@
 						tab:function(i,v){
 							 this.active = i;
 	  						 this.currentView = v;
-	  						 if(i==2){
-	  						 	getAccess();
-	  						 }
 						},
 						//选择颜色类型toggle
 						isShow:function(){
@@ -273,7 +266,7 @@
 							props:['comdata'],
 							template: "<div class='detail'>"+
 								"<ul>"+
-									"<li v-for='item in comdata.pictureDetail'><img v-bind:src='item.src'/></li>"+
+									"<li class='cmdPic' v-for='item in comdata.pictureDetail'><img src='//gw.alicdn.com/tfscom/TB1AfYzJVXXXXcxXFXXorbaIVXX-80-80.jpg_q75' :data-src='item'/></li>"+
 								"</ul>"+
 							"</div>"
 						},
@@ -302,18 +295,38 @@
 						}
 					}
 				});
-				
+				var mySwiper = new Swiper ('#shopBigPic_swiper', {
+				    direction: 'horizontal',
+				    loop: true,
+				    
+				    // 如果需要分页器
+				    pagination: '.swiper-pagination',
+				    
+				    // 如果需要滚动条
+				    scrollbar: '.swiper-scrollbar',
+				});
 				scriptAccess = document.createElement('script');
 	            scriptAccess.src = "https://rate.taobao.com/feedRateList.htm?userNumId="+data.data.seller.shopId+"&auctionNumId="+data.data.item.itemId+"&currentPageNum=1&callback=jsonp2";
 	            document.body.appendChild(scriptAccess);
 	            setTimeout(function(){
 	            	scriptAccess.parentNode.removeChild(scriptAccess);
 	            },1000)
-				
+				$.ajax({
+			 		type:"get",
+			 		url:"/weibao/index/getTBCmdPidWordDetail?itemId="+data.data.item.itemId,
+			 		async:true,
+			 		success:function(res){
+			 			var res =JSON.parse(res);
+			 			vm.commodityData.pictureDetail=res.data.images;
+			 		},
+			 		error:function(err){
+			 			alert('请求数据失败');
+	                }
+			 	});
 	        }
 			
 			function jsonp2(a){
-				commodityData.assessInfo=a.comments;
+				vm.commodityData.assessInfo=a.comments;
 				accessFlag=false;
 	 			vm.loadingFlag=false;
 			}
@@ -330,77 +343,28 @@
 			}catch(e){
 				alert(e+"</br请求数据失败，请尝试刷新网页");
 			}
-			//请求评价数据
-			/*function getAccess(){
-				if(accessFlag){
-  					vm.loadingFlag=true;
-					var getAccess={
-				 		"sellerID":data.data.seller.shopId,
-				 		"itemID":data.data.item.itemId
-					 };
-				 	$.ajax({
-				 		type:"post",
-				 		url:"/weibao/index/GetTBAccessData",
-				 		async:true,
-				 		data:getAccess,
-				 		success:function(res){
-				 			
-				 		},
-				 		error:function(err){
-				 			alert('请求数据失败');
-				 			accessFlag=true;
-				 			vm.loadingFlag=false;
-		                }
-				 	});
-				}
-				
-			};*/
-			//请求图文详情数据
-			function getAccess(){
-				if(accessFlag){
-  					vm.loadingFlag=true;
-					var getAccess={
-				 		"sellerID":data.data.seller.shopId,
-				 		"itemID":data.data.item.itemId
-					 };
-				 	$.ajax({
-				 		type:"post",
-				 		url:"/weibao/index/GetTBAccessData",
-				 		async:true,
-				 		data:getAccess,
-				 		success:function(res){
-				 			res=JSON.parse(res);
-							commodityData.assessInfo=res.comments;
-							accessFlag=false;
-				 			vm.loadingFlag=false;
-				 		},
-				 		error:function(err){
-				 			alert('请求数据失败');
-				 			accessFlag=true;
-				 			vm.loadingFlag=false;
-		                }
-				 	});
-				}
-				
-			};
-			function getShopUrl(url){
-				var str=url;
-				return "/weibao/index/getShopData?shopURL=https://shop.m.taobao.com/shop/shop_index.htm"+encodeURIComponent(str.slice(str.indexOf('?'))); 
-			}
 		</script>
 		<script type="text/javascript">
-		//借用swiper插件，图片轮播
-		var mySwiper = new Swiper ('.swiper-container', {
-		    direction: 'horizontal',
-		    loop: true,
-		    
-		    // 如果需要分页器
-		    pagination: '.swiper-pagination',
-		    
-		    // 如果需要滚动条
-		    scrollbar: '.swiper-scrollbar',
-		})
-		  
+		window.addEventListener('scroll',checkImage,true);
+        var timer=0;
+        function checkImage() {
+        	clearTimeout(timer);
+        	timer = setTimeout(function(){
+        		console.log(1)
+            	var	lazys = document.querySelectorAll('.cmdPic img')
+        		l=lazys.length
+        		for (var i = 0; i < l; i++) {
+			      var rect = lazys[i].getBoundingClientRect();
+			      if (rect.top < window.innerHeight) {
+			      	console.log()
+			      	if(lazys[i].src.indexOf('XXXX')>-1){
+			      		lazys[i].src=lazys[i].getAttribute('data-src');
+			      	}
+			      }
+			    }
+        	},300);
+        	
+		}
 		//添加scroll事件,监听页面滚动
 	  	window.addEventListener('scroll',winScroll);
 	  	var scrollFlag=true;
