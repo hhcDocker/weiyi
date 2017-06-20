@@ -748,9 +748,9 @@ class WtService extends APIAuthController
      */
     public function getShopService()
     {
-        $pageIndex = input('post.pageIndex') ? intval(input('post.pageIndex')):1;
-        $pageSize = input('post.pageSize') ? intval(input('post.pageSize')):5;
-        $service_list = model('ShopServices')->getServicesByManagerId(session('manager_id'),$pageIndex, $pageSize);
+        $page_index = input('post.page_index') ? intval(input('post.page_index')):1;
+        $page_size = input('post.page_size') ? intval(input('post.page_size')):5;
+        $service_list = model('ShopServices')->getServicesByManagerId(session('manager_id'),$page_index, $page_size);
         return $this->format_ret($service_list);
 
     }
