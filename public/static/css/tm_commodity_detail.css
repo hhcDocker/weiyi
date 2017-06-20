@@ -58,10 +58,10 @@ arcitle, .to_shop, .score, .ortherData .module_box, .cd_paramete li {
   display: block; }
 
 html {
-  width: 100%; }
+  overflow-x: hidden; }
 
 body {
-  width: 100%;
+  width: 10rem;
   color: #051b28;
   overflow-x: hidden; }
 
