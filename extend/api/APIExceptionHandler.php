@@ -78,9 +78,13 @@ class APIExceptionHandler extends Handle {
                 "file" => $data['file'],
                 "line" => $data['line']
             ];
-            $message = print_r($info, true);
-            $mail = new AlertMail("<pre>{$message}</pre>");
-            $mail->send();
+            $cachekey = serialize($info['error']);
+            if(cache($cachekey) === false) {
+                cache($cachekey, 1, 600);
+                $message = print_r($info, true);
+                $mail = new AlertMail("<pre>{$message}</pre>");
+                $mail->send();
+            }
         }
     }
 

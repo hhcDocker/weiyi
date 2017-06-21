@@ -39,6 +39,7 @@ class AlertMail {
             }
             $mail->Subject = $subject;
             $mail->Body = $this->content;
+            
             // $mail->send();
         }
     }
