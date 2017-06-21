@@ -18,6 +18,6 @@ return [
         ':name' => ['index/hello', ['method' => 'post']],
     ],
 
-    // "item/:goods_id" => "mall_seller/seller_commodity/getCommodityDetail",
-
+    ":str_url$" => ["weibao/index/getShopDataByShortUrl",['str_url' => '^[\w\d]{6}$']],
+    "detail/:isTm/:item_id" => "weibao/index/getGoodsDetail",
 ];
