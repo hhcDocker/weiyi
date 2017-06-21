@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/common/model/AliShops.php" afterPath="$PROJECT_DIR$/application/common/model/AliShops.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/common/model/ShopApi.php" afterPath="$PROJECT_DIR$/application/common/model/ShopApi.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/common/service/WeiBaoData.php" afterPath="$PROJECT_DIR$/application/common/service/WeiBaoData.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config.php" afterPath="$PROJECT_DIR$/application/config.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/index/controller/WtService.php" afterPath="$PROJECT_DIR$/application/index/controller/WtService.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/weibao/controller/Index.php" afterPath="$PROJECT_DIR$/application/weibao/controller/Index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/extend/api/APIException.php" afterPath="$PROJECT_DIR$/extend/api/APIException.php" />
-    </list>
+    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="" />
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -91,8 +83,8 @@
       <file leaf-file-name="WtService.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="360" column="0" selection-start-line="360" selection-start-column="0" selection-end-line="360" selection-end-column="0" />
+            <state relative-caret-position="315">
+              <caret line="626" column="0" selection-start-line="626" selection-start-column="0" selection-end-line="626" selection-end-column="0" />
               <folding>
                 <element signature="e#997#1296#0#PHP" expanded="false" />
                 <element signature="e#1415#1539#0#PHP" expanded="false" />
@@ -157,11 +149,10 @@
       <file leaf-file-name="AliPay.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/common/service/AliPay.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
+            <state relative-caret-position="196">
+              <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
               <folding>
                 <element signature="e#1060#1079#0#PHP" expanded="true" />
-                <element signature="e#1900#3089#0#PHP" expanded="false" />
                 <element signature="e#3211#6512#0#PHP" expanded="false" />
                 <marker date="1497955429348" expanded="true" signature="9467:9486" ph="..." />
                 <marker date="1497955429348" expanded="true" signature="9554:9586" ph="..." />
@@ -179,7 +170,7 @@
       <file leaf-file-name="alipay.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/alipay/alipay.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
+            <state relative-caret-position="82">
               <caret line="192" column="13" selection-start-line="192" selection-start-column="13" selection-end-line="192" selection-end-column="13" />
               <folding />
             </state>
@@ -574,16 +565,16 @@
       <workItem from="1497755242780" duration="25066000" />
       <workItem from="1497836514999" duration="16849000" />
       <workItem from="1497927617730" duration="11335000" />
-      <workItem from="1498009587934" duration="6313000" />
+      <workItem from="1498009587934" duration="6579000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108331000" />
+    <option name="totallyTimeSpent" value="108597000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16666667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1256,29 +1247,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/vendor/alipay/alipay.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
+        <state relative-caret-position="82">
           <caret line="192" column="13" selection-start-line="192" selection-start-column="13" selection-end-line="192" selection-end-column="13" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/common/service/AliPay.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
-          <folding>
-            <element signature="e#1060#1079#0#PHP" expanded="true" />
-            <element signature="e#1900#3089#0#PHP" expanded="false" />
-            <element signature="e#3211#6512#0#PHP" expanded="false" />
-            <marker date="1497955429348" expanded="true" signature="9467:9486" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9554:9586" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9694:9713" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9770:9802" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9818:9855" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10296:10315" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10372:10404" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10420:10457" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1339,10 +1310,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/application/common/service/AliPay.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding>
+            <element signature="e#1060#1079#0#PHP" expanded="true" />
+            <element signature="e#3211#6512#0#PHP" expanded="false" />
+            <marker date="1497955429348" expanded="true" signature="9467:9486" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="9554:9586" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="9694:9713" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="9770:9802" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="9818:9855" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="10296:10315" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="10372:10404" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="10420:10457" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="360" column="0" selection-start-line="360" selection-start-column="0" selection-end-line="360" selection-end-column="0" />
+        <state relative-caret-position="315">
+          <caret line="626" column="0" selection-start-line="626" selection-start-column="0" selection-end-line="626" selection-end-column="0" />
           <folding>
             <element signature="e#997#1296#0#PHP" expanded="false" />
             <element signature="e#1415#1539#0#PHP" expanded="false" />
