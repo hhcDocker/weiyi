@@ -663,6 +663,9 @@ class Index extends Controller
         dump($response->getConsole());*/
 
         $data=$response->getUrlData();
+        if (empty($data)){
+
+        }
         $value=preg_replace('/^mtopjsonp\d\(/','', $data[0]);
         $value= trim($value,')');
         $value=json_decode($value,true);
