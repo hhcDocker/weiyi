@@ -1,7 +1,8 @@
-.idea
-.idea/workspace.xml
+.idea/
+workspace.xml
 rumtime/
 .project
 runtime
 public/static/css/*.scss
 public/static/css/*.map
+*.lockfile

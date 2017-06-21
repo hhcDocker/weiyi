@@ -654,35 +654,51 @@ class Index extends Controller
      */
     public function getTbGoodsDescription()
     {
-        
         $itemId=$_GET['itemId'];
-        $cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
-        $client = Client::getInstance();
-        $client->getEngine()->setPath(config('PhantomjsPath'));
-        /**
-         * @see JonnyW\PhantomJs\Http\Request
-         **/
-        $request = $client->getMessageFactory()->createRequest($cmd_url, 'GET');
-        //$request->setDelay(1000);
-        /**
-         * @see JonnyW\PhantomJs\Http\Response
-         **/
-        $response = $client->getMessageFactory()->createResponse();
-
-        // Send the request
-        $client->send($request, $response);
-       /* $urls = $response->getUrls();
-        var_dump($urls);
-        $console = $response->getConsole();
-        var_dump($console);*/
-
-        $data=$response->getUrlData();
-        if (empty($data)){
-            echo "获取数据失败";
+        if (!$itemId) {
+            echo '参数错误';
             exit;
         }
-        $value=preg_replace('/^mtopjsonp\d\(/','', $data[0]);
-        $value= trim($value,')');
+        //查询是否有数据
+        $des_info = model('AliGoodsDes')->getDesDataByItemId($itemId);
+        $description_cache_time = config('description_cache_day') * 24 *60 * 60;
+        if (!empty($des_info) && $des_info['update_time'] - time() < $description_cache_time) {
+            echo $des_info['data'];
+        }else{
+            //获取数据
+            $cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
+            $client = Client::getInstance();
+            $client->getEngine()->setPath(config('PhantomjsPath'));
+            /**
+             * @see JonnyW\PhantomJs\Http\Request
+             **/
+            $request = $client->getMessageFactory()->createRequest($cmd_url, 'GET');
+            //$request->setDelay(1000);
+            /**
+             * @see JonnyW\PhantomJs\Http\Response
+             **/
+            $response = $client->getMessageFactory()->createResponse();
 
+            // Send the request
+            $client->send($request, $response);
+           /* $urls = $response->getUrls();
+            var_dump($urls);
+            $console = $response->getConsole();
+            var_dump($console);*/
+
+            $data=$response->getUrlData();
+            if (empty($data)){
+                echo "获取数据失败";
+            }else{
+                $des_data = preg_replace('/^mtopjsonp\d+\(([\s\S]+)\)/','$1', $data[0]);
+
+                if (empty($des_info)) {
+                    $has_add = model('AliGoodsDes')->addShopData($itemId,$des_data);
+                }else{
+                    $has_update = model('AliGoodsDes')->updateDesDataById($des_info['id'],$des_data);
+                }
+                echo $des_data;
+            }
+        }
     }
 }

@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/common/service/AliPay.php" afterPath="$PROJECT_DIR$/application/common/service/AliPay.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config.php" afterPath="$PROJECT_DIR$/application/config.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/weibao/controller/Index.php" afterPath="$PROJECT_DIR$/application/weibao/controller/Index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/log.txt" afterPath="$PROJECT_DIR$/public/log.txt" />
     </list>
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +28,8 @@
       <file leaf-file-name="Index.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="478">
-              <caret line="669" column="0" selection-start-line="669" selection-start-column="0" selection-end-line="669" selection-end-column="0" />
+            <state relative-caret-position="278">
+              <caret line="699" column="0" selection-start-line="699" selection-start-column="0" selection-end-line="699" selection-end-column="0" />
               <folding>
                 <element signature="e#762#796#0#PHP" expanded="true" />
                 <element signature="e#1046#1972#0#PHP" expanded="false" />
@@ -77,8 +77,18 @@
                 <element signature="e#14061#14209#0#PHP" expanded="false" />
                 <element signature="e#14218#14348#0#PHP" expanded="false" />
                 <element signature="e#17160#25296#0#PHP" expanded="false" />
-                <marker date="1498044292490" expanded="false" signature="12470:12479" ph="..." />
+                <marker date="1498047602161" expanded="false" signature="12470:12479" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Connection.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/thinkphp/library/think/db/Connection.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="163">
+              <caret line="484" column="0" selection-start-line="484" selection-start-column="0" selection-end-line="484" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -248,18 +258,11 @@
       <file leaf-file-name="AliPay.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/common/service/AliPay.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="986">
-              <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+            <state relative-caret-position="1088">
+              <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
               <folding>
-                <element signature="e#1060#1079#0#PHP" expanded="true" />
-                <marker date="1497955429348" expanded="true" signature="9467:9486" ph="..." />
-                <marker date="1497955429348" expanded="true" signature="9554:9586" ph="..." />
-                <marker date="1497955429348" expanded="true" signature="9694:9713" ph="..." />
-                <marker date="1497955429348" expanded="true" signature="9770:9802" ph="..." />
-                <marker date="1497955429348" expanded="true" signature="9818:9855" ph="..." />
-                <marker date="1497955429348" expanded="true" signature="10296:10315" ph="..." />
-                <marker date="1497955429348" expanded="true" signature="10372:10404" ph="..." />
-                <marker date="1497955429348" expanded="true" signature="10420:10457" ph="..." />
+                <marker date="1498045313664" expanded="false" signature="9:462" ph=" +---------------------------------------------------------------------- ..." />
+                <marker date="1498045313664" expanded="true" signature="15552:15553" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -303,10 +306,10 @@
         <option value="$PROJECT_DIR$/application/common/service/WeiBaoData.php" />
         <option value="$PROJECT_DIR$/application/common/service/AliPay.php" />
         <option value="$PROJECT_DIR$/application/index/common.php" />
-        <option value="$PROJECT_DIR$/application/weibao/controller/Index.php" />
         <option value="$PROJECT_DIR$/application/common/model/ShopServices.php" />
         <option value="$PROJECT_DIR$/application/index/controller/WtService.php" />
         <option value="$PROJECT_DIR$/vendor/alipay/alipay.php" />
+        <option value="$PROJECT_DIR$/application/weibao/controller/Index.php" />
       </list>
     </option>
   </component>
@@ -478,7 +481,7 @@
     <configuration default="false" name="second_git" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" server_name="second_git">
       <method />
     </configuration>
-    <configuration default="false" name="wt" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" server_name="wt" start_url="http://127.0.0.9/weibao/index/getTbGoodsDescription?itemId=552707355952">
+    <configuration default="false" name="wt" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" server_name="wt" start_url="http://127.0.0.9/weibao/index/getTbGoodsDescription?itemId=540866815805&amp;XDEBUG_SESSION_START=12899">
       <method />
     </configuration>
     <list size="3">
@@ -505,16 +508,16 @@
       <workItem from="1497755242780" duration="25066000" />
       <workItem from="1497836514999" duration="16849000" />
       <workItem from="1497927617730" duration="11335000" />
-      <workItem from="1498009587934" duration="17514000" />
+      <workItem from="1498009587934" duration="19717000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="119532000" />
+    <option name="totallyTimeSpent" value="121735000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16666667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -525,7 +528,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27027026" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41189188" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -606,7 +609,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/common/service/AliPay.php</url>
-          <line>94</line>
+          <line>89</line>
           <option name="timeStamp" value="165" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -616,7 +619,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/common/service/AliPay.php</url>
-          <line>184</line>
+          <line>182</line>
           <option name="timeStamp" value="167" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -636,12 +639,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/common/service/AliPay.php</url>
-          <line>188</line>
+          <line>186</line>
           <option name="timeStamp" value="187" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/common/service/AliPay.php</url>
-          <line>93</line>
+          <line>88</line>
           <option name="timeStamp" value="188" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -653,16 +656,6 @@
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
           <line>545</line>
           <option name="timeStamp" value="191" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>670</line>
-          <option name="timeStamp" value="194" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>675</line>
-          <option name="timeStamp" value="195" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/vendor/alipay/alipay.php</url>
@@ -716,24 +709,34 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/common/service/AliPay.php</url>
-          <line>79</line>
+          <line>74</line>
           <option name="timeStamp" value="218" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/common/service/AliPay.php</url>
-          <line>80</line>
+          <line>75</line>
           <option name="timeStamp" value="219" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>657</line>
-          <option name="timeStamp" value="220" />
+          <line>699</line>
+          <option name="timeStamp" value="222" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
+          <line>656</line>
+          <option name="timeStamp" value="223" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
+          <line>662</line>
+          <option name="timeStamp" value="224" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="221" />
+      <option name="time" value="225" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -882,6 +885,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
           <caret line="56" column="7" selection-start-line="56" selection-start-column="7" selection-end-line="56" selection-end-column="7" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1118,14 +1122,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/db/Connection.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="484" column="0" selection-start-line="484" selection-start-column="0" selection-end-line="484" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/thinkphp/library/think/App.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
@@ -1184,18 +1180,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/common/service/AliPay.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="986">
-          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+        <state relative-caret-position="1088">
+          <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
           <folding>
-            <element signature="e#1060#1079#0#PHP" expanded="true" />
-            <marker date="1497955429348" expanded="true" signature="9467:9486" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9554:9586" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9694:9713" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9770:9802" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9818:9855" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10296:10315" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10372:10404" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10420:10457" ph="..." />
+            <marker date="1498045313664" expanded="false" signature="9:462" ph=" +---------------------------------------------------------------------- ..." />
+            <marker date="1498045313664" expanded="true" signature="15552:15553" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1360,10 +1349,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/db/Connection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="484" column="0" selection-start-line="484" selection-start-column="0" selection-end-line="484" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="669" column="0" selection-start-line="669" selection-start-column="0" selection-end-line="669" selection-end-column="0" />
+        <state relative-caret-position="278">
+          <caret line="699" column="0" selection-start-line="699" selection-start-column="0" selection-end-line="699" selection-end-column="0" />
           <folding>
             <element signature="e#762#796#0#PHP" expanded="true" />
             <element signature="e#1046#1972#0#PHP" expanded="false" />
@@ -1411,7 +1408,7 @@
             <element signature="e#14061#14209#0#PHP" expanded="false" />
             <element signature="e#14218#14348#0#PHP" expanded="false" />
             <element signature="e#17160#25296#0#PHP" expanded="false" />
-            <marker date="1498044292490" expanded="false" signature="12470:12479" ph="..." />
+            <marker date="1498047602161" expanded="false" signature="12470:12479" ph="..." />
           </folding>
         </state>
       </provider>
