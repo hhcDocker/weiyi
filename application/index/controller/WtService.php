@@ -357,6 +357,9 @@ class WtService extends APIAuthController
         $_year = $_service_start_time[0];
         $_month = $_service_start_time[1];
         $_day = $_service_start_time[2];
+        if (!$_year || !$_month || !$_day){
+            throw new APIException(30017);
+        }
         if ($_year <date("Y") || $_month<date("m") || $_month>12 || $_day<date("d") ||$_day>31) {
             throw new APIException(30017);
         }
@@ -581,6 +584,7 @@ class WtService extends APIAuthController
                 $response_data = $result['msg'];
             }
         }
+        //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝链接
         if (!$response_data){
             throw new APIException(30019);
         }
@@ -626,8 +630,8 @@ class WtService extends APIAuthController
             throw new APIException(30019);
         }
 
-        //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝链接
-        return $this->format_ret($response_data);
+        $res = array('shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_date'=>$response_data);
+        return $this->format_ret($res);
     }
 
     /**
@@ -758,10 +762,40 @@ class WtService extends APIAuthController
 
         $service_list = model('ShopServices')->getServicesByManagerId(session('manager_id'),$page_index, $page_size);
         return $this->format_ret($service_list);
+    }
 
+    /**
+     * [updateAllShop description]
+     * @return [type] [description]
+     */
+    public function updateAllShop()
+    {
+        set_time_limit(0);
+        $shop_list = model('AliShops')->getAllShop();
+        $log = '';
+        if (!empty($shop_list)) {
+            foreach ($shop_list as $k => $v) {
+                //抓取店铺信息,调用服务
+                $wei_bao = new WeiBaoData();
+                $res = $wei_bao->getShopDataByUrl($v['shop_url']);
+                if ($res['errcode']) {
+                    $log .="id为".$v['id']."，链接为（".$v['shop_url'].")的店铺获取数据失败，保留原数据；异常编号:".$res['errcode']."\n\n";
+                    continue;
+                }
+                $shop_id = $res['shop_id'];
+                //检查对比url和shopid，没有则添加;有则修改
+                $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
+                }
+
+                $has_delete =  model('AliShops')->softDeleteShopDataByShopId($v['id']);
+                if (!$has_delete) {
+                    $log .='删除店铺'.$v['id'].'api数据失败';
+                    continue;
+                }
+        }
     }
     
-    // **********************************支付相关******************************************************
+    // ******************************************************************************支付相关************************************************************************
     /**
      * 微信订单异步通知
      */
@@ -832,7 +866,7 @@ class WtService extends APIAuthController
         $notify->Handle(false);
     }
 
-    // **********************************公有函数******************************************************
+    // *******************************************************************公有函数*****************************************************************************
 
     /**
      * 检查链接

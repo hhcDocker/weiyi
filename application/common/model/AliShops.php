@@ -79,6 +79,12 @@ class AliShops extends Base
         return $res?$res:array();
     }
 
+    public function getAllShop()
+    {
+        $res = Db::table('wj_ali_shops')->where('is_deleted',0)->select();
+        return $res;
+    }
+
     /**
      * 保存链接信息
      * @param  integer $ali_shop_id [description]

@@ -106,20 +106,5 @@ class WeiBaoData {
         }else{
             return array('errcode'=>0,'shop_id'=>$shopId,'shop_data'=>$shop_data,'user_id'=>$userId);
         }
-
-
-        /*else{
-            //查询当前shopid是否在数据库中
-
-            //软删除之前记录
-            model('ShopApi')->softDeleteShopDataByShopUrl($url);
-            foreach ($shop_data as $k1 => $v1) {
-                $has_add = model('ShopApi')->saveShopData($v1['shop_url'],$v1['api_url'],$v1['api_data']);
-                if (!$has_add) {
-                    //mc 记录日志或者发送警报，不推送给前端
-                }
-            }
-        }*/
-        // }
     }
 }

@@ -20,6 +20,7 @@ use app\common\service\WeiBaoData;
 use app\common\utils\SN\ShortUrl;
 use app\common\utils\SN\ExpenseSN;
 use JonnyW\PhantomJs\Client;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use think\Controller;
 use think\Request;
 use think\Db;
@@ -234,7 +235,7 @@ class Index extends Controller
     public function getShopData() {
         $url = input('param.url') ? input('param.url'):'';
 		session('shopUrl',$url);
-        $flag = input('param.flag') ? input('param.flag'):1;
+        $flag = input('param.flag') ? input('param.flag'):0;
         $checkUrl = $this->checkUrl($url);
         if (!$checkUrl['code']) {
             echo json_encode($checkUrl);
@@ -316,7 +317,7 @@ class Index extends Controller
                     );
                 }
             }
-            if ($flag_error) {
+            /*if ($flag_error) {
                 echo json_encode(array('code'=>0,'msg'=>'获取数据失败'));
                 return;
             }else{
@@ -328,7 +329,7 @@ class Index extends Controller
                         //mc 记录日志或者发送警报，不推送给前端
                     }
                 }
-            }
+            }*/
         }
 
 		//return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
@@ -436,7 +437,7 @@ class Index extends Controller
                 }
                 if ($flag_error) {
                     echo "获取数据失败";
-                    throw new APIException(30010);
+                    exit;
                 }
             }
 
@@ -487,12 +488,18 @@ class Index extends Controller
                 //$arr['area']=$_GET['area'];
                 $arr['isTm']=$isTm;
                 $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
+                $html = file_get_html($url);
                 try{
-                    $html = file_get_html($url);
-                    //店铺链接
-                    $shop_url=trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
-                    //先获取shopid,验证服务是否存在，是否过期
-                    $shop_id = 0;
+                    $shop_href_str = $html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href;
+                }catch (Exception $e) {
+                    echo "获取数据失败";
+                    exit;
+                }
+                //店铺链接
+                $shop_url=trim(iconv("GB2312//IGNORE","UTF-8",$shop_href_str));
+                //先获取shopid,验证服务是否存在，是否过期
+                $shop_id = 0;
+                try{
                     //得到dataDetail对象
                     foreach($html->find('script') as $key => $script){
                     //if($key==6){
@@ -641,6 +648,10 @@ class Index extends Controller
         }
     }
 
+    /**
+     * [getTbGoodsDescription description]
+     * @return [type] [description]
+     */
     public function getTbGoodsDescription()
     {
         $itemId=$_GET['itemId'];
@@ -659,12 +670,15 @@ class Index extends Controller
 
         // Send the request
         $client->send($request, $response);
-        /*dump($response->getUrls());
-        dump($response->getConsole());*/
+       /* $urls = $response->getUrls();
+        var_dump($urls);
+        $console = $response->getConsole();
+        var_dump($console);*/
 
         $data=$response->getUrlData();
         if (empty($data)){
-
+            echo "获取数据失败";
+            exit;
         }
         $value=preg_replace('/^mtopjsonp\d\(/','', $data[0]);
         $value= trim($value,')');

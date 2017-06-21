@@ -78,7 +78,7 @@ class ShopApi extends Base
      * @param  string $shop_id [description]
      * @return [type]           [description]
      */
-    public function softDeleteShopDataByShopUrl($shop_id='')
+    public function softDeleteShopDataByShopId($shop_id='')
     {
         if (!$shop_id) {
             return 0;
