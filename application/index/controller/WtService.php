@@ -1134,6 +1134,11 @@ class WtService extends APIAuthController
         }
 
         if ($service_info['service_start_time']<=time() && $service_info['service_end_time']>=time()) { //服务未过期
+            //体验期内
+            $service_type =2;
+            if ($service_info['service_end_time'] - $service_info['service_start_time']== 259200) {
+                $service_type =1;
+            }
             //设置路由，获取链接，生成二维码
             //mc 路由映射短链
             $qrcode_url = $qrcode_url?$qrcode_url:'/'.$service_info['transformed_url'];
@@ -1141,16 +1146,12 @@ class WtService extends APIAuthController
             //二维码
             $QRCode = new QRCode;
             $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
-            $service_type =2;
         }elseif ($service_info['service_start_time']>time()) { //服务未开始
             $qrcode_url='';
             $service_type =3;
         }else {//已过期
             $qrcode_url='';
             $service_type =4;
-        }
-        if ($service_info['service_end_time'] - $service_info['service_start_time']= 259200) {
-            $service_type =1;
         }
         $res_data =array('service_id'=>$service_info['id'],'service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'service_type'=>$service_type,'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $res_data;
