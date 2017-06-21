@@ -74,7 +74,7 @@
 				</div>
 			</div>
 			<div class="to_shop_tb">
-				<a :href="commodityData.shopUrl">进入店铺</a>
+				<a href="{$shortUrl}">进入店铺</a>
 			</div>
 			<div  id="tab_contain" class="infomain_tab">
 				<div id="tabbar" class="tabbar" >
@@ -320,7 +320,6 @@
 			 			vm.commodityData.pictureDetail=res.data.images;
 			 		},
 			 		error:function(err){
-			 			alert(err+'请求数据失败');
 	                }
 			 	});
 	        }

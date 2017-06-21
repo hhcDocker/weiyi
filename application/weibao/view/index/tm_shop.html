@@ -146,7 +146,7 @@
 				<div class="ranking_data">
 					<div class="ranking_left" @click="toDetailByRank(0)">
 						<span class="topImg">
-							<img src="/static/images/topOneTm.jpg"/>
+							<img src="/static/images/topOneTm.png"/>
 						</span>
 						<img :src="rankingData[0].imgUrl"/>
 						<p class="solePrice">
@@ -157,7 +157,7 @@
 					<div class="ranking_right">
 						<div @click="toDetailByRank(1)">
 							<span class="topImg">
-								<img src="/static/images/topTwoTm.jpg"/>
+								<img src="/static/images/topTwoTm.png"/>
 							</span>
 							<img :src="rankingData[1].imgUrl"/>>
 							<p class="solePrice">
@@ -166,7 +166,7 @@
 						</div>
 						<div @click="toDetailByRank(2)">
 							<span class="topImg">
-								<img src="/static/images/topThreeTm.jpg"/>
+								<img src="/static/images/topThreeTm.png"/>
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
 							<p class="solePrice">
@@ -412,10 +412,10 @@
 						}
 					},
 					toDeatail:function(item){
-						location.href='/weibao/index/processUrl?isTm=1&itemId='+item.nid;
+						location.href='/detail/1/'+item.nid;
 					},
 					toDetailByRank:function(index){
-						location.href='/weibao/index/processUrl?isTm=1&itemId='+this.rankingData[index].id;
+						location.href='/detail/1/'+this.rankingData[index].id;
 					},
 					getQueryString:function (name,url) { 
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
@@ -423,7 +423,7 @@
 						if (r != null) return unescape(r[2]); return null; 
 					},
 					toDetailByEnhenced:function(item){
-						location.href='/weibao/index/processUrl?isTm=1&itemId='+item.nid;
+						location.href='/detail/1/'+item.nid;
 					},
 					toDetailByItemSearch:function(item,index){
 						if(item.cmdId){
@@ -433,7 +433,7 @@
 								var url = shopData.data.data[item.cmdId].slice(shopData.data.data[item.cmdId].indexOf('?')); 
 								var id=this.getQueryString('id',url);
 								if(id){
-									location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+									location.href='/detail/1/'+id;
 								}else{
 									console.log('跳转商品列表')
 								}
@@ -443,7 +443,7 @@
 							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
 							var id=this.getQueryString('id',urls);
 							if(id){
-								location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+								location.href='/detail/1/'+id;
 							}else{
 								console.log('跳转商品列表')
 							}
@@ -459,7 +459,7 @@
 						}else if(index==1){
 							var id = item['item2'].nid;
 						}
-						location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+						location.href='/detail/1/'+id;
 					}
 				}
 			})
