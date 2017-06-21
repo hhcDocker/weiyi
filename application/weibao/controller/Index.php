@@ -385,7 +385,7 @@ class Index extends Controller
 
 
 
-    /***********************************正式使用****************************************/
+    /*********************************************************************正式使用******************************************************************************/
 
     /**
      * 通过短链接访问，短链接长度为6个字符
@@ -405,7 +405,7 @@ class Index extends Controller
             return;
         }
 
-        if ($service_info['service_end_time']>=time()) {//服务未过期
+        if ($service_info['service_start_time']<=time() && $service_info['service_end_time']>=time()) {//服务未过期
             //获取接口
             $shop_data = model('ShopApi')->getShopDataByShopId($service_info['shop_id']);
             //获取链接
@@ -456,7 +456,7 @@ class Index extends Controller
                 return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
             }
         }else {//已过期
-            echo "该服务已过期，请联系管理员";
+            echo "该服务不在服务时间范围内，请联系管理员";
             return;
         }
     }
@@ -534,6 +534,7 @@ class Index extends Controller
                     }
                 }
 
+                session('shopUrl',$shop_url);
                 $arr['shopUrl'] = $shop_url;
                 $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
                 $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
@@ -604,12 +605,14 @@ class Index extends Controller
                     echo "获取数据失败";
                     return;
                 }
+                $shortUrl = '';
                 //查询服务
                 $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
                 if (empty($service_info)) {
                     echo "该店铺无购买服务，请到微跳上购买";
                     return;
                 }else{
+                    $shortUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
                     $is_time_out =1;
                     foreach ($service_info as $k => $v) {
                         if ($v['service_end_time'] > time()) {
@@ -622,7 +625,6 @@ class Index extends Controller
                         return;
                     }
                 }
-                $shortUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
                 return $this->fetch('tb_commodity_detail',array('data' => $item_id,'shortUrl'=>$shortUrl));
             }
 
@@ -638,4 +640,32 @@ class Index extends Controller
         }
     }
 
+    public function getTbGoodsDescription()
+    {
+        $itemId=$_GET['itemId'];
+        $cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
+        $client = Client::getInstance();
+        $client->getEngine()->setPath(config('PhantomjsPath'));
+        /**
+         * @see JonnyW\PhantomJs\Http\Request
+         **/
+        $request = $client->getMessageFactory()->createRequest($cmd_url, 'GET');
+        //$request->setDelay(1000);
+        /**
+         * @see JonnyW\PhantomJs\Http\Response
+         **/
+        $response = $client->getMessageFactory()->createResponse();
+
+        // Send the request
+        $client->send($request, $response);
+        /*dump($response->getUrls());
+        dump($response->getConsole());*/
+
+        $data=$response->getUrlData();
+        $value=preg_replace('/^mtopjsonp\d\(/','', $data[0]);
+        $value= trim($value,')');
+        $value=json_decode($value,true);
+        var_dump($value);
+        echo json_encode($value);
+    }
 }
