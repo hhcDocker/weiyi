@@ -525,6 +525,7 @@ class Index extends Controller
                     foreach ($service_info as $k => $v) {
                         if ($v['service_end_time'] > time()) {
                             $is_time_out =0;
+                            $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                             break;
                         }
                     }
@@ -536,7 +537,6 @@ class Index extends Controller
 
                 session('shopUrl',$shop_url);
                 $arr['shopUrl'] = $shop_url;
-                $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
                 $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
                 $assessFlag='{'.file_get_contents($assessFlag).'}';
                 $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
@@ -612,11 +612,11 @@ class Index extends Controller
                     echo "该店铺无购买服务，请到微跳上购买";
                     exit;
                 }else{
-                    $shortUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
                     $is_time_out =1;
                     foreach ($service_info as $k => $v) {
                         if ($v['service_end_time'] > time()) {
                             $is_time_out =0;
+                            $shortUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                             break;
                         }
                     }
