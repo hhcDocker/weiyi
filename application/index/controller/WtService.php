@@ -140,6 +140,7 @@ class WtService extends APIAuthController
                         //添加店铺数据记录
                         $shop_data = $res['shop_data'];
                         $flag_error=0;
+                        Db::startTrans();
                         foreach ($shop_data as $k1 => $v1) {
                             $has_add = model('ShopApi')->saveShopData($wj_shop_id,$v1['api_url'],$v1['api_data']);
                             if (!$has_add) {
@@ -148,7 +149,10 @@ class WtService extends APIAuthController
                             }
                         }
                         if ($flag_error) {
+                            Db::rollback();
                             throw new APIException(30010);
+                        }else{
+                             Db::commit();
                         }
                         //表示没有服务
                         $service_info=array();
@@ -572,7 +576,8 @@ class WtService extends APIAuthController
                 'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
                 'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
                 'out_trade_no' => $expense_num,
-                'subject' => "微跳-购买服务",
+//                'subject' => "微跳-购买服务",
+                'subject' => "buy service",
                 'total_fee' => $payment_amount,//订单金额，单位为元
                 'body' => "微跳",
             ]);
@@ -765,10 +770,10 @@ class WtService extends APIAuthController
     }
 
     /**
-     * [updateAllShop description]
+     * 更新店铺数据
      * @return [type] [description]
      */
-    public function updateAllShop()
+    public function updateShopApi()
     {
         set_time_limit(0);
         $shop_list = model('AliShops')->getAllShop();
@@ -782,16 +787,48 @@ class WtService extends APIAuthController
                     $log .="id为".$v['id']."，链接为（".$v['shop_url'].")的店铺获取数据失败，保留原数据；异常编号:".$res['errcode']."\n\n";
                     continue;
                 }
-                $shop_id = $res['shop_id'];
-                //检查对比url和shopid，没有则添加;有则修改
-                $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
-                }
-
-                $has_delete =  model('AliShops')->softDeleteShopDataByShopId($v['id']);
-                if (!$has_delete) {
-                    $log .='删除店铺'.$v['id'].'api数据失败';
+                if ($res['shop_id'] != $v['ali_shop_id']) {
+                    $log .="链接为（".$v['shop_url'].")的店铺更新数据失败，保留原数据；异常原因:原始id：".$v['ali_shop_id']."，现id：".$res['shop_id']."\n\n";
                     continue;
                 }
+                Db::startTrans();
+                try{
+                    $has_delete =  model('ShopApi')->softDeleteShopDataByShopId($v['id']);
+                    if (!$has_delete) {
+                        $has_data = model('ShopApi')->getShopDataByShopId($v['id']);
+                        if (!empty($has_data)) {
+                            throw new \Exception('删除店铺'.$v['id'].'api数据失败', 1);
+                        }
+                    }
+
+                    //添加店铺数据记录
+                    $shop_data = $res['shop_data'];
+                    $flag_error=0;
+                    foreach ($shop_data as $k1 => $v1) {
+                        $has_add = model('ShopApi')->saveShopData($v['id'],$v1['api_url'],$v1['api_data']);
+                        if (!$has_add) {
+                            $flag_error=1;
+                            break;
+                        }
+                    }
+                    if ($flag_error) {
+                        Db::rollback();
+                        throw new \Exception('店铺'.$v['id'].'添加api数据失败', 1);
+                    }else{
+                        Db::commit();
+                    }
+                }catch(Exception $e){
+                    $log .= $e."\n\n";
+                    continue;
+                }
+                if (!$k%100) {
+                    usleep(10000);
+                }
+            }
+            $log = $log ? $log : '成功更新所有店铺数据';
+            $file = 'new_cron_log/'.date("Ymd").'_update_shop_api_log.txt';
+            $content = date("Y-m-d H:i:s")."\n\n**********************更新店铺数据'**************************\n\n".$log."\n\n";
+            Log::write($content, $file);
         }
     }
     
@@ -938,9 +975,9 @@ class WtService extends APIAuthController
         $img ='';
         if (empty($service_info)){
             //新增体验服务
-            $experience_time = config('experience_time');
+            $experience_days = config('experience_days');
             $time_start = time();
-            $time_end = strtotime("+".$experience_time." day");
+            $time_end = strtotime("+".$experience_days." day");
 
             //mc 改用shop_id+manager_id
             $o = new ShortUrl($wj_shop_id,session('manager_id'));

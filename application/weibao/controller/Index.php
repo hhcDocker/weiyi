@@ -352,9 +352,9 @@ class Index extends Controller
         $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
         //没有服务则表示体验
         if (empty($service_info)) {
-            $experience_time = config('experience_time');
+            $experience_days = config('experience_days');
             $time_start = time();
-            $time_end = strtotime("+".$experience_time." day");
+            $time_end = strtotime("+".$experience_days." day");
             $o = new ShortUrl($url);
             $shop_url_str = $o->getSN();
             $service_id = model('ShopServices')->saveServices(session('manager_id'),$url,$shop_url_str,$time_start,$time_end);
