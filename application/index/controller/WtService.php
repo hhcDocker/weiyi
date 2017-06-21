@@ -487,7 +487,7 @@ class WtService extends APIAuthController
                     if (!$has_update) {
                         throw new APIException(30010);
                     }
-                    $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
+                    $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
                 }
             }
         }elseif (preg_match('/shop\d+\.taobao/', $shop_url)){
@@ -527,7 +527,7 @@ class WtService extends APIAuthController
                 $service_info=array();
             }else{
                 $wj_shop_id = $shop_info['id'];
-                $service_info =model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
+                $service_info =model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
             }
         }else{
             throw new APIException(30001);

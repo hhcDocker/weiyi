@@ -108,11 +108,12 @@ class ShopServices extends Base
         if (!$shop_id ||!$manager_id) {
             return array();
         }
-        $res = Db::table('wj_shop_services w')
-                ->join('wj_expense_records r','r.service_id = w.id and r.trade_status=1 and r.is_deleted=0')
-                ->where('w.shop_id',$shop_id)
-                ->where('w.manager_id',$manager_id)
-                ->where('w.is_deleted',0)
+        $res = Db::table('wj_shop_services s')
+                ->field('s.id,s.service_start_time,s.service_end_time')
+                ->join('wj_expense_records r','r.service_id = s.id and r.trade_status=1 and r.is_deleted=0','left')
+                ->where('s.shop_id',$shop_id)
+                ->where('s.manager_id',$manager_id)
+                ->where('s.is_deleted',0)
                 ->order('r.id desc')
                 ->find();
         return $res?$res:array();
