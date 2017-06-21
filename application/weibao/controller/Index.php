@@ -396,13 +396,13 @@ class Index extends Controller
         $str_url = input('param.str_url') ? input('param.str_url') : '';
         if (!$str_url) {
             echo "链接不存在";
-            return;
+            exit;
         }
         //查询是否存在且未过期
         $service_info = model('ShopServices')->getServicesByUrlStr($str_url);
         if (empty($service_info)) {
             echo "链接不存在";
-            return;
+            exit;
         }
 
         if ($service_info['service_start_time']<=time() && $service_info['service_end_time']>=time()) {//服务未过期
@@ -412,7 +412,7 @@ class Index extends Controller
             $shop_info = model('AliShops')->getShopInfoById($service_info['shop_id']);
             if (empty($shop_info) || !isset($shop_info['shop_url'])) {
                 echo "链接不存在";
-                return;
+                exit;
             }
             session('shopUrl',$shop_info['shop_url']);
             if (empty($shop_data)) {
@@ -421,7 +421,7 @@ class Index extends Controller
 
                 if ($res['errcode']) {
                     var_dump($res);
-                    return;
+                    exit;
                 }
 
                 //添加店铺数据记录
@@ -457,7 +457,7 @@ class Index extends Controller
             }
         }else {//已过期
             echo "该服务不在服务时间范围内，请联系管理员";
-            return;
+            exit;
         }
     }
 
@@ -471,7 +471,7 @@ class Index extends Controller
         $item_id = input('param.item_id') ? input('param.item_id') : '';
         if (!$item_id) {
             echo "item_id参数错误不存在";
-            return;
+            exit;
         }
 
         vendor('simple_html_dom.simple_html_dom');
@@ -509,17 +509,17 @@ class Index extends Controller
                     };
                 }catch (Exception $e){
                     echo "获取数据失败";
-                    return;
+                    exit;
                 }
                 if (!$shop_url || !$shop_id) {
                     echo "获取数据失败";
-                    return;
+                    exit;
                 }
                 //查询服务
                 $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
                 if (empty($service_info)) {
                     echo "该店铺无购买服务，请到微跳上购买";
-                    return;
+                    exit;
                 }else{
                     $is_time_out =1;
                     foreach ($service_info as $k => $v) {
@@ -530,7 +530,7 @@ class Index extends Controller
                     }
                     if ($is_time_out) {
                         echo "该店铺所购买服务已过期，请到微跳上续费";
-                        return;
+                        exit;
                     }
                 }
 
@@ -582,7 +582,7 @@ class Index extends Controller
                     $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
                 }catch(Exception  $e){
                     echo "获取数据失败";
-                    return;
+                    exit;
                 }
                 return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
             }else{
@@ -592,7 +592,7 @@ class Index extends Controller
 
                 if(!$data || $data['ret'][0] !="SUCCESS::调用成功" || !isset($data['data']['seller'])){
                     echo "获取数据失败";
-                    return;
+                    exit;
                 }
 
                 //获取shopid,验证服务是否存在，是否过期
@@ -603,14 +603,14 @@ class Index extends Controller
 
                 if (!$shop_id) {
                     echo "获取数据失败";
-                    return;
+                    exit;
                 }
                 $shortUrl = '';
                 //查询服务
                 $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
                 if (empty($service_info)) {
                     echo "该店铺无购买服务，请到微跳上购买";
-                    return;
+                    exit;
                 }else{
                     $shortUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
                     $is_time_out =1;
@@ -622,7 +622,7 @@ class Index extends Controller
                     }
                     if ($is_time_out) {
                         echo "该店铺所购买服务已过期，请到微跳上续费";
-                        return;
+                        exit;
                     }
                 }
                 return $this->fetch('tb_commodity_detail',array('data' => $item_id,'shortUrl'=>$shortUrl));
@@ -636,7 +636,8 @@ class Index extends Controller
                 'msg'  => '请求参数错误！',
                 'data' => '{}',
             ];
-            return json($result, 400);
+            echo json($result, 400);
+            exit;
         }
     }
 
