@@ -41,7 +41,7 @@ class ShopServices extends Base
             return array();
         }
         $res = Db::table('wj_shop_services w')
-                ->join('wj_ali_shops a','a.id =w.shop_id','left')
+                ->join('wj_ali_shops a','a.id =w.shop_id')
                 ->where('a.ali_shop_id',$ali_shop_id)
                 ->where('w.is_deleted',0)
                 ->select();
@@ -109,7 +109,7 @@ class ShopServices extends Base
             return array();
         }
         $res = Db::table('wj_shop_services w')
-                ->join('wj_expense_records r','r.service_id = w.id and r.trade_status=1 and r.is_deleted=0','left')
+                ->join('wj_expense_records r','r.service_id = w.id and r.trade_status=1 and r.is_deleted=0')
                 ->where('w.shop_id',$shop_id)
                 ->where('w.manager_id',$manager_id)
                 ->where('w.is_deleted',0)
