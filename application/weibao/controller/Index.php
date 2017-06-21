@@ -654,6 +654,7 @@ class Index extends Controller
      */
     public function getTbGoodsDescription()
     {
+        
         $itemId=$_GET['itemId'];
         $cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
         $client = Client::getInstance();
@@ -682,8 +683,6 @@ class Index extends Controller
         }
         $value=preg_replace('/^mtopjsonp\d\(/','', $data[0]);
         $value= trim($value,')');
-        $value=json_decode($value,true);
-        var_dump($value);
-        echo json_encode($value);
+
     }
 }
