@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/index/common.php" afterPath="$PROJECT_DIR$/application/index/common.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/index/controller/WtService.php" afterPath="$PROJECT_DIR$/application/index/controller/WtService.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/route.php" afterPath="$PROJECT_DIR$/application/route.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config.php" afterPath="$PROJECT_DIR$/application/config.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/weibao/controller/Index.php" afterPath="$PROJECT_DIR$/application/weibao/controller/Index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/extend/api/APIException.php" afterPath="$PROJECT_DIR$/extend/api/APIException.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/log.txt" afterPath="$PROJECT_DIR$/public/log.txt" />
     </list>
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +29,8 @@
       <file leaf-file-name="Index.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="540" column="0" selection-start-line="540" selection-start-column="0" selection-end-line="540" selection-end-column="0" />
+            <state relative-caret-position="460">
+              <caret line="673" column="5" selection-start-line="673" selection-start-column="5" selection-end-line="673" selection-end-column="5" />
               <folding>
                 <element signature="e#985#1911#0#PHP" expanded="false" />
                 <element signature="e#1244#1306#0#PHP" expanded="false" />
@@ -97,43 +96,39 @@
                 <element signature="e#13830#13986#0#PHP" expanded="false" />
                 <element signature="e#13996#14144#0#PHP" expanded="false" />
                 <element signature="e#14153#14283#0#PHP" expanded="false" />
-                <element signature="e#14439#14512#0#PHP" expanded="false" />
-                <element signature="e#14917#16905#0#PHP" expanded="false" />
-                <element signature="e#15200#15326#0#PHP" expanded="false" />
-                <element signature="e#15394#16240#0#PHP" expanded="false" />
-                <element signature="e#15556#15660#0#PHP" expanded="false" />
-                <element signature="e#15784#16087#0#PHP" expanded="false" />
-                <element signature="e#15961#16069#0#PHP" expanded="false" />
-                <element signature="e#16104#16226#0#PHP" expanded="false" />
-                <element signature="e#16280#16580#0#PHP" expanded="false" />
-                <element signature="e#16331#16566#0#PHP" expanded="false" />
-                <element signature="e#16447#16566#0#PHP" expanded="false" />
-                <element signature="e#16593#16820#0#PHP" expanded="false" />
-                <element signature="e#16712#16820#0#PHP" expanded="false" />
-                <element signature="e#16830#16905#0#PHP" expanded="false" />
-                <element signature="e#16917#17000#0#PHP" expanded="false" />
-                <element signature="e#20344#21010#0#PHP" expanded="false" />
-                <element signature="e#20442#20992#0#PHP" expanded="false" />
-                <element signature="e#20580#20970#0#PHP" expanded="false" />
-                <element signature="e#20658#20904#0#PHP" expanded="false" />
-                <element signature="e#20780#20904#0#PHP" expanded="false" />
-                <element signature="e#21057#21371#0#PHP" expanded="false" />
-                <element signature="e#21125#21353#0#PHP" expanded="false" />
-                <element signature="e#21414#22263#0#PHP" expanded="false" />
-                <element signature="e#21439#21837#0#PHP" expanded="false" />
-                <element signature="e#21606#21739#0#PHP" expanded="false" />
-                <element signature="e#21761#21837#0#PHP" expanded="false" />
-                <element signature="e#22161#22263#0#PHP" expanded="false" />
-                <element signature="e#23086#23250#0#PHP" expanded="false" />
-                <element signature="e#23584#23681#0#PHP" expanded="false" />
-                <element signature="e#23810#24383#0#PHP" expanded="false" />
-                <element signature="e#23928#24383#0#PHP" expanded="false" />
-                <element signature="e#23991#24219#0#PHP" expanded="false" />
-                <element signature="e#24053#24197#0#PHP" expanded="false" />
-                <element signature="e#24240#24365#0#PHP" expanded="false" />
-                <element signature="e#24504#24706#0#PHP" expanded="false" />
-                <element signature="e#24541#24656#0#PHP" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AliPay.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/common/service/AliPay.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
+              <folding>
+                <element signature="e#1060#1079#0#PHP" expanded="true" />
+                <element signature="e#1900#3089#0#PHP" expanded="false" />
+                <element signature="e#3211#6512#0#PHP" expanded="false" />
+                <marker date="1497955429348" expanded="true" signature="9467:9486" ph="..." />
+                <marker date="1497955429348" expanded="true" signature="9554:9586" ph="..." />
+                <marker date="1497955429348" expanded="true" signature="9694:9713" ph="..." />
+                <marker date="1497955429348" expanded="true" signature="9770:9802" ph="..." />
+                <marker date="1497955429348" expanded="true" signature="9818:9855" ph="..." />
+                <marker date="1497955429348" expanded="true" signature="10296:10315" ph="..." />
+                <marker date="1497955429348" expanded="true" signature="10372:10404" ph="..." />
+                <marker date="1497955429348" expanded="true" signature="10420:10457" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="alipay.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/vendor/alipay/alipay.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="116">
+              <caret line="192" column="13" selection-start-line="192" selection-start-column="13" selection-end-line="192" selection-end-column="13" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -142,8 +137,9 @@
         <entry file="file://$PROJECT_DIR$/application/common/service/WeiBaoData.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
-              <caret line="29" column="43" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
+              <caret line="27" column="47" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
               <folding>
+                <element signature="e#885#4377#0#PHP" expanded="false" />
                 <element signature="e#3074#3144#0#PHP" expanded="false" />
                 <element signature="e#3166#3319#0#PHP" expanded="false" />
                 <element signature="e#3755#3944#0#PHP" expanded="false" />
@@ -157,19 +153,21 @@
       <file leaf-file-name="Index.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/index/controller/Index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="52" column="9" selection-start-line="52" selection-start-column="9" selection-end-line="52" selection-end-column="9" />
+            <state relative-caret-position="287">
+              <caret line="118" column="4" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="4" />
               <folding>
                 <element signature="e#813#862#0#PHP" expanded="false" />
                 <element signature="e#868#1198#0#PHP" expanded="false" />
                 <element signature="e#1008#1114#0#PHP" expanded="false" />
                 <element signature="e#1204#1275#0#PHP" expanded="false" />
+                <element signature="e#1281#2654#0#PHP" expanded="false" />
                 <element signature="e#1606#1709#0#PHP" expanded="false" />
                 <element signature="e#1827#2003#0#PHP" expanded="false" />
                 <element signature="e#2013#2648#0#PHP" expanded="false" />
                 <element signature="e#2292#2372#0#PHP" expanded="false" />
                 <element signature="e#2589#2648#0#PHP" expanded="false" />
                 <element signature="e#2660#2706#0#PHP" expanded="false" />
+                <element signature="e#2712#4268#0#PHP" expanded="false" />
                 <element signature="e#2784#2859#0#PHP" expanded="false" />
                 <element signature="e#3050#3145#0#PHP" expanded="false" />
                 <element signature="e#3155#4025#0#PHP" expanded="false" />
@@ -232,26 +230,6 @@
                 <element signature="e#10866#10945#0#PHP" expanded="false" />
                 <element signature="e#10954#11034#0#PHP" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Error.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Error.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="common.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/index/common.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -336,10 +314,99 @@
     </navigator>
     <panes>
       <pane id="ProjectPane">
-        <subPane />
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="index" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wtiao" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -388,7 +455,7 @@
     <configuration default="false" name="second_git" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" server_name="second_git">
       <method />
     </configuration>
-    <configuration default="false" name="wt" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" server_name="wt" start_url="http://127.0.0.9/weibao/index/getGoodsDetail?isTm=1&amp;item_id=551133401583">
+    <configuration default="false" name="wt" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" browser="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" server_name="wt" start_url="http://127.0.0.9/weibao/index/getTbGoodsDescription?itemId=540866815805">
       <method />
     </configuration>
     <list size="3">
@@ -414,18 +481,19 @@
       <workItem from="1497663541888" duration="16189000" />
       <workItem from="1497755242780" duration="25066000" />
       <workItem from="1497836514999" duration="16849000" />
-      <workItem from="1497927617730" duration="10745000" />
+      <workItem from="1497927617730" duration="11335000" />
+      <workItem from="1498009587934" duration="2826000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="101428000" />
+    <option name="totallyTimeSpent" value="104844000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28843337" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16666667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17405406" sideWeight="0.5042598" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -434,7 +502,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48108107" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34702703" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -549,25 +617,35 @@
           <option name="timeStamp" value="173" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>469</line>
-          <option name="timeStamp" value="182" />
+          <url>file://$PROJECT_DIR$/application/common/service/AliPay.php</url>
+          <line>188</line>
+          <option name="timeStamp" value="187" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/application/common/service/AliPay.php</url>
+          <line>93</line>
+          <option name="timeStamp" value="188" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/vendor/alipay/alipay.php</url>
+          <line>193</line>
+          <option name="timeStamp" value="189" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>513</line>
-          <option name="timeStamp" value="184" />
+          <line>538</line>
+          <option name="timeStamp" value="191" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>396</line>
-          <option name="timeStamp" value="186" />
+          <line>664</line>
+          <option name="timeStamp" value="193" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="187" />
+      <option name="time" value="194" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -596,12 +674,14 @@
             <element signature="e#868#1198#0#PHP" expanded="false" />
             <element signature="e#1008#1114#0#PHP" expanded="false" />
             <element signature="e#1204#1275#0#PHP" expanded="false" />
+            <element signature="e#1281#2654#0#PHP" expanded="false" />
             <element signature="e#1606#1709#0#PHP" expanded="false" />
             <element signature="e#1827#2003#0#PHP" expanded="false" />
             <element signature="e#2013#2648#0#PHP" expanded="false" />
             <element signature="e#2292#2372#0#PHP" expanded="false" />
             <element signature="e#2589#2648#0#PHP" expanded="false" />
             <element signature="e#2660#2706#0#PHP" expanded="false" />
+            <element signature="e#2712#4268#0#PHP" expanded="false" />
             <element signature="e#2784#2859#0#PHP" expanded="false" />
             <element signature="e#3050#3145#0#PHP" expanded="false" />
             <element signature="e#3155#4025#0#PHP" expanded="false" />
@@ -680,7 +760,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
           <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -773,13 +852,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/index/model/SMS.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="30" column="30" selection-start-line="30" selection-start-column="30" selection-end-line="30" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/application/index/model/SMS.php" />
     <entry file="file://$PROJECT_DIR$/vendor/phpmailer/phpmailer/class.phpmailer.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
@@ -794,13 +867,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/extend/api/APIBase.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="16" column="21" selection-start-line="15" selection-start-column="14" selection-end-line="16" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/extend/api/APIBase.php" />
     <entry file="file://$PROJECT_DIR$/extend/api/APIController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -819,7 +886,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -869,7 +935,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
           <caret line="56" column="7" selection-start-line="56" selection-start-column="7" selection-end-line="56" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -877,7 +942,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
           <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -917,7 +981,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
           <caret line="415" column="0" selection-start-line="415" selection-start-column="0" selection-end-line="415" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -970,34 +1033,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
           <caret line="295" column="0" selection-start-line="295" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/alipay/alipay.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/common/service/AliPay.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="184" column="0" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
-          <folding>
-            <element signature="e#1060#1079#0#PHP" expanded="true" />
-            <element signature="e#1900#3089#0#PHP" expanded="false" />
-            <marker date="1497955429348" expanded="true" signature="9467:9486" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9554:9586" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9694:9713" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9770:9802" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="9818:9855" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10296:10315" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10372:10404" ph="..." />
-            <marker date="1497955429348" expanded="true" signature="10420:10457" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1006,12 +1041,9 @@
         <state relative-caret-position="119">
           <caret line="29" column="41" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
           <folding>
-            <element signature="e#949#41356#0#PHP" expanded="false" />
             <element signature="e#997#1296#0#PHP" expanded="false" />
-            <element signature="e#1301#15992#0#PHP" expanded="false" />
             <element signature="e#1415#1539#0#PHP" expanded="false" />
             <element signature="e#1741#1815#0#PHP" expanded="false" />
-            <element signature="e#1825#15986#0#PHP" expanded="false" />
             <element signature="e#1987#2152#0#PHP" expanded="false" />
             <element signature="e#2041#2138#0#PHP" expanded="false" />
             <element signature="e#2166#7857#0#PHP" expanded="false" />
@@ -1038,8 +1070,6 @@
             <element signature="e#6888#7039#0#PHP" expanded="false" />
             <element signature="e#7156#7260#0#PHP" expanded="false" />
             <element signature="e#7419#7608#0#PHP" expanded="false" />
-            <element signature="e#7867#15931#0#PHP" expanded="false" />
-            <element signature="e#7923#15921#0#PHP" expanded="false" />
             <element signature="e#8002#13169#0#PHP" expanded="false" />
             <element signature="e#8178#8306#0#PHP" expanded="false" />
             <element signature="e#8569#11059#0#PHP" expanded="false" />
@@ -1062,146 +1092,11 @@
             <element signature="e#12671#12774#0#PHP" expanded="false" />
             <element signature="e#12876#13077#0#PHP" expanded="false" />
             <element signature="e#13095#13169#0#PHP" expanded="false" />
-            <element signature="e#13418#15855#0#PHP" expanded="false" />
             <element signature="e#13578#13698#0#PHP" expanded="false" />
             <element signature="e#14439#14591#0#PHP" expanded="false" />
             <element signature="e#14965#15542#0#PHP" expanded="false" />
             <element signature="e#15121#15217#0#PHP" expanded="false" />
             <element signature="e#15279#15542#0#PHP" expanded="false" />
-            <element signature="e#15855#15921#0#PHP" expanded="false" />
-            <element signature="e#15931#15986#0#PHP" expanded="false" />
-            <element signature="e#15998#16120#0#PHP" expanded="false" />
-            <element signature="e#16125#29377#0#PHP" expanded="false" />
-            <element signature="e#16687#16821#0#PHP" expanded="false" />
-            <element signature="e#17039#17133#0#PHP" expanded="false" />
-            <element signature="e#17373#17515#0#PHP" expanded="false" />
-            <element signature="e#17778#17877#0#PHP" expanded="false" />
-            <element signature="e#17960#25109#0#PHP" expanded="false" />
-            <element signature="e#18256#20440#0#PHP" expanded="false" />
-            <element signature="e#18461#18562#0#PHP" expanded="false" />
-            <element signature="e#18746#20241#0#PHP" expanded="false" />
-            <element signature="e#18912#19008#0#PHP" expanded="false" />
-            <element signature="e#19147#19461#0#PHP" expanded="false" />
-            <element signature="e#19319#19439#0#PHP" expanded="false" />
-            <element signature="e#19482#19577#0#PHP" expanded="false" />
-            <element signature="e#19667#20241#0#PHP" expanded="false" />
-            <element signature="e#19745#19892#0#PHP" expanded="false" />
-            <element signature="e#20005#20101#0#PHP" expanded="false" />
-            <element signature="e#20255#20440#0#PHP" expanded="false" />
-            <element signature="e#20453#20649#0#PHP" expanded="false" />
-            <element signature="e#20497#20635#0#PHP" expanded="false" />
-            <element signature="e#20659#23321#0#PHP" expanded="false" />
-            <element signature="e#20815#20927#0#PHP" expanded="false" />
-            <element signature="e#21158#23311#0#PHP" expanded="false" />
-            <element signature="e#21362#23311#0#PHP" expanded="false" />
-            <element signature="e#21525#21626#0#PHP" expanded="false" />
-            <element signature="e#21810#23297#0#PHP" expanded="false" />
-            <element signature="e#21976#22072#0#PHP" expanded="false" />
-            <element signature="e#22211#22525#0#PHP" expanded="false" />
-            <element signature="e#22383#22503#0#PHP" expanded="false" />
-            <element signature="e#22546#22641#0#PHP" expanded="false" />
-            <element signature="e#22731#23297#0#PHP" expanded="false" />
-            <element signature="e#22808#22955#0#PHP" expanded="false" />
-            <element signature="e#23068#23164#0#PHP" expanded="false" />
-            <element signature="e#23321#25051#0#PHP" expanded="false" />
-            <element signature="e#23626#25041#0#PHP" expanded="false" />
-            <element signature="e#23808#23909#0#PHP" expanded="false" />
-            <element signature="e#24181#24269#0#PHP" expanded="false" />
-            <element signature="e#24392#24682#0#PHP" expanded="false" />
-            <element signature="e#24556#24664#0#PHP" expanded="false" />
-            <element signature="e#24699#24786#0#PHP" expanded="false" />
-            <element signature="e#24864#25041#0#PHP" expanded="false" />
-            <element signature="e#25051#25109#0#PHP" expanded="false" />
-            <element signature="e#25141#25280#0#PHP" expanded="false" />
-            <element signature="e#25425#27413#0#PHP" expanded="false" />
-            <element signature="e#25529#26116#0#PHP" expanded="false" />
-            <element signature="e#25543#26115#1#PHP" expanded="false" />
-            <element signature="e#26143#26618#0#PHP" expanded="false" />
-            <element signature="e#26306#26618#0#PHP" expanded="false" />
-            <element signature="e#26501#26604#0#PHP" expanded="false" />
-            <element signature="e#26628#27413#0#PHP" expanded="false" />
-            <element signature="e#26739#27128#0#PHP" expanded="false" />
-            <element signature="e#26755#27127#1#PHP" expanded="false" />
-            <element signature="e#27142#27403#0#PHP" expanded="false" />
-            <element signature="e#27305#27403#0#PHP" expanded="false" />
-            <element signature="e#27422#27496#0#PHP" expanded="false" />
-            <element signature="e#27531#29280#0#PHP" expanded="false" />
-            <element signature="e#27572#28936#0#PHP" expanded="false" />
-            <element signature="e#27879#28374#0#PHP" expanded="false" />
-            <element signature="e#28240#28330#0#PHP" expanded="false" />
-            <element signature="e#28528#28616#0#PHP" expanded="false" />
-            <element signature="e#28630#28936#0#PHP" expanded="false" />
-            <element signature="e#28834#28922#0#PHP" expanded="false" />
-            <element signature="e#29178#29280#0#PHP" expanded="false" />
-            <element signature="e#29383#29470#0#PHP" expanded="false" />
-            <element signature="e#29475#34132#0#PHP" expanded="false" />
-            <element signature="e#29936#30030#0#PHP" expanded="false" />
-            <element signature="e#30055#30154#0#PHP" expanded="false" />
-            <element signature="e#30393#30535#0#PHP" expanded="false" />
-            <element signature="e#30860#30940#0#PHP" expanded="false" />
-            <element signature="e#30949#31366#0#PHP" expanded="false" />
-            <element signature="e#31051#31356#0#PHP" expanded="false" />
-            <element signature="e#31185#31356#0#PHP" expanded="false" />
-            <element signature="e#31511#33499#0#PHP" expanded="false" />
-            <element signature="e#31615#32202#0#PHP" expanded="false" />
-            <element signature="e#31629#32201#1#PHP" expanded="false" />
-            <element signature="e#32229#32704#0#PHP" expanded="false" />
-            <element signature="e#32392#32704#0#PHP" expanded="false" />
-            <element signature="e#32587#32690#0#PHP" expanded="false" />
-            <element signature="e#32714#33499#0#PHP" expanded="false" />
-            <element signature="e#32825#33214#0#PHP" expanded="false" />
-            <element signature="e#32841#33213#1#PHP" expanded="false" />
-            <element signature="e#33228#33489#0#PHP" expanded="false" />
-            <element signature="e#33391#33489#0#PHP" expanded="false" />
-            <element signature="e#33508#33582#0#PHP" expanded="false" />
-            <element signature="e#33617#34035#0#PHP" expanded="false" />
-            <element signature="e#33933#34035#0#PHP" expanded="false" />
-            <element signature="e#34138#34221#0#PHP" expanded="false" />
-            <element signature="e#34226#34610#0#PHP" expanded="false" />
-            <element signature="e#34720#34747#0#PHP" expanded="false" />
-            <element signature="e#34752#35161#0#PHP" expanded="false" />
-            <element signature="e#34866#34975#0#PHP" expanded="false" />
-            <element signature="e#34984#35034#0#PHP" expanded="false" />
-            <element signature="e#35167#35230#0#PHP" expanded="false" />
-            <element signature="e#35235#35653#0#PHP" expanded="false" />
-            <element signature="e#35280#35647#0#PHP" expanded="false" />
-            <element signature="e#35474#35544#0#PHP" expanded="false" />
-            <element signature="e#35593#35647#0#PHP" expanded="false" />
-            <element signature="e#35659#35723#0#PHP" expanded="false" />
-            <element signature="e#35728#35951#0#PHP" expanded="false" />
-            <element signature="e#35855#35945#0#PHP" expanded="false" />
-            <element signature="e#35903#35945#0#PHP" expanded="false" />
-            <element signature="e#35659#35723#0#PHP" expanded="false" />
-            <element signature="e#36043#36185#0#PHP" expanded="false" />
-            <element signature="e#36043#36185#0#PHP" expanded="false" />
-            <element signature="e#36191#36202#0#PHP" expanded="false" />
-            <element signature="e#36207#36330#0#PHP" expanded="false" />
-            <element signature="e#36607#36676#0#PHP" expanded="false" />
-            <element signature="e#36817#37013#0#PHP" expanded="false" />
-            <element signature="e#36931#37013#0#PHP" expanded="false" />
-            <element signature="e#37019#37424#0#PHP" expanded="false" />
-            <element signature="e#37147#37335#0#PHP" expanded="false" />
-            <element signature="e#37241#37335#0#PHP" expanded="false" />
-            <element signature="e#37342#37420#0#PHP" expanded="false" />
-            <element signature="e#37430#37519#0#PHP" expanded="false" />
-            <element signature="e#37529#37644#0#PHP" expanded="false" />
-            <element signature="e#37653#37759#0#PHP" expanded="false" />
-            <element signature="e#37768#37920#0#PHP" expanded="false" />
-            <element signature="e#37793#37910#0#PHP" expanded="false" />
-            <element signature="e#36437#36542#0#PHP" expanded="false" />
-            <element signature="e#36547#37947#0#PHP" expanded="false" />
-            <element signature="e#38331#38403#0#PHP" expanded="false" />
-            <element signature="e#38430#39997#0#PHP" expanded="false" />
-            <element signature="e#38906#39359#0#PHP" expanded="false" />
-            <element signature="e#39241#39323#0#PHP" expanded="false" />
-            <element signature="e#39607#39695#0#PHP" expanded="false" />
-            <element signature="e#40007#40692#0#PHP" expanded="false" />
-            <element signature="e#40484#40613#0#PHP" expanded="false" />
-            <element signature="e#40613#40692#0#PHP" expanded="false" />
-            <element signature="e#40701#40827#0#PHP" expanded="false" />
-            <element signature="e#40847#41074#0#PHP" expanded="false" />
-            <element signature="e#36437#36542#0#PHP" expanded="false" />
-            <element signature="e#36547#37947#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1210,27 +1105,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="118">
           <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/common/service/WeiBaoData.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="29" column="43" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
-          <folding>
-            <element signature="e#3074#3144#0#PHP" expanded="false" />
-            <element signature="e#3166#3319#0#PHP" expanded="false" />
-            <element signature="e#3755#3944#0#PHP" expanded="false" />
-            <element signature="e#3827#3944#0#PHP" expanded="false" />
-            <element signature="e#3955#4358#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Error.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
+        <state relative-caret-position="459">
           <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding />
         </state>
@@ -1238,7 +1118,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/index/common.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
+        <state relative-caret-position="17">
           <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
           <folding />
         </state>
@@ -1246,19 +1126,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/index/controller/Index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="52" column="9" selection-start-line="52" selection-start-column="9" selection-end-line="52" selection-end-column="9" />
+        <state relative-caret-position="287">
+          <caret line="118" column="4" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="4" />
           <folding>
             <element signature="e#813#862#0#PHP" expanded="false" />
             <element signature="e#868#1198#0#PHP" expanded="false" />
             <element signature="e#1008#1114#0#PHP" expanded="false" />
             <element signature="e#1204#1275#0#PHP" expanded="false" />
+            <element signature="e#1281#2654#0#PHP" expanded="false" />
             <element signature="e#1606#1709#0#PHP" expanded="false" />
             <element signature="e#1827#2003#0#PHP" expanded="false" />
             <element signature="e#2013#2648#0#PHP" expanded="false" />
             <element signature="e#2292#2372#0#PHP" expanded="false" />
             <element signature="e#2589#2648#0#PHP" expanded="false" />
             <element signature="e#2660#2706#0#PHP" expanded="false" />
+            <element signature="e#2712#4268#0#PHP" expanded="false" />
             <element signature="e#2784#2859#0#PHP" expanded="false" />
             <element signature="e#3050#3145#0#PHP" expanded="false" />
             <element signature="e#3155#4025#0#PHP" expanded="false" />
@@ -1324,10 +1206,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/application/common/service/WeiBaoData.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="27" column="47" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
+          <folding>
+            <element signature="e#885#4377#0#PHP" expanded="false" />
+            <element signature="e#3074#3144#0#PHP" expanded="false" />
+            <element signature="e#3166#3319#0#PHP" expanded="false" />
+            <element signature="e#3755#3944#0#PHP" expanded="false" />
+            <element signature="e#3827#3944#0#PHP" expanded="false" />
+            <element signature="e#3955#4358#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/alipay/alipay.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="192" column="13" selection-start-line="192" selection-start-column="13" selection-end-line="192" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/common/service/AliPay.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
+          <folding>
+            <element signature="e#1060#1079#0#PHP" expanded="true" />
+            <element signature="e#1900#3089#0#PHP" expanded="false" />
+            <element signature="e#3211#6512#0#PHP" expanded="false" />
+            <marker date="1497955429348" expanded="true" signature="9467:9486" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="9554:9586" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="9694:9713" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="9770:9802" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="9818:9855" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="10296:10315" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="10372:10404" ph="..." />
+            <marker date="1497955429348" expanded="true" signature="10420:10457" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/application/weibao/controller/Index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="540" column="0" selection-start-line="540" selection-start-column="0" selection-end-line="540" selection-end-column="0" />
+        <state relative-caret-position="460">
+          <caret line="673" column="5" selection-start-line="673" selection-start-column="5" selection-end-line="673" selection-end-column="5" />
           <folding>
             <element signature="e#985#1911#0#PHP" expanded="false" />
             <element signature="e#1244#1306#0#PHP" expanded="false" />
@@ -1393,42 +1318,6 @@
             <element signature="e#13830#13986#0#PHP" expanded="false" />
             <element signature="e#13996#14144#0#PHP" expanded="false" />
             <element signature="e#14153#14283#0#PHP" expanded="false" />
-            <element signature="e#14439#14512#0#PHP" expanded="false" />
-            <element signature="e#14917#16905#0#PHP" expanded="false" />
-            <element signature="e#15200#15326#0#PHP" expanded="false" />
-            <element signature="e#15394#16240#0#PHP" expanded="false" />
-            <element signature="e#15556#15660#0#PHP" expanded="false" />
-            <element signature="e#15784#16087#0#PHP" expanded="false" />
-            <element signature="e#15961#16069#0#PHP" expanded="false" />
-            <element signature="e#16104#16226#0#PHP" expanded="false" />
-            <element signature="e#16280#16580#0#PHP" expanded="false" />
-            <element signature="e#16331#16566#0#PHP" expanded="false" />
-            <element signature="e#16447#16566#0#PHP" expanded="false" />
-            <element signature="e#16593#16820#0#PHP" expanded="false" />
-            <element signature="e#16712#16820#0#PHP" expanded="false" />
-            <element signature="e#16830#16905#0#PHP" expanded="false" />
-            <element signature="e#16917#17000#0#PHP" expanded="false" />
-            <element signature="e#20344#21010#0#PHP" expanded="false" />
-            <element signature="e#20442#20992#0#PHP" expanded="false" />
-            <element signature="e#20580#20970#0#PHP" expanded="false" />
-            <element signature="e#20658#20904#0#PHP" expanded="false" />
-            <element signature="e#20780#20904#0#PHP" expanded="false" />
-            <element signature="e#21057#21371#0#PHP" expanded="false" />
-            <element signature="e#21125#21353#0#PHP" expanded="false" />
-            <element signature="e#21414#22263#0#PHP" expanded="false" />
-            <element signature="e#21439#21837#0#PHP" expanded="false" />
-            <element signature="e#21606#21739#0#PHP" expanded="false" />
-            <element signature="e#21761#21837#0#PHP" expanded="false" />
-            <element signature="e#22161#22263#0#PHP" expanded="false" />
-            <element signature="e#23086#23250#0#PHP" expanded="false" />
-            <element signature="e#23584#23681#0#PHP" expanded="false" />
-            <element signature="e#23810#24383#0#PHP" expanded="false" />
-            <element signature="e#23928#24383#0#PHP" expanded="false" />
-            <element signature="e#23991#24219#0#PHP" expanded="false" />
-            <element signature="e#24053#24197#0#PHP" expanded="false" />
-            <element signature="e#24240#24365#0#PHP" expanded="false" />
-            <element signature="e#24504#24706#0#PHP" expanded="false" />
-            <element signature="e#24541#24656#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
