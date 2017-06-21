@@ -534,8 +534,8 @@ class Index extends Controller
                     }
                 }
 
-                $arr['shopUrl']=$shop_url;
-                session('shopUrl',$shop_url);
+                $arr['shopUrl'] = $shop_url;
+                $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
                 $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
                 $assessFlag='{'.file_get_contents($assessFlag).'}';
                 $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
@@ -622,7 +622,8 @@ class Index extends Controller
                         return;
                     }
                 }
-                return $this->fetch('tb_commodity_detail',array('data' => $item_id ));
+                $shortUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
+                return $this->fetch('tb_commodity_detail',array('data' => $item_id,'shortUrl'=>$shortUrl));
             }
 
         }
