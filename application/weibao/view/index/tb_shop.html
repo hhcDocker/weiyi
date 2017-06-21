@@ -353,10 +353,10 @@
 						}
 					},
 					toDeatail:function(item){
-						location.href='/weibao/index/processUrl?isTm=0&itemId='+item.nid;
+						location.href='/detail/0/'+item.nid;
 					},
 					toDetailByRank:function(index){
-						location.href='/weibao/index/processUrl?isTm=0&itemId='+this.rankingData[index].id;
+						location.href='/detail/0/'+this.rankingData[index].id;
 					},
 					getQueryString:function (name,url) { 
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
@@ -364,7 +364,7 @@
 						if (r != null) return unescape(r[2]); return null; 
 					},
 					toDetailByEnhenced:function(item){
-						location.href='/weibao/index/processUrl?isTm=0&itemId='+item.nid;
+						location.href='/detail/0/'+item.nid;
 					},
 					toDetailByItemSearch:function(item,index){
 						if(item.cmdId){
@@ -373,12 +373,12 @@
 							if(!id){
 								return false;
 							}
-							location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+							location.href='/detail/0/'+id;
 						}else if(item.label){
 							var keys = item.label[index].dataBinding.replace("title",'url');
 							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
 							var id=this.getQueryString('id',urls);
-							location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+							location.href='/detail/0/'+id;
 						}
 						
 					},
