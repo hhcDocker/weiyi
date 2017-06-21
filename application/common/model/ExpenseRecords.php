@@ -60,11 +60,35 @@ class ExpenseRecords extends Base
      * @param  [type] $data        [description]
      * @return [type]              [description]
      */
-    public function updateExpense($expense_num,$data)
+    public function updateExpense($expense_num,$trade_num,$actually_amount,$trade_status)
     {
-        # code...
+        if (!$expense_num) {
+            return 0;
+        }
+        $update_data = array(
+            'trade_num'=> $trade_num,
+            'actually_amount'=> $actually_amount,
+            'trade_status'=> $trade_status,
+            'update_time' =>time()
+        );
+        $has_update = Db::table('wj_expense_records')->where('expense_num' , $expense_num)->update($update_data);
+        return $has_update;
     }
-  
+    
+    /**
+     * [getRecordsByExpenseNum description]
+     * @param  string $expense_num [description]
+     * @return [type]              [description]
+     */
+    public function getRecordsByExpenseNum($expense_num='')
+    {
+        if (!$expense_num) {
+            return array();
+        }
+
+        $has_update = Db::table('wj_expense_records')->where('expense_num' , $expense_num)->find();
+        return $has_update;
+    }
 }
 /*CREATE TABLE `wj_expense_records` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
