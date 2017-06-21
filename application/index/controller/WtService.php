@@ -78,7 +78,7 @@ class WtService extends APIAuthController
                 header("Proxy-Connection:Keep-Alive");
                 try{
                     $html = file_get_html($url);
-                }catch (Exception $e){
+                }catch (\Exception $e){
                     throw new APIException(30009);
                 }
                 //店铺链接
@@ -817,7 +817,7 @@ class WtService extends APIAuthController
                     }else{
                         Db::commit();
                     }
-                }catch(Exception $e){
+                }catch(\Exception $e){
                     $log .= $e."\n\n";
                     continue;
                 }
@@ -919,7 +919,7 @@ class WtService extends APIAuthController
             $url = 'https://'.$url;
             $url_header = @get_headers($url);
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
             throw new APIException(30003);
         }
@@ -930,7 +930,7 @@ class WtService extends APIAuthController
             {
                 $url_header = @get_headers($url);
             }
-            catch(Exception $e)
+            catch(\Exception $e)
             {
                 throw new APIException(30003);
             }
