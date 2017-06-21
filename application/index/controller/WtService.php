@@ -856,18 +856,14 @@ class WtService extends APIAuthController
      */
     public function queryWxOrder()
     {
-        if(input('post.expense_num'))
-        {
-            $expense_num = input('post.expense_num');
-            $wxPay = new WxPay;
-            $result = $wxPay->queryOrder($expense_num);
-            if ($result) {
-                return json(['code'=>1]);
-            }
-            return json(['code'=>0]);
-        } else {
-            return json(['code'=>0]);
+        $expense_num = noempty_input('expense_num','/\d+/');
+        
+        $wxPay = new WxPay;
+        $result = $wxPay->queryOrder($expense_num);
+        if ($result) {
+            return json(['code'=>1]);
         }
+        return json(['code'=>0]);
     }
 
     /**
@@ -943,7 +939,7 @@ class WtService extends APIAuthController
 		    }
 		}
 	    if(!in_array('HTTP/1.1 200 OK',$url_header)){
-        	throw new APIException(30006);
+        	throw new APIException(30003);
 		}
 
         if(!preg_match('/[\w.]+[\w\/]*[\w.]*[\w=&\+\%.\-\_?]*/is',$url)){
