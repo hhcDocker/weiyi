@@ -589,7 +589,7 @@ class WtService extends APIAuthController
                 $response_data = $result['msg'];
             }
         }
-        //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝链接
+        //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝
         if (!$response_data){
             throw new APIException(30019);
         }
@@ -634,9 +634,12 @@ class WtService extends APIAuthController
             Db::rollback();
             throw new APIException(30019);
         }
-
-        $res = array('shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_date'=>$response_data);
-        return $this->format_ret($res);
+        if ($payment_method==1) { //微信
+            $res = array('shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_date'=>$response_data);
+            return $this->format_ret($res);
+        }elseif ($payment_method==2) { //支付宝
+            return $this->fetch('ali_pay',array('pay_html'=>$response_data));
+        }
     }
 
     /**
@@ -891,11 +894,11 @@ class WtService extends APIAuthController
                 //如果没有做过处理，根据订单号（out_trade_no）查到该笔订单的详细，并执行商户的业务程序
                 $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($out_trade_no);
                 if(empty($expense_info)){
-                    throw new Exception(30024);
+                    logResult($out_trade_no."没有对应的消费记录");
                 }
                 //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
                 if ($expense_info['payment_amount']!=$total_fee) {
-                    throw new Exception(30025);
+                    logResult($out_trade_no."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$total_fee);
                 }
 
                 $has_update = model('ExpenseRecords')->updateExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
@@ -914,11 +917,11 @@ class WtService extends APIAuthController
                 //如果没有做过处理，根据订单号（out_trade_no）查到该笔订单的详细，并执行商户的业务程序
                  $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($out_trade_no);
                 if(empty($expense_info)){
-                    throw new Exception(30024);
+                    logResult($out_trade_no."没有对应的消费记录");
                 }
                 //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
                 if ($expense_info['payment_amount']!=$total_fee) {
-                    throw new Exception(30025);
+                    logResult($out_trade_no."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$total_fee);
                 }
 
                 $has_update = model('ExpenseRecords')->updateExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
@@ -951,8 +954,69 @@ class WtService extends APIAuthController
     public function AlipayReturnUrl()
     {
         $aliPay = new AliPay;
+        $config = $aliPay::$alipay_config;
+        vendor('alipay.alipay');
+        $alipayNotify = new \AlipayNotify($config);
+        $verify_result = $alipayNotify->verifyReturn();
         $result = $aliPay->return_alipay();
-        exit($result);
+        if($verify_result) { //验证成功
+            $out_trade_no = $_GET['out_trade_no'];//商户订单号
+            $trade_no = $_GET['trade_no'];//支付宝交易号
+            $trade_status = $_GET['trade_status']; //交易状态
+            $total_fee = $_GET['total_fee'];//交易金额
+            $seller_id = $_GET['seller_id'];//支付宝partner
+
+            if($trade_status == 'TRADE_FINISHED') {
+                //如果没有做过处理，根据订单号（out_trade_no）查到该笔订单的详细，并执行商户的业务程序
+                $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($out_trade_no);
+                if(empty($expense_info)){
+                    logResult($out_trade_no."没有对应的消费记录");
+                }
+                //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
+                if ($expense_info['payment_amount']!=$total_fee) {
+                    logResult($out_trade_no."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$total_fee);
+                }
+
+                $has_update = model('ExpenseRecords')->updateExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($has_update) {
+                    $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
+                    $service_start_time = $expense_info['service_start_time'];
+                    $service_end_time = $expense_info['service_end_time'];
+
+                    if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
+                        $service_start_time = $service_info['service_start_time'];
+                    }
+                    $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
+                }
+                logResult("TRADE_FINISHED------notify_alipay Run Success");
+            }elseif ($trade_status == 'TRADE_SUCCESS') {
+                //如果没有做过处理，根据订单号（out_trade_no）查到该笔订单的详细，并执行商户的业务程序
+                 $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($out_trade_no);
+                if(empty($expense_info)){
+                    logResult($out_trade_no."没有对应的消费记录");
+                }
+                //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
+                if ($expense_info['payment_amount']!=$total_fee) {
+                    logResult($out_trade_no."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$total_fee);
+                }
+
+                $has_update = model('ExpenseRecords')->updateExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($has_update) {
+                    $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
+                    $service_start_time = $expense_info['service_start_time'];
+                    $service_end_time = $expense_info['service_end_time'];
+
+                    if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
+                        $service_start_time = $service_info['service_start_time'];
+                    }
+                    $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
+                }
+                logResult("TRADE_FINISHED------notify_alipay Run Success ");
+            }
+            echo "success";  
+        }else{
+
+        }
     }
 
     /** //mc */

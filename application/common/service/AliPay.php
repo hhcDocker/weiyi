@@ -216,11 +216,7 @@ class AliPay extends Model
                 
                 logResult("TRADE_FINISHED || TRADE_SUCCESS------return_alipay Run Seccess !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-                if ($type==1) {
-                    $this->update_order_expense_status($out_trade_no,$total_fee,$trade_no,$seller_id==$config['seller_id']);
-                }else{
-                    $this->update_recharge_status($out_trade_no,$total_fee,$trade_no,$seller_id==$config['seller_id']);
-                }
+                
                     echo '<meta charset="utf-8" /><div style="text-align: center;"><img src="/static/images/chongzhichenggong.png" border="0" style="height: 160px; margin-top: 80px;" /></div>';
                 }
             else {
