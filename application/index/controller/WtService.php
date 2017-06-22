@@ -577,7 +577,6 @@ class WtService extends APIAuthController
                 'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
                 'out_trade_no' => $expense_num,
                 'subject' => "微跳-购买服务",
-//                'subject' => "buy service",
                 'total_fee' => $payment_amount,//订单金额，单位为元
                 'body' => "微跳",
             ]);
@@ -842,11 +841,36 @@ class WtService extends APIAuthController
             $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
         }
         if(!$notify_data){
-            exit('');
+            exit('校验失败');
         }
         $wxPay = new WxPay;
-        $result = $wxPay->notify_wxpay($notify_data,1);//调用模型中的异步通知函数
-        exit($result);
+        $wxPay->_weixin_config();
+        $doc = new \DOMDocument();
+        $doc->loadXML($data);
+        $out_trade_no = $doc->getElementsByTagName("out_trade_no")->item(0)->nodeValue;
+        $transaction_id = $doc->getElementsByTagName("transaction_id")->item(0)->nodeValue;
+        $openid = $doc->getElementsByTagName("openid")->item(0)->nodeValue;
+        $input = new \WxPayOrderQuery();
+        $input->SetTransaction_id($transaction_id);
+        $result = \WxPayApi::orderQuery($input);
+        if(array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && array_key_exists("trade_state", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS" && $result["trade_state"] == "SUCCESS")
+        {
+            $total_fee = $result['total_fee'] * 0.01;
+            
+            $res = $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
+            if ($res) {
+                // 处理支付成功后的逻辑业务
+                Log::init([
+                    'type'  =>  'File',
+                    'path'  =>  LOG_PATH.'../paylog/'
+                ]);
+                Log::write($result,'log');
+                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                }
+                exit('支付成功');
+        }else{
+            exit('支付失败');
+        }
     }
 
     /**
@@ -856,13 +880,33 @@ class WtService extends APIAuthController
     public function queryWxOrder()
     {
         $expense_num = noempty_input('expense_num','/\d+/');
-        
+        // 主动查询支付结果
         $wxPay = new WxPay;
-        $result = $wxPay->queryOrder($expense_num);
-        if ($result) {
-            return json(['code'=>1]);
+        $wxPay->_weixin_config();
+        $input = new \WxPayOrderQuery();
+        $input->SetOut_trade_no($expense_num);
+        $result = \WxPayApi::orderQuery($input);
+        
+        if(array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && array_key_exists("trade_state", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS" && $result["trade_state"] == "SUCCESS")
+        {
+            $total_fee = $result['total_fee'] * 0.01;
+            
+            $res = $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
+            if ($res) {
+                // 处理支付成功后的逻辑业务
+                Log::init([
+                    'type'  =>  'File',
+                    'path'  =>  LOG_PATH.'../paylog/'
+                ]);
+                Log::write($result,'log');
+                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                return $this->format_ret(array('code'=>1));
+            }else{
+                return $this->format_ret(array('code'=>0));
+            }
+        }else{
+            return $this->format_ret(array('code'=>0));
         }
-        return json(['code'=>0]);
     }
 
     /**
@@ -887,58 +931,21 @@ class WtService extends APIAuthController
             $seller_id = $_POST['seller_id'];//支付宝partner
 
             if($trade_status == 'TRADE_FINISHED') {
-                //如果没有做过处理，根据订单号（out_trade_no）查到该笔订单的详细，并执行商户的业务程序
-                $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($out_trade_no);
-                if(empty($expense_info)){
-                    logResult($out_trade_no."没有对应的消费记录");
+                $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($res) {
+                    logResult("TRADE_FINISHED------notify_alipay Run Success");
                 }
-                //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
-                if ($expense_info['payment_amount']!=$total_fee) {
-                    logResult($out_trade_no."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$total_fee);
-                }
-
-                $has_update = model('ExpenseRecords')->updateExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
-                if ($has_update) {
-                    $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
-                    $service_start_time = $expense_info['service_start_time'];
-                    $service_end_time = $expense_info['service_end_time'];
-
-                    if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
-                        $service_start_time = $service_info['service_start_time'];
-                    }
-                    $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-                }
-                logResult("TRADE_FINISHED------notify_alipay Run Success");
             }elseif ($trade_status == 'TRADE_SUCCESS') {
-                //如果没有做过处理，根据订单号（out_trade_no）查到该笔订单的详细，并执行商户的业务程序
-                 $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($out_trade_no);
-                if(empty($expense_info)){
-                    logResult($out_trade_no."没有对应的消费记录");
+                $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($res) {
+                    logResult("TRADE_FINISHED------notify_alipay Run Success");
                 }
-                //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
-                if ($expense_info['payment_amount']!=$total_fee) {
-                    logResult($out_trade_no."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$total_fee);
-                }
-
-                $has_update = model('ExpenseRecords')->updateExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
-                if ($has_update) {
-                    $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
-                    $service_start_time = $expense_info['service_start_time'];
-                    $service_end_time = $expense_info['service_end_time'];
-
-                    if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
-                        $service_start_time = $service_info['service_start_time'];
-                    }
-                    $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-                }
-                logResult("TRADE_FINISHED------notify_alipay Run Success ");
             }
             echo "success";  
         }else {
             //验证失败
             echo "fail";
-
-            //调试用，写文本函数记录程序运行情况是否正常
+            //写文本函数记录程序运行情况是否正常
             logResult("fail------notify_alipay Run Success ");
         }
     }
@@ -962,64 +969,22 @@ class WtService extends APIAuthController
             $seller_id = $_GET['seller_id'];//支付宝partner
 
             if($trade_status == 'TRADE_FINISHED') {
-                //如果没有做过处理，根据订单号（out_trade_no）查到该笔订单的详细，并执行商户的业务程序
-                $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($out_trade_no);
-                if(empty($expense_info)){
-                    logResult($out_trade_no."没有对应的消费记录");
+                $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($res) {
+                    logResult("TRADE_FINISHED------notify_alipay Run Success");
                 }
-                //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
-                if ($expense_info['payment_amount']!=$total_fee) {
-                    logResult($out_trade_no."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$total_fee);
-                }
-
-                $has_update = model('ExpenseRecords')->updateExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
-                if ($has_update) {
-                    $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
-                    $service_start_time = $expense_info['service_start_time'];
-                    $service_end_time = $expense_info['service_end_time'];
-
-                    if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
-                        $service_start_time = $service_info['service_start_time'];
-                    }
-                    $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-                }
-                logResult("TRADE_FINISHED------notify_alipay Run Success");
             }elseif ($trade_status == 'TRADE_SUCCESS') {
-                //如果没有做过处理，根据订单号（out_trade_no）查到该笔订单的详细，并执行商户的业务程序
-                 $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($out_trade_no);
-                if(empty($expense_info)){
-                    logResult($out_trade_no."没有对应的消费记录");
+                $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($res) {
+                    logResult("TRADE_FINISHED------notify_alipay Run Success");
                 }
-                //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
-                if ($expense_info['payment_amount']!=$total_fee) {
-                    logResult($out_trade_no."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$total_fee);
-                }
-
-                $has_update = model('ExpenseRecords')->updateExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
-                if ($has_update) {
-                    $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
-                    $service_start_time = $expense_info['service_start_time'];
-                    $service_end_time = $expense_info['service_end_time'];
-
-                    if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
-                        $service_start_time = $service_info['service_start_time'];
-                    }
-                    $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-                }
-                logResult("TRADE_FINISHED------notify_alipay Run Success ");
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
             header($url);
             exit;
         }else{
-            echo '<meta charset="utf-8" /><div style="text-align: center;"><img src="/static/images/quxiao.png" border="0" style="height: 160px; margin-top: 80px;" /><div style="font-size: x-large; margin-top: 30px;">验证失败！</div></div>';
+            echo '<meta charset="utf-8" /><div style="text-align: center;"><div style="font-size: x-large; margin-top: 30px;">验证失败！</div></div>';
         }
-    }
-
-    /** //mc */
-    public function wxRechargeNotify(){
-        $notify = new WxRechargeNotifyCallBack();
-        $notify->Handle(false);
     }
 
     // *******************************************************************公有函数*****************************************************************************
@@ -1154,15 +1119,37 @@ class WtService extends APIAuthController
         return $res_data;
     }
 
-    
     /**
-     * 支付成功
-     * @return [type]
+     * [updateServiceExpense description]
+     * @param  string $value [description]
+     * @return [type]        [description]
      */
-    public function payBuyerSuccess()
+    private function updateServiceExpense($expense_num='',$trade_num='',$actually_amount=0,$trade_status=0)
     {
-        $num = parent::getCartNum();
-        return $this->fetch('order_pay_success',array('title'=>'支付成功', 'shoping_cart_num'=>$num));
+        $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($expense_num);
+        if(empty($expense_info)){
+            logResult($expense_num."没有对应的消费记录");
+            return false;
+        }
+        //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
+        if ($expense_info['payment_amount']!=$actually_amount) {
+            logResult($expense_num."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$actually_amount);
+            return false;
+        }
+
+        $has_update = model('ExpenseRecords')->updateExpense($expense_num,$trade_num,$actually_amount,$trade_status);
+        if ($has_update) {
+            $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
+            $service_start_time = $expense_info['service_start_time'];
+            $service_end_time = $expense_info['service_end_time'];
+
+            if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
+                $service_start_time = $service_info['service_start_time'];
+            }
+            $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
+            return true;
+        }else{
+            return false;
+        }
     }
-    
 }
