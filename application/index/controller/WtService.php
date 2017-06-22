@@ -969,7 +969,7 @@ class WtService extends APIAuthController
      */
     public function AlipayReturnUrl()
     {
-            $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
+            $url = 'http://'.$_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
             header("Location:".$url);
             exit;
         $aliPay = new AliPay;
@@ -996,6 +996,11 @@ class WtService extends APIAuthController
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
+
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Cache-Control: no-cache");
+            header("Pragma: no-cache");
+            $url = 'http://'.$_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
             header("Location:".$url);
             exit;
         }else{
