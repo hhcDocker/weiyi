@@ -739,7 +739,7 @@ class WtService extends APIAuthController
                 // return $this->error($result['msg']);
             }else{
                 //生成支付宝链接
-                $response_data = $result['msg'];
+                $response_data = 'https://mapi.alipay.com/gateway.do?'.$result['msg'];
             }
         }
         if (!$response_data){
@@ -758,7 +758,8 @@ class WtService extends APIAuthController
         }
 
         //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝链接
-        return $this->format_ret($response_data);
+        $res = array('expense_num'=>$expense_num,'shop_url'=>$service_info['shop_url'],'shop_name'=>$service_info['shop_name'],'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
+        return $this->format_ret($res);
     }
 
     /**
