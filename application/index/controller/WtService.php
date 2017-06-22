@@ -969,12 +969,6 @@ class WtService extends APIAuthController
      */
     public function AlipayReturnUrl()
     {
-            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-            header("Cache-Control: no-cache");
-            header("Pragma: no-cache");
-            $url = 'http://'.$_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
-            header("Location:".$url);
-            exit;
         $aliPay = new AliPay;
         $config = $aliPay::$alipay_config;
         vendor('alipay.alipay');
