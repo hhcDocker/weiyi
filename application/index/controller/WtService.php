@@ -359,7 +359,7 @@ class WtService extends APIAuthController
         //店铺名称
         
         //服务时长
-        if ($service_time>3 || $service_time<1) {
+        if ($service_time>5 || $service_time<1) {
             throw new APIException(30016);
         }
 
@@ -658,7 +658,7 @@ class WtService extends APIAuthController
         $payment_method = noempty_input('payment_method','/\d/');//1-微信，2-支付宝
         
         //服务时长
-        if ($service_time>3 || $service_time<1) {
+        if ($service_time>5 || $service_time<1) {
             throw new APIException(30016);
         }
 
