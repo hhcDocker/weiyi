@@ -178,6 +178,13 @@ class WtService extends APIAuthController
                 return $this->format_ret($res);
             }
         }elseif (strpos($full_url, 'taobao')) { //淘宝
+
+            $key_word_arr =array('markets.','shouji.','www.taobao.com','m.taobao.com','chaoshi');//淘宝各种列表关键字
+            foreach ($key_word_arr as $k => $v) {
+                if (strpos($full_url, $v)) {
+                    throw new APIException(30011);
+                }
+            }
             if (preg_match('/shop[.\d\w]+.taobao.com/',$full_url)){ //店铺链接
                 if (strpos($full_url, 'shop.m.taobao.com')) { //淘宝店铺移动端1
                     //获取userid
@@ -275,7 +282,7 @@ class WtService extends APIAuthController
                         $service_info =model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                     }
                 }else{
-                    throw new APIException(30001);
+                    throw new APIException(30008);
                 }
 
                 //链接从$service_info取短链拼接而成，指向店铺数据，路由映射
@@ -530,7 +537,7 @@ class WtService extends APIAuthController
                 $service_info =model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
             }
         }else{
-            throw new APIException(30001);
+            throw new APIException(30008);
         }
 
         //校验服务，防止重复购买
