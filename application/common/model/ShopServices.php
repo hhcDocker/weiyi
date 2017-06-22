@@ -67,10 +67,18 @@ class ShopServices extends Base
      * @param  integer $manager_id [description]
      * @return [type]              [description]
      */
-    public function getServicesByManagerId($manager_id=0,$pageIndex=1, $pageSize=5)
+    public function getServicesByManagerId($manager_id=0,$pageIndex=1, $pageSize=10,$service_type=0)
     {
         if (!$manager_id) {
             return array();
+        }
+        $where = '';
+        if ($service_type==1) { //已过期
+            $where ='service_end_time <= unix_timestamp(now())';
+        }elseif ($service_type==2) { //未开始
+            $where ='service_start_time > UNIX_TIMESTAMP(NOW())';
+        }elseif ($service_type==3) { //未过期
+            $where ='service_start_time < UNIX_TIMESTAMP(NOW()) AND service_end_time > unix_timestamp(now())';
         }
         $offset = ($pageIndex-1)*$pageSize;
         $res = Db::table('wj_shop_services')
@@ -78,6 +86,7 @@ class ShopServices extends Base
                 ->where('manager_id',$manager_id)
                 ->where('is_deleted',0)
                 ->where('shop_url','not null')
+                ->where($where)
                 ->limit($offset, $pageSize)
                 ->select();
         return $res;

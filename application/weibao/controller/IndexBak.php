@@ -622,7 +622,7 @@ class IndexBak extends Controller
         $shop_url_array=array();
         echo "<table><tr><td>wj_shop_id</td><td>manager_id</td><td>ShortUrl</td><td>length</td><td>j</td></tr>";
         $j=0;
-        for ($i=0; $i <100; $i++) {
+        for ($i=0; $i <10000; $i++) {
             $time++;
            /* $wj_shop_id = rand(1,1000);
             $ali_shop_id = rand(100000000,999999999);
@@ -636,7 +636,7 @@ class IndexBak extends Controller
                 break;
             }else{
                 $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-                echo "<tr><td colspan = '4'>".json_encode($res)."</td></tr>";
+                echo "<td>".json_encode($res)."</td>";
                 $shop_url_array[]=$shop_url_str;
             }
         }
