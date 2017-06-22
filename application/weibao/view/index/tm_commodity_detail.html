@@ -191,8 +191,7 @@
 			try{
 				for(var i=0;i<data.dataOther.length;i++){
 					if(data.dataOther[i].indexOf('_DATA_Detail')||data.dataOther[i].indexOf('_DATA_Mdskip')){
-						console.log(_DATA_Detail)
-						console.log(_DATA_Mdskip)
+						console.log(data.dataOther[i])
 						eval(data.dataOther[i]);
 					}
 				}
