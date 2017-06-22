@@ -576,8 +576,8 @@ class WtService extends APIAuthController
                 'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
                 'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
                 'out_trade_no' => $expense_num,
-//                'subject' => "微跳-购买服务",
-                'subject' => "buy service",
+                'subject' => "微跳-购买服务",
+//                'subject' => "buy service",
                 'total_fee' => $payment_amount,//订单金额，单位为元
                 'body' => "微跳",
             ]);
@@ -585,8 +585,8 @@ class WtService extends APIAuthController
                 throw new APIException(30019, ['msg'=>$result['msg']]);
                 // return $this->error($result['msg']);
             }else{
-                //生成支付宝支付html
-                $response_data = $result['msg'];
+                //生成支付宝支付链接
+                $response_data = 'https://mapi.alipay.com/gateway.do?'.$result['msg'];
             }
         }
         //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝
@@ -634,12 +634,8 @@ class WtService extends APIAuthController
             Db::rollback();
             throw new APIException(30019);
         }
-        if ($payment_method==1) { //微信
-            $res = array('shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_date'=>$response_data);
-            return $this->format_ret($res);
-        }elseif ($payment_method==2) { //支付宝
-            return $this->fetch('ali_pay',array('pay_html'=>$response_data));
-        }
+        $res = array('shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
+        return $this->format_ret($res);
     }
 
     /**
@@ -736,7 +732,7 @@ class WtService extends APIAuthController
                 throw new APIException(30019, ['msg'=>$result['msg']]);
                 // return $this->error($result['msg']);
             }else{
-                //生成支付宝支付html
+                //生成支付宝链接
                 $response_data = $result['msg'];
             }
         }

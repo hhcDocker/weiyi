@@ -73,7 +73,10 @@ class AliPay extends Model
 			"_input_charset"	=> $config['input_charset']
 		];
 		$alipaySubmit = new \AlipaySubmit($config);
-		return ['code'=>1,'msg'=>$alipaySubmit->buildRequestForm($parameter,"get", "确认")];
+//        $pay_form = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
+        $pay_url = $alipaySubmit->buildRequestParaToString($parameter);
+        
+		return ['code'=>1,'msg'=>$pay_url];
 	}
 
     /**
@@ -234,116 +237,5 @@ class AliPay extends Model
         }
 	}
     
-    /**
-     * 更新订单状态，更新消费状态
-     * @param  string  $out_trade_no      [消费记录编号]
-     * @param  integer $total_fee         [消费金额]
-     * @param  string  $trade_no          [支付宝交易单号]
-     * @param  boolean $comfirm_seller_id [$seller_id是否等于$config['seller_id']]
-     */
-    private function update_order_expense_status($out_trade_no='',$total_fee=0,$trade_no='',$comfirm_seller_id=false)
-    {
-        $query_expense_records = model('BuyerExpense')->getExpenseByNum($out_trade_no);
-        if (trim($query_expense_records['trade_status']) == 0 && $query_expense_records['payment_amount'] == $total_fee && $comfirm_seller_id) {
-            $time = time();
-            $expense_data = [
-                'trade_num'=>$trade_no,
-                'trade_status'=> 1,//已支付
-                'update_time' => $time
-            ];
-            Db::startTrans();
-            try {
-                model('BuyerExpense')->updateExpenseByNum($out_trade_no, $expense_data);
-                
-                $buyer_id = $query_expense_records['buyer_id'];
-                $buyer_type = $query_expense_records['buyer_type'];
-                
-                if(1 == $buyer_type){
-                    $table = 'BeautyShop';
-                    $query_buyer = model('BeautyShop')->getBeautyUserById($buyer_id);
-                }else{
-                    $table = 'EcommerceShop';
-                    $query_buyer = model('EcommerceShop')->getEcommerceUserById($buyer_id);
-                }
-                $total_score = 0;
-                
-                $query_buyer_orders = model('Orders')->getOrdersByExpenseNum($out_trade_no);
-                $orderid_arr = [];
-                foreach ($query_buyer_orders as $order) {
-                    $orderid_arr[] = $order['id'];
-                    $total_score += $order['score'];
-                }
-                
-                $order_ids = implode(',', $orderid_arr);
-                $sample_num = model('OrderGoods')->getSampleNumByOrderIds($order_ids);
-                if ($sample_num) {
-                    $sample_num += $query_buyer['used_sample_chance'];
-                    model($table)->updateSampleNum($query_buyer['id'], $query_buyer['uid'], $sample_num);
-                }
-                
-                // 更新商品销量
-                $query_order_goods = model('OrderGoods')->getOrderGoodsByOrderIds($order_ids);
-                foreach ($query_order_goods as $order_goods) {
-                    model('Goods')->addGoodsCurrentSaleNum($order_goods['id'], $order_goods['purchase_quantity']);
-                }
-                // 拆单
-                model('Orders')->splitOrder($buyer_id, $buyer_type, $order_ids, $out_trade_no);
-                
-                // 支付时使用积分，要扣除积分
-                if ($total_score) {
-                    $new_score  = $query_buyer['score'] - $total_score;
-                    model($table)->updateManagerNameByUidId($query_buyer['id'], $query_buyer['uid'], ['score'=>$new_score, 'update_time'=>['exp', 'now()']]);
-                }
-                Db::commit();
-            } catch (\Exception $e) {
-                Db::rollback();
-            }
-        }
-    }
-
-    /**
-     * 更新充值状态，更新余额
-     * @param  string  $out_trade_no      [消费记录编号]
-     * @param  integer $total_fee         [消费金额]
-     * @param  string  $trade_no          [支付宝交易单号]
-     * @param  boolean $comfirm_seller_id [$seller_id是否等于$config['seller_id']]
-     */
-    private function update_recharge_status($out_trade_no='',$total_fee=0,$trade_no='',$comfirm_seller_id=false){
-        
-        $query_recharge_order = model('RechargeRecord')->getRechargeRecordByNum($out_trade_no);
-        
-        if($query_recharge_order['trade_status'] == 0 && $query_recharge_order['payment_amount'] == $total_fee && $comfirm_seller_id)
-        {
-            $buyer_type = $query_recharge_order['buyer_type'];
-            if ($buyer_type == 1) {
-                $query_money = model('BeautyShop')->getShopStatusByUserId($query_recharge_order['buyer_id']);
-                $table = 'BeautyShop';
-            } else if ($buyer_type == 2) {
-                $query_money = model('EcommerceShop')->getEcommerceUserCompaniesByUserId($query_recharge_order['buyer_id']);
-                $table = 'EcommerceShop';
-            } else {
-                $query_money = model('SellerShops')->getShopsInfoBySellerId($query_recharge_order['buyer_id']);
-            }
-            
-            $new_money = $query_money['money'] + $total_fee;
-            
-            $company_data = [
-                'money' => $new_money,
-                'update_time' => ['exp', 'now()']
-            ];
-            Db::startTrans();
-            try {
-                if ($buyer_type == 1 || $buyer_type == 2) {
-                    model($table)->updateCompanyNameByUidId($query_money['id'], $query_money['boss_uid'], $company_data);
-                } else {
-                    model('SellerShops')->updateShopBalance($query_money['id'], $query_money['boss_uid'], $new_money);
-                }
-                model('RechargeRecord')->updateRechargeRecord($out_trade_no,$trade_no, $total_fee, 1);
-                Db::commit();
-            } catch (\Exception $e) {
-                Db::rollback();
-            }
-        }
-    }
 }
 ?>
