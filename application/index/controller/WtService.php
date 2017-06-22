@@ -954,7 +954,6 @@ class WtService extends APIAuthController
         vendor('alipay.alipay');
         $alipayNotify = new \AlipayNotify($config);
         $verify_result = $alipayNotify->verifyReturn();
-        $result = $aliPay->return_alipay();
         if($verify_result) { //验证成功
             $out_trade_no = $_GET['out_trade_no'];//商户订单号
             $trade_no = $_GET['trade_no'];//支付宝交易号
@@ -1009,9 +1008,9 @@ class WtService extends APIAuthController
                 }
                 logResult("TRADE_FINISHED------notify_alipay Run Success ");
             }
-            echo "success";  
+            header("Location: http://bbs.lampbrother.net");
         }else{
-
+            echo '<meta charset="utf-8" /><div style="text-align: center;"><img src="/static/images/quxiao.png" border="0" style="height: 160px; margin-top: 80px;" /><div style="font-size: x-large; margin-top: 30px;">验证失败！</div></div>';
         }
     }
 
