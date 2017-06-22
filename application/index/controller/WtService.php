@@ -371,12 +371,12 @@ class WtService extends APIAuthController
         if (!$_year || !$_month || !$_day){
             throw new APIException(30017);
         }
-        if ($_year <date("Y") || $_month<date("m") || $_month>12 || $_day<date("d") ||$_day>31) {
-            throw new APIException(30017);
-        }
         // $service_start_time = mktime(hour, minute, second, month, day, year);
         $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
         $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
+        if ($_year <date("Y") || $_month>12 ||$_day>31 || time() - $service_start_time<24*60*60) {
+            throw new APIException(30017);
+        }
 
         //支付方式
         if ($payment_method!=1 &&$payment_method!=2) {
@@ -672,12 +672,16 @@ class WtService extends APIAuthController
         $_year = $_service_start_time[0];
         $_month = $_service_start_time[1];
         $_day = $_service_start_time[2];
-        if ($_year <date("Y") || $_month<date("m") || $_month>12 || $_day<date("d") ||$_day>31) {
+
+        if (!$_year || !$_month || !$_day){
             throw new APIException(30017);
         }
         // $service_start_time = mktime(hour, minute, second, month, day, year);
         $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
         $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
+        if ($_year <date("Y") || $_month>12 ||$_day>31 || time() - $service_start_time<24*60*60) {
+            throw new APIException(30017);
+        }
 
         $service_info = model('ShopServices')->getServicesById($service_id);
         if (empty($service_info)) {
