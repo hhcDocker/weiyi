@@ -1008,7 +1008,9 @@ class WtService extends APIAuthController
                 }
                 logResult("TRADE_FINISHED------notify_alipay Run Success ");
             }
-            header("Location: http://bbs.lampbrother.net");
+            $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
+            header($url);
+            exit;
         }else{
             echo '<meta charset="utf-8" /><div style="text-align: center;"><img src="/static/images/quxiao.png" border="0" style="height: 160px; margin-top: 80px;" /><div style="font-size: x-large; margin-top: 30px;">验证失败！</div></div>';
         }
