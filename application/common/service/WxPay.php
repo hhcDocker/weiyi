@@ -22,7 +22,7 @@ use think\Validate;
 
 class WxPay
 {
-	private function _weixin_config(){//微信支付公共配置函数
+	public function _weixin_config(){//微信支付公共配置函数
 		define('WXPAY_APPID', config('wx_config.WXPAY_APPID'));//微信公众号APPID
 		define('WXPAY_MCHID', config('wx_config.WXPAY_MCHID'));//微信商户号MCHID
 		define('WXPAY_KEY', config('wx_config.WXPAY_KEY'));//微信商户自定义32位KEY

@@ -846,7 +846,7 @@ class WtService extends APIAuthController
         $wxPay = new WxPay;
         $wxPay->_weixin_config();
         $doc = new \DOMDocument();
-        $doc->loadXML($data);
+        $doc->loadXML($notify_data);
         $out_trade_no = $doc->getElementsByTagName("out_trade_no")->item(0)->nodeValue;
         $transaction_id = $doc->getElementsByTagName("transaction_id")->item(0)->nodeValue;
         $openid = $doc->getElementsByTagName("openid")->item(0)->nodeValue;
@@ -882,16 +882,15 @@ class WtService extends APIAuthController
         $expense_num = noempty_input('expense_num','/\d+/');
         // 主动查询支付结果
         $wxPay = new WxPay;
-        $wxPay->_weixin_config();
         $input = new \WxPayOrderQuery();
         $input->SetOut_trade_no($expense_num);
         $result = \WxPayApi::orderQuery($input);
-        
+        var_dump($result);
         if(array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && array_key_exists("trade_state", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS" && $result["trade_state"] == "SUCCESS")
         {
             $total_fee = $result['total_fee'] * 0.01;
             
-            $res = $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
+            $res = $this->updateServiceExpense($expense_num,$transaction_id,$total_fee,1);
             if ($res) {
                 // 处理支付成功后的逻辑业务
                 Log::init([
