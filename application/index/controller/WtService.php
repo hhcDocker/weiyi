@@ -185,7 +185,7 @@ class WtService extends APIAuthController
                     if (empty($m) || !isset($m[1])){
                         throw new APIException(30001,['url'=>$full_url]);
                     }
-                    $user_id =$m[1];
+                    $user_id =end($m);
                     $shop_url='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
                     //查询店铺
                     $shop_info = model('AliShops')->getShopInfoByUrl($shop_url);
@@ -379,7 +379,7 @@ class WtService extends APIAuthController
         $service_info = array();
         //检测是否在alishop表中
         //天猫店铺
-        if (strpos($shop_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$shop_url)){ //店铺
+        if (strpos($shop_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$shop_url)){ //天猫店铺
             $ali_shop_url = preg_replace('/(\w+)[\.m]*\.tmall.com.*/','$1'.'.m.tmall.com',$shop_url);//获取数据的网址
 
             $shop_info = model('AliShops')->getShopInfoByUrl($ali_shop_url);
@@ -440,7 +440,7 @@ class WtService extends APIAuthController
             if (empty($m) || !isset($m[1])){
                 throw new APIException(30001,['url'=>$shop_url]);
             }
-            $user_id =$m[1];
+            $user_id =end($m);
             $ali_shop_url='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
             //查询店铺
             $shop_info = model('AliShops')->getShopInfoByUrl($ali_shop_url);
