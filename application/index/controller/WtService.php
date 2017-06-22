@@ -179,12 +179,12 @@ class WtService extends APIAuthController
             }
         }elseif (strpos($full_url, 'taobao')) { //淘宝
 
-            $key_word_arr =array('markets.','qiang.taobao.com','www.taobao.com','m.taobao.com','login.taobao.com');//淘宝各种列表关键字
+            /*$key_word_arr =array('markets.','qiang.taobao.com','www.taobao.com','https://m.taobao.com','login.taobao.com');//淘宝各种列表关键字
             foreach ($key_word_arr as $k => $v) {
                 if (strpos($full_url, $v)) {
                     throw new APIException(30026);
                 }
-            }
+            }*/
             if (preg_match('/shop[.\d\w]+.taobao.com/',$full_url)){ //店铺链接
                 if (strpos($full_url, 'shop.m.taobao.com')) { //淘宝店铺移动端1
                     //获取userid
