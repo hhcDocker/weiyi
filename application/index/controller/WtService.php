@@ -181,7 +181,7 @@ class WtService extends APIAuthController
             if (preg_match('/shop[.\d\w]+.taobao.com/',$full_url)){ //店铺链接
                 if (strpos($full_url, 'shop.m.taobao.com')) { //淘宝店铺移动端1
                     //获取userid
-                    preg_match('/(?:user_id=)(\d+)/',$full_url,$m);
+                    preg_match('/(?:user_(number_)?id=)(\d+)/',$full_url,$m);
                     if (empty($m) || !isset($m[1])){
                         throw new APIException(30001,['url'=>$full_url]);
                     }
@@ -436,7 +436,7 @@ class WtService extends APIAuthController
             }
         }elseif (strpos($shop_url, 'shop.m.taobao.com')) { //淘宝店铺移动端1
             //获取userid
-            preg_match('/(?:user_id=)(\d+)/',$shop_url,$m);
+            preg_match('/(?:user_(number_)?id=)(\d+)/',$shop_url,$m);
             if (empty($m) || !isset($m[1])){
                 throw new APIException(30001,['url'=>$shop_url]);
             }
@@ -633,7 +633,7 @@ class WtService extends APIAuthController
             Db::rollback();
             throw new APIException(30019);
         }
-        $res = array('shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
+        $res = array('expense_num'=>$expense_num,'shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
         return $this->format_ret($res);
     }
 
@@ -874,37 +874,33 @@ class WtService extends APIAuthController
     }
 
     /**
-     * 查询微信订单结果
+     * 查询微信或支付宝订单结果
      * @return \think\response\Json
      */
-    public function queryWxOrder()
+    public function queryOrderStatus()
     {
         $expense_num = noempty_input('expense_num','/\d+/');
-        // 主动查询支付结果
-        $wxPay = new WxPay;
-        $input = new \WxPayOrderQuery();
-        $input->SetOut_trade_no($expense_num);
-        $result = \WxPayApi::orderQuery($input);
-        var_dump($result);
-        if(array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && array_key_exists("trade_state", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS" && $result["trade_state"] == "SUCCESS")
-        {
-            $total_fee = $result['total_fee'] * 0.01;
-            
-            $res = $this->updateServiceExpense($expense_num,$transaction_id,$total_fee,1);
-            if ($res) {
-                // 处理支付成功后的逻辑业务
-                Log::init([
-                    'type'  =>  'File',
-                    'path'  =>  LOG_PATH.'../paylog/'
-                ]);
-                Log::write($result,'log');
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
-                return $this->format_ret(array('code'=>1));
-            }else{
-                return $this->format_ret(array('code'=>0));
-            }
+        //查询数据库
+        $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($expense_num);
+        if ($expense_info['trade_status']) {
+            return $this->format_ret(array('code'=>1));
         }else{
-            return $this->format_ret(array('code'=>0));
+            $payment_method = $expense_info['payment_method'];
+            if ($payment_method==1) {
+                // 主动查询支付结果
+                vendor('alipay.alipay');
+                $wxPay = new WxPay;
+                $result = $wxPay->queryOrder($expense_num);
+                if ($result['code']) {
+                    $total_fee = $result['data']['total_fee'] * 0.01;
+                    $transaction_id = $result['data']['transaction_id'] ;
+                    $res = $this->updateServiceExpense($expense_num,$transaction_id,$total_fee,1);
+                    $code = $res ?1:0;
+                    return $this->format_ret(array('code'=>$code));
+                }else{
+                    return $this->format_ret(array('code'=>0));
+                }
+            }
         }
     }
 

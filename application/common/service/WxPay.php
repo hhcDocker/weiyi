@@ -19,6 +19,7 @@
 
 namespace app\common\service;
 use think\Validate;
+use think\Log;
 
 class WxPay
 {
@@ -75,5 +76,26 @@ class WxPay
 		return ['code'=>1,'msg'=>$result["code_url"]];
 	}
 
+
+	public function queryOrder($expense_num, $type =1)
+	{
+		// 主动查询支付结果
+	    $this->_weixin_config();
+	    $input = new \WxPayOrderQuery();
+	    $input->SetOut_trade_no($expense_num);
+	    $result = \WxPayApi::orderQuery($input);
+	    
+	    if(array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && array_key_exists("trade_state", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS" && $result["trade_state"] == "SUCCESS")
+	    {
+	        // 处理支付成功后的逻辑业务
+	        Log::init([
+	            'type'  =>  'File',
+	            'path'  =>  LOG_PATH.'../paylog/'
+	        ]);
+	        Log::write($result,'log');
+	        return array('code'=>1,'data'=>$result);
+	    }
+	    return array('code'=>0,'data'=>array());
+	}
 }
 ?>
