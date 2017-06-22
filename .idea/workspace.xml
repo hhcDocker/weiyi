@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/index/controller/WtService.php" afterPath="$PROJECT_DIR$/application/index/controller/WtService.php" />
-    </list>
+    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="" />
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -29,8 +26,8 @@
           <file leaf-file-name="WtService.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="177">
-                  <caret line="681" column="94" selection-start-line="681" selection-start-column="94" selection-end-line="681" selection-end-column="94" />
+                <state relative-caret-position="126">
+                  <caret line="376" column="0" selection-start-line="376" selection-start-column="0" selection-end-line="376" selection-end-column="0" />
                   <folding>
                     <element signature="e#997#1296#0#PHP" expanded="false" />
                     <element signature="e#1301#16484#0#PHP" expanded="false" />
@@ -101,7 +98,6 @@
                     <element signature="e#17179#17313#0#PHP" expanded="false" />
                     <element signature="e#17531#17625#0#PHP" expanded="false" />
                     <element signature="e#17865#17953#0#PHP" expanded="false" />
-                    <element signature="e#18368#18467#0#PHP" expanded="false" />
                     <element signature="e#18550#25727#0#PHP" expanded="false" />
                     <element signature="e#18848#21032#0#PHP" expanded="false" />
                     <element signature="e#19053#19154#0#PHP" expanded="false" />
@@ -270,6 +266,16 @@
                     <element signature="e#50932#51101#0#PHP" expanded="false" />
                     <element signature="e#51290#51360#0#PHP" expanded="false" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Error.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Error.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="177">
+                  <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -743,16 +749,16 @@
       <workItem from="1497836514999" duration="16849000" />
       <workItem from="1497927617730" duration="11335000" />
       <workItem from="1498009587934" duration="23645000" />
-      <workItem from="1498095519597" duration="11028000" />
+      <workItem from="1498095519597" duration="11121000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="136691000" />
+    <option name="totallyTimeSpent" value="136784000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1682641" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -763,7 +769,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42378378" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42378378" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -915,16 +921,6 @@
           <url>file://$PROJECT_DIR$/application/index/controller/WtService.php</url>
           <line>902</line>
           <option name="timeStamp" value="247" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/index/controller/WtService.php</url>
-          <line>374</line>
-          <option name="timeStamp" value="250" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/index/controller/WtService.php</url>
-          <line>376</line>
-          <option name="timeStamp" value="251" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -1354,14 +1350,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Error.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/thinkphp/helper.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="305">
@@ -1422,10 +1410,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
+    <entry file="file://$PROJECT_DIR$/thinkphp/library/think/Error.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
-          <caret line="681" column="94" selection-start-line="681" selection-start-column="94" selection-end-line="681" selection-end-column="94" />
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="376" column="0" selection-start-line="376" selection-start-column="0" selection-end-line="376" selection-end-column="0" />
           <folding>
             <element signature="e#997#1296#0#PHP" expanded="false" />
             <element signature="e#1301#16484#0#PHP" expanded="false" />
@@ -1496,7 +1492,6 @@
             <element signature="e#17179#17313#0#PHP" expanded="false" />
             <element signature="e#17531#17625#0#PHP" expanded="false" />
             <element signature="e#17865#17953#0#PHP" expanded="false" />
-            <element signature="e#18368#18467#0#PHP" expanded="false" />
             <element signature="e#18550#25727#0#PHP" expanded="false" />
             <element signature="e#18848#21032#0#PHP" expanded="false" />
             <element signature="e#19053#19154#0#PHP" expanded="false" />

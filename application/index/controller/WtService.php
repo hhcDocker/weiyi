@@ -993,6 +993,7 @@ class WtService extends APIAuthController
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
+            echo $url;
             header($url);
             exit;
         }else{
