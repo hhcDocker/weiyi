@@ -893,14 +893,14 @@ class WtService extends APIAuthController
                 vendor('alipay.alipay');
                 $wxPay = new WxPay;
                 $result = $wxPay->queryOrder($expense_num);
-                if ($result['code']) {
+                if ($result['code']==1) {
                     $total_fee = $result['data']['total_fee'] * 0.01;
                     $transaction_id = $result['data']['transaction_id'] ;
                     $res = $this->updateServiceExpense($expense_num,$transaction_id,$total_fee,1);
                     
                     return $this->format_ret($res);
                 }else{
-                    return $this->format_ret(array('code'=>0,'msg'=>$result['msg']));
+                    return $this->format_ret($result);
                 }
             }else{
                 return $this->format_ret(array('code'=>0));

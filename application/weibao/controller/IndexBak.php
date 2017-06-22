@@ -616,17 +616,28 @@ class IndexBak extends Controller
 
     public function testShortUrl()
     {
+        $wj_shop_id =57;
+        $manager_id = 1;
+        $time =1498118756;
         $shop_url_array=array();
-        echo "<table><tr><td>wj_shop_id</td><td>manager_id</td><td>ShortUrl</td></tr>";
-        for ($i=0; $i <1000 ; $i++) {
-            $wj_shop_id = rand(1,1000);
-            $manager_id = rand(1,1000);
-            $o = new ShortUrl($wj_shop_id,$manager_id);
+        echo "<table><tr><td>wj_shop_id</td><td>manager_id</td><td>ShortUrl</td><td>length</td><td>j</td></tr>";
+        $j=0;
+        for ($i=0; $i <100; $i++) {
+            $time++;
+           /* $wj_shop_id = rand(1,1000);
+            $ali_shop_id = rand(100000000,999999999);
+            $manager_id = rand(1,1000);*/
+            $o = new ShortUrl($wj_shop_id,$manager_id,$time);
             $shop_url_str = $o->getSN();
-            echo "<tr><td>".$wj_shop_id."</td><td>".$manager_id."</td><td>".$ShortUrl."</td></tr>";
+            echo "<tr><td>".$wj_shop_id."</td><td>".$manager_id."</td><td>".$shop_url_str."</td><td>".strlen($shop_url_str)."</td><td>".(strlen($shop_url_str)==5?++$j:$j)."</td></tr>";
             if (in_array($shop_url_str, $shop_url_array)) {
                 echo "</table>";
                 echo $i;
+                break;
+            }else{
+                $res = model('ShopServices')->ExistShortUrl($shop_url_str);
+                echo "<tr><td colspan = '4'>".json_encode($res)."</td></tr>";
+                $shop_url_array[]=$shop_url_str;
             }
         }
     }
