@@ -19,6 +19,7 @@
 
 namespace app\weibao\controller;
 use JonnyW\PhantomJs\Client;
+use app\common\utils\SN\ShortUrl;
 use think\Controller;
 use think\Request;
 use think\Db;
@@ -612,4 +613,21 @@ class IndexBak extends Controller
             return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
         }
     }   
+
+    public function testShortUrl()
+    {
+        $shop_url_array=array();
+        echo "<table><tr><td>wj_shop_id</td><td>manager_id</td><td>ShortUrl</td></tr>";
+        for ($i=0; $i <1000 ; $i++) {
+            $wj_shop_id = rand(1,1000);
+            $manager_id = rand(1,1000);
+            $o = new ShortUrl($wj_shop_id,$manager_id);
+            $shop_url_str = $o->getSN();
+            echo "<tr><td>".$wj_shop_id."</td><td>".$manager_id."</td><td>".$ShortUrl."</td></tr>";
+            if (in_array($shop_url_str, $shop_url_array)) {
+                echo "</table>";
+                echo $i;
+            }
+        }
+    }
 }

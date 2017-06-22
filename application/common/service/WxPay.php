@@ -95,7 +95,25 @@ class WxPay
 	        Log::write($result,'log');
 	        return array('code'=>1,'data'=>$result);
 	    }
-	    return array('code'=>0,'data'=>array());
+	    elseif(!array_key_exists("return_code", $result)){
+	    	return ['code'=>0,'msg'=> '参数错误','data'=>array()];
+	    }
+	    elseif($result['return_code'] != 'SUCCESS'){
+	    	return ['code'=>0,'msg'=> $result['return_msg'],'data'=>array()];
+	    }
+	    elseif (! array_key_exists("result_code", $result)) {
+	    	return ['code'=>0,'msg'=> '参数错误','data'=>array()];
+	    }
+	    elseif($result['result_code'] != 'SUCCESS')
+		{
+			return ['code'=>0,'msg'=> $result['err_code_des'],'data'=>array()];
+		}elseif($result['trade_state'] != 'SUCCESS')
+		{
+			return ['code'=>0,'msg'=> $result['trade_state_desc'],'data'=>array()];
+		}
+		else {
+	    	return ['code'=>0,'msg'=> '查询失败','data'=>array()];
+		}
 	}
 }
 ?>

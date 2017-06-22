@@ -858,16 +858,18 @@ class WtService extends APIAuthController
             $total_fee = $result['total_fee'] * 0.01;
             
             $res = $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
-            if ($res) {
+            if ($res['code']) {
                 // 处理支付成功后的逻辑业务
                 Log::init([
                     'type'  =>  'File',
                     'path'  =>  LOG_PATH.'../paylog/'
                 ]);
                 Log::write($result,'log');
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
-                }
+                logResult("TRADE_FINISHED------notify_alipay Run Success");
                 exit('支付成功');
+            }else{
+                exit(json($res));
+            }
         }else{
             exit('支付失败');
         }
@@ -895,12 +897,15 @@ class WtService extends APIAuthController
                     $total_fee = $result['data']['total_fee'] * 0.01;
                     $transaction_id = $result['data']['transaction_id'] ;
                     $res = $this->updateServiceExpense($expense_num,$transaction_id,$total_fee,1);
-                    $code = $res ?1:0;
-                    return $this->format_ret(array('code'=>$code));
+                    
+                    return $this->format_ret($res);
                 }else{
-                    return $this->format_ret(array('code'=>0));
+                    return $this->format_ret(array('code'=>0,'msg'=>$result['msg']));
                 }
+            }else{
+                return $this->format_ret(array('code'=>0));
             }
+
         }
     }
 
@@ -1124,12 +1129,12 @@ class WtService extends APIAuthController
         $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($expense_num);
         if(empty($expense_info)){
             logResult($expense_num."没有对应的消费记录");
-            return false;
+            return array('code'=>0,'msg'=>'没有对应的消费记录');
         }
         //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
         if ($expense_info['payment_amount']!=$actually_amount) {
             logResult($expense_num."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$actually_amount);
-            return false;
+            return array('code'=>0,'msg'=>'实际支付金额不对');
         }
 
         $has_update = model('ExpenseRecords')->updateExpense($expense_num,$trade_num,$actually_amount,$trade_status);
@@ -1142,9 +1147,9 @@ class WtService extends APIAuthController
                 $service_start_time = $service_info['service_start_time'];
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-            return true;
+            return array('code'=>1);
         }else{
-            return false;
+            return array('code'=>0,'msg'=>'更新消费记录失败');
         }
     }
 }
