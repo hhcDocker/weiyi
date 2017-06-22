@@ -374,7 +374,7 @@ class WtService extends APIAuthController
         // $service_start_time = mktime(hour, minute, second, month, day, year);
         $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
         $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
-        if ($_year <date("Y") || $_month>12 ||$_day>31 || time() - $service_start_time<24*60*60) {
+        if ($_year <date("Y") || $_month>12 ||$_day>31 || time() - $service_start_time>24*60*60) {
             throw new APIException(30017);
         }
 
@@ -679,7 +679,7 @@ class WtService extends APIAuthController
         // $service_start_time = mktime(hour, minute, second, month, day, year);
         $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
         $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
-        if ($_year <date("Y") || $_month>12 ||$_day>31 || time() - $service_start_time<24*60*60) {
+        if ($_year <date("Y") || $_month>12 ||$_day>31 ||time() - $service_start_time>24*60*60) {
             throw new APIException(30017);
         }
 
