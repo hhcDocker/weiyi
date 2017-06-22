@@ -704,8 +704,9 @@ class Index extends Controller
     
     public function testHeader()
     {
-        $url  = $_SERVER['HTTP_HOST'] . 'frontend/html/service.html';
-        header($url);
+        $url  = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
+        echo $url;
+//        header($url);
         exit;
     }
 }
