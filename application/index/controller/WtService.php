@@ -993,8 +993,7 @@ class WtService extends APIAuthController
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
-            echo $url;
-            header($url);
+            header("Location:".$url);
             exit;
         }else{
             echo '<meta charset="utf-8" /><div style="text-align: center;"><div style="font-size: x-large; margin-top: 30px;">验证失败！</div></div>';
