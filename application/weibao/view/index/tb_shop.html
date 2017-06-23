@@ -46,15 +46,6 @@
 	                在店铺内搜索
 	            </div>
 			</section>-->
-			<section class="section_swiper" v-if='banner[0]'>
-				<div class="swiper-container"  id="swiper1">
-				    <div class="swiper-wrapper">
-				        <div class="swiper-slide " v-for='item in banner[0].bannerArrData.banner_array'>
-				        	<img :src="item.image"/>
-				        </div>
-				    </div>
-				</div>
-			</section>
 			<section  class="section_swiper" v-if="conponQueryData.count>0">
 				 <div class="swiper-container"  id="conponList">
 				    <div class="swiper-wrapper">
@@ -63,6 +54,15 @@
 				        	<p class="price">￥{{item.amount}}</p>
 				        	<p class="title">本店满{{item.threshold}}元使用</p>
 				        	<p class="time" >{{item.startTime}}前有效</p>
+				        </div>
+				    </div>
+				</div>
+			</section>
+			<section class="section_swiper" v-if='banner[0]'>
+				<div class="swiper-container"  id="swiper1">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide " v-for='item in banner[0].bannerArrData'>
+				        	<img :src="item.image" @click="todetailByBanner(item)"/>
 				        </div>
 				    </div>
 				</div>
@@ -237,7 +237,6 @@
 																openUrl=openUrl.split(".");
 														}
 													}
-													console.log(openUrl);
 													var obj={
 														bannerArrName:name,
 														imageUrl:shopData.data.data[name.split('.')[0]][name.split('.')[1]],
@@ -305,6 +304,19 @@
 												//alert(e)
 											}
 											
+										}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].type=='sliderView'){
+											console.log(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].foreach.array)
+											try{
+												var name=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].foreach.array.replace('$','');
+												var obj={
+													bannerArrName:name,
+													bannerArrData:shopData.data.data[name]
+												}
+												banner.push(obj);
+											}catch(e){
+												//TODO handle the exception
+												alert(e)
+											}
 										}
 									}
 									imagesModel.push(modelData);
@@ -392,6 +404,14 @@
 							var id = item['item2'].nid;
 						}
 						location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+					},
+					todetailByBanner:function(item){
+						var url = item.url.slice(item.url.indexOf('?')); 
+						var id=this.getQueryString('id',url);
+						if(!id){
+							return false;
+						}
+						location.href='/detail/0/'+id;
 					}
 				}
 			})
