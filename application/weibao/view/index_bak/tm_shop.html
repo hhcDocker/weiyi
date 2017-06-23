@@ -39,7 +39,7 @@
 			</header>
 			<section class="nav_tab">
 				<a href="#" class="selected_tab"><i></i><span>首页</span></a>
-				<a href="#" @click="toCommodityList()"><i></i><span>全部商品</span></a>
+				<a href="javascript:void(0)" @click="toCommodityList()"><i></i><span>全部商品</span></a>
 				<a href="#"><i></i><span>上新</span></a>
 				<a href="#"><i></i><span>店铺活动</span></a>
 			</section>
@@ -62,7 +62,7 @@
 				 <div class="swiper-container"  id="conponList">
 				    <div class="swiper-wrapper">
 				        <div class="swiper-slide " v-for='item in conponQueryData.couponList'>
-				        	<img src="//gw.alicdn.com/tps/i1/TB1NavLKpXXXXcgaXXXkmBt9FXX-342-192.png_300x300.jpg_.webp"/>
+				        	<img src="/static/images/conponBg.png"/>
 				        	<p class="price">￥{{item.amount}}</p>
 				        	<p class="title">本店{{item.thresholdDesc}}</p>
 				        	<p class="time" >{{item.startTime}}前有效</p>
@@ -71,7 +71,7 @@
 				</div>
 			</section>
 			<section class="shopCmdImageList" v-if='images.length>0'>
-				<div v-for='item in images' v-if='item.length>0'  >
+				<div v-for='item in images' v-if='item.length>0&&item[0].imageUrl' >
 					<span v-for="items in item" @click="toDetailByItemSearch(items,$index)" :style="{width:items.styleBinding.width*1.155/75 + 'rem',height:items.styleBinding.height*1.155/75 + 'rem'}">
 						<img :src="items.imageUrl"/>
 					</span>
@@ -146,7 +146,7 @@
 				<div class="ranking_data">
 					<div class="ranking_left" @click="toDetailByRank(0)">
 						<span class="topImg">
-							<img src="//gw.alicdn.com/tps/i1/TB1YeF.GXXXXXc4XFXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+							<img src="/static/images/topOneTm.png"/>
 						</span>
 						<img :src="rankingData[0].imgUrl"/>
 						<p class="solePrice">
@@ -157,20 +157,20 @@
 					<div class="ranking_right">
 						<div @click="toDetailByRank(1)">
 							<span class="topImg">
-								<img src="//gw.alicdn.com/tps/i2/TB1HHOjGXXXXXa8XXXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+								<img src="/static/images/topTwoTm.png"/>
 							</span>
 							<img :src="rankingData[1].imgUrl"/>>
 							<p class="solePrice">
-								已售 {{rankingData[0].totalSold}}
+								已售 {{rankingData[1].totalSold}}
 							</p>
 						</div>
 						<div @click="toDetailByRank(2)">
 							<span class="topImg">
-								<img src="//gw.alicdn.com/tps/i3/TB1XmB.GXXXXXX5XVXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+								<img src="/static/images/topThreeTm.png"/>
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
 							<p class="solePrice">
-								已售 {{rankingData[0].totalSold}}
+								已售 {{rankingData[2].totalSold}}
 							</p>
 						</div>
 					</div>
@@ -284,7 +284,9 @@
 															
 															if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].type=='image'){
 																var url = shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].dataBinding.url
-																objImage.arr.push(url);
+																if(url.indexOf('$')<0){
+																	objImage.arr.push(url);
+																}
 															}
 															
 														}
@@ -324,7 +326,6 @@
 															
 														}
 													}
-													
 													titleArr.push(shopData.data.data[title]);
 													if(l>0&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=="image"){
 														var obj={
@@ -411,10 +412,10 @@
 						}
 					},
 					toDeatail:function(item){
-						location.href='/weibao/index/processUrl?isTm=1&itemId='+item.nid;
+						location.href='/detail/1/'+item.nid;
 					},
 					toDetailByRank:function(index){
-						location.href='/weibao/index/processUrl?isTm=1&itemId='+this.rankingData[index].id;
+						location.href='/detail/1/'+this.rankingData[index].id;
 					},
 					getQueryString:function (name,url) { 
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
@@ -422,22 +423,33 @@
 						if (r != null) return unescape(r[2]); return null; 
 					},
 					toDetailByEnhenced:function(item){
-						location.href='/weibao/index/processUrl?isTm=1&itemId='+item.nid;
+						location.href='/detail/1/'+item.nid;
 					},
 					toDetailByItemSearch:function(item,index){
+						console.log(item)
 						if(item.cmdId){
 							if(shopData.data.data[item.cmdId].indexOf('catId')>-1){
-								console.log('跳转商品列表')
+								location.href="/weibao/index/tmShopCommodityList";
 							}else if(shopData.data.data[item.cmdId].indexOf('id')>-1){
 								var url = shopData.data.data[item.cmdId].slice(shopData.data.data[item.cmdId].indexOf('?')); 
 								var id=this.getQueryString('id',url);
-								location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+								if(id){
+									location.href='/detail/1/'+id;
+								}else{
+									location.href="/weibao/index/tmShopCommodityList";
+								}
+							}else{
+								location.href="/weibao/index/tmShopCommodityList";
 							}
 						}else if(item.label){
 							var keys = item.label[index].dataBinding.replace("title",'url');
 							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
 							var id=this.getQueryString('id',urls);
-							location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+							if(id){
+								location.href='/detail/1/'+id;
+							}else{
+								location.href="/weibao/index/tmShopCommodityList";
+							}
 						}
 						
 					},
@@ -450,7 +462,7 @@
 						}else if(index==1){
 							var id = item['item2'].nid;
 						}
-						location.href='/weibao/index/processUrl?isTm=1&itemId='+id;
+						location.href='/detail/1/'+id;
 					}
 				}
 			})

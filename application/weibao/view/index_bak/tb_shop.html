@@ -35,7 +35,7 @@
 				</section>
 			</header>
 			<section class="nav_tab">
-				<a href="#"><i></i><span>店铺首页</span></a>
+				<a href="#" class="selected_tab"><i></i><span>店铺首页</span></a>
 				<a href="#"><i></i><span>全部宝贝</span></a>
 				<a href="#"><i></i><span>新品上架</span></a>
 				<a href="#"><i></i><span>微淘动态</span></a>
@@ -46,23 +46,23 @@
 	                在店铺内搜索
 	            </div>
 			</section>-->
-			<section class="section_swiper" v-if='banner[0]'>
-				<div class="swiper-container"  id="swiper1">
-				    <div class="swiper-wrapper">
-				        <div class="swiper-slide " v-for='item in banner[0].bannerArrData.banner_array'>
-				        	<img :src="item.image"/>
-				        </div>
-				    </div>
-				</div>
-			</section>
 			<section  class="section_swiper" v-if="conponQueryData.count>0">
 				 <div class="swiper-container"  id="conponList">
 				    <div class="swiper-wrapper">
 				        <div class="swiper-slide " v-for='item in conponQueryData.couponList'>
-				        	<img src="//gw.alicdn.com/tps/i1/TB1NavLKpXXXXcgaXXXkmBt9FXX-342-192.png_300x300.jpg_.webp"/>
+				        	<img src="/static/images/conponBg.png"/>
 				        	<p class="price">￥{{item.amount}}</p>
-				        	<p class="title">本店{{item.thresholdDesc}}</p>
+				        	<p class="title">本店满{{item.threshold}}元使用</p>
 				        	<p class="time" >{{item.startTime}}前有效</p>
+				        </div>
+				    </div>
+				</div>
+			</section>
+			<section class="section_swiper" v-if='banner[0]'>
+				<div class="swiper-container"  id="swiper1">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide " v-for='item in banner[0].bannerArrData'>
+				        	<img :src="item.image" @click="todetailByBanner(item)"/>
 				        </div>
 				    </div>
 				</div>
@@ -115,7 +115,7 @@
 				<div class="ranking_data">
 					<div class="ranking_left" @click="toDetailByRank(0)">
 						<span class="topImg">
-							<img src="//gw.alicdn.com/tps/i1/TB1YeF.GXXXXXc4XFXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+							<img src="/static/images/topOneTb.jpg"/>
 						</span>
 						<img :src="rankingData[0].imgUrl"/>
 						<p class="solePrice">
@@ -126,30 +126,30 @@
 					<div class="ranking_right">
 						<div @click="toDetailByRank(1)">
 							<span class="topImg">
-								<img src="//gw.alicdn.com/tps/i2/TB1HHOjGXXXXXa8XXXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+								<img src="/static/images/topTwoTb.jpg"/>
 							</span>
 							<img :src="rankingData[1].imgUrl"/>>
 							<p class="solePrice">
-								已售 {{rankingData[0].totalSold}}
+								已售 {{rankingData[1].totalSold}}
 							</p>
 						</div>
 						<div @click="toDetailByRank(2)">
 							<span class="topImg">
-								<img src="//gw.alicdn.com/tps/i3/TB1XmB.GXXXXXX5XVXXYdsBGpXX-40-45.png_48x48.jpg_.webp"/>
+								<img src="/static/images/topThreeTb.jpg"/>
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
 							<p class="solePrice">
-								已售 {{rankingData[0].totalSold}}
+								已售 {{rankingData[2].totalSold}}
 							</p>
 						</div>
 					</div>
 				</div>
 			</section>
-			<section class="enhenced" v-if="enhenced" v-for="models in enhenced"> 
+			<section class="enhenced" v-if="enhenced&&models.list.length>0" v-for="models in enhenced"> 
 				<div class="title_container_itemsearch" v-if="titleArr[$index]">
 					<span>{{titleArr[$index]}}</span>
 				</div>
-				<ul class="girdList">
+				<ul class="girdList" >
 					<li v-for="item in models.list" @click="toDetailByEnhenced(item)">
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
 						<h2 v-text="item.title"></h2>
@@ -230,18 +230,17 @@
 											try{
 												var name=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].dataBinding.url.replace('$','');
 												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events){
-											console.log(l);
 													var len3=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions.length;
 													for(j=0;j<len3;j++){
 														if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
 															var openUrl=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
-																openUrl=openUrl.split(".")[0];
+																openUrl=openUrl.split(".");
 														}
 													}
 													var obj={
 														bannerArrName:name,
 														imageUrl:shopData.data.data[name.split('.')[0]][name.split('.')[1]],
-														cmdId:shopData.data.data[openUrl].clickUrl,
+														cmdId:shopData.data.data[openUrl[0]][openUrl[1]],
 														styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding
 													};
 													modelData.push(obj)
@@ -285,7 +284,7 @@
 														}
 														modelData[0].label.push(obj);
 													}
-												}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value){
+												}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value&&shopData.data.view.subViews[0].subViews[k].subViews[i].dataBinding.aipName=="mtop.taobao.geb.enhenced.itemList.get"){
 													titleArr.push(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
 												}
 											}catch(e){
@@ -305,6 +304,19 @@
 												//alert(e)
 											}
 											
+										}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].type=='sliderView'){
+											console.log(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].foreach.array)
+											try{
+												var name=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].foreach.array.replace('$','');
+												var obj={
+													bannerArrName:name,
+													bannerArrData:shopData.data.data[name]
+												}
+												banner.push(obj);
+											}catch(e){
+												//TODO handle the exception
+												alert(e)
+											}
 										}
 									}
 									imagesModel.push(modelData);
@@ -353,10 +365,10 @@
 						}
 					},
 					toDeatail:function(item){
-						location.href='/weibao/index/processUrl?isTm=0&itemId='+item.nid;
+						location.href='/detail/0/'+item.nid;
 					},
 					toDetailByRank:function(index){
-						location.href='/weibao/index/processUrl?isTm=0&itemId='+this.rankingData[index].id;
+						location.href='/detail/0/'+this.rankingData[index].id;
 					},
 					getQueryString:function (name,url) { 
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
@@ -364,22 +376,21 @@
 						if (r != null) return unescape(r[2]); return null; 
 					},
 					toDetailByEnhenced:function(item){
-						location.href='/weibao/index/processUrl?isTm=0&itemId='+item.nid;
+						location.href='/detail/0/'+item.nid;
 					},
 					toDetailByItemSearch:function(item,index){
-						console.log(item);return false;
 						if(item.cmdId){
 							var url = item.cmdId.slice(item.cmdId.indexOf('?')); 
 							var id=this.getQueryString('id',url);
 							if(!id){
 								return false;
 							}
-							location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+							location.href='/detail/0/'+id;
 						}else if(item.label){
 							var keys = item.label[index].dataBinding.replace("title",'url');
 							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
 							var id=this.getQueryString('id',urls);
-							location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+							location.href='/detail/0/'+id;
 						}
 						
 					},
@@ -393,6 +404,14 @@
 							var id = item['item2'].nid;
 						}
 						location.href='/weibao/index/processUrl?isTm=0&itemId='+id;
+					},
+					todetailByBanner:function(item){
+						var url = item.url.slice(item.url.indexOf('?')); 
+						var id=this.getQueryString('id',url);
+						if(!id){
+							return false;
+						}
+						location.href='/detail/0/'+id;
 					}
 				}
 			})
