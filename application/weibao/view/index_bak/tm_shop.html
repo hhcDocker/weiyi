@@ -40,8 +40,8 @@
 			<section class="nav_tab">
 				<a href="#" class="selected_tab"><i></i><span>首页</span></a>
 				<a href="javascript:void(0)" @click="toCommodityList()"><i></i><span>全部商品</span></a>
-				<a href="#"><i></i><span>上新</span></a>
-				<a href="#"><i></i><span>店铺活动</span></a>
+				<a href="#"><i></i><span>&emsp;&emsp;</span></a>
+				<a href="#"><i></i><span>&emsp;&emsp;</span></a>
 			</section>
 			<!--<section>
 				<div class="tm_search">
@@ -315,7 +315,6 @@
 													//TODO handle the exception
 												}
 												if(shopData.data.view.subViews[k].subViews[i].subViews[l].events){
-													
 													var len5=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions.length;
 													for(j=0;j<len5;j++){
 														if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
@@ -333,7 +332,20 @@
 														}
 														modelData[0].label.push(obj);
 													}
-													
+													try{
+													 var name = shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.url.replace("$","")
+													 var openUrl=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[1].param.url.replace("$","");
+													 var obj={
+															bannerArrName:name,
+															imageUrl:shopData.data.data[name],
+															cmdId:openUrl,
+															styleBinding:shopData.data.view.subViews[k].subViews[i].subViews[l].styleBinding
+														};
+														modelData.push(obj)
+													 
+													}catch(e){
+														//TODO handle the exception
+													}
 												}else if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews instanceof Array){
 													try{
 														titleArr.push(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
@@ -349,7 +361,6 @@
 														//TODO handle the exception
 													}
 												}
-												
 											}catch(e){
 												//TODO handle the exception
 												//alert(e)
@@ -372,6 +383,17 @@
 									imagesModel.push(modelData);
 									if(objImage){
 										objImages.push(objImage);
+									}
+								}else if(shopData.data.view.subViews[k].subViews[i].type=='banner'){
+									try{
+										var keys=shopData.data.view.subViews[k].subViews[i].dataBinding.bannerArray.replace("$",'');
+										var obj={
+											bannerArrName:name,
+											bannerArrData:shopData.data.data[keys]
+										}
+										banner.push(obj) 
+									}catch(e){
+										//TODO handle the exception
 									}
 								}
 							}
@@ -426,7 +448,6 @@
 						location.href='/detail/1/'+item.nid;
 					},
 					toDetailByItemSearch:function(item,index){
-						console.log(item)
 						if(item.cmdId){
 							if(shopData.data.data[item.cmdId].indexOf('catId')>-1){
 								location.href="/weibao/index/tmShopCommodityList";
