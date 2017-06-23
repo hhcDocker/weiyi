@@ -359,7 +359,7 @@ class WtService extends APIAuthController
         //店铺名称
         
         //服务时长
-        if ($service_time>3 || $service_time<1) {
+        if ($service_time>5 || $service_time<1) {
             throw new APIException(30016);
         }
 
@@ -371,12 +371,12 @@ class WtService extends APIAuthController
         if (!$_year || !$_month || !$_day){
             throw new APIException(30017);
         }
-        if ($_year <date("Y") || $_month<date("m") || $_month>12 || $_day<date("d") ||$_day>31) {
-            throw new APIException(30017);
-        }
         // $service_start_time = mktime(hour, minute, second, month, day, year);
         $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
         $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
+        if ($_year <date("Y") || $_month>12 ||$_day>31 || time() - $service_start_time>24*60*60) {
+            throw new APIException(30017);
+        }
 
         //支付方式
         if ($payment_method!=1 &&$payment_method!=2) {
@@ -658,7 +658,7 @@ class WtService extends APIAuthController
         $payment_method = noempty_input('payment_method','/\d/');//1-微信，2-支付宝
         
         //服务时长
-        if ($service_time>3 || $service_time<1) {
+        if ($service_time>5 || $service_time<1) {
             throw new APIException(30016);
         }
 
@@ -672,12 +672,16 @@ class WtService extends APIAuthController
         $_year = $_service_start_time[0];
         $_month = $_service_start_time[1];
         $_day = $_service_start_time[2];
-        if ($_year <date("Y") || $_month<date("m") || $_month>12 || $_day<date("d") ||$_day>31) {
+
+        if (!$_year || !$_month || !$_day){
             throw new APIException(30017);
         }
         // $service_start_time = mktime(hour, minute, second, month, day, year);
         $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
         $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
+        if ($_year <date("Y") || $_month>12 ||$_day>31 ||time() - $service_start_time>24*60*60) {
+            throw new APIException(30017);
+        }
 
         $service_info = model('ShopServices')->getServicesById($service_id);
         if (empty($service_info)) {
@@ -739,7 +743,7 @@ class WtService extends APIAuthController
                 // return $this->error($result['msg']);
             }else{
                 //生成支付宝链接
-                $response_data = $result['msg'];
+                $response_data = 'https://mapi.alipay.com/gateway.do?'.$result['msg'];
             }
         }
         if (!$response_data){
@@ -758,7 +762,8 @@ class WtService extends APIAuthController
         }
 
         //返回支付页面所需参数,微信则微信二维码，支付宝则支付宝链接
-        return $this->format_ret($response_data);
+        $res = array('expense_num'=>$expense_num,'shop_url'=>$service_info['shop_url'],'shop_name'=>$service_info['shop_name'],'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
+        return $this->format_ret($res);
     }
 
     /**
@@ -988,7 +993,12 @@ class WtService extends APIAuthController
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
-            header($url);
+
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Cache-Control: no-cache");
+            header("Pragma: no-cache");
+            $url = 'http://'.$_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
+            header("Location:".$url);
             exit;
         }else{
             echo '<meta charset="utf-8" /><div style="text-align: center;"><div style="font-size: x-large; margin-top: 30px;">验证失败！</div></div>';

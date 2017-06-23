@@ -69,7 +69,7 @@ class Managers extends Base
         $has_update = Db::table('wj_managers')
                             ->where('uid', $uid)
                             ->update([
-                                    'last_login_time'  => ['exp', 'now()'],
+                                    'last_login_time'  => time(),
                                     'last_login_ip'    => $client_ip,
                                  ]);
         return $has_update;
@@ -144,12 +144,13 @@ class Managers extends Base
   `mobilephone` char(16) DEFAULT NULL,
   `password` char(64) DEFAULT NULL,
   `is_locked` tinyint(1) unsigned DEFAULT '0',
+  `is_deleted` tinyint(1) unsigned DEFAULT '0',
   `create_time` int(11) unsigned NOT NULL,
   `register_ip` char(16) DEFAULT NULL,
-  `last_login_time` datetime DEFAULT NULL,
+  `last_login_time` int(10) unsigned DEFAULT NULL,
   `last_login_ip` char(16) DEFAULT NULL,
   `update_time` int(11) unsigned NOT NULL,
   `delete_time` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`,`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微跳客户信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='微跳客户信息表';
 */
