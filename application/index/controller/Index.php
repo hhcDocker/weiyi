@@ -154,6 +154,9 @@ class Index extends APIController
         if ($password !==$re_password) {
             throw new APIException(10006);
         }
+        if(!preg_match('/[0-9a-z]{32}/',$password)) {
+           $password = md5($password); 
+        }
         if (session('weitiao_sms_tag')) {
             $mobilephone_info =$this->checkMobilephone($mobilephone);
             if ($mobilephone_info==0) {
