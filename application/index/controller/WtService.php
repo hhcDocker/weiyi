@@ -1078,9 +1078,9 @@ class WtService extends APIAuthController
         if (empty($service_info)){
             //新增体验服务
             //mc 方便测试改为10分钟
-            /*$experience_days = config('experience_days');
+            // $experience_days = config('experience_days');
             $time_start = time();
-            $time_end = strtotime("+".$experience_days." day");*/
+            // $time_end = strtotime("+".$experience_days." day");
 
             $time_end = $time_start+600;
             //mc end
