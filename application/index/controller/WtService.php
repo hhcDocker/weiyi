@@ -1070,7 +1070,7 @@ class WtService extends APIAuthController
      */
     private function manageServiceInfo($service_info='',$qrcode_url='',$wj_shop_id=0)
     {
-        $service_type =0; //服务类型：1-体验3天，2-已购买，3-服务未开始,4-已过期
+        $service_type =0; //服务类型：1-体验3天，2-已购买，3-服务未开始,4-已过期，5-体验已过期
         if (!$wj_shop_id) {
             throw new APIException(30010);
         }
@@ -1113,12 +1113,21 @@ class WtService extends APIAuthController
             $service_type =1;
         }
 
-        if ($service_info['service_start_time']<=time() && $service_info['service_end_time']>=time()) { //服务未过期
-            //体验期内
-            $service_type =2;
-            if ($service_info['service_end_time'] - $service_info['service_start_time']== 259200) {
-                $service_type =1;
+        if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) {//体验期，包括新转化情况
+            if ($service_info['service_end_time']>=time()) {//体验期内
+                //设置路由，获取链接，生成二维码
+                //mc 路由映射短链
+                $qrcode_url = $qrcode_url?$qrcode_url:'/'.$service_info['transformed_url'];
+                $qrcode_url = 'http://'.$_SERVER['HTTP_HOST'].$qrcode_url;
+                //二维码
+                $QRCode = new QRCode;
+                $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+            }else{ //体验过期
+                $qrcode_url='';
+                $service_type = 5;
             }
+        }elseif ($service_info['service_start_time']<=time() && $service_info['service_end_time']>=time()) { //服务未过期
+            $service_type =2;
             //设置路由，获取链接，生成二维码
             //mc 路由映射短链
             $qrcode_url = $qrcode_url?$qrcode_url:'/'.$service_info['transformed_url'];

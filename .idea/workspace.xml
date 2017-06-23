@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="" />
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -695,7 +693,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.171459" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -747,7 +745,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/IndexBak.php</url>
-          <line>593</line>
+          <line>592</line>
           <option name="timeStamp" value="138" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -1017,9 +1015,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="56">
           <caret line="599" column="42" selection-start-line="599" selection-start-column="42" selection-end-line="599" selection-end-column="42" />
-          <folding>
-            <element signature="e#19845#20332#0#PHP" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1113,54 +1109,7 @@
             <element signature="e#4488#4859#0#PHP" expanded="false" />
             <element signature="e#4624#4725#0#PHP" expanded="false" />
             <element signature="e#4869#4928#0#PHP" expanded="false" />
-            <element signature="e#4933#5921#0#PHP" expanded="false" />
             <element signature="e#5176#5261#0#PHP" expanded="false" />
-            <element signature="e#5270#5915#0#PHP" expanded="false" />
-            <element signature="e#5386#5849#0#PHP" expanded="false" />
-            <element signature="e#5474#5769#0#PHP" expanded="false" />
-            <element signature="e#5618#5706#0#PHP" expanded="false" />
-            <element signature="e#5769#5849#0#PHP" expanded="false" />
-            <element signature="e#5858#5915#0#PHP" expanded="false" />
-            <element signature="e#5927#5971#0#PHP" expanded="false" />
-            <element signature="e#5977#7287#0#PHP" expanded="false" />
-            <element signature="e#6269#6354#0#PHP" expanded="false" />
-            <element signature="e#6363#6458#0#PHP" expanded="false" />
-            <element signature="e#6467#6574#0#PHP" expanded="false" />
-            <element signature="e#6583#6667#0#PHP" expanded="false" />
-            <element signature="e#6765#6859#0#PHP" expanded="false" />
-            <element signature="e#6868#6954#0#PHP" expanded="false" />
-            <element signature="e#6963#7051#0#PHP" expanded="false" />
-            <element signature="e#7149#7221#0#PHP" expanded="false" />
-            <element signature="e#7293#7367#0#PHP" expanded="false" />
-            <element signature="e#7372#7669#0#PHP" expanded="false" />
-            <element signature="e#7417#7487#0#PHP" expanded="false" />
-            <element signature="e#7777#7904#0#PHP" expanded="false" />
-            <element signature="e#7909#8163#0#PHP" expanded="false" />
-            <element signature="e#7980#8053#0#PHP" expanded="false" />
-            <element signature="e#8169#8295#0#PHP" expanded="false" />
-            <element signature="e#8300#9373#0#PHP" expanded="false" />
-            <element signature="e#8354#8437#0#PHP" expanded="false" />
-            <element signature="e#8513#9367#0#PHP" expanded="false" />
-            <element signature="e#8645#8818#0#PHP" expanded="false" />
-            <element signature="e#8655#8817#1#PHP" expanded="false" />
-            <element signature="e#8833#9034#0#PHP" expanded="false" />
-            <element signature="e#9047#9133#0#PHP" expanded="false" />
-            <element signature="e#9308#9367#0#PHP" expanded="false" />
-            <element signature="e#9379#9426#0#PHP" expanded="false" />
-            <element signature="e#9432#9922#0#PHP" expanded="false" />
-            <element signature="e#9641#9916#0#PHP" expanded="false" />
-            <element signature="e#9857#9916#0#PHP" expanded="false" />
-            <element signature="e#9932#10053#0#PHP" expanded="false" />
-            <element signature="e#10058#10577#0#PHP" expanded="false" />
-            <element signature="e#10122#10205#0#PHP" expanded="false" />
-            <element signature="e#10301#10361#0#PHP" expanded="false" />
-            <element signature="e#10370#10456#0#PHP" expanded="false" />
-            <element signature="e#10465#10553#0#PHP" expanded="false" />
-            <element signature="e#10583#10721#0#PHP" expanded="false" />
-            <element signature="e#10726#11040#0#PHP" expanded="false" />
-            <element signature="e#10784#10857#0#PHP" expanded="false" />
-            <element signature="e#10866#10945#0#PHP" expanded="false" />
-            <element signature="e#10954#11034#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
