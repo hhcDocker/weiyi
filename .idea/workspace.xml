@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="" />
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -595,7 +593,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="E:/shorturl" />
+    <property name="last_opened_file_path" value="E:/tp_before" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
@@ -685,15 +683,15 @@
       <workItem from="1497927617730" duration="11335000" />
       <workItem from="1498009587934" duration="23645000" />
       <workItem from="1498095519597" duration="11667000" />
-      <workItem from="1498180990068" duration="8000" />
+      <workItem from="1498180990068" duration="616000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="137338000" />
+    <option name="totallyTimeSpent" value="137946000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16986156" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
