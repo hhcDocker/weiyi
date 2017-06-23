@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="" />
+    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -26,8 +28,8 @@
           <file leaf-file-name="WtService.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="17">
-                  <caret line="338" column="36" selection-start-line="338" selection-start-column="36" selection-end-line="338" selection-end-column="36" />
+                <state relative-caret-position="459">
+                  <caret line="670" column="6" selection-start-line="670" selection-start-column="6" selection-end-line="670" selection-end-column="6" />
                   <folding>
                     <element signature="e#997#1296#0#PHP" expanded="false" />
                     <element signature="e#1301#16484#0#PHP" expanded="false" />
@@ -221,7 +223,7 @@
           <file leaf-file-name="WtService.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="218">
+                <state relative-caret-position="235">
                   <caret line="770" column="35" selection-start-line="770" selection-start-column="35" selection-end-line="770" selection-end-column="35" />
                   <folding>
                     <element signature="e#997#1296#0#PHP" expanded="false" />
@@ -593,7 +595,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="E:/tp_before" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
@@ -684,17 +686,18 @@
       <workItem from="1498009587934" duration="23645000" />
       <workItem from="1498095519597" duration="11667000" />
       <workItem from="1498180990068" duration="616000" />
+      <workItem from="1498188240720" duration="625000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="137946000" />
+    <option name="totallyTimeSpent" value="138571000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16986156" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.171459" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17405406" sideWeight="0.5042598" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -766,11 +769,6 @@
           <url>file://$PROJECT_DIR$/vendor/wxpay/phpqrcode.php</url>
           <line>3289</line>
           <option name="timeStamp" value="155" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/index/controller/WtService.php</url>
-          <line>656</line>
-          <option name="timeStamp" value="162" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/index/controller/WtService.php</url>
@@ -1236,7 +1234,7 @@
         <state relative-caret-position="550">
           <caret line="698" column="17" selection-start-line="698" selection-start-column="17" selection-end-line="698" selection-end-column="17" />
           <folding>
-            <marker date="1498123616985" expanded="false" signature="12470:12479" ph="..." />
+            <marker date="1498187315198" expanded="false" signature="12470:12479" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1325,8 +1323,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/index/controller/WtService.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="770" column="35" selection-start-line="770" selection-start-column="35" selection-end-line="770" selection-end-column="35" />
+        <state relative-caret-position="459">
+          <caret line="670" column="6" selection-start-line="670" selection-start-column="6" selection-end-line="670" selection-end-column="6" />
           <folding>
             <element signature="e#997#1296#0#PHP" expanded="false" />
             <element signature="e#1301#16484#0#PHP" expanded="false" />

@@ -45,7 +45,7 @@ class Managers extends Base
     public function getManagerInfoByMobilephone($mobilephone='')
     {
         $query_manager = array();
-        if($mobilephone && $password)
+        if($mobilephone)
         {
             $query_manager = Db::table('wj_managers')
                             ->where('mobilephone', $mobilephone)
