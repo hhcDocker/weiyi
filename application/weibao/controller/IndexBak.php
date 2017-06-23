@@ -596,7 +596,7 @@ class IndexBak extends Controller
             exit;
         }
         $shop_data = $res['shop_data'];
-        $is_tmall =0;
+        $is_tmall =1;
         foreach ($shop_data as $k => $v) {
             if (strpos($v['api_url'],'taobao')) {
                 $is_tmall =0;
