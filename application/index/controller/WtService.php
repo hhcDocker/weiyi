@@ -1077,10 +1077,14 @@ class WtService extends APIAuthController
         $img ='';
         if (empty($service_info)){
             //新增体验服务
-            $experience_days = config('experience_days');
+            //mc 方便测试改为10分钟
+            /*$experience_days = config('experience_days');
             $time_start = time();
-            $time_end = strtotime("+".$experience_days." day");
+            $time_end = strtotime("+".$experience_days." day");*/
 
+            $time_end = $time_start+600;
+            //mc end
+            
             //mc 改用shop_id+manager_id
             $o = new ShortUrl($wj_shop_id,session('manager_id'));
             $shop_url_str = $o->getSN();
@@ -1115,6 +1119,7 @@ class WtService extends APIAuthController
 
         if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) {//体验期，包括新转化情况
             if ($service_info['service_end_time']>=time()) {//体验期内
+                $service_type =1;
                 //设置路由，获取链接，生成二维码
                 //mc 路由映射短链
                 $qrcode_url = $qrcode_url?$qrcode_url:'/'.$service_info['transformed_url'];
@@ -1142,6 +1147,7 @@ class WtService extends APIAuthController
             $qrcode_url='';
             $service_type =4;
         }
+
         $res_data =array('service_id'=>$service_info['id'],'service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'service_type'=>$service_type,'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $res_data;
     }
