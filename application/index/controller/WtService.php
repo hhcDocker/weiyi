@@ -1077,10 +1077,14 @@ class WtService extends APIAuthController
         $img ='';
         if (empty($service_info)){
             //新增体验服务
-            $experience_days = config('experience_days');
+            //mc 方便测试改为10分钟
+            /*$experience_days = config('experience_days');
             $time_start = time();
-            $time_end = strtotime("+".$experience_days." day");
+            $time_end = strtotime("+".$experience_days." day");*/
 
+            $time_end = $time_start+600;
+            //mc end
+            
             //mc 改用shop_id+manager_id
             $o = new ShortUrl($wj_shop_id,session('manager_id'));
             $shop_url_str = $o->getSN();
