@@ -192,6 +192,15 @@ body {
   margin-bottom: 0.533333rem;
   overflow: hidden; }
 
+#tmShopCt .nav_tab i {
+  width: 0.533333rem;
+  height: 0.533333rem;
+  position: absolute;
+  top: 20px;
+  right: 0;
+  left: 0;
+  margin: auto; }
+
 .shop_commodity_contain {
   background-color: #fff;
   padding: 0 0.2rem; }

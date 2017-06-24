@@ -591,6 +591,7 @@ class IndexBak extends Controller
         $url = input('param.shopURL');
         $wei_bao = new WeiBaoData();
         $res = $wei_bao->getShopDataByUrl($url);
+		session('shopUrl',$url);
         if ($res['errcode']) {
             echo "获取数据失败；";
             exit;
