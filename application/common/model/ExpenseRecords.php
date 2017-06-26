@@ -89,6 +89,18 @@ class ExpenseRecords extends Base
         $has_update = Db::table('wj_expense_records')->where('expense_num' , $expense_num)->find();
         return $has_update;
     }
+
+    /**
+     * 获取体验信息
+     */
+    public function getExperienceInfoByService($service_id=0)
+    {
+        if (!$service_id) {
+            return array();
+        }
+        $experience_info = Db::table('wj_expense_records')->where('service_id',$service_id)->where('payment_method',0)->find();
+        return $experience_info;
+    }
 }
 /*CREATE TABLE `wj_expense_records` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',

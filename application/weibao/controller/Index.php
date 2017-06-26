@@ -31,8 +31,7 @@ class Index extends Controller
 	 * 搜索商品
 	 */
 	public function GetCommodityData(){
-			if(isset($_POST["commodityName"])){
-
+		if(isset($_POST["commodityName"])){
 			if(!isset($_POST["sortType"])){
 				$url='https://s.m.taobao.com/search?event_submit_do_new_search_auction=1&_input_charset=utf-8&topSearch=1&atype=b&searchfrom=1&action=home%3Aredirect_app_action&from=1&q='.$_POST['commodityName'].'&sst=1&n=20&buying=buyitnow&m=api4h5&abtest=22&wlsort=22&page='.$_POST['page'];
 			}else{
@@ -42,15 +41,26 @@ class Index extends Controller
 			echo $html;
 		}
 	}
+
+    /**
+     * 商品搜索页
+     * @return [type] [description]
+     */
 	public function searchCommodity()
     {
         return $this->fetch('search_commodity');
     }
+
+    /**
+     * 天猫店铺商品列表
+     * @return [type] [description]
+     */
 	public function tmShopCommodityList()
     {
         $shopUrl=session('shopUrl');
         return $this->fetch('tm_shop_commodity_list',array('shopUrl'=>$shopUrl));
     }
+
 	/**
      * 获取天猫评价数据
      * @return [data]
@@ -85,57 +95,7 @@ class Index extends Controller
 		$arr[]=$str2;
 		echo json_encode($arr);
 	}
-    /**
-     *
-     * @param  [type] $url [description]
-     * @return [type]      [description]
-     */
-    private function getShopShortUrlInfo($url)
-    {
-        //mc
-        session('manager_id',1);
-        echo "error";
-        exit;
 
-        // $has_info = model('')
-        $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
-        //没有服务则表示体验
-        if (empty($service_info)) {
-            $experience_days = config('experience_days');
-            $time_start = time();
-            $time_end = strtotime("+".$experience_days." day");
-            $o = new ShortUrl($url);
-            $shop_url_str = $o->getSN();
-            $service_id = model('ShopServices')->saveServices(session('manager_id'),$url,$shop_url_str,$time_start,$time_end);
-            $service_info = model('ShopServices')->getServicesByShopUrl($url,session('manager_id'));
-            //添加消费记录，体验3天
-            $expense_model = new ExpenseSN();
-            $expense_num = $expense_model->getSN();
-            $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,'',$service_id,session('manager_id'),0,$time_start,$time_end,1);
-        }
-        return $service_info;
-    }
-
-
-    private function checkUrl($url='')
-    {
-        if (!$url) { //非空检验
-            // return array('code'=>0,'url'=>'','msg'=>'网址不为空');
-            return array('code'=>0,'url'=>'','msg'=>'网址不为空');
-        }
-
-        if(!preg_match('/https?:\/\/[\w.]+[\w\/]*[\w.]*[\w=&\+\%.\-\_?]*/is',$url)){
-            return array('code'=>0,'url'=>'','msg'=>'网址不合法');
-        }
-        if (!strstr($url, 'taobao') && !strstr($url, 'tmall')) {
-            return array('code'=>0,'url'=>'','msg'=>'非淘宝天猫链接');
-        }
-        return array('code'=>1,'url'=>$url,'msg'=>'');
-    }
-
-
-
-    /*********************************************************************正式使用******************************************************************************/
 
     /**
      * 通过短链接访问，短链接长度为6个字符
@@ -155,7 +115,7 @@ class Index extends Controller
             exit;
         }
 
-        if ($service_info['service_start_time']<=time() && $service_info['service_end_time']>=time()) {//服务未过期
+        if (($service_info['service_start_time']<=time() && $service_info['service_end_time']>=time()) || ($service_info['experience_start_time']<=time() && $service_info['experience_end_time']>=time()) ) {//服务未过期
             //获取接口
             $shop_data = model('ShopApi')->getShopDataByShopId($service_info['shop_id']);
             //获取链接
@@ -212,7 +172,7 @@ class Index extends Controller
     }
 
     /**
-     * [getGoodsDetail description]
+     * 商品详情
      * @return [type] [description]
      */
     public function getGoodsDetail()
@@ -279,7 +239,7 @@ class Index extends Controller
                 }else{
                     $is_time_out =1;
                     foreach ($service_info as $k => $v) {
-                        if ($v['service_end_time'] > time()) {
+                        if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
                             $is_time_out =0;
                             $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                             break;
@@ -370,7 +330,7 @@ class Index extends Controller
                 }else{
                     $is_time_out =1;
                     foreach ($service_info as $k => $v) {
-                        if ($v['service_end_time'] > time()) {
+                        if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
                             $is_time_out =0;
                             $shortUrl = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                             break;
@@ -398,7 +358,7 @@ class Index extends Controller
     }
 
     /**
-     * [getTbGoodsDescription description]
+     * 商品图文详情
      * @return [type] [description]
      */
     public function getTbGoodsDescription()

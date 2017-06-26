@@ -19,8 +19,14 @@ namespace app\common\model;
 use think\Db;
 
 class ShopServices extends Base
-{
-    public function getServicesByShopId($shop_id='',$manager_id='')
+{   
+    /**
+     * 根据店铺id查询服务，WtService.php调用
+     * @param  string $shop_id    [description]
+     * @param  string $manager_id [description]
+     * @return [type]             [description]
+     */
+    public function getServicesByShopId($shop_id=0,$manager_id=0)
     {
         if (!$shop_id) {
             return array();
@@ -30,18 +36,19 @@ class ShopServices extends Base
     }
 
     /**
-     * [getServicesByShopId description]
-     * @param  string $shop_id    [description]
-     * @param  string $manager_id [description]
-     * @return [type]             [description]
+     * 根据阿里淘宝天猫的店铺id查询服务，webao的index.php调用
+     * @param  string $ali_shop_id [description]
+     * @return [type]              [description]
      */
-    public function getServicesByAliShopId($ali_shop_id='')
+    public function getServicesByAliShopId($ali_shop_id=0)
     {
         if (!$ali_shop_id) {
             return array();
         }
         $res = Db::table('wj_shop_services w')
+                ->field('w.shop_id,w.transformed_url,w.service_start_time,w.service_end_time,r.service_start_time as experience_start_time,r.service_end_time as experience_end_time')
                 ->join('wj_ali_shops a','a.id =w.shop_id')
+                ->join('wj_expense_records r','w.id =r.service_id and r.payment_method=0')
                 ->where('a.ali_shop_id',$ali_shop_id)
                 ->where('w.is_deleted',0)
                 ->select();
@@ -49,7 +56,7 @@ class ShopServices extends Base
     }
 
     /**
-     * [getServicesById description]
+     * 根据id查询服务，WtService.php调用
      * @param  integer $id [description]
      * @return [type]      [description]
      */
@@ -63,7 +70,7 @@ class ShopServices extends Base
     }
 
     /**
-     * [getServicesByManagerId description]
+     * 服务列表
      * @param  integer $manager_id [description]
      * @return [type]              [description]
      */
@@ -93,7 +100,7 @@ class ShopServices extends Base
     }
 
     /**
-     * [getServicesByUrlStr description]
+     * 通过短链接查询服务
      * @param  integer $url_str [description]
      * @return [type]              [description]
      */
@@ -102,12 +109,17 @@ class ShopServices extends Base
         if (!$url_str) {
             return array();
         }
-        $res = Db::table('wj_shop_services')->where('transformed_url',$url_str)->where('is_deleted',0)->find();
+        $res = Db::table('wj_shop_services w')
+                ->field('w.shop_id,w.transformed_url,w.service_start_time,w.service_end_time,r.service_start_time as experience_start_time,r.service_end_time as experience_end_time')
+                ->join('wj_expense_records r','w.id =r.service_id and r.payment_method=0')
+                ->where('w.transformed_url',$url_str)
+                ->where('w.is_deleted',0)
+                ->find();
         return $res?$res:array();
     }
 
     /**
-     * [getServicesExpenseByShopId description]
+     * 店铺服务最后一次消费
      * @param  [type] $shop_id    [description]
      * @param  string $manager_id [description]
      * @return [type]             [description]
@@ -129,7 +141,7 @@ class ShopServices extends Base
     }
 
     /**
-     * [saveServices description]
+     * 添加服务，添加体验服务时
      * @param  integer $manager_id         [description]
      * @param  string  $shop_id            [description]
      * @param  string  $transformed_url    [description]
@@ -157,7 +169,7 @@ class ShopServices extends Base
     }
 
     /**
-     * [addServices description]
+     * 添加服务
      * @param  integer $manager_id         [description]
      * @param  string  $shop_id            [description]
      * @param  string  $transformed_url    [description]
@@ -185,7 +197,7 @@ class ShopServices extends Base
     }
 
     /**
-     * [updateShopNameUrl description]
+     * 更新店铺名称和url
      * @param  integer $id        [description]
      * @param  string  $shop_name [description]
      * @param  string  $shop_url  [description]
@@ -206,7 +218,7 @@ class ShopServices extends Base
     }
 
     /**
-     * [updateShopNameUrl description]
+     * 更新服务时间
      * @param  integer $id        [description]
      * @param  string  $shop_name [description]
      * @param  string  $shop_url  [description]
@@ -227,7 +239,7 @@ class ShopServices extends Base
     }
 
     /**
-     * [ExistShortUrl description]
+     * 是否存在短链接
      * @param string $short_url [description]
      */
     public function ExistShortUrl($transformed_url='')
@@ -239,6 +251,11 @@ class ShopServices extends Base
         return $res;
     }
 
+    /**
+     * [softDeleteShopData description]
+     * @param  string $url [description]
+     * @return [type]      [description]
+     */
     public function softDeleteShopData($url='')
     {
     	# code...

@@ -37,7 +37,6 @@ class WtService extends APIAuthController
      * 4.查表获取该链接所属店铺是否已购买服务，是否已过期
      * 5.如果从未购买，则爬取店铺数据，生成体验记录，默认3天，生成服务记录，返回短链接
      * 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
-     * 短链接全部由路由定义
      * @return [type] [description]
      */
     public function getShortUrl()
@@ -51,11 +50,6 @@ class WtService extends APIAuthController
         $url = str_replace('https://', '', $url);
         $full_url = $this->checkUrl($url,0);
         $is_shop = 1;//店铺链接
-
-        //mc 判断是否登录
-        /*if(!is_login()) {
-            throw new APIException(10018);
-        }*/
 
         if (strpos($full_url,'tmall.com')) { //天猫
             $key_word_arr =array('list.','shouji.','www.tmall.com','pages.tmall.com','chaoshi');//天猫各种列表关键字
@@ -109,7 +103,6 @@ class WtService extends APIAuthController
                     $service_info =array();
                 }else{
                     $wj_shop_id = $shop_info['id'];
-                    //mc 测试是否有shop_url无shop_id的情况，或者有shop_if无shop_url的情况
                     $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                 }
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
@@ -615,7 +608,7 @@ class WtService extends APIAuthController
                     $shop_url_str = $o->getSN();
                     //查询短链接是否存在
                     $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-                    if ($i>100) {
+                    if ($i>200) {
                         throw new APIException(30010);
                     }
                     $i++;
@@ -1068,7 +1061,7 @@ class WtService extends APIAuthController
      * @param  string $qrcode_url   [description]
      * @return [type]               [链接二维码，短链接，有效期（不返回具体数据，只返回链接）]
      */
-    private function manageServiceInfo($service_info='',$qrcode_url='',$wj_shop_id=0)
+    private function manageServiceInfo($service_info=array(),$qrcode_url='',$wj_shop_id=0)
     {
         $service_type =0; //服务类型：1-体验3天，2-已购买，3-服务未开始,4-已过期，5-体验已过期
         if (!$wj_shop_id) {
@@ -1097,7 +1090,7 @@ class WtService extends APIAuthController
                 $shop_url_str = $o->getSN();
                 //查询短链接是否存在
                 $res = model('ShopServices')->ExistShortUrl($shop_url_str);
-                if ($i>100) {
+                if ($i>200) {
                     throw new APIException(30010);
                 }
                 $i++;
@@ -1117,7 +1110,7 @@ class WtService extends APIAuthController
             $service_type =1;
         }
 
-        if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) {//体验期，包括新转化情况
+        if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) { //体验期，包括新转化情况
             if ($service_info['service_end_time']>=time()) {//体验期内
                 $service_type =1;
                 //设置路由，获取链接，生成二维码
@@ -1141,8 +1134,21 @@ class WtService extends APIAuthController
             $QRCode = new QRCode;
             $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
         }elseif ($service_info['service_start_time']>time()) { //服务未开始
-            $qrcode_url='';
-            $service_type =3;
+            //判断体验是否过期
+            $service_experience_info = model('ExpenseRecords')->getExperienceInfoByService($service_info['id']);
+            if ($service_experience_info['service_start_time']<time() && $service_experience_info['service_end_time']>time()) {
+                 $service_type =2;
+                //设置路由，获取链接，生成二维码
+                //mc 路由映射短链
+                $qrcode_url = $qrcode_url?$qrcode_url:'/'.$service_info['transformed_url'];
+                $qrcode_url = 'http://'.$_SERVER['HTTP_HOST'].$qrcode_url;
+                //二维码
+                $QRCode = new QRCode;
+                $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+            }else{
+                $qrcode_url='';
+                $service_type =3;
+            }
         }else {//已过期
             $qrcode_url='';
             $service_type =4;
@@ -1177,6 +1183,12 @@ class WtService extends APIAuthController
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
+                if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) { //体验服务
+                    if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
+                        $remain_expenience_day = date('d',$service_info['service_end_time']) - date('d', $service_start_time); //剩余的体验服务时间
+                        $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
+                    }
+                }
                 $service_start_time = $service_info['service_start_time'];
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
