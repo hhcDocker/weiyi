@@ -386,10 +386,10 @@
 					lookDetail:function (event,index,item){
 				  		if(commodityData.recommend[index].url.indexOf("tmall")>0){
 				  			var isTm=1;
-				  			location.href='/weibao/index/processUrl?isTm='+isTm+'&itemId='+item.id+'&price='+item.price+'&sold=--&area=--';
+				  			location.href='/weibao/index/getGoodsDetail?isTm='+isTm+'&itemId='+item.id+'&price='+item.price+'&sold=--&area=--';
 				  		}else{
 				  			var isTm=0;
-				  			location.href='/weibao/index/processUrl?isTm='+isTm+'&itemId='+item.id;
+				  			location.href='/weibao/index/getGoodsDetail?isTm='+isTm+'&itemId='+item.id;
 				  		}
 	
 				  	}

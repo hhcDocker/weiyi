@@ -21,7 +21,7 @@ use think\Db;
 class AliGoodsDes extends Base
 {
     /**
-     * 通过shop_id获取api接口数据
+     * 通过item_id获取api接口数据
      * @param  integer $shop_id [description]
      * @return [type]            [description]
      */

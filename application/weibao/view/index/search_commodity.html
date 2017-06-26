@@ -97,10 +97,10 @@
 		  		lookDetail:function (event,index){
 			  		if(data.items[index].url.indexOf("tmall")>0){
 			  			var isTm=1;
-			  			location.href='/weibao/index/processUrl?isTm='+isTm+'&itemId='+data.items[index].itemNumId+'&price='+data.items[index].price+'&sold='+data.items[index].sold+'&area='+data.items[index].area;
+			  			location.href='/weibao/index/getGoodsDetail?isTm='+isTm+'&itemId='+data.items[index].itemNumId+'&price='+data.items[index].price+'&sold='+data.items[index].sold+'&area='+data.items[index].area;
 			  		}else{
 			  			var isTm=0;
-			  			location.href='/weibao/index/processUrl?isTm='+isTm+'&itemId='+data.items[index].itemNumId;
+			  			location.href='/weibao/index/getGoodsDetail?isTm='+isTm+'&itemId='+data.items[index].itemNumId;
 			  		}
 
 			  	},

@@ -235,7 +235,7 @@ class WtService extends APIAuthController
                             $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                         }
                     }
-                }elseif (preg_match('/shop\d+\.taobao/', $full_url)){
+                }elseif (preg_match('/shop\d+\.[m.]{2}taobao/', $full_url)){
                     $shop_id = preg_replace('/.+shop(\d+).+/','\1',$full_url);
                     //根据shopid查表
                     $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
@@ -490,7 +490,7 @@ class WtService extends APIAuthController
                     $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
                 }
             }
-        }elseif (preg_match('/shop\d+\.taobao/', $shop_url)){
+        }elseif (preg_match('/shop\d+\.[m.]{2}taobao/', $shop_url)){
             $shop_id = preg_replace('/.+shop(\d+).+/','\1',$shop_url);
             //根据shopid查表
             $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);

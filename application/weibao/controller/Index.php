@@ -179,10 +179,6 @@ class Index extends Controller
     {
         $isTm = input('param.isTm') ? input('param.isTm') : '';
         $item_id = input('param.item_id') ? input('param.item_id') : '';
-        if (!$item_id) {
-            echo "item_id参数错误不存在";
-            exit;
-        }
 
         vendor('simple_html_dom.simple_html_dom');
         set_time_limit(0);
@@ -196,24 +192,69 @@ class Index extends Controller
                 //$arr['sold']=$_GET['sold'];
                 //$arr['area']=$_GET['area'];
                 $arr['isTm']=$isTm;
-                $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
-                $html = file_get_html($url);
-                try{
-                    $shop_href_str = $html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href;
-                }catch (Exception $e) {
-                    echo "获取数据失败";
+
+                if (!$item_id) {
+                    echo "item_id参数错误不存在";
                     exit;
                 }
-                //店铺链接
-                $shop_url=trim(iconv("GB2312//IGNORE","UTF-8",$shop_href_str));
-                //先获取shopid,验证服务是否存在，是否过期
-                $shop_id = 0;
-                try{
-                    //得到dataDetail对象
-                    foreach($html->find('script') as $key => $script){
-                    //if($key==6){
-                    //  $arr['dataDetail']=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
-                    //}else{
+                $item_info = model('AliTmGoodsDetail')->getGoodsDetailByItemId($item_id);
+
+                $tm_detail_cache_day = config('tm_detail_cache_day') * 24 *60 * 60;
+                if (!empty($item_info) && $item_info['update_time'] - time() < $tm_detail_cache_day) {
+                    $shop_id =  $item_info['shop_id'];
+
+                    $arr = array(
+                        'shop_id' => $item_info['shop_id'],
+                        'dataOther'=> json_decode($item_info['data_other'],true),
+                        'assess_flag'=> $item_info['assess_flag'],
+                        'imgUrl'=> json_decode($item_info['img_url'],true),
+                        'score'=> $item_info['score'],
+                        'cd_parameter'=> $item_info['cd_parameter'],
+                        'shopName'=> $item_info['shop_name'],
+                        'delPrice'=> $item_info['del_price'],
+                    );
+                    //查询服务
+                    $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
+                    if (empty($service_info)) {
+                        echo "该店铺无购买服务，请到微跳上购买";
+                        exit;
+                    }else{
+                        $is_time_out =1;
+                        foreach ($service_info as $k => $v) {
+                            if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
+                                $is_time_out = 0;
+                                $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                                break;
+                            }
+                        }
+                        if ($is_time_out) {
+                            echo "该店铺所购买服务已过期，请到微跳上续费";
+                            exit;
+                        }
+                    }
+
+                    session('shopUrl',$item_info['shop_url']);
+                }else{
+                    $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
+                    $html = file_get_html($url);
+                    $add_data = array();
+                    try{
+                        $shop_href_str = $html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href;
+                    }catch (Exception $e) {
+                        echo "获取数据失败";
+                        exit;
+                    }
+                    //店铺链接
+                    $shop_url=trim(iconv("GB2312//IGNORE","UTF-8",$shop_href_str));
+                    $add_data['shop_url'] = 'https:'.$shop_url;
+                    //先获取shopid,验证服务是否存在，是否过期
+                    $shop_id = 0;
+                    try{
+                        //得到dataDetail对象
+                        foreach($html->find('script') as $key => $script){
+                            //if($key==6){
+                            //  $arr['dataDetail']=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+                            //}else{
                             $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
                             $arr['dataOther'][]=$v;
                             if (strpos($v,'_DATA_Detail')!==false){
@@ -221,86 +262,103 @@ class Index extends Controller
                                 $id_str = $id_str[0];
                                 $shop_id = str_replace('"rstShopId":','',$id_str);
                             }
-                    //}
-                    };
-                }catch (Exception $e){
-                    echo "获取数据失败";
-                    exit;
-                }
-                if (!$shop_url || !$shop_id) {
-                    echo "获取数据失败";
-                    exit;
-                }
-                //查询服务
-                $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
-                if (empty($service_info)) {
-                    echo "该店铺无购买服务，请到微跳上购买";
-                    exit;
-                }else{
-                    $is_time_out =1;
-                    foreach ($service_info as $k => $v) {
-                        if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
-                            $is_time_out =0;
-                            $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
-                            break;
-                        }
-                    }
-                    if ($is_time_out) {
-                        echo "该店铺所购买服务已过期，请到微跳上续费";
+                            //}
+                        };
+                    }catch (Exception $e){
+                        echo "获取数据失败";
                         exit;
                     }
-                }
-
-                session('shopUrl',$shop_url);
-                $arr['shopUrl'] = $shop_url;
-                $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
-                $assessFlag='{'.file_get_contents($assessFlag).'}';
-                $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
-                //得到商品图片url
-                foreach($html->find('section#s-showcase') as $pic_contain)
-                {
-
-                    foreach($pic_contain->find('div.scroller') as $itembox)
-                    {
-                        $imgflag=1;
-                        foreach ($itembox ->find('div.itbox') as $item) {
-                            if($imgflag==1){
-                                $arr['imgUrl'][]=$item->find('img',0)->src;
-                            }else{
-                                $arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
-                            }
-                            $imgflag++;
-                        }
+                    $add_data['data_other'] = json_encode($arr['dataOther']);
+                    $add_data['shop_id'] = $shop_id;
+                    if (!$shop_url || !$shop_id) {
+                        echo "获取数据失败";
+                        exit;
                     }
-                };
-
-                //得到店铺score
-                foreach ($html ->find('ul.score') as  $score) {
-                    foreach($score->find('li') as $key => $li){
-                        $arr['score'][$key]['className']=$li->find('b',0)->class;
-                        $arr['score'][$key]['text']=$li->find('b',0)->innertext;
-                    }
-                }
-
-                //得到商品信息
-                try{
-                    if($html ->find('div.mdv-standardItemProps',0)){
-                        $string=$html ->find('div.mdv-standardItemProps',0)->attr['mdv-cfg'];
-                        if($string){
-                            $arr['cd_parameter']=mb_convert_encoding($string, 'utf-8', 'gbk');
-                        }
+                    //查询服务
+                    $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
+                    if (empty($service_info)) {
+                        echo "该店铺无购买服务，请到微跳上购买";
+                        exit;
                     }else{
-                        $arr['cd_parameter']="";
+                        $is_time_out =1;
+                        foreach ($service_info as $k => $v) {
+                            if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
+                                $is_time_out =0;
+                                $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                                break;
+                            }
+                        }
+                        if ($is_time_out) {
+                            echo "该店铺所购买服务已过期，请到微跳上续费";
+                            exit;
+                        }
                     }
-                    //得到店铺名
-                    $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
 
-                    $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
-                }catch(Exception  $e){
-                    echo "获取数据失败";
-                    exit;
+                    session('shopUrl',$shop_url);
+                    $arr['shopUrl'] = $shop_url;
+                    $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
+                    $assessFlag='{'.file_get_contents($assessFlag).'}';
+                    $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
+
+                    $add_data['assess_flag'] = $arr['assessFlag'];
+                    //得到商品图片url
+                    foreach($html->find('section#s-showcase') as $pic_contain)
+                    {
+
+                        foreach($pic_contain->find('div.scroller') as $itembox)
+                        {
+                            $imgflag=1;
+                            foreach ($itembox ->find('div.itbox') as $item) {
+                                if($imgflag==1){
+                                    $arr['imgUrl'][]=$item->find('img',0)->src;
+                                }else{
+                                    $arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
+                                }
+                                $imgflag++;
+                            }
+                        }
+                    };
+
+                    $add_data['img_url'] = json_encode($arr['imgUrl']);
+                    //得到店铺score
+                    foreach ($html ->find('ul.score') as  $score) {
+                        foreach($score->find('li') as $key => $li){
+                            $arr['score'][$key]['className']=$li->find('b',0)->class;
+                            $arr['score'][$key]['text']=$li->find('b',0)->innertext;
+                        }
+                    }
+
+                    $add_data['score'] = json_encode($arr['score']);
+                    //得到商品信息
+                    try{
+                        if($html ->find('div.mdv-standardItemProps',0)){
+                            $string=$html ->find('div.mdv-standardItemProps',0)->attr['mdv-cfg'];
+                            if($string){
+                                $arr['cd_parameter']=mb_convert_encoding($string, 'utf-8', 'gbk');
+                            }
+                        }else{
+                            $arr['cd_parameter']="";
+                        }
+                        $add_data['cd_parameter'] =$arr['cd_parameter'];
+
+                        //得到店铺名
+                        $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
+                        $add_data['shop_name'] =$arr['shopName'];
+
+                        $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
+                        $add_data['del_price'] =$arr['delPrice'];
+                    }catch(Exception  $e){
+                        echo "获取数据失败";
+                        exit;
+                    }
+                    if (empty($item_info)) {
+                        $has_add = model('AliTmGoodsDetail')->addGoodsDetailData($item_id,$add_data);
+                    }else{
+                        $has_update = model('AliTmGoodsDetail')->updateGoodsDetailDataByItemId($item_info['id'],$add_data);
+                    }
                 }
                 return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
+
             }else{
                 $url='https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$item_id.'%22%7D';
                 $data=file_get_contents($url);

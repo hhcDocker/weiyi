@@ -253,5 +253,6 @@ return [
     'PhantomjsPath' =>'/usr/bin/phantomjs', //执行文件位置
     // 'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe',
     'service_cost' =>0.01,
-    'description_cache_day' =>1,//商品详情保留时间
+    'description_cache_day' =>1,//商品详情图文详情保留时间
+    'tm_detail_cache_day' =>3,//天猫商品详情保留时间
 ];
