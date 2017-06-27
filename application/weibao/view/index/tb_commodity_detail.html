@@ -230,10 +230,6 @@
 						    {       
 						       name: '产品参数',    
 						       view: 'parameter'    
-						    },
-						    {       
-						       name: '评价列表',    
-						       view: 'recommend'    
 						    }  
 					    ],
 					    commodityData:commodityData
@@ -275,23 +271,6 @@
 							props:['comdata'],
 							template: "<div class='parameter'>"+
 								"<dl v-for='item in comdata.commodityParameter'><dt>{{item.left}}</dt><dd>{{item.right}}</dd></dl></div>"
-						},
-						//评价列表template
-						"recommend":{
-							props:['comdata'],
-							template:"<div class='rate_single'>"+
-								"<ul>"+
-									"<li v-for='item in comdata.assessInfo' v-if='comdata.assessInfo.length>0'>"+
-										"<h2><img src='/static/images/TB1yeWeIFXXXXX5XFXXuAZJYXXX-210-210.png_40x40.jpg'/><span v-text='item.user.nick'></span></h2>"+
-										"<p v-text='item.content'></p>"+
-										"<span v-text='item.date'></span>"+
-										"<div class='assess_img'><img v-for='img in item.photos' v-bind:src='img.thumbnail'/></div>"+
-									"</li>"+
-									"<li v-else>"+
-										"<div style='text-align:center;'>暂无评价</div>"+
-									"</li>"+
-								"</ul>"+
-							"</div>"
 						}
 					}
 				});
