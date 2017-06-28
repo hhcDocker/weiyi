@@ -87,6 +87,7 @@ class Index extends APIController
         $client_ip = request()->ip();
         $mobilephone = noempty_input('mobilephone', '/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
         $password = noempty_input('password');
+        $this->checkPassword($password);
         if(!preg_match('/[0-9a-z]{32}/',$password)) {
            $password = md5($password); 
         }
