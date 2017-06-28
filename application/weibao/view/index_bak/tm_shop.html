@@ -38,8 +38,8 @@
 				</section>
 			</header>
 			<section class="nav_tab">
-				<a href="#" class="selected_tab"><i style="background:url(/static/images/allCmd.png) no-repeat;"></i><span>首页</span></a>
-				<a href="javascript:void(0)" @click="toCommodityList()"><i></i><span>全部商品</span></a>
+				<a href="#" class="selected_tab"><i style="background:url(/static/images/shopindex.png) no-repeat;"></i><span>首页</span></a>
+				<a href="javascript:void(0)" @click="toCommodityList()"><i style="background:url(/static/images/allCmd.png) no-repeat;"></i><span>全部商品</span></a>
 				<a href="#"><i></i><span>&emsp;&emsp;</span></a>
 				<a href="#"><i></i><span>&emsp;&emsp;</span></a>
 			</section>
@@ -112,9 +112,9 @@
 				</ul>
 			</section>
 			<section class="enhenced" v-if="enhenced" v-for="models in enhenced"> 
-				<div class="title_container_itemsearch" v-if="titleArr[$index]">
+				<!--<div class="title_container_itemsearch" v-if="titleArr[$index]">
 					<span>{{titleArr[$index]}}</span>
-				</div>
+				</div>-->
 				<ul v-if='models.list.length>1' class="girdList">
 					<li v-for="item in models.list" @click="toDetailByEnhenced(item)">
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
@@ -149,8 +149,12 @@
 							<img src="/static/images/topOneTm.png"/>
 						</span>
 						<img :src="rankingData[0].imgUrl"/>
-						<p class="solePrice">
+						<p class="solePrice" v-if="tmRanking">
 							已售 {{rankingData[0].totalSold}}
+							<span>￥{{rankingData[0].price}}</span>
+						</p>
+						<p class="solePrice" v-else>
+							已收藏 {{rankingData[0].collectCount}}
 							<span>￥{{rankingData[0].price}}</span>
 						</p>
 					</div>
@@ -160,8 +164,11 @@
 								<img src="/static/images/topTwoTm.png"/>
 							</span>
 							<img :src="rankingData[1].imgUrl"/>>
-							<p class="solePrice">
+							<p class="solePrice" v-if="tmRanking">
 								已售 {{rankingData[1].totalSold}}
+							</p>
+							<p class="solePrice" v-else>
+								已收藏 {{rankingData[1].collectCount}}
 							</p>
 						</div>
 						<div @click="toDetailByRank(2)">
@@ -169,8 +176,11 @@
 								<img src="/static/images/topThreeTm.png"/>
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
-							<p class="solePrice">
+							<p class="solePrice" v-if="tmRanking">
 								已售 {{rankingData[2].totalSold}}
+							</p>
+							<p class="solePrice" v-else>
+								已收藏 {{rankingData[2].collectCount}}
 							</p>
 						</div>
 					</div>
@@ -188,7 +198,7 @@
 					</li>
 				</ul>
 			</section>
-			<section class="lookAllCmd">
+			<section class="lookAllCmd"  @click="toCommodityList()">
 				查看全部商品
 			</section>
 		</div>
@@ -319,13 +329,13 @@
 													for(j=0;j<len5;j++){
 														if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
 															var openUrl=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
-															if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title){
-																var title=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title.replace('$','');
-															}
+//															if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title){
+//																var title=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title.replace('$','');
+//															}
 															
 														}
 													}
-													titleArr.push(shopData.data.data[title]);
+//													titleArr.push(shopData.data.data[title]);
 													if(l>0&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=="image"){
 														var obj={
 															dataBinding:openUrl,
@@ -346,21 +356,22 @@
 													}catch(e){
 														//TODO handle the exception
 													}
-												}else if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews instanceof Array){
-													try{
-														titleArr.push(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
-													}catch(e){
-														//TODO handle the exception
-													}
 												}
-												if(shopData.data.view.subViews[k].subViews[i].subViews[l].conditions){
-													try{
-														var titleEcho=shopData.data.view.subViews[k].subViews[i].subViews[l].conditions[0].left.replace("$",'');
-														titleArr.push(hopData.data.data[titleEcho]);
-													}catch(e){
-														//TODO handle the exception
-													}
-												}
+//												else if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews instanceof Array){
+//													try{
+//														titleArr.push(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
+//													}catch(e){
+//														//TODO handle the exception
+//													}
+//												}
+//												if(shopData.data.view.subViews[k].subViews[i].subViews[l].conditions){
+//													try{
+//														var titleEcho=shopData.data.view.subViews[k].subViews[i].subViews[l].conditions[0].left.replace("$",'');
+//														titleArr.push(hopData.data.data[titleEcho]);
+//													}catch(e){
+//														//TODO handle the exception
+//													}
+//												}
 											}catch(e){
 												//TODO handle the exception
 												//alert(e)
@@ -418,6 +429,7 @@
 					titleArr:titleArr,
 					objImages,objImages,
 					objImagesClick,objImagesClick,
+					tmRanking:1,
 				},
 				created:function(){
 					document.title=this.shopData.data.shop_other_data.shopName;
@@ -427,10 +439,13 @@
 						this.rinkingIndex=index;
 						if(index==0){
 							this.rankingData=getItemLists.favoredByDiamonds;
+							this.tmRanking=1;
 						}else if(index==1){
 							this.rankingData=getItemLists.totalCollect;
+							this.tmRanking=0;
 						}else if(index==2){
 							this.rankingData=getItemLists.totalSold;
+							this.tmRanking=1;
 						}
 					},
 					toDeatail:function(item){

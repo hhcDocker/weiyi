@@ -149,8 +149,12 @@
 							<img src="/static/images/topOneTm.png"/>
 						</span>
 						<img :src="rankingData[0].imgUrl"/>
-						<p class="solePrice">
+						<p class="solePrice" v-if="tmRanking">
 							已售 {{rankingData[0].totalSold}}
+							<span>￥{{rankingData[0].price}}</span>
+						</p>
+						<p class="solePrice" v-else>
+							已收藏 {{rankingData[0].collectCount}}
 							<span>￥{{rankingData[0].price}}</span>
 						</p>
 					</div>
@@ -160,8 +164,12 @@
 								<img src="/static/images/topTwoTm.png"/>
 							</span>
 							<img :src="rankingData[1].imgUrl"/>>
-							<p class="solePrice">
+							<p class="solePrice" v-if="tmRanking">
 								已售 {{rankingData[1].totalSold}}
+							</p>
+							<p class="solePrice" v-else>
+								已收藏 {{rankingData[1].collectCount}}
+								<span>￥{{rankingData[1].price}}</span>
 							</p>
 						</div>
 						<div @click="toDetailByRank(2)">
@@ -169,8 +177,12 @@
 								<img src="/static/images/topThreeTm.png"/>
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
-							<p class="solePrice">
+							<p class="solePrice" v-if="tmRanking">
 								已售 {{rankingData[2].totalSold}}
+							</p>
+							<p class="solePrice" v-else>
+								已收藏 {{rankingData[2].collectCount}}
+								<span>￥{{rankingData[2].price}}</span>
 							</p>
 						</div>
 					</div>
@@ -419,6 +431,7 @@
 					titleArr:titleArr,
 					objImages,objImages,
 					objImagesClick,objImagesClick,
+					tmRanking:1,
 				},
 				created:function(){
 					document.title=this.shopData.data.shop_other_data.shopName;
@@ -428,10 +441,13 @@
 						this.rinkingIndex=index;
 						if(index==0){
 							this.rankingData=getItemLists.favoredByDiamonds;
+							this.tmRanking=1;
 						}else if(index==1){
 							this.rankingData=getItemLists.totalCollect;
+							this.tmRanking=0;
 						}else if(index==2){
 							this.rankingData=getItemLists.totalSold;
+							this.tmRanking=1;
 						}
 					},
 					toDeatail:function(item){
