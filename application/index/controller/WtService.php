@@ -41,6 +41,7 @@ class WtService extends APIAuthController
      */
     public function getShortUrl()
     {
+        set_time_limit(0);
         $url = noempty_input('url');
         $url = strtolower($url);
         if (strpos($url,'http://')===false && strpos($url,'https://')===false){
@@ -67,7 +68,6 @@ class WtService extends APIAuthController
                 $item_id =$m[1];
                 $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
                 vendor('simple_html_dom.simple_html_dom');
-                set_time_limit(0);
                 header("Connection:Keep-Alive");
                 header("Proxy-Connection:Keep-Alive");
                 try{
