@@ -45,14 +45,15 @@ class Index extends APIController
         $client_ip = $this->request->ip();
         $sms_code = noempty_input('sms_code');
         $mobilephone =  noempty_input('mobilephone','/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
-        $password = noempty_input('password');
-        $re_password = noempty_input('re_password');
+        $password = input('password');
+        $re_password =input('re_password');
+        $this->checkPassword($password);
+        $this->checkPassword($re_password);
 
         if ($this->checkExistsMobilephone($mobilephone)) {
             throw new APIException(10002);
         }
-        $this->checkPassword($password);
-
+       
         $time_elapsed = time() - session('weitiao_sms_code_time');
         if($sms_code != session('weitiao_sms_code') || $mobilephone != session('weitiao_sms_mobilephone') || $time_elapsed > 600) {
             throw new APIException(10005);
@@ -86,7 +87,9 @@ class Index extends APIController
         }
         $client_ip = request()->ip();
         $mobilephone = noempty_input('mobilephone', '/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
-        $password = noempty_input('password');
+        $password = input('password');
+
+         // noempty_input('password');
         $this->checkPassword($password);
         if(!preg_match('/[0-9a-z]{32}/',$password)) {
            $password = md5($password); 
@@ -148,10 +151,11 @@ class Index extends APIController
     public function setNewPasswd()
     {
         $mobilephone = session('find_pwd_mobilephone');
-        $password = noempty_input('password');
-        $re_password = noempty_input('re_password');
+        $password = input('password');
+        $re_password =input('re_password');
 
         $this->checkPassword($password);
+        $this->checkPassword($re_password);
         if ($password !==$re_password) {
             throw new APIException(10006);
         }
@@ -183,11 +187,14 @@ class Index extends APIController
      */ 
     public function resetPasswd() {
         $mobilephone = session('manager_mobilephone');
-        $old_password = noempty_input('old_password');
-        $password = noempty_input('password');
-        $re_password = noempty_input('re_password');
+        $old_password = input('old_password');
+        $password = input('password');
+        $re_password =input('re_password');
 
+        $this->checkPassword($old_password);
         $this->checkPassword($password);
+        $this->checkPassword($re_password);
+        
         if ($password !==$re_password) {
             throw new APIException(10006);
         }
@@ -334,7 +341,7 @@ class Index extends APIController
     public function checkPassword($password='')
     {
         if (!$password) {
-            throw new \Exception("password");
+            throw new APIException(10001);
         }
         if (strlen($password)<6) {
             throw new APIException(10020);
@@ -342,7 +349,7 @@ class Index extends APIController
         if (strlen($password)>16) {
             throw new APIException(10021);
         }
-        if (preg_match('/[^0-9A-Za-z._+-]/', $password)) {
+        if (preg_match('/[^0-9A-Za-z]/', $password)) {
             throw new APIException(10022);
         }
     }
