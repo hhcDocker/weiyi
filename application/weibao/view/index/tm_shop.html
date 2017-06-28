@@ -112,9 +112,9 @@
 				</ul>
 			</section>
 			<section class="enhenced" v-if="enhenced" v-for="models in enhenced"> 
-				<div class="title_container_itemsearch" v-if="titleArr[$index]">
+				<!--<div class="title_container_itemsearch" v-if="titleArr[$index]">
 					<span>{{titleArr[$index]}}</span>
-				</div>
+				</div>-->
 				<ul v-if='models.list.length>1' class="girdList">
 					<li v-for="item in models.list" @click="toDetailByEnhenced(item)">
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
@@ -188,7 +188,7 @@
 					</li>
 				</ul>
 			</section>
-			<section class="lookAllCmd">
+			<section class="lookAllCmd"  @click="toCommodityList()">
 				查看全部商品
 			</section>
 		</div>
@@ -319,13 +319,13 @@
 													for(j=0;j<len5;j++){
 														if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].type=='openURL'){
 															var openUrl=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.url.replace('$','');
-															if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title){
-																var title=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title.replace('$','');
-															}
+//															if(shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title){
+//																var title=shopData.data.view.subViews[k].subViews[i].subViews[l].events[0].actions[j].param.title.replace('$','');
+//															}
 															
 														}
 													}
-													titleArr.push(shopData.data.data[title]);
+//													titleArr.push(shopData.data.data[title]);
 													if(l>0&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=="image"){
 														var obj={
 															dataBinding:openUrl,
@@ -346,21 +346,22 @@
 													}catch(e){
 														//TODO handle the exception
 													}
-												}else if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews instanceof Array){
-													try{
-														titleArr.push(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
-													}catch(e){
-														//TODO handle the exception
-													}
 												}
-												if(shopData.data.view.subViews[k].subViews[i].subViews[l].conditions){
-													try{
-														var titleEcho=shopData.data.view.subViews[k].subViews[i].subViews[l].conditions[0].left.replace("$",'');
-														titleArr.push(hopData.data.data[titleEcho]);
-													}catch(e){
-														//TODO handle the exception
-													}
-												}
+//												else if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews instanceof Array){
+//													try{
+//														titleArr.push(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.value);
+//													}catch(e){
+//														//TODO handle the exception
+//													}
+//												}
+//												if(shopData.data.view.subViews[k].subViews[i].subViews[l].conditions){
+//													try{
+//														var titleEcho=shopData.data.view.subViews[k].subViews[i].subViews[l].conditions[0].left.replace("$",'');
+//														titleArr.push(hopData.data.data[titleEcho]);
+//													}catch(e){
+//														//TODO handle the exception
+//													}
+//												}
 											}catch(e){
 												//TODO handle the exception
 												//alert(e)
