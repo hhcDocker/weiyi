@@ -341,5 +341,8 @@ class Index extends APIController
         if (strlen($password)>16) {
             throw new APIException(10021);
         }
+        if (preg_match('/[^0-9A-Za-z._+-]/', $password)) {
+            throw new APIException(10022);
+        }
     }
 }
