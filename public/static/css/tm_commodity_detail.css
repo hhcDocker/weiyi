@@ -608,4 +608,20 @@ arcitle {
 .shopActive a {
   padding-bottom: 0.24rem; }
 
+.rate_tags ul {
+  overflow: hidden;
+  padding: 0.2rem 0 0.066666rem;
+  margin: 0 0.266666rem;
+  border-bottom: 1px solid #e5e5e5; }
+.rate_tags li {
+  padding: 2.5% 4.5%;
+  margin: 0 2.3% 3.5% 0;
+  float: left;
+  border-radius: 0.266666rem;
+  background-color: #FEE;
+  color: #666; }
+.rate_tags .select_tag {
+  background-color: #DD2727;
+  color: white; }
+
 /*# sourceMappingURL=tm_commodity_detail.css.map */

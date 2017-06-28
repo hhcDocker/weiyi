@@ -123,6 +123,12 @@
 				</div>
 			</section>
 			<section>
+				<div class="rate_tags">
+					<ul>
+						<li class="select_tag">全部</li>
+						<li v-for="item in commodityData.label" >{{item.tag}}(<b>{{item.count}}</b>)</li>
+					</ul>
+				</div>
 				<div class='rate_single'>
 					<ul>
 						<li v-for='item in commodityData.assessInfo' v-if="commodityData.assessInfo.length>0">
@@ -178,6 +184,7 @@
 			}
 			var colorTypeFlag=null,skuStock=null,skuPrice=null,skuPics=null,skuName=null,doEclientWidth=-(document.documentElement.getBoundingClientRect().width);
 			commodityData={};
+			commodityData.label=[];
 			commodityData.shopInfo={};
 			commodityData.assessInfo=[];
 			commodityData.score=[];
@@ -212,18 +219,9 @@
 				commodityData.allCommodity="/weibao/index/tmShopCommodityList";
 				commodityData.shopUrl=data.shortUrl;
 				commodityData.score=data.score;
-			}
-			//尝试得到商品标志
-			try{
-				if(JSON.parse(data.assessFlag).tags) {
-					var tags = JSON.parse(data.assessFlag).tags;
-					commodityData.assessmentNum=tags.dimenSum;
-				}else{
-					commodityData.assessmentNum=null;
-				};
-				commodityData.label=tags.tagClouds;
-			}catch(e){
-				console.log(e);
+				if(typeof (data.score=="string")){
+					commodityData.score=JSON.parse(data.score);
+				}
 			}
 			//尝试得到颜色分类
 			try{
@@ -413,6 +411,7 @@
 				 		data:getAccess,
 				 		success:function(res){
 				 			if(JSON.parse(res).rateDetail.rateList){
+				 				vm.tabs[2].name+="("+JSON.parse(res).rateDetail.rateCount.total+")";
 				 				commodityData.assessInfo=JSON.parse(res).rateDetail.rateList;
 				 				accessFlag=false;
 				 			}else{
@@ -430,21 +429,19 @@
 		</script>
 		<script type="text/javascript">
 			
-			/*var scriptRecommend=null,scriptTag,scriptAccess=null;
+			var scriptRecommend=null,scriptTag,scriptAccess=null;
 			scriptRecommend = document.createElement('script');
-            scriptRecommend.src = "https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444&callback=jsonp";
+            //scriptRecommend.src = "https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444&callback=jsonp";
+            scriptRecommend.src="https://rate.tmall.com/listTagClouds.htm?itemId="+_DATA_Detail.itemDO.itemId+"&isAll=true&isInner=true&callback=jsonp_tag";
             document.body.appendChild(scriptRecommend);
             setTimeout(function(){
             	scriptRecommend.parentNode.removeChild(scriptRecommend);
             },1000)
-            function jsonp(a){
-            	console.log(a);
-            }
-            function jsonp2(a){
-            	console.log(a);
+            function jsonp_tag(a){
+				vm.commodityData.label=a.tags.tagClouds;
             }
             
-            $url='https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444';
+            /*$url='https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444';
 		$url2='https://detailskip.taobao.com/json/wap/tmallH5Desc.do?_ksTS=1489820826429_496&callback=setMdskip&itemId='.$_GET['itemId'].'&sellerId='.$_GET['sellerId'].'&isPreview=false&isg=AuDgXeh1rO_KJxDslDcORQ7Gse4-_2Aoq6eCMlrxrPuOVYB_AvmUQ7Zjn0eq&isg2=AsjIpAa3XVo%2FHf0FqOwc%2FzrXGC3acSx7';*/
 			function getRecommend(){
 			 	$.ajax({
