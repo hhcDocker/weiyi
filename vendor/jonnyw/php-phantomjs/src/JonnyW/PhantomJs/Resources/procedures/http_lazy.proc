@@ -127,7 +127,6 @@ procedure.execute = function (status) {
 		var arrData=[];
 		for(var i=0;i<url.length;i++){
 			if((url[i].indexOf('v=1')>-1||url[i].indexOf('v=2')>-1)&&(url[i].indexOf('getpageview')==-1)){
-				try{
 					var xhr = new XMLHttpRequest(); 
 				    if(xhr){ 
 			    		var urlToken=url[i];
@@ -135,21 +134,17 @@ procedure.execute = function (status) {
 				        xhr.onreadystatechange = function(){  
 				            if(xhr.readyState == 4){  
 				                if(xhr.status == 200){  
-				                	//arrData.push(xhr.response);
+				                	arrData.push(xhr.response);
 				                } 
 				            }  
 				        }  
 				        xhr.open("GET", urlToken, false);  
 				        xhr.send(null);  
 				    } 
-			    }catch(e){
-					arrData.push(url[i])
-				}
 			}
 		}
 		for(var i=url.length-1;i>=0;i--){
 			if(url[i].indexOf('v=4')>-1||url[i].indexOf('getpageview')>-1){
-				try{
 					var xhr = new XMLHttpRequest(); 
 				    if(xhr){ 
 			    		var urlToken=url[i];
@@ -157,16 +152,13 @@ procedure.execute = function (status) {
 				        xhr.onreadystatechange = function(){  
 				            if(xhr.readyState == 4){  
 				                if(xhr.status == 200){  
-				                	//arrData.unshift(xhr.response);
+				                	arrData.unshift(xhr.response);
 				                } 
 				            }  
 				        }  
 				        xhr.open("GET", urlToken, false);  
 				        xhr.send(null);  
 				    }
-				}catch(e){
-					arrData.push(url[i])
-				}
 			    break; 
 			}
 		}
