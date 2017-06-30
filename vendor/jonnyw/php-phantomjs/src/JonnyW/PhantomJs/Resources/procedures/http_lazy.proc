@@ -127,6 +127,7 @@ procedure.execute = function (status) {
 		var arrData=[];
 		for(var i=0;i<url.length;i++){
 			if((url[i].indexOf('v=1')>-1||url[i].indexOf('v=2')>-1)&&(url[i].indexOf('getpageview')==-1)){
+				arrData.push(url[i])
 				var xhr = new XMLHttpRequest(); 
 			    if(xhr){ 
 		    		var urlToken=url[i];
@@ -145,6 +146,7 @@ procedure.execute = function (status) {
 		}
 		for(var i=url.length-1;i>=0;i--){
 			if(url[i].indexOf('v=4')>-1||url[i].indexOf('getpageview')>-1){
+				arrData.push(url[i])
 				var xhr = new XMLHttpRequest(); 
 			    if(xhr){ 
 		    		var urlToken=url[i];
