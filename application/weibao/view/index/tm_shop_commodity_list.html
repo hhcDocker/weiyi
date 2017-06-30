@@ -101,7 +101,7 @@
             			},
             			teDetail:function(item){
             				var id = this.getQueryString('id',item.url.slice(item.url.indexOf("?")))
-            				location.href='/weibao/index/getGoodsDetail?isTm=1&itemId='+id;
+            				location.href='/detail/1/'+id;
             			},
             			getQueryString:function (name,url) { 
 							var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
