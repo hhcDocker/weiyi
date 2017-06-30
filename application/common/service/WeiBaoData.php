@@ -49,9 +49,10 @@ class WeiBaoData {
 
         // Send the request
         $client->send($request, $response);
-        //dump( $response->getUrls());
-        //dump($response->getConsole());
+        dump( $response->getUrls());
+        dump($response->getConsole());
         $data=$response->getUrlData();
+        var_dump($data);
         //end
         if (!$data ||empty($data)) {
             return array('errcode'=>30012);

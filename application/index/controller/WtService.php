@@ -21,7 +21,6 @@ use app\common\service\WeiBaoData;
 use app\common\service\QRCode;
 use app\common\service\WxPay;
 use app\common\service\AliPay;
-use JonnyW\PhantomJs\Client;
 use api\APIAuthController;
 use api\APIException;
 use think\Config;
