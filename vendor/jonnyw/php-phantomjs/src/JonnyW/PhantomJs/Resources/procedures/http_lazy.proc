@@ -135,7 +135,7 @@ procedure.execute = function (status) {
 				        xhr.onreadystatechange = function(){  
 				            if(xhr.readyState == 4){  
 				                if(xhr.status == 200){  
-				                	arrData.push(xhr.response);
+				                	//arrData.push(xhr.response);
 				                } 
 				            }  
 				        }  
@@ -157,7 +157,7 @@ procedure.execute = function (status) {
 				        xhr.onreadystatechange = function(){  
 				            if(xhr.readyState == 4){  
 				                if(xhr.status == 200){  
-				                	arrData.unshift(xhr.response);
+				                	//arrData.unshift(xhr.response);
 				                } 
 				            }  
 				        }  
