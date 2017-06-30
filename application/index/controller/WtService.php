@@ -21,7 +21,6 @@ use app\common\service\WeiBaoData;
 use app\common\service\QRCode;
 use app\common\service\WxPay;
 use app\common\service\AliPay;
-use JonnyW\PhantomJs\Client;
 use api\APIAuthController;
 use api\APIException;
 use think\Config;
@@ -235,7 +234,7 @@ class WtService extends APIAuthController
                             $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                         }
                     }
-                }elseif (preg_match('/shop\d+\.[m.]{2}taobao/', $full_url)){
+                }elseif (preg_match('/shop\d+\.[m.]{0,2}taobao/', $full_url)){
                     $shop_id = preg_replace('/.+shop(\d+).+/','\1',$full_url);
                     //根据shopid查表
                     $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
@@ -998,7 +997,7 @@ class WtService extends APIAuthController
         }
     }
 
-    // *******************************************************************公有函数*****************************************************************************
+    // ******************************************************************************公有函数*************************************************************************
 
     /**
      * 检查链接
@@ -1196,5 +1195,26 @@ class WtService extends APIAuthController
         }else{
             return array('code'=>0,'msg'=>'更新消费记录失败');
         }
+    }
+
+    public function testWxPay()
+    {
+        $expense_num = '72170621142433765409';
+        $payment_amount = 0.01;
+        $wxPay = new WxPay;
+        $result = $wxPay->wxPay([
+            'body' => '微跳-购买服务',
+            'attach' => '微跳-购买服务',
+            'out_trade_no' => $expense_num,
+            'total_fee' => $payment_amount*100,//订单金额，单位为分，如果你的订单是100元那么此处应该为 100*100
+            'time_start' => date("YmdHis"),//交易开始时间
+            'time_expire' => date("YmdHis", time() + 604800),//一周过期
+            'goods_tag' => '购买服务',
+            'notify_url' => request()->domain().'/index/wt_service/WeixinNotify',
+            'trade_type' => 'NATIVE',
+            'product_id' => rand(1,999999),
+        ]);
+        echo $result['msg'];
+        var_dump($result);
     }
 }
