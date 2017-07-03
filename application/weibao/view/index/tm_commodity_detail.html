@@ -120,7 +120,7 @@
 			    	</div>
 			    	
 			    </div>
-				<div class='detail'>
+				<div class='detail' style="margin-bottom:1.333333rem;">
 					<h4 class="title">商品图片</h4>
 					<ul>
 						<li v-for='item in commodityData.pictureDetail'><img v-bind:src='item.img'/></li>
@@ -238,7 +238,7 @@
 				commodityData.allCommodity="/weibao/index/tmShopCommodityList";
 				commodityData.shopUrl=data.shortUrl;
 				commodityData.score=data.score;
-				commodityData.openAppUrl="taobao://http://h5.m.taobao.com/awp/core/detail.htm?id="+_DATA_Detail.itemDO.itemId;
+				commodityData.openAppUrl="taobao://item.taobao.com/item.html?id="+_DATA_Detail.itemDO.itemId;
 				if(typeof(data.score)=="string"){
 					commodityData.score=JSON.parse(data.score);
 				}
