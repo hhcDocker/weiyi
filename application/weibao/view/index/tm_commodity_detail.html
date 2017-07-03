@@ -177,7 +177,21 @@
 				</div>
 			</div>
 		</div>
-		<footer></footer>
+		<footer>
+			<div id="s_actionbar" class="action_bar">
+                <a class="person_center">
+                 	我的
+                </a>
+                <a class="toshop" :href="commodityData.shopUrl">
+               	       进店
+                </a>
+                <a class="addfav">
+                	收藏
+                </a>
+                <a class="cart" style="" :href="commodityData.openAppUrl">加入购物车</a>
+                <a class="buy" style="" :href="commodityData.openAppUrl">立即购买</div>
+            </div>
+		</footer>
 		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
 		<script type="text/javascript">
@@ -224,6 +238,7 @@
 				commodityData.allCommodity="/weibao/index/tmShopCommodityList";
 				commodityData.shopUrl=data.shortUrl;
 				commodityData.score=data.score;
+				commodityData.openAppUrl="taobao://http://h5.m.taobao.com/awp/core/detail.htm?id="+_DATA_Detail.itemDO.itemId;
 				if(typeof(data.score)=="string"){
 					commodityData.score=JSON.parse(data.score);
 				}
