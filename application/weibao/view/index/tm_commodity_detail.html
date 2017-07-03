@@ -224,7 +224,7 @@
 				commodityData.allCommodity="/weibao/index/tmShopCommodityList";
 				commodityData.shopUrl=data.shortUrl;
 				commodityData.score=data.score;
-				if(typeof (data.score=="string")){
+				if(typeof(data.score)=="string"){
 					commodityData.score=JSON.parse(data.score);
 				}
 			}
