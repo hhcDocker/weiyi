@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我的收藏</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/weibao_myfav.css"/>
+		<script type="text/javascript" src="/static/build/flexible.js" ></script>
+	</head>
+	<body id="fav">
+		<header>
+			<nav>
+				<span @click="tabs($index)" :class="{selected:$index==thisIndex,fav_cmd:$index==0,fav_shop:$index==1}" v-for='item in tab'>{{item.name}}</span>
+			</nav>
+		</header>
+		<div id="list" class="commodity_list">
+			<ul>
+				<li v-for="item in cmdlist" @click='lookDetail(item)' :class="{shopList:thisIndex==1}">
+					<div class="picture"><!--<div v-if='item.url.indexOf("tmall")>0' class="tmTagPic"></div>--><a href="javascript:;"><img v-bind:src="item.img2" alt="" /></a></div>
+					<div class="info">
+						<h3 v-text="item.name"></h3>
+						<p class="info_price">
+							<em >
+								<span class="price_icon" v-if="thisIndex==0">¥</span><span class="font_num" v-text="item.price"></span>
+							</em>
+							<i @click.stop="delete_fav(item)"></i>
+						</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
+		<script type="text/javascript">
+			var cmdData=[
+					{
+						id:"583333",
+						img2:"//gw3.alicdn.com/bao/uploaded/i4/TB1m0AXQVXXXXXVaXXXXXXXXXXX_!!0-item_pic.jpg_250x250q90.jpg",
+						name:"券减50+礼】汇仁牌肾宝片126片肾亏虚补肾肾虚男补亏损旗舰店",
+						price:"28.88",
+						url:"http://www.baidu.com",
+					},
+					{
+						id:"583333",
+						img2:"//gw3.alicdn.com/bao/uploaded/i4/TB1m0AXQVXXXXXVaXXXXXXXXXXX_!!0-item_pic.jpg_250x250q90.jpg",
+						name:"券减50+礼】汇仁牌肾宝片126片肾亏虚补肾肾虚男补亏损旗舰店",
+						price:"28.88",
+						url:"http://www.baidu.com",
+					},
+					{
+						id:"583333",
+						img2:"//gw3.alicdn.com/bao/uploaded/i4/TB1m0AXQVXXXXXVaXXXXXXXXXXX_!!0-item_pic.jpg_250x250q90.jpg",
+						name:"券减50+礼】汇仁牌肾宝片126片肾亏虚补肾肾虚男补亏损旗舰店",
+						price:"28.88",
+						url:"http://www.baidu.com",
+					},
+					
+					],
+					shopData=[
+					{
+						id:"583333",
+						img2:"//gw.alicdn.com/bao/uploaded//dc/af/TB1Aso0RFXXXXaTXpXXSutbFXXX.jpg_100x100q90.jpg",
+						name:"华玉美衣",
+						url:"http://www.baidu.com",
+					},
+					{
+						id:"583333",
+						img2:"//gw.alicdn.com/bao/uploaded//dc/af/TB1Aso0RFXXXXaTXpXXSutbFXXX.jpg_100x100q90.jpg",
+						name:"华玉美衣",
+						url:"http://www.baidu.com",
+					},
+					]
+			var vm =new Vue({
+				el:"#fav",
+				data:{
+					thisIndex:0,
+					tab:[
+						{
+							name:"宝贝"
+						},
+						{
+							name:"店铺"
+						}
+					],
+					cmdlist:cmdData,
+				},
+				methods:{
+					lookDetail:function(item){
+						alert("去详情")
+						location.href=item.url;
+					},
+					delete_fav:function(item){
+						alert("删除:"+item.id)
+					},
+					tabs:function(index){
+						this.thisIndex=index;
+						if(index){
+							this.cmdlist=shopData;
+						}else{
+							this.cmdlist=cmdData;
+						}
+					}
+				}
+			});
+			
+		</script>
+	</body>
+</html>
