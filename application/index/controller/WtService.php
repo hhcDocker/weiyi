@@ -344,6 +344,9 @@ class WtService extends APIAuthController
         if (strpos($shop_url,'http://')===false && strpos($shop_url,'https://')===false){
             throw new APIException(30001);
         }
+        if (strstr($shop_url,'detail')){
+            throw new APIException(30005);
+        }
         $shop_url = str_replace('http://', '', $shop_url);
         $shop_url = str_replace('https://', '', $shop_url);
         $shop_url = $this->checkUrl($shop_url,0);
