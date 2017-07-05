@@ -158,6 +158,9 @@
 		<div :class="{show:showFlag}" class="sort-droplist-mask" id="J_DroplistMask" v-on:click.self="showFlag=!showFlag">
 			<div  class="pop_main ">
 				<div class="sku_pro animatied fadeInUp">
+					<div class="close_sku_pro " v-on:click.self="showFlag=!showFlag">
+						
+					</div>
 					<div class="sku_pro_ct">
 						<div class="sku_img">
 							<img v-bind:src="skuPics"/>
@@ -402,13 +405,7 @@
 						return true;
 					},
 					lookDetail:function (event,index,item){
-				  		if(commodityData.recommend[index].url.indexOf("tmall")>0){
-				  			var isTm=1;
-				  			location.href='/weibao/index/getGoodsDetail?isTm='+isTm+'&itemId='+item.id+'&price='+item.price+'&sold=--&area=--';
-				  		}else{
-				  			var isTm=0;
-				  			location.href='/weibao/index/getGoodsDetail?isTm='+isTm+'&itemId='+item.id;
-				  		}
+							location.href='/detail/1/'+item.id;
 	
 				  	}
 				}
