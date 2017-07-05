@@ -77,6 +77,7 @@
             		},
             		methods:{
             			sort:function(item,index){
+            				this.sort=item.sort;
             				this.sortIndex=index;
             				console.log(index)
             				var scriptRecommend = document.createElement('script');
@@ -116,10 +117,10 @@
             }
             window.addEventListener('scroll',checkImage,true);
             var timer=0;
+            var isShowAll=true;
             function checkImage() {
             	clearTimeout(timer);
             	timer = setTimeout(function(){
-            		console.log(1)
 	            	var	lazys = document.querySelectorAll('.cmd_item')
 	            		l=lazys.length
 	            	if(l>6){
@@ -130,11 +131,31 @@
 					      		lazys[i].src=lazys[i].getAttribute('data-src');
 					      	}
 					      }
+					      
 					    }
+	            	}
+	            	if(l==24&&isShowAll){
+	            		var rect = lazys[l-4].getBoundingClientRect();
+						 if(rect.top< window.innerHeight){
+						 	vm.loadingFlag=true;
+            				var scriptRecommendAdd = document.createElement('script');
+						 	 scriptRecommendAdd.src = "{$shopUrl}/shop/shop_auction_search.do?sort="+vm.sort+"&p=2&page_size=12&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp2";
+				            document.body.appendChild(scriptRecommendAdd);
+				             setTimeout(function(){
+				            	scriptRecommendAdd.parentNode.removeChild(scriptRecommendAdd);
+				            },2000)
+						 }
 	            	}
             	},300);
             	
 			}
+            function jsonp2(a){
+            	for(var i=0;i<a.items.length;i++){
+            		vm.cmdList.push(a.items[i]);
+            	}
+            	isShowAll=false;
+            	vm.loadingFlag=false;
+            }
 		</script>
 	</body>
 </html>

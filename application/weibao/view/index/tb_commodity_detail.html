@@ -7,8 +7,8 @@
 		<link rel="stylesheet" type="text/css" href="/static/css/swiper-3.4.1.min.css"/>
 		<script type="text/javascript" src="/static/build/flexible.js" ></script>
 	</head>
-	<body>
-		<arcitle id="body_container">
+	<body  id="body_container">
+		<arcitle>
 			<div class="swiper-container" id="shopBigPic_swiper">
 			    <div class="swiper-wrapper">
 			        <div class="swiper-slide " v-for="item in commodityData.lunboImageUrl">
@@ -107,7 +107,21 @@
 				</div>
 			</div>
 		</arcitle>
-		<footer></footer>
+		<footer>
+			<div id="s_actionbar" class="action_bar">
+                <a class="person_center" href="/weibao/index/weibaoPersonCenter">
+                 	我的
+                </a>
+                <a class="toshop" href="{$shortUrl}">
+               	       进店
+                </a>
+                <a class="addfav">
+                	收藏
+                </a>
+                <a class="cart" style="" :href="commodityData.openAppUrl">加入购物车</a>
+                <a class="buy" style="" :href="commodityData.openAppUrl">立即购买</div>
+            </div>
+		</footer>
 		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
 		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
@@ -160,6 +174,7 @@
 					commodityData.num=apiStackValue.item.sellCount;
 					commodityData.area=apiStackValue.delivery.from;
 					commodityData.labelExtra=apiStackValue.consumerProtection.items;
+					commodityData.openAppUrl="taobao://item.taobao.com/item.html?id="+data.data.item.itemId;
 					if(data.data.rate){
 					 	commodityData.label=data.data.rate.keywords;
 					}

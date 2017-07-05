@@ -120,7 +120,7 @@
 			    	</div>
 			    	
 			    </div>
-				<div class='detail'>
+				<div class='detail' style="margin-bottom:1.333333rem;">
 					<h4 class="title">商品图片</h4>
 					<ul>
 						<li v-for='item in commodityData.pictureDetail'><img v-bind:src='item.img'/></li>
@@ -158,6 +158,9 @@
 		<div :class="{show:showFlag}" class="sort-droplist-mask" id="J_DroplistMask" v-on:click.self="showFlag=!showFlag">
 			<div  class="pop_main ">
 				<div class="sku_pro animatied fadeInUp">
+					<div class="close_sku_pro " v-on:click.self="showFlag=!showFlag">
+						
+					</div>
 					<div class="sku_pro_ct">
 						<div class="sku_img">
 							<img v-bind:src="skuPics"/>
@@ -177,7 +180,21 @@
 				</div>
 			</div>
 		</div>
-		<footer></footer>
+		<footer>
+			<div id="s_actionbar" class="action_bar">
+                <a class="person_center" href="/weibao/index/weibaoPersonCenter">
+                 	我的
+                </a>
+                <a class="toshop" :href="commodityData.shopUrl">
+               	       进店
+                </a>
+                <a class="addfav">
+                	收藏
+                </a>
+                <a class="cart" style="" :href="commodityData.openAppUrl">加入购物车</a>
+                <a class="buy" style="" :href="commodityData.openAppUrl">立即购买</div>
+            </div>
+		</footer>
 		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
 		<script type="text/javascript">
@@ -224,6 +241,7 @@
 				commodityData.allCommodity="/weibao/index/tmShopCommodityList";
 				commodityData.shopUrl=data.shortUrl;
 				commodityData.score=data.score;
+				commodityData.openAppUrl="taobao://item.taobao.com/item.html?id="+_DATA_Detail.itemDO.itemId;
 				if(typeof(data.score)=="string"){
 					commodityData.score=JSON.parse(data.score);
 				}
@@ -387,19 +405,13 @@
 						return true;
 					},
 					lookDetail:function (event,index,item){
-				  		if(commodityData.recommend[index].url.indexOf("tmall")>0){
-				  			var isTm=1;
-				  			location.href='/weibao/index/getGoodsDetail?isTm='+isTm+'&itemId='+item.id+'&price='+item.price+'&sold=--&area=--';
-				  		}else{
-				  			var isTm=0;
-				  			location.href='/weibao/index/getGoodsDetail?isTm='+isTm+'&itemId='+item.id;
-				  		}
+							location.href='/detail/1/'+item.id;
 	
 				  	}
 				}
 			})
 			var accessFlag=true;
-			var page=0;
+			var page=-1;
 			function getAccess(){
 				if(accessFlag){
 					page++;

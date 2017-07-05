@@ -27,6 +27,18 @@ use think\Db;
 
 class Index extends Controller
 {
+	/**
+     * 商品搜索页
+     * @return [type] [description]
+     */
+	public function weibaoPersonCenter()
+    {
+        return $this->fetch('weibao_person_center');
+    }
+	public function weibaoMyFav()
+    {
+        return $this->fetch('weibao_fav_cmd_shop');
+    }
 	/*
 	 * 搜索商品
 	 */
