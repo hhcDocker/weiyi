@@ -77,9 +77,10 @@
             		},
             		methods:{
             			sort:function(item,index){
-            				this.sort=item.sort;
+							document.documentElement.scrollTop = document.body.scrollTop =0;
+            				nowPage=1;
+            				this.sorts=item.sort;
             				this.sortIndex=index;
-            				console.log(index)
             				var scriptRecommend = document.createElement('script');
             				if(index==3){
             					if(item.flag){
@@ -118,6 +119,7 @@
             window.addEventListener('scroll',checkImage,true);
             var timer=0;
             var isShowAll=true;
+            var nowPage=1;
             function checkImage() {
             	clearTimeout(timer);
             	timer = setTimeout(function(){
@@ -134,12 +136,13 @@
 					      
 					    }
 	            	}
-	            	if(l==24&&isShowAll){
+	            	if(l>=24&&isShowAll){
 	            		var rect = lazys[l-4].getBoundingClientRect();
 						 if(rect.top< window.innerHeight){
+	            			nowPage++;
 						 	vm.loadingFlag=true;
             				var scriptRecommendAdd = document.createElement('script');
-						 	 scriptRecommendAdd.src = "{$shopUrl}/shop/shop_auction_search.do?sort="+vm.sort+"&p=2&page_size=12&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp2";
+						 	 scriptRecommendAdd.src = "{$shopUrl}/shop/shop_auction_search.do?sort="+vm.sorts+"&p="+nowPage+"&page_size=12&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp2";
 				            document.body.appendChild(scriptRecommendAdd);
 				             setTimeout(function(){
 				            	scriptRecommendAdd.parentNode.removeChild(scriptRecommendAdd);
@@ -150,10 +153,13 @@
             	
 			}
             function jsonp2(a){
-            	for(var i=0;i<a.items.length;i++){
+            	var len=a.items.length
+            	for(var i=0;i<len;i++){
             		vm.cmdList.push(a.items[i]);
             	}
-            	isShowAll=false;
+            	if(len<24){
+            		isShowAll=false;
+            	}
             	vm.loadingFlag=false;
             }
 		</script>

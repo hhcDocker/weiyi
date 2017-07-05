@@ -344,6 +344,7 @@
 				},
 				methods:{
 					tab:function(i,v){
+						document.documentElement.scrollTop = document.body.scrollTop =0;
 						 this.active = i;
   						 if(i==1){
 						 	$("arcitle").css({
