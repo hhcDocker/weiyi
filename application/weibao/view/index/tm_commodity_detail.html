@@ -357,7 +357,6 @@
 						 		"-webkit-transform":"translate3d("+2*doEclientWidth+"px, 0px, 0px)",
 						 		"transform":"translate3d("+2*doEclientWidth+"px, 0px)"
 						 	});
-						 	getAccess();
   						 }else{
   						 	$("arcitle").css({
 						 		"-webkit-transform":"translate3d(0px, 0px, 0px)",
@@ -416,34 +415,68 @@
 			function getAccess(){
 				if(accessFlag){
 					page++;
-					var getAccess={
-				 		"isTm":data.isTm,
-				 		"sellerID":_DATA_Detail.itemDO.userId,
-				 		"itemID":_DATA_Detail.itemDO.itemId,
-				 		'page':page
-				 	};
-				 	$.ajax({
-				 		type:"post",
-				 		url:"/weibao/index/GetAccessData",
-				 		async:true,
-				 		data:getAccess,
-				 		success:function(res){
-				 			if(JSON.parse(res).rateDetail.rateList){
-				 				vm.tabs[2].name+="("+JSON.parse(res).rateDetail.rateCount.total+")";
-				 				commodityData.assessInfo=JSON.parse(res).rateDetail.rateList;
-				 				accessFlag=false;
-				 			}else{
-				 				getAccess();
-				 			}
-				 		},
-				 		error:function(err){
-				 			accessFlag=true;
-		                }
-				 	});
+					var scriptRecommend = document.createElement('script');
+		            scriptRecommend.src = "https://rate.tmall.com/list_detail_rate.htm?itemId=528707440247&sellerId=2485044533&order=3&append=0&content=0&currentPage="+page+"&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp";
+		            document.body.appendChild(scriptRecommend);
+		            setTimeout(function(){
+		            	scriptRecommend.parentNode.removeChild(scriptRecommend);
+		            },1000)
 				}
-				
-			};
+			}
 			getAccess();
+			function jsonp(res){
+	        	if(res.rateDetail.rateList){
+	 				vm.tabs[2].name="评价("+res.rateDetail.rateCount.total+")";
+	 				var rateList=res.rateDetail.rateList;
+	 				if(rateList.length>0){
+	 					for(var i=0;i<rateList.length;i++){
+	 						commodityData.assessInfo.push(rateList[i]);
+	 					}
+	 				}else{
+	 					accessFlag=false;
+	 				}
+	 			}else{
+	 				page--;
+	 				getAccess();
+	 			}
+	        }
+//			function getAccess(){
+//				if(accessFlag){
+//					page++;
+//					var getAccess={
+//				 		"isTm":data.isTm,
+//				 		"sellerID":_DATA_Detail.itemDO.userId,
+//				 		"itemID":_DATA_Detail.itemDO.itemId,
+//				 		'page':page
+//				 	};
+//				 	$.ajax({
+//				 		type:"post",
+//				 		url:"/weibao/index/GetAccessData",
+//				 		async:true,
+//				 		data:getAccess,
+//				 		success:function(res){
+//				 			if(JSON.parse(res).rateDetail.rateList){
+//				 				vm.tabs[2].name="评价("+JSON.parse(res).rateDetail.rateCount.total+")";
+//				 				var rateList=JSON.parse(res).rateDetail.rateList;
+//				 				if(rateList.length>0){
+//				 					for(var i=0;i<rateList.length;i++){
+//				 						commodityData.assessInfo.push(rateList[i]);
+//				 					}
+//				 				}else{
+//				 					accessFlag=false;
+//				 				}
+//				 			}else{
+//				 				page--;
+//				 				getAccess();
+//				 			}
+//				 		},
+//				 		error:function(err){
+//				 			accessFlag=true;
+//		                }
+//				 	});
+//				}
+//				
+//			};
 		</script>
 		<script type="text/javascript">
 			
@@ -500,6 +533,20 @@
 			    scrollbar: '.swiper-scrollbar',
 			});
 		</script>
-		
+		<script type="text/javascript">
+			window.addEventListener('scroll',checkImage,true);
+            var timer=0;
+            function checkImage() {
+            	clearTimeout(timer);
+            	timer = setTimeout(function(){
+	            	var	lazys = document.querySelectorAll('.rate_single li');
+	            	l=lazys.length;
+	            	var rect = lazys[l-2].getBoundingClientRect();
+					 if(rect.top< window.innerHeight){
+	            		getAccess();
+					 }
+            	},300);
+			}
+		</script>
 	</body>
 </html>

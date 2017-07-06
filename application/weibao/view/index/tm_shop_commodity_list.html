@@ -124,8 +124,8 @@
             function checkImage() {
             	clearTimeout(timer);
             	timer = setTimeout(function(){
-	            	var	lazys = document.querySelectorAll('.cmd_item')
-	            		l=lazys.length
+	            	var	lazys = document.querySelectorAll('.cmd_item'),
+	            		l=lazys.length;
 	            	if(l>6){
 	            		for (var i = 0; i < l; i++) {
 					      var rect = lazys[i].getBoundingClientRect();
