@@ -273,8 +273,14 @@
 				console.log(_DATA_Detail);
 				if(_DATA_Detail.api.newWapDescJson){
 					_DATA_Detail.api.newWapDescJson.forEach(function(item,index){
-						if(item.moduleName=='商品图片'){
+						if(item.moduleKey=='item_picture'){
 							commodityData.pictureDetail=item.data;
+						}else if(item.moduleKey=="custompriceDesc"){
+							if(item.data instanceof Array){
+								for (var i =0;i<item.data.length;i++){
+									commodityData.pictureDetail.push(item.data[i]);
+								}
+							}
 						}
 					});
 				}else{
