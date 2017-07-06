@@ -401,10 +401,19 @@
 							}
 							location.href='/detail/0/'+id;
 						}else if(item.label){
-							var keys = item.label[index].dataBinding.replace("title",'url');
-							var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
-							var id=this.getQueryString('id',urls);
-							location.href='/detail/0/'+id;
+							if(item.label[index].dataBinding.indexOf('.')<0){
+								var keys = item.label[index].dataBinding.replace("title",'url');
+								var urls = shopData.data.data[keys].slice(shopData.data.data[keys].indexOf('?'));
+								var id=this.getQueryString('id',urls);
+								location.href='/detail/0/'+id;
+							}else{
+								var keys = item.label[index].dataBinding.split('.');
+								console.log(keys)
+								console.log(shopData.data.data[keys[0]][keys[1]])
+								var urls = shopData.data.data[keys[0]][keys[1].replace("title",'url')].slice(shopData.data.data[keys[0]][keys[1].replace("title",'url')].indexOf('?'));
+								var id=this.getQueryString('id',urls);
+								location.href='/detail/0/'+id;
+							}
 						}
 						
 					},
