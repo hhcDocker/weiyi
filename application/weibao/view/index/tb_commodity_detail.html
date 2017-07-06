@@ -7,7 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="/static/css/swiper-3.4.1.min.css"/>
 		<script type="text/javascript" src="/static/build/flexible.js" ></script>
 	</head>
-	<body  id="body_container">
+	<body  id="body_container" :style="{overflow: isVisible}">
 		<arcitle>
 			<div class="swiper-container" id="shopBigPic_swiper">
 			    <div class="swiper-wrapper">
@@ -87,6 +87,9 @@
 			<div :class="{show:showFlag}" class="sort-droplist-mask" id="J_DroplistMask" v-on:click.self="showFlag=!showFlag">
 				<div  class="pop_main ">
 					<div class="sku_pro animatied fadeInUp">
+						<div class="close_sku_pro" v-on:click.self="showFlag=!showFlag">
+							
+						</div>
 						<div class="sku_pro_ct">
 							<div class="sku_img">
 								<img v-bind:src="skuPic"/>
@@ -234,6 +237,7 @@
 				  		skuName:apiStackValue.item.skuText,
 				  		colorType:colorType,
 				  		loadingFlag:false,
+				  		isVisible:"auto",
 						tabs: [   
 						    {       
 						       name: '图文详情',   
@@ -246,9 +250,16 @@
 					    ],
 					    commodityData:commodityData
 					},
-					
+					watch:{
+						showFlag:function(val){
+							if(val){
+								this.isVisible="hidden";
+							}else{
+								this.isVisible="auto";
+							}
+						}
+					},
 					methods:{
-						
 						//tab切换触发事件
 						tab:function(i,v){
 							 this.active = i;

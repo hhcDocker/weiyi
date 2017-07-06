@@ -13,7 +13,7 @@
 			}
 		</style>
 	</head>
-	<body id="body_container" v-cloak>
+	<body id="body_container" v-cloak  :style="{overflowY: isVisible}">
 		<arcitle >
 			<section>
 				<div id="shopBigPic_swiper" class="swiper-container">
@@ -315,6 +315,7 @@
 			  		cmdPrice:cmdPrice,
 			  		accessPage:0,
 			  		assessInfo:[],
+			  		isVisible:"auto",
 					tabs: [   
 					    {       
 					       name: '基本信息',   
@@ -330,6 +331,15 @@
 					    }  
 				    ],
 				    commodityData:commodityData
+				},
+				watch:{
+					showFlag:function(val){
+						if(val){
+							this.isVisible="hidden";
+						}else{
+							this.isVisible="auto";
+						}
+					}
 				},
 				created:function(){
 					try{
