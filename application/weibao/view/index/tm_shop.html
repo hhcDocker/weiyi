@@ -100,14 +100,14 @@
 					<li v-for="items in item.list" @click="toDetailGird(items,$parent.$index)">
 							<a href="javascript:void(0)"><img :src="items.item1.imgUrl" alt="" /></a>
 							<h2 v-text="items.item1.title"></h2>
-							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
+							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.{{items.item1.priceFen}}</span></p>
 					</li>
 				</ul>
 				<ul class="data_grid" v-else>
 					<li v-for="items in item.list" @click="toDetailGird(items,$index)">
 							<a href="javascript:void(0)"><img :src="items.item2.imgUrl" alt="" /></a>
 							<h2 v-text="items.item1.title"></h2>
-							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.00</span></p>
+							<p><span>￥{{items.item1.priceYuan}}</span><span class="priceFen">.{{items.item1.priceFen}}</span></p>
 					</li>
 				</ul>
 			</section>
