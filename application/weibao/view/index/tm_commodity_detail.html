@@ -2,11 +2,11 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>商品详情</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/dialog_window.css"/>
 		<link rel="stylesheet" type="text/css" href="/static/css/tm_commodity_detail.css"/>
 		<link rel="stylesheet" type="text/css" href="/static/css/swiper-3.4.1.min.css"/>
 		<script type="text/javascript" src="/static/build/flexible.js" ></script>
-		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
 		<style type="text/css">
 			[v-cloak]{
 				display: none;
@@ -182,21 +182,24 @@
 		</div>
 		<footer>
 			<div id="s_actionbar" class="action_bar">
-                <a class="person_center" href="/weibao/index/weibaoPersonCenter">
+                <a class="person_center" @click="showKouling">
                  	我的
                 </a>
                 <a class="toshop" :href="commodityData.shopUrl">
                	       进店
                 </a>
-                <a class="addfav">
+                <a class="addfav" @click="showKouling">
                 	收藏
                 </a>
-                <a class="cart" style="" :href="commodityData.openAppUrl">加入购物车</a>
-                <a class="buy" style="" :href="commodityData.openAppUrl">立即购买</div>
+                <a class="cart" style="" :href="commodityData.openAppUrl" @click="showKouling">加入购物车</a>
+                <a class="buy" style="" :href="commodityData.openAppUrl" @click="showKouling">立即购买</div>
             </div>
 		</footer>
 		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
+		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
+		<script type="text/javascript" src="/static/js/myBaseLibrary.js" ></script>
+    	<script src="/static/js/clipboard.min.js"></script>
 		<script type="text/javascript">
 			try{
 				var data={$data},dataMdsKig,cmdPrice;
@@ -360,6 +363,29 @@
 					}
 				},
 				methods:{
+					showKouling:function(){
+						var clipboard = new Clipboard('#s_actionbar', {
+					        text: function() {
+					            return '复制这条信息，打开「手机淘宝」领券下单 ￥3uP3ZzFXlK6￥';
+					        }
+					   });
+					   clipboard.on('success', function(e) {
+					        console.log(e)
+					    });
+					   document.getElementById('s_actionbar').click();
+						buildDialogWindow({
+							title:"淘口令复制成功",
+							content:"打开淘宝App购买",
+							primaryBtn:"没有安装淘宝App？<i>浏览器购买>></i>",
+							parameter:"",
+							callback:function(that){
+								console.log(2333)
+							}
+						})
+						document.getElementById("dialog_mongolia_layer").onclick=function(){
+							this.style.display="none";
+						}
+					},
 					tab:function(i,v){
 						document.documentElement.scrollTop = document.body.scrollTop =0;
 						 this.active = i;
@@ -564,6 +590,8 @@
 					 }
             	},300);
 			}
+		</script>
+		<script type="text/javascript">
 		</script>
 	</body>
 </html>
