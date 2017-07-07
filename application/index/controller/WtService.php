@@ -344,7 +344,7 @@ class WtService extends APIAuthController
         if (strpos($shop_url,'http://')===false && strpos($shop_url,'https://')===false){
             throw new APIException(30001);
         }
-        if (strstr($shop_url,'detail')){
+        if (strstr($shop_url,'detail') || (!strstr($shop_url,'tmall') && !strstr($shop_url,'taobao'))){
             throw new APIException(30005);
         }
         $shop_url = str_replace('http://', '', $shop_url);
@@ -1183,6 +1183,17 @@ class WtService extends APIAuthController
             $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
+
+            if ($service_info['service_start_time']==0 && $service_info['service_end_time']==0) { //直接购买
+                //添加体验记录，添加消费记录，体验3天
+                $experience_days = config('experience_days');
+                $time_start = time();
+                $time_end = strtotime("+".$experience_days." day");
+                $expense_model = new ExpenseSN();
+                $experience_expense_num = $expense_model->getSN();
+                $expense_id = model('ExpenseRecords')->addExpense($experience_expense_num, 0,$expense_info['service_id'],session('manager_id'),0,$time_start,$time_end,1);
+                $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
+            }
 
             if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) { //体验服务

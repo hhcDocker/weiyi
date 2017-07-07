@@ -641,4 +641,24 @@ class IndexBak extends Controller
             }
         }
     }
+
+
+    public function testAliShare()
+    {
+        vendor('taobao.TopSdk');
+        $config = self::$sms_config;
+        $c = new \TopClient;
+        $c->appkey = $config['appkey'];
+        $c->secretKey = $config['secretKey'];
+
+        $req = new \WirelessShareTpwdCreateRequest;
+        $tpwd_param = new \GenPwdIsvParamDto;
+        $tpwd_param->ext="{\"xx\":\"xx\"}";
+        $tpwd_param->logo="http://m.taobao.com/xxx.jpg";
+        $tpwd_param->url="http://m.taobao.com";
+        $tpwd_param->text="超值活动，惊喜活动多多";
+        $tpwd_param->user_id="24234234234";
+        $req->setTpwdParam(json_encode($tpwd_param));
+        $resp = $c->execute($req);
+    }
 }
