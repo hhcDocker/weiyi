@@ -219,10 +219,10 @@ class ShopServices extends Base
 
     /**
      * 更新服务时间
-     * @param  integer $id        [description]
-     * @param  string  $shop_name [description]
-     * @param  string  $shop_url  [description]
-     * @return [type]             [description]
+     * @param  integer $id                 [description]
+     * @param  string  $service_start_time [description]
+     * @param  string  $service_end_time   [description]
+     * @return [type]                      [description]
      */
     public function updateShopServiceTime($id=0,$service_start_time='',$service_end_time='')
     {

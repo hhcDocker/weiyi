@@ -615,11 +615,22 @@ class WtService extends APIAuthController
                     }
                     $i++;
                 }
-
                 $service_id = model('ShopServices')->addServices(session('manager_id'),$wj_shop_id,$shop_url_str,$shop_name,$shop_url);
+
                 if (!$service_id) {
                     throw new APIException(30010);
                 }
+
+                //添加体验记录
+                //添加消费记录，体验3天
+                $experience_days = config('experience_days');
+                $time_start = time();
+                $time_end = strtotime("+".$experience_days." day");
+                $expense_model = new ExpenseSN();
+                $experience_expense_num = $expense_model->getSN();
+                $expense_id = model('ExpenseRecords')->addExpense($experience_expense_num, 0,$service_id,session('manager_id'),0,$time_start,$time_end,1);
+                //修改服务时间为3天，付款后再修改具体服务时间
+                $has_update = model('ShopServices')->updateShopServiceTime($service_id, $time_start, $time_end);
             }else{
                 //更新服务信息
                 $service_id = $service_info['id'];
@@ -1183,17 +1194,6 @@ class WtService extends APIAuthController
             $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
-
-            if ($service_info['service_start_time']==0 && $service_info['service_end_time']==0) { //直接购买
-                //添加体验记录，添加消费记录，体验3天
-                $experience_days = config('experience_days');
-                $time_start = time();
-                $time_end = strtotime("+".$experience_days." day");
-                $expense_model = new ExpenseSN();
-                $experience_expense_num = $expense_model->getSN();
-                $expense_id = model('ExpenseRecords')->addExpense($experience_expense_num, 0,$expense_info['service_id'],session('manager_id'),0,$time_start,$time_end,1);
-                $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
-            }
 
             if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) { //体验服务
