@@ -125,7 +125,7 @@ page.open ('{{ input.getUrl() }}', '{{ input.getMethod() }}', '{{ input.getBody(
 procedure.execute = function (status) {
 	function Fn(url) {
 		var arrData=[];
-		/*for(var i=0;i<url.length;i++){
+		for(var i=0;i<url.length;i++){
 			if((url[i].indexOf('v=1')>-1||url[i].indexOf('v=2')>-1)&&(url[i].indexOf('getpageview')==-1)){
 					var xhr = new XMLHttpRequest(); 
 				    if(xhr){ 
@@ -161,24 +161,22 @@ procedure.execute = function (status) {
 				    }
 			    break; 
 			}
-		}*/
+		}
 		if(location.origin.indexOf('tmall')>-1){
 			var arr=[];
 			arr.push(location.origin);
-			for(var i=0;i<5;i++){
-				var xhr = new XMLHttpRequest(); 
-	    		var urlToken=location.origin+"/shop/shop_auction_search.do?sort=s&p="+i+"&page_size=12&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp";
-		        xhr.withCredentials = true;
-		        xhr.onreadystatechange = function(){  
-		            if(xhr.readyState == 4){  
-		                if(xhr.status == 200){  	
-		                	arr.push(xhr.response);
-		                } 
-		            }  
-		        }  
-		        xhr.open("GET", urlToken, false);  
-		        xhr.send(null);  
-			}
+			var xhr = new XMLHttpRequest(); 
+    		var urlToken=location.origin+"/shop/shop_auction_search.do?sort=s&p="+i+"&page_size=100&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp";
+	        xhr.withCredentials = true;
+	        xhr.onreadystatechange = function(){  
+	            if(xhr.readyState == 4){  
+	                if(xhr.status == 200){  	
+	                	arr.push(xhr.response);
+	                } 
+	            }  
+	        }  
+	        xhr.open("GET", urlToken, false);  
+	        xhr.send(null);  
 			arrData.push(arr);
 			return arrData;
 		}
