@@ -88,7 +88,7 @@ class ProcedureCompiler implements ProcedureCompilerInterface
      */
     public function compile(ProcedureInterface $procedure, InputInterface $input)
     {
-        $cacheKey = sprintf('phantomjs_%s_%s', $input->getType(), md5($procedure->getTemplate()));
+        $cacheKey = sprintf('phantomjs_%s_%s --web-security=no', $input->getType(), md5($procedure->getTemplate()));
 
         if ($this->cacheEnabled && $this->cacheHandler->exists($cacheKey)) {
             $template = $this->cacheHandler->fetch($cacheKey);

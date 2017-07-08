@@ -40,7 +40,7 @@ class WeiBaoData {
         /**
          * @see JonnyW\PhantomJs\Http\Request
          **/
-        $request = $client->getMessageFactory()->createRequest($url, 'GET');
+        $request = $client->getMessageFactory()->createRequest("https://pg.m.tmall.com/shop/shop_auction_search.htm?sort=default", 'GET');
         $request->setDelay(20000);
         /**
          * @see JonnyW\PhantomJs\Http\Response
@@ -50,10 +50,10 @@ class WeiBaoData {
 
         // Send the request
         $client->send($request, $response);
-        // dump( $response->getUrls());
-        // dump($response->getConsole());
+         dump( $response->getUrls());
+         dump($response->getConsole());
         $data=$response->getUrlData();
-        // var_dump($data);
+         var_dump($data);exit;
         //end
         if (!$data ||empty($data)) {
             return array('errcode'=>30012);
