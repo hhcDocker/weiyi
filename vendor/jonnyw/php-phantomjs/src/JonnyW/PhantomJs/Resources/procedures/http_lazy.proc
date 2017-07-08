@@ -165,18 +165,20 @@ procedure.execute = function (status) {
 		if(location.origin.indexOf('tmall')>-1){
 			var arr=[];
 			arr.push(location.origin);
-			var xhr = new XMLHttpRequest(); 
-    		var urlToken=location.origin+"/shop/shop_auction_search.do?sort=s&p="+i+"&page_size=100&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp";
-	        xhr.withCredentials = true;
-	        xhr.onreadystatechange = function(){  
-	            if(xhr.readyState == 4){  
-	                if(xhr.status == 200){  	
-	                	arr.push(xhr.response);
-	                } 
-	            }  
-	        }  
-	        xhr.open("GET", urlToken, false);  
-	        xhr.send(null);  
+			for(var i=0;i<3;i++){
+				var xhr = new XMLHttpRequest(); 
+	    		var urlToken=location.origin+"/shop/shop_auction_search.do?sort=s&p="+i+"&page_size=24&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp";
+		        xhr.withCredentials = true;
+		        xhr.onreadystatechange = function(){  
+		            if(xhr.readyState == 4){  
+		                if(xhr.status == 200){  	
+		                	arr.push(xhr.response);
+		                } 
+		            }  
+		        }  
+		        xhr.open("GET", urlToken, false);  
+		        xhr.send(null);  
+			}
 			arrData.push(arr);
 			return arrData;
 		}
