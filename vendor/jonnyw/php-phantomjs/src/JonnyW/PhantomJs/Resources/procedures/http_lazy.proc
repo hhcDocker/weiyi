@@ -125,7 +125,7 @@ page.open ('{{ input.getUrl() }}', '{{ input.getMethod() }}', '{{ input.getBody(
 procedure.execute = function (status) {
 	function Fn(url) {
 		var arrData=[];
-		/*for(var i=0;i<url.length;i++){
+		for(var i=0;i<url.length;i++){
 			if((url[i].indexOf('v=1')>-1||url[i].indexOf('v=2')>-1)&&(url[i].indexOf('getpageview')==-1)){
 					var xhr = new XMLHttpRequest(); 
 				    if(xhr){ 
@@ -161,8 +161,8 @@ procedure.execute = function (status) {
 				    }
 			    break; 
 			}
-		}*/
-		if(location.origin.indexOf('tmall')>-1){
+		}
+		/*if(location.origin.indexOf('tmall')>-1){
 			var arr=[];
 			arr.push(location.origin);
 			for(var i=0;i<3;i++){
@@ -181,7 +181,7 @@ procedure.execute = function (status) {
 			}
 			arrData.push(arr);
 			return arrData;
-		}
+		}*/
         return  arrData;
     }
 	var urldata = page.evaluate(Fn,urls);
