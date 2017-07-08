@@ -192,9 +192,12 @@
                 	收藏
                 </a>
                 <a class="cart" style="" :href="commodityData.openAppUrl" @click="showKouling">加入购物车</a>
-                <a class="buy" style="" :href="commodityData.openAppUrl" @click="showKouling">立即购买</div>
+                <a class="buy" style="" :href="commodityData.openAppUrl" @click="showKouling">立即购买</a></div>
             </div>
 		</footer>
+		<div class="openForBrower" v-show="directFlag" @click="showKouling" style="display: none;">
+			<img src="/static/images/openForBrower.png"/>
+		</div>
 		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
 		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
@@ -320,6 +323,7 @@
 			  		accessPage:0,
 			  		assessInfo:[],
 			  		isVisible:"auto",
+			  		directFlag:false,
 					tabs: [   
 					    {       
 					       name: '基本信息',   
@@ -364,29 +368,30 @@
 				},
 				methods:{
 					showKouling:function(){
-						//ajax请求
-						//mc
-						var clipboard = new Clipboard('#s_actionbar', {
-					        text: function() {
-					            return '复制这条信息，打开「手机淘宝」领券下单 ￥3uP3ZzFXlK6￥';
-					        }
-					   });
-					   clipboard.on('success', function(e) {
-					        console.log(e)
-					    });
-					   document.getElementById('s_actionbar').click();
-						buildDialogWindow({
-							title:"淘口令复制成功",
-							content:"打开淘宝App购买",
-							primaryBtn:"没有安装淘宝App？<i>浏览器购买>></i>",
-							parameter:"",
-							callback:function(that){
-								console.log(2333)
-							}
-						})
-						document.getElementById("dialog_mongolia_layer").onclick=function(){
-							this.style.display="none";
-						}
+//						//ajax请求
+//						//mc
+//						var clipboard = new Clipboard('#s_actionbar', {
+//					        text: function() {
+//					            return '复制这条信息，打开「手机淘宝」领券下单 ￥3uP3ZzFXlK6￥';
+//					        }
+//					   });
+//					   clipboard.on('success', function(e) {
+//					        console.log(e)
+//					    });
+//					   document.getElementById('s_actionbar').click();
+//						buildDialogWindow({
+//							title:"淘口令复制成功",
+//							content:"打开淘宝App购买",
+//							primaryBtn:"没有安装淘宝App？<i>浏览器购买>></i>",
+//							parameter:"",
+//							callback:function(that){
+//								console.log(2333)
+//							}
+//						})
+//						document.getElementById("dialog_mongolia_layer").onclick=function(){
+//							this.style.display="none";
+//						}
+						this.directFlag=!this.directFlag;
 					},
 					tab:function(i,v){
 						document.documentElement.scrollTop = document.body.scrollTop =0;

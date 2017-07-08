@@ -8,8 +8,8 @@
 		<link rel="stylesheet" type="text/css" href="/static/css/swiper-3.4.1.min.css"/>
 		<script type="text/javascript" src="/static/build/flexible.js" ></script>
 	</head>
-	<body>
-		<div id="tmShopCt" v-cloak>
+	<body id="tmShopCt">
+		<div v-cloak>
 			<header>
 				<section class="shop_header">
 					<div class="header_img">
@@ -21,7 +21,7 @@
 						</a>
 						<div class="collect_wrapper">
 	                
-			                <div class="collect_item">收藏</div>
+			                <div class="collect_item" @click="showKouling">收藏</div>
 			                <div class="collect_item collect_counter">
 			                    <p v-text="shopData.data.shop_other_data.collectCounter">
 			                    </p>
@@ -203,6 +203,15 @@
 			<section class="lookAllCmd"  @click="toCommodityList()">
 				查看全部商品
 			</section>
+		</div>
+		<footer>
+			<div id="s_actionbar" class="action_bar">
+                <a class="cart" style="" :href="commodityData.openAppUrl" @click="showKouling">收藏</a>
+                <a class="buy" style="" :href="commodityData.openAppUrl" @click="showKouling">去淘宝购买</a></div>
+            </div>
+		</footer>
+		<div class="openForBrower" v-show="directFlag" @click="showKouling" style="display: none;">
+			<img src="/static/images/openForBrower.png"/>
 		</div>
 		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
@@ -432,11 +441,38 @@
 					objImages,objImages,
 					objImagesClick,objImagesClick,
 					tmRanking:1,
+					directFlag:false,
 				},
 				created:function(){
 					document.title=this.shopData.data.shop_other_data.shopName;
 				},
 				methods:{
+					showKouling:function(){
+//						//ajax请求
+//						//mc
+//						var clipboard = new Clipboard('#s_actionbar', {
+//					        text: function() {
+//					            return '复制这条信息，打开「手机淘宝」领券下单 ￥3uP3ZzFXlK6￥';
+//					        }
+//					   });
+//					   clipboard.on('success', function(e) {
+//					        console.log(e)
+//					    });
+//					   document.getElementById('s_actionbar').click();
+//						buildDialogWindow({
+//							title:"淘口令复制成功",
+//							content:"打开淘宝App购买",
+//							primaryBtn:"没有安装淘宝App？<i>浏览器购买>></i>",
+//							parameter:"",
+//							callback:function(that){
+//								console.log(2333)
+//							}
+//						})
+//						document.getElementById("dialog_mongolia_layer").onclick=function(){
+//							this.style.display="none";
+//						}
+						this.directFlag=!this.directFlag;
+					},
 					selectRinking:function(index){
 						this.rinkingIndex=index;
 						if(index==0){
