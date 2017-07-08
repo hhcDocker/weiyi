@@ -112,17 +112,17 @@
 		</arcitle>
 		<footer>
 			<div id="s_actionbar" class="action_bar">
-                <a class="person_center" href="/weibao/index/weibaoPersonCenter">
+                <a class="person_center" href="javascript:void(0)" @click="showKouling">
                  	我的
                 </a>
                 <a class="toshop" href="{$shortUrl}">
                	       进店
                 </a>
-                <a class="addfav">
+                <a class="addfav" @click="showKouling">
                 	收藏
                 </a>
-                <a class="cart" style="" :href="commodityData.openAppUrl">加入购物车</a>
-                <a class="buy" style="" :href="commodityData.openAppUrl">立即购买</a></div>
+                <a class="cart" style="" href="javascript:void(0)" @click="showKouling">加入购物车</a>
+                <a class="buy" style="" href="javascript:void(0)" @click="showKouling">立即购买</a></div>
             </div>
 		</footer>
 		<div class="openForBrower" v-show="directFlag" @click="showKouling" style="display: none;">
