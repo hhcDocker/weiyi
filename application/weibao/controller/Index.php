@@ -39,24 +39,6 @@ class Index extends Controller
     {
         return $this->fetch('weibao_fav_cmd_shop');
     }
-	public function getData()
-    {
-    	$url="https://pg.m.tmall.com/shop/shop_auction_search.do?sort=p&p=1&page_size=12&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp";
-    	 $ch = curl_init();
-		 // 2. 设置选项，包括URL
-		 curl_setopt($ch,CURLOPT_URL,$url);
-		 curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-		 curl_setopt($ch,CURLOPT_HEADER,0);
-		 // 3. 执行并获取HTML文档内容
-		 $output = curl_exec($ch);
-		 if($output === FALSE ){
-		 echo "CURL Error:".curl_error($ch);
-		 }
-		 // 4. 释放curl句柄
-		 curl_close($ch);exit;
-		return $this->fetch('weibao_fav_cmd_shop');
-		
-    }
 	/*
 	 * 搜索商品
 	 */
@@ -88,9 +70,6 @@ class Index extends Controller
 	public function tmShopCommodityList()
     {
         $shopUrl=session('shopUrl');
-        $wei_bao = new WeiBaoData();
-        $res = $wei_bao->getShopDataByUrl($shopUrl);
-		dump($res);
         return $this->fetch('tm_shop_commodity_list',array('shopUrl'=>$shopUrl));
     }
 

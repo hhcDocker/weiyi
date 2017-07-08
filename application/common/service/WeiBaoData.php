@@ -34,13 +34,14 @@ class WeiBaoData {
         }
 
         $client = Client::getInstance();
+		$client->getEngine()->addOption('--web-security=no');
         $client->getProcedureCompiler()->clearCache();
         $client->getEngine()->setPath(config('PhantomjsPath'));
         $client->isLazy();
         /**
          * @see JonnyW\PhantomJs\Http\Request
          **/
-        $request = $client->getMessageFactory()->createRequest("https://pg.m.tmall.com/shop/shop_auction_search.htm?sort=default", 'GET');
+        $request = $client->getMessageFactory()->createRequest($url, 'GET');
         $request->setDelay(20000);
         /**
          * @see JonnyW\PhantomJs\Http\Response
