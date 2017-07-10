@@ -136,7 +136,11 @@ class Index extends Controller
                 echo "链接不存在";
                 exit;
             }
+
             session('shopUrl',$shop_info['shop_url']);
+            if (!$this->is_weixin()) {
+                header($shop_info['shop_url']);
+            }
             if (empty($shop_data)) {
                 $wei_bao = new WeiBaoData();
                 $res = $wei_bao->getShopDataByUrl($shop_info['shop_url']);
@@ -191,6 +195,15 @@ class Index extends Controller
     {
         $isTm = input('param.isTm') ? input('param.isTm') : '';
         $item_id = input('param.item_id') ? input('param.item_id') : '';
+
+        if (!$this->is_weixin()) {
+            if ($isTm) {
+                header('https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000');
+            }else{
+                header('https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$item_id.'%22%7D');
+            }
+            header($shop_info['shop_url']);
+        }
 
         vendor('simple_html_dom.simple_html_dom');
         set_time_limit(0);
@@ -486,5 +499,5 @@ class Index extends Controller
             return true;  
         }    
         return false;  
-    }  
+    }
 }
