@@ -7,7 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="/static/css/swiper-3.4.1.min.css"/>
 		<script type="text/javascript" src="/static/build/flexible.js" ></script>
 	</head>
-	<body  id="body_container" :style="{overflow: isVisible}">
+	<body  id="body_container" :style="{overflowY: isVisible}">
 		<arcitle>
 			<div class="swiper-container" id="shopBigPic_swiper">
 			    <div class="swiper-wrapper">
@@ -112,19 +112,22 @@
 		</arcitle>
 		<footer>
 			<div id="s_actionbar" class="action_bar">
-                <a class="person_center" href="/weibao/index/weibaoPersonCenter">
+                <a class="person_center" href="javascript:void(0)" @click="showKouling">
                  	我的
                 </a>
                 <a class="toshop" href="{$shortUrl}">
                	       进店
                 </a>
-                <a class="addfav">
+                <a class="addfav" @click="showKouling">
                 	收藏
                 </a>
-                <a class="cart" style="" :href="commodityData.openAppUrl">加入购物车</a>
-                <a class="buy" style="" :href="commodityData.openAppUrl">立即购买</div>
+                <a class="cart" style="" href="javascript:void(0)" @click="showKouling">加入购物车</a>
+                <a class="buy" style="" href="javascript:void(0)" @click="showKouling">立即购买</a></div>
             </div>
 		</footer>
+		<div class="openForBrower" v-show="directFlag" @click="showKouling" style="display: none;">
+			<img src="/static/images/openForBrower.png"/>
+		</div>
 		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
 		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
@@ -238,6 +241,7 @@
 				  		colorType:colorType,
 				  		loadingFlag:false,
 				  		isVisible:"auto",
+				  		directFlag:false,
 						tabs: [   
 						    {       
 						       name: '图文详情',   
@@ -260,6 +264,32 @@
 						}
 					},
 					methods:{
+						showKouling:function(){
+//							//ajax请求
+//							//mc
+//							var clipboard = new Clipboard('#s_actionbar', {
+//						        text: function() {
+//						            return '复制这条信息，打开「手机淘宝」领券下单 ￥3uP3ZzFXlK6￥';
+//						        }
+//						   });
+//						   clipboard.on('success', function(e) {
+//						        console.log(e)
+//						    });
+//						   document.getElementById('s_actionbar').click();
+//							buildDialogWindow({
+//								title:"淘口令复制成功",
+//								content:"打开淘宝App购买",
+//								primaryBtn:"没有安装淘宝App？<i>浏览器购买>></i>",
+//								parameter:"",
+//								callback:function(that){
+//									console.log(2333)
+//								}
+//							})
+//							document.getElementById("dialog_mongolia_layer").onclick=function(){
+//								this.style.display="none";
+//							}
+							this.directFlag=!this.directFlag;
+						},
 						//tab切换触发事件
 						tab:function(i,v){
 							 this.active = i;

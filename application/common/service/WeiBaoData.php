@@ -34,6 +34,7 @@ class WeiBaoData {
         }
 
         $client = Client::getInstance();
+		$client->getEngine()->addOption('--web-security=no');
         $client->getProcedureCompiler()->clearCache();
         $client->getEngine()->setPath(config('PhantomjsPath'));
         $client->isLazy();
@@ -53,7 +54,7 @@ class WeiBaoData {
         // dump( $response->getUrls());
         // dump($response->getConsole());
         $data=$response->getUrlData();
-        // var_dump($data);
+        // var_dump($data);exit;
         //end
         if (!$data ||empty($data)) {
             return array('errcode'=>30012);

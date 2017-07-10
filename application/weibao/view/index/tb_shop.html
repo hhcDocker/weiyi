@@ -7,8 +7,8 @@
 		<link rel="stylesheet" type="text/css" href="/static/css/swiper-3.4.1.min.css"/>
 		<script type="text/javascript" src="/static/build/flexible.js" ></script>
 	</head>
-	<body>
-		<div id="tbShopCt" v-cloak>
+	<body id="tbShopCt">
+		<div v-cloak>
 			<header>
 				<section class="shop_header">
 					<div class="header_img">
@@ -184,6 +184,15 @@
 			<section v-if="text_content"style="padding: 0 0.4rem 0.266666rem;border-bottom:0.05rem dashed rgb(149, 149, 149)">
 				{{text_content}}
 			</section>
+		</div>
+		<footer>
+			<div id="s_actionbar" class="action_bar">
+                <a class="cart" style="" :href="commodityData.openAppUrl" @click="showKouling">收藏</a>
+                <a class="buy" style="" :href="commodityData.openAppUrl" @click="showKouling">去淘宝购买</a></div>
+            </div>
+		</footer>
+		<div class="openForBrower" v-show="directFlag" @click="showKouling" style="display: none;">
+			<img src="/static/images/openForBrower.png"/>
 		</div>
 		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
@@ -363,8 +372,35 @@
 					text_content:text_content,
 					titleArr:titleArr,
 					tbRanking:1,
+					directFlag:false,
 				},
 				methods:{
+					showKouling:function(){
+//						//ajax请求
+//						//mc
+//						var clipboard = new Clipboard('#s_actionbar', {
+//					        text: function() {
+//					            return '复制这条信息，打开「手机淘宝」领券下单 ￥3uP3ZzFXlK6￥';
+//					        }
+//					   });
+//					   clipboard.on('success', function(e) {
+//					        console.log(e)
+//					    });
+//					   document.getElementById('s_actionbar').click();
+//						buildDialogWindow({
+//							title:"淘口令复制成功",
+//							content:"打开淘宝App购买",
+//							primaryBtn:"没有安装淘宝App？<i>浏览器购买>></i>",
+//							parameter:"",
+//							callback:function(that){
+//								console.log(2333)
+//							}
+//						})
+//						document.getElementById("dialog_mongolia_layer").onclick=function(){
+//							this.style.display="none";
+//						}
+						this.directFlag=!this.directFlag;
+					},
 					selectRinking:function(index){
 						this.rinkingIndex=index;
 						if(index==0){
