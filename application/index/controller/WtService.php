@@ -893,7 +893,6 @@ class WtService extends APIAuthController
                     $total_fee = $result['data']['total_fee'] * 0.01;
                     $transaction_id = $result['data']['transaction_id'] ;
                     $res = $this->updateServiceExpense($expense_num,$transaction_id,$total_fee,1);
-                    logResult("消费编号:".$expense_num."微信扫码支付成功");
                     return $this->format_ret($res);
                 }else{
                     return $this->format_ret($result);

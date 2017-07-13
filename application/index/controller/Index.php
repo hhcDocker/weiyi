@@ -19,6 +19,7 @@ use api\APIController;
 use api\APIException;
 use think\Config;
 use think\Request;
+use  app\index\AlertMail;
 
 
 class Index extends APIController
@@ -359,17 +360,19 @@ class Index extends APIController
      */
     public function WeixinNotify()
     {
-        $log ='成功调用WeixinNotify';
+        /*$log ='成功调用WeixinNotify';
         $file = 'new_cron_log/'.date("Ymd").'_wxpay_log.txt';
         $content = date("Y-m-d H:i:s")."\n\n".$log."\n\n";
-        Log::write($content, $file);
+        Log::write($content, $file);*/
+
+        $mail = new AlertMail("微信回调".time());
+        $mail->send();
 
         $notify_data = file_get_contents("php://input");//获取由微信传来的数据
         if(!$notify_data){
             $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
         }
         if(!$notify_data){
-            logResult("微信订单异步通知:校验失败");
             exit('校验失败');
         }
         $wxPay = new WxPay;
@@ -394,7 +397,6 @@ class Index extends APIController
                     'path'  =>  LOG_PATH.'../paylog/'
                 ]);
                 Log::write($result,'log');
-                logResult("微信订单异步通知:TRADE_FINISHED------notify_wxpay Run Success");
                 exit('支付成功');
             }else{
                 exit(json($res));

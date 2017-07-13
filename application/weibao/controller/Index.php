@@ -369,6 +369,7 @@ class Index extends Controller
                             if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
                                 $is_time_out =0;
                                 $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                                session('shopId',$service_info['shop_id']);
                                 break;
                             }
                         }
@@ -378,7 +379,6 @@ class Index extends Controller
                         }
                     }
 
-                    session('shopId',$service_info['shop_id']);
                     $arr['shopUrl'] = $shop_url;
                     $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
                     $assessFlag='{'.file_get_contents($assessFlag).'}';
