@@ -369,7 +369,7 @@ class Index extends APIController
             $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
         }
         if(!$notify_data){
-            logResult("校验失败");
+            logResult("微信订单异步通知:校验失败");
             exit('校验失败');
         }
         $wxPay = new WxPay;
@@ -394,7 +394,7 @@ class Index extends APIController
                     'path'  =>  LOG_PATH.'../paylog/'
                 ]);
                 Log::write($result,'log');
-                logResult("TRADE_FINISHED------notify_wxpay Run Success");
+                logResult("微信订单异步通知:TRADE_FINISHED------notify_wxpay Run Success");
                 exit('支付成功');
             }else{
                 exit(json($res));

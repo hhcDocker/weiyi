@@ -893,7 +893,7 @@ class WtService extends APIAuthController
                     $total_fee = $result['data']['total_fee'] * 0.01;
                     $transaction_id = $result['data']['transaction_id'] ;
                     $res = $this->updateServiceExpense($expense_num,$transaction_id,$total_fee,1);
-                    
+                    logResult("消费编号:".$expense_num."微信扫码支付成功");
                     return $this->format_ret($res);
                 }else{
                     return $this->format_ret($result);
@@ -918,7 +918,7 @@ class WtService extends APIAuthController
         vendor('alipay.alipay');
         $alipayNotify = new \AlipayNotify($config);
         $verify_result = $alipayNotify->verifyNotify();
-        logResult("outside------notify_alipay Run Success------verify_result = ".serialize($verify_result));
+        logResult("支付宝支付结果通知:verify_result = ".serialize($verify_result));
         if($verify_result) {//验证成功
             $out_trade_no = $_POST['out_trade_no'];//商户订单号
             $trade_no = $_POST['trade_no'];//支付宝交易号
@@ -929,12 +929,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
                 }
             }
             echo "success";  
@@ -942,7 +942,7 @@ class WtService extends APIAuthController
             //验证失败
             echo "fail";
             //写文本函数记录程序运行情况是否正常
-            logResult("fail------notify_alipay Run Success ");
+            logResult("支付宝支付结果通知:fail------notify_alipay Run Success ");
         }
     }
     
@@ -967,12 +967,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
