@@ -17,7 +17,7 @@ namespace app\common\service;
 use JonnyW\PhantomJs\Client;
 use app\common\utils\SN\ShortUrl;
 use app\common\utils\SN\ExpenseSN;
-
+use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 class WeiBaoData {
 
     /**
@@ -46,7 +46,7 @@ class WeiBaoData {
         /**
          * @see JonnyW\PhantomJs\Http\Response
          **/
-        //$request->setTimeout(100000);
+        //$request->setTimeout(10000);
         $response = $client->getMessageFactory()->createResponse();
 
         // Send the request
@@ -110,4 +110,39 @@ class WeiBaoData {
             return array('errcode'=>0,'shop_id'=>$shopId,'shop_data'=>$shop_data,'user_id'=>$userId);
         }
     }
+//	public function getShopDataByUrl($url='') {
+//  	if (!$url) {
+//  		return array('errcode'=>10001);
+//  	}
+//      if (!preg_match('/http.+m.taobao.com/', $url) && !preg_match('/http.+m.tmall.com/', $url)) {
+//      	return array('errcode'=>30007);
+//      }
+//		$location = $_SERVER['DOCUMENT_ROOT'].'/../vendor/jonnyw/php-phantomjs/src/JonnyW/PhantomJs/Resources/procedures';
+//		$serviceContainer = ServiceContainer::getInstance();
+//		$procedureLoader = $serviceContainer->get('procedure_loader_factory')->createProcedureLoader($location);
+//      $client = Client::getInstance();
+//		$client->setProcedure('my_procedure');
+//		$client->getProcedureLoader()->addLoader($procedureLoader);
+//		
+//		$client->getEngine()->addOption('--web-security=no');
+//      $client->getProcedureCompiler()->clearCache();
+//      $client->getEngine()->setPath(config('PhantomjsPath'));
+//      //$client->isLazy();
+//      /**
+//       * @see JonnyW\PhantomJs\Http\Request
+//       **/
+//      $request = $client->getMessageFactory()->createRequest($url, 'GET');
+//      //$request->setDelay(30000);
+//      /**
+//       * @see JonnyW\PhantomJs\Http\Response
+//       **/
+//      $request->setTimeout(10000);
+//      $response = $client->getMessageFactory()->createResponse();
+//
+//      // Send the request
+//      $client->send($request, $response);
+//      $data=$response->getUrlData();
+//       var_dump($data);exit;
+//     
+//  }
 }

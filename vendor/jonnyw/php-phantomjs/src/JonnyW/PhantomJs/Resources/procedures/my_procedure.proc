@@ -105,15 +105,6 @@ phantom.onError = function(msg, trace) {
  */
 page.open ('{{ input.getUrl() }}', '{{ input.getMethod() }}', '{{ input.getBody() }}', function (status) {
     [[ engine.load('page_body_styles') ]]
-    response.shopOtherData = page.evaluate(function(){
-	    var obj={
-	    	shopName:document.querySelector('.name').innerHTML,
-	    	collectCounter:document.querySelector('.collect-counter').innerHTML,
-	    	logo:document.querySelector('.logo img').src,
-	    	backImage:document.querySelector('.shop-back-img img').src,
-	    };
-    	return obj;
-    });
     window.setTimeout(function () { 
         procedure.execute(status);
     }, {{ input.getTimeout() - 200 }});
@@ -125,42 +116,19 @@ page.open ('{{ input.getUrl() }}', '{{ input.getMethod() }}', '{{ input.getBody(
 procedure.execute = function (status) {
 	function Fn(url) {
 		var arrData=[];
-		for(var i=0;i<url.length;i++){
-			if((url[i].indexOf('v=1')>-1||url[i].indexOf('v=2')>-1)&&(url[i].indexOf('getpageview')==-1)){
-					var xhr = new XMLHttpRequest(); 
-				    if(xhr){ 
-			    		var urlToken=url[i];
-				        xhr.withCredentials = true;
-				        xhr.onreadystatechange = function(){  
-				            if(xhr.readyState == 4){  
-				                if(xhr.status == 200){  
-				                	arrData.push(xhr.response);
-				                } 
-				            }  
-				        }  
-				        xhr.open("GET", urlToken, false);  
-				        xhr.send(null);  
-				    } 
-			}
-		}
-		for(var i=url.length-1;i>=0;i--){
-			if(url[i].indexOf('v=4')>-1||url[i].indexOf('getpageview')>-1){
-					var xhr = new XMLHttpRequest(); 
-				    if(xhr){ 
-			    		var urlToken=url[i];
-				        xhr.withCredentials = true;
-				        xhr.onreadystatechange = function(){  
-				            if(xhr.readyState == 4){  
-				                if(xhr.status == 200){  
-				                	arrData.unshift(xhr.response);
-				                } 
-				            }  
-				        }  
-				        xhr.open("GET", urlToken, false);  
-				        xhr.send(null);  
-				    }
-			    break; 
-			}
+		for(var i=1;i<4;i++){
+			var xhr = new XMLHttpRequest(); 
+			var urlToken=location.origin+"/shop/shop_auction_search.do?sort=s&p="+i+"&page_size=24&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp";
+	        xhr.withCredentials = true;
+	        xhr.onreadystatechange = function(){  
+	            if(xhr.readyState == 4){  
+	                if(xhr.status == 200){  	
+	                	arrData.push(xhr.response);
+	                } 
+	            }  
+	        }  
+	        xhr.open("GET", urlToken, false);  
+	        xhr.send(null);
 		}
         return  arrData;
     }
