@@ -79,7 +79,7 @@ class Index extends Controller
             }
 
             if ($page_index<1 || $page_index>3) {
-                return json_encode(array('errcode'=>0,'msg'=>'页码错误','data'=>array()));
+                return json_encode(array('errcode'=>3,'msg'=>'页码错误','data'=>array()));
             }
 
             //获取店铺商品统计信息
@@ -108,12 +108,12 @@ class Index extends Controller
                     if (array_key_exists($page_index-1, $goods_data)) {
                         return json_encode(array('errcode'=>0,'data'=>$goods_data[$page_index-1]['items']));
                     }else{
-                        return json_encode(array('errcode'=>0,'msg'=>'页码错误','data'=>array()));
+                        return json_encode(array('errcode'=>3,'msg'=>'页码错误','data'=>array()));
                     }
                 }
             }else{
                 if ($page_index>$shop_info['total_page']) {
-                    return json_encode(array('errcode'=>0,'msg'=>'页码错误','data'=>array()));
+                    return json_encode(array('errcode'=>3,'msg'=>'页码错误','data'=>array()));
                 }else{
                     //从表中获取对应页数据
                     $data = model('AliShopGoodsList')->getGoodsListByShopId($shopId,$page_index);
@@ -557,7 +557,7 @@ class Index extends Controller
      * @return bool
      */
     public function is_weixin(){  
-        // return true;  
+        return true;  
         if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {  
             return true;  
         }    
