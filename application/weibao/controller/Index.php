@@ -117,7 +117,7 @@ class Index extends Controller
                 }else{
                     //从表中获取对应页数据
                     $data = model('AliShopGoodsList')->getGoodsListByShopId($shopId,$page_index);
-                    return json_encode(array('errcode'=>0,'data'=>$data[$page_index-1]['items']));
+                    return json_encode(array('errcode'=>0,'data'=>$data));
                 }
             }
         }else{

@@ -30,7 +30,7 @@ class AliShopGoodsList extends Base
         if (!$wj_shop_id || !$page_index) {
             return array();
         }
-        $list_info = Db::table('wj_ali_shop_goods_list')->where('wj_shop_id',$wj_shop_id)->where('page_index',$page_index)->find();
+        $list_info = Db::table('wj_ali_shop_goods_list')->where('wj_shop_id',$wj_shop_id)->where('page_index',$page_index)->value('items');
         return $list_info;
     }
 
@@ -52,7 +52,7 @@ class AliShopGoodsList extends Base
                 'page_index' =>$v['page_index']
             );
         }
-    	$has_add =Db::table('wj_ali_goods_des')->insertAll($add_data);
+    	$has_add =Db::table('wj_ali_shop_goods_list')->insertAll($add_data);
         return $has_add;
     }
 
