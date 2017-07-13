@@ -557,7 +557,7 @@ class Index extends Controller
      * @return bool
      */
     public function is_weixin(){  
-        return true;  
+        //return true;  
         if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {  
             return true;  
         }    
