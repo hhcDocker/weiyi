@@ -113,11 +113,12 @@ class WeiBaoData {
 
 	public function getShopGoodsDataByUrl($url='') {
      	if (!$url) {
-     		return array('errcode'=>10001);
+     		return array('errcode'=>10001,'msg'=>'参数错误');
      	}
         if (!preg_match('/http.+m.taobao.com/', $url) && !preg_match('/http.+m.tmall.com/', $url)) {
-         	return array('errcode'=>30007);
+         	return array('errcode'=>30007,'msg'=>'非淘宝天猫链接');
         }
+
 		$location = $_SERVER['DOCUMENT_ROOT'].'/../vendor/jonnyw/php-phantomjs/src/JonnyW/PhantomJs/Resources/procedures';
 		$serviceContainer = ServiceContainer::getInstance();
 		$procedureLoader = $serviceContainer->get('procedure_loader_factory')->createProcedureLoader($location);
@@ -143,6 +144,30 @@ class WeiBaoData {
         // Send the request
         $client->send($request, $response);
         $data=$response->getUrlData();
-        var_dump($data);exit;
+        if (!$data ||empty($data)) {
+            return array('errcode'=>30012,'msg'=>'获取数据失败');
+            //echo json_encode($response->getConsole());
+            //return;
+        }
+
+        $goods_data =array();
+        $total_page = 0;
+        $page_size = 0;
+        $total_results = 0;
+        foreach ($data as $k => $v) {
+            $v = preg_replace('/jsonp\((.+)\)/','\1',$v);
+            $v = json_decode($v,true);
+            if ($k==0) {
+                $total_page = $v['total_page'];
+                $page_size = $v['page_size'];
+                $total_results = $v['total_results'];
+            }
+            $goods_data[] = array('items'=>json_encode($v['items']),'page_index'=>$v['current_page']);
+        }
+        if (empty($goods_data)) {
+            return json_encode(array('errcode'=>30012,'msg'=>'获取数据失败'));
+        }
+
+        return array('errcode'=>0,'goods_data'=>$goods_data,'total_page'=>$total_page,'page_size'=>$page_size,'total_results'=>$total_results);
     }
 }

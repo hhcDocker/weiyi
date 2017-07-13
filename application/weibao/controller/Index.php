@@ -69,8 +69,68 @@ class Index extends Controller
      */
 	public function tmShopCommodityList()
     {
-        $shopUrl=session('shopUrl');
-        return $this->fetch('tm_shop_commodity_list',array('shopUrl'=>$shopUrl));
+        if($this->request->method() == 'POST'){
+            $page_index = input('post.page_index') ? intval(input('post.page_index')) : 0;
+
+            //session存在则表示服务时间范围内，不再做检测
+            $shopId=session('shopId');
+            if (!$shopId) {
+                return json_encode(array('errcode'=>1,'msg'=>'参数错误','data'=>array()));
+            }
+
+            if ($page_index<1 || $page_index>3) {
+                return json_encode(array('errcode'=>0,'msg'=>'页码错误','data'=>array()));
+            }
+
+            //获取店铺商品统计信息
+            $shop_info = model('AliShops')->getShopInfoById($shopId);
+            if (empty($shop_info)) {
+                return json_encode(array('errcode'=>2,'msg'=>'该店铺未转换过链接','data'=>array()));
+            }
+            if (is_null($shop_info['total_page']) || is_null($shop_info['total_results'])) { //表示没有获取过商品列表页
+                $wei_bao = new WeiBaoData();
+                $res = $wei_bao->getShopGoodsDataByUrl($shop_url);
+                if ($res['errcode']) {
+                    return json_encode($res);
+                }else{
+                    if (empty($res['data'])) {
+                        return json_encode(array('errcode'=>1,'msg'=>'获取数据失败'));
+                    }
+                    $total_page = $res['total_page'];
+                    $page_size = $res['page_size'];
+                    $total_results = $res['total_results'];
+                    $goods_data = $res['goods_data'];
+                    try{
+                        //更新店铺数据
+                        $has_update = model('AliShops')->updateShopById($shopId,$total_page,$page_size,$total_results);
+                        //存储店铺商品信息
+                        $has_add = model('AliShopGoodsList')->batchAddGoodsListData($shopId,$goods_data);
+                    }catch(Exception $e){
+                        return json_encode(array('errcode'=>2,'msg'=>'操作数据失败'));
+                    }
+                    if (array_key_exists($page_index-1, $goods_data)) {
+                        return json_encode(array('errcode'=>0,'data'=>$goods_data[$page_index-1]['items']));
+                    }else{
+                        return json_encode(array('errcode'=>0,'msg'=>'页码错误','data'=>array()));
+                    }
+                }
+            }else{
+                if ($page_index>$shop_info['total_page']) {
+                    return json_encode(array('errcode'=>0,'msg'=>'页码错误','data'=>array()));
+                }else{
+                    //从表中获取对应页数据
+                    $data = model('AliShopGoodsList')->getGoodsListByShopId($shopId,$page_index);
+                    return json_encode(array('errcode'=>0,'data'=>$data[$page_index-1]['items']));
+                }
+            }
+        }else{
+            $flag_session=1;
+            $shopId=session('shopId');
+            if (!$shopId) {
+                $flag_session=0;
+            }
+            return $this->fetch('tm_shop_commodity_list',array('flag_session'=>$flag_session));
+        }
     }
 
 	/**
@@ -137,7 +197,7 @@ class Index extends Controller
                 exit;
             }
 
-            session('shopUrl',$shop_info['shop_url']);
+            session('shopId',$service_info['shop_id']);
             if (!$this->is_weixin()) {
                 header('Location:'.$shop_info['shop_url']);
                 exit;
@@ -260,7 +320,7 @@ class Index extends Controller
                         }
                     }
 
-                    session('shopUrl',$item_info['shop_url']);
+                    session('shopId',$service_info['shop_id']);
                 }else{
                     $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
                     $html = file_get_html($url);
@@ -321,7 +381,7 @@ class Index extends Controller
                         }
                     }
 
-                    session('shopUrl',$shop_url);
+                    session('shopId',$service_info['shop_id']);
                     $arr['shopUrl'] = $shop_url;
                     $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
                     $assessFlag='{'.file_get_contents($assessFlag).'}';
@@ -496,10 +556,14 @@ class Index extends Controller
         }
     }
 
+    /**
+     * @return bool
+     */
     public function is_weixin(){  
         if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {  
             return true;  
         }    
         return false;  
     }
+
 }

@@ -125,14 +125,37 @@ class AliShops extends Base
         $has_update =Db::table('wj_ali_shops')->where('ali_shop_id',$ali_shop_id)->update($update_data);
         return $has_update;
     }
+
+    /**
+     * 更新店铺商品信息
+     */
+    public function updateShopById($id=0,$total_page=0,$page_size=0,$total_results=0)
+    {
+        if (!$id ||!$page_size) {
+            return 0;
+        }
+        $update_data = array(
+            'total_page'=>$total_page,
+            'page_size'=>$page_size,
+            'total_results'=>$total_results,
+            'update_time'=> time(),
+        );
+        $has_update =Db::table('wj_ali_shops')->where('id',$id)->update($update_data);
+        return $has_update;
+    }
 }
 /*CREATE TABLE `wj_ali_shops` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `ali_shop_id` int(10) unsigned NOT NULL COMMENT '淘宝天猫店铺id，可根据shopId拼成店铺链接（淘宝以https://shop34189316.taobao.com形式）',
   `shop_url` varchar(255) DEFAULT NULL COMMENT '店铺链接，天猫以https://lanhuqcyp.m.tmall.com形式，淘宝以https://shop.m.taobao.com/shop/shop_index.htm?user_id=2256365969形式',
+  `total_page` mediumint(5) unsigned DEFAULT NULL COMMENT '店铺商品列表页数',
+  `page_size` tinyint(2) unsigned DEFAULT NULL COMMENT '店铺商品每页商品数量，当前为24个商品',
+  `total_results` int(10) unsigned DEFAULT NULL COMMENT '店铺商品总数量',
   `is_deleted` tinyint(1) unsigned DEFAULT '0',
   `create_time` int(10) unsigned DEFAULT NULL,
   `update_time` int(10) unsigned DEFAULT NULL,
-  `delete_-time` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;*/
+  `delete_time` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ali_shop_id` (`ali_shop_id`),
+  KEY `shop_url` (`shop_url`)
+) ENGINE=InnoDB AUTO_INCREMENT=163 DEFAULT CHARSET=utf8;*/
