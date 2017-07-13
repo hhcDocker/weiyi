@@ -786,9 +786,14 @@ class WtService extends APIAuthController
         $page_index = input('param.page_index') ? intval(input('param.page_index')):1;
         $page_size = input('param.page_size') ? intval(input('param.page_size')):10;
         $service_type = input('param.service_type') ? intval(input('param.service_type')):0;//0-全部，1-已过期，2-未开始，3-未过期
-
+        if (!$page_size) {
+            throw new APIException(10001);
+        }
         $service_list = model('ShopServices')->getServicesByManagerId(session('manager_id'),$page_index, $page_size,$service_type);
-        return $this->format_ret($service_list);
+        $service_count = model('ShopServices')->countServicesByManagerId(session('manager_id'),$service_type);
+        $service_page = ceil($service_count/$page_size);
+        $res_array = array('page_index'=>$page_index,'page_all'=>$service_page,'service_list'=>$service_list);
+        return $this->format_ret($res_array);
     }
 
     /**

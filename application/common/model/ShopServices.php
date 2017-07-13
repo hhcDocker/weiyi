@@ -100,6 +100,34 @@ class ShopServices extends Base
     }
 
     /**
+     * [countServicesByManagerId description]
+     * @param  integer $manager_id   [description]
+     * @param  [type]  $service_type [description]
+     * @return [type]                [description]
+     */
+    public function countServicesByManagerId($manager_id=0,$service_type)
+    {
+        if (!$manager_id) {
+            return 0;
+        }
+        $where = '';
+        if ($service_type==1) { //已过期
+            $where ='service_end_time <= unix_timestamp(now())';
+        }elseif ($service_type==2) { //未开始
+            $where ='service_start_time > UNIX_TIMESTAMP(NOW())';
+        }elseif ($service_type==3) { //未过期
+            $where ='service_start_time < UNIX_TIMESTAMP(NOW()) AND service_end_time > unix_timestamp(now())';
+        }
+        $res = Db::table('wj_shop_services')
+                ->where('manager_id',$manager_id)
+                ->where('is_deleted',0)
+                ->where('shop_url','not null')
+                ->where($where)
+                ->count();
+        return $res;
+    }
+
+    /**
      * 通过短链接查询服务
      * @param  integer $url_str [description]
      * @return [type]              [description]
