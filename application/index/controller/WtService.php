@@ -651,6 +651,16 @@ class WtService extends APIAuthController
             Db::rollback();
             throw new APIException(30019);
         }
+        //如果体验未过期，加上剩余天数
+        if (!empty($service_info)) {
+            if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
+                $remain_expenience_day = date('d',$service_info['service_end_time']) - date('d', $service_start_time); //剩余的体验服务时间
+                $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
+            }
+        }else{
+            $experience_days = config('experience_days');
+            $service_end_time = $service_end_time + $experience_days*24*60*60;
+        }
         $res = array('expense_num'=>$expense_num,'shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
         return $this->format_ret($res);
     }
