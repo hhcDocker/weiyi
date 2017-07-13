@@ -9,8 +9,8 @@
 	</head>
 	<body>
 		<div id="commodity_list_ct">
-			<header>
-				<!--<section class="head_search">
+			<!--<header>
+				<section class="head_search">
 					<div class="filter_back"><a href="/" class="to_shop_mp">&nbsp;</a></div>
 					<div class="searchbar_wrap">
 	            		<input type="text" name="" id="" value="" />
@@ -19,11 +19,11 @@
 			        	<div id="J_GlobalNav" class="mui-header-global-nav"><b></b></div>
 			        </div>
 			        
-				</section>-->
+				</section>
 				<section class="head_nav">
 					<div @click="sort(item,$index)" class="o_item " :class="{'selected_item':$index==sortIndex,'prict_sort':$index==3}" v-for='item in sortArr' >{{item.title}}<i class="before" v-if='$index==3' :class="{'sort_pd':item.flag}"></i><i class="after" v-if='$index==3' :class="{'sort_p':!item.flag}"></i></div>
 				</section>
-			</header>
+			</header>-->
 			<article>
 				<ul>
 					<li v-for='item in cmdList' @click="teDetail(item)">
@@ -42,6 +42,7 @@
 			</footer>
 		</div>
 		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
+		<script type="text/javascript" src="/static/js/zepto.min.js" ></script>
 		<script type="text/javascript">
 			var vm=new Vue({
             		el:"#commodity_list_ct",
@@ -70,35 +71,35 @@
             			sortIndex:0,
             			sorts:1,
             		},
-            		created:function(){
-            			var obj={
-            				sort:'s',
-            			}
-            			this.sort(obj,0);
-            		},
+//          		created:function(){
+//          			var obj={
+//          				sort:'s',
+//          			}
+//          			this.sort(obj,0);
+//          		},
             		methods:{
-            			sort:function(item,index){
-							document.documentElement.scrollTop = document.body.scrollTop =0;
-            				nowPage=1;
-            				this.sorts=item.sort;
-            				this.sortIndex=index;
-            				var scriptRecommend = document.createElement('script');
-            				if(index==3){
-            					if(item.flag){
-            						item.sort='pd',
-            						item.flag=false;
-            					}else{
-            						item.sort='p',
-            						item.flag=true;
-            					}
-            				}
-				            scriptRecommend.src = "{$shopUrl}/shop/shop_auction_search.do?sort="+item.sort+"&p=1&page_size=12&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp";
-				            document.body.appendChild(scriptRecommend);
-				             setTimeout(function(){
-				            	scriptRecommend.parentNode.removeChild(scriptRecommend);
-				            },2000)
-				            checkImage();
-            			},
+//          			sort:function(item,index){
+//							document.documentElement.scrollTop = document.body.scrollTop =0;
+//          				nowPage=1;
+//          				this.sorts=item.sort;
+//          				this.sortIndex=index;
+//          				var scriptRecommend = document.createElement('script');
+//          				if(index==3){
+//          					if(item.flag){
+//          						item.sort='pd',
+//          						item.flag=false;
+//          					}else{
+//          						item.sort='p',
+//          						item.flag=true;
+//          					}
+//          				}
+//				            scriptRecommend.src = "/shop/shop_auction_search.do?sort="+item.sort+"&p=1&page_size=12&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp";
+//				            document.body.appendChild(scriptRecommend);
+//				             setTimeout(function(){
+//				            	scriptRecommend.parentNode.removeChild(scriptRecommend);
+//				            },2000)
+//				            checkImage();
+//          			},
             			sortByPrice:function(item){
             				
             			},
@@ -113,16 +114,28 @@
 						},
             		}
             	})
-            function jsonp(a){
-            	vm.cmdList=a.items;
-            	vm.loadingFlag=false;
-            }
+//          function jsonp(a){
+//          	vm.cmdList=a.items;
+//          	vm.loadingFlag=false;
+//          }
             window.addEventListener('scroll',checkImage,true);
             var timer=0;
             var isShowAll=true;
             var nowPage=1;
-            function checkImage() {
-            	clearTimeout(timer);
+            $.ajax({
+				type:"post",
+				url:"/weibao/index/tmShopCommodityList",
+				data:{
+					page_index:nowPage
+				},
+				async:true,
+				success:function(res){
+        			vm.cmdList=JSON.parse(JSON.parse(res).data);
+        			vm.loadingFlag=false;
+				}
+			});
+		    function checkImage() {
+	    		clearTimeout(timer);
             	timer = setTimeout(function(){
 	            	var	lazys = document.querySelectorAll('.cmd_item'),
 	            		l=lazys.length;
@@ -142,28 +155,31 @@
 						 if(rect.top< window.innerHeight){
 	            			nowPage++;
 						 	vm.loadingFlag=true;
-            				var scriptRecommendAdd = document.createElement('script');
-						 	 scriptRecommendAdd.src = "{$shopUrl}/shop/shop_auction_search.do?sort="+vm.sorts+"&p="+nowPage+"&page_size=12&from=h5&shop_id=850725306&ajson=1&_tm_source=tmallsearch&callback=jsonp2";
-				            document.body.appendChild(scriptRecommendAdd);
-				             setTimeout(function(){
-				            	scriptRecommendAdd.parentNode.removeChild(scriptRecommendAdd);
-				            },2000)
+	        				$.ajax({
+	        					type:"post",
+	        					url:"/weibao/index/tmShopCommodityList",
+	        					data:"&page_index="+nowPage,
+	        					async:true,
+	        					success:function(res){
+	        						console.log(res)
+	        						if(JSON.parse(res).errcode==0){
+	        							var data=JSON.parse(JSON.parse(res).data)
+	        							var len=JSON.parse(JSON.parse(res).data).length;
+						            	for(var i=0;i<len;i++){
+						            		vm.cmdList.push(data[i]);
+						            	}
+	        						}else if(JSON.parse(res).errcode==3){
+					            		isShowAll=false;
+						            	vm.loadingFlag=false;
+	        						}else {
+	        							alert(JSON.parse(res).msg);
+	        						}
+	        					}
+	        				});
 						 }
 	            	}
             	},300);
-            	
 			}
-            function jsonp2(a){
-            	var len=a.items.length
-            	for(var i=0;i<len;i++){
-            		vm.cmdList.push(a.items[i]);
-            	}
-            	if(len<24){
-            		isShowAll=false;
-            	}
-            	vm.loadingFlag=false;
-            }
-            
 		</script>
 	</body>
 </html>
