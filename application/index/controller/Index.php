@@ -353,4 +353,54 @@ class Index extends APIController
             throw new APIException(10022);
         }
     }
+
+    /**
+     * 微信订单异步通知
+     */
+    public function WeixinNotify()
+    {
+        $log ='成功调用WeixinNotify';
+        $file = 'new_cron_log/'.date("Ymd").'_wxpay_log.txt';
+        $content = date("Y-m-d H:i:s")."\n\n".$log."\n\n";
+        Log::write($content, $file);
+
+        $notify_data = file_get_contents("php://input");//获取由微信传来的数据
+        if(!$notify_data){
+            $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
+        }
+        if(!$notify_data){
+            logResult("微信订单异步通知:校验失败");
+            exit('校验失败');
+        }
+        $wxPay = new WxPay;
+        $wxPay->_weixin_config();
+        $doc = new \DOMDocument();
+        $doc->loadXML($notify_data);
+        $out_trade_no = $doc->getElementsByTagName("out_trade_no")->item(0)->nodeValue;
+        $transaction_id = $doc->getElementsByTagName("transaction_id")->item(0)->nodeValue;
+        $openid = $doc->getElementsByTagName("openid")->item(0)->nodeValue;
+        $input = new \WxPayOrderQuery();
+        $input->SetTransaction_id($transaction_id);
+        $result = \WxPayApi::orderQuery($input);
+        if(array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && array_key_exists("trade_state", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS" && $result["trade_state"] == "SUCCESS")
+        {
+            $total_fee = $result['total_fee'] * 0.01;
+            
+            $res = $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
+            if ($res['code']) {
+                // 处理支付成功后的逻辑业务
+                Log::init([
+                    'type'  =>  'File',
+                    'path'  =>  LOG_PATH.'../paylog/'
+                ]);
+                Log::write($result,'log');
+                logResult("微信订单异步通知:TRADE_FINISHED------notify_wxpay Run Success");
+                exit('支付成功');
+            }else{
+                exit(json($res));
+            }
+        }else{
+            exit('支付失败');
+        }
+    }
 }

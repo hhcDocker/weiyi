@@ -560,7 +560,7 @@ class WtService extends APIAuthController
                 'time_start' => date("YmdHis"),//交易开始时间
                 'time_expire' => date("YmdHis", time() + 604800),//一周过期
                 'goods_tag' => '购买服务',
-                'notify_url' => request()->domain().'/index/wt_service/WeixinNotify',
+                'notify_url' => request()->domain().'/index/index/WeixinNotify',
                 'trade_type' => 'NATIVE',
                 'product_id' => rand(1,999999),
             ]);
@@ -732,7 +732,7 @@ class WtService extends APIAuthController
                 'time_start' => date("YmdHis"),//交易开始时间
                 'time_expire' => date("YmdHis", time() + 604800),//一周过期
                 'goods_tag' => '服务续费',
-                'notify_url' => request()->domain().'/index/wt_service/WeixinNotify',
+                'notify_url' => request()->domain().'/index/index/WeixinNotify',
                 'trade_type' => 'NATIVE',
                 'product_id' => rand(1,999999),
             ]);
@@ -870,50 +870,7 @@ class WtService extends APIAuthController
     }
     
     // ******************************************************************************支付相关************************************************************************
-    /**
-     * 微信订单异步通知
-     */
-    public function WeixinNotify()
-    {
-        $notify_data = file_get_contents("php://input");//获取由微信传来的数据
-        if(!$notify_data){
-            $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
-        }
-        if(!$notify_data){
-            exit('校验失败');
-        }
-        $wxPay = new WxPay;
-        $wxPay->_weixin_config();
-        $doc = new \DOMDocument();
-        $doc->loadXML($notify_data);
-        $out_trade_no = $doc->getElementsByTagName("out_trade_no")->item(0)->nodeValue;
-        $transaction_id = $doc->getElementsByTagName("transaction_id")->item(0)->nodeValue;
-        $openid = $doc->getElementsByTagName("openid")->item(0)->nodeValue;
-        $input = new \WxPayOrderQuery();
-        $input->SetTransaction_id($transaction_id);
-        $result = \WxPayApi::orderQuery($input);
-        if(array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && array_key_exists("trade_state", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS" && $result["trade_state"] == "SUCCESS")
-        {
-            $total_fee = $result['total_fee'] * 0.01;
-            
-            $res = $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
-            if ($res['code']) {
-                // 处理支付成功后的逻辑业务
-                Log::init([
-                    'type'  =>  'File',
-                    'path'  =>  LOG_PATH.'../paylog/'
-                ]);
-                Log::write($result,'log');
-                logResult("TRADE_FINISHED------notify_alipay Run Success");
-                exit('支付成功');
-            }else{
-                exit(json($res));
-            }
-        }else{
-            exit('支付失败');
-        }
-    }
-
+    
     /**
      * 查询微信或支付宝订单结果
      * @return \think\response\Json
@@ -936,7 +893,7 @@ class WtService extends APIAuthController
                     $total_fee = $result['data']['total_fee'] * 0.01;
                     $transaction_id = $result['data']['transaction_id'] ;
                     $res = $this->updateServiceExpense($expense_num,$transaction_id,$total_fee,1);
-                    
+                    logResult("消费编号:".$expense_num."微信扫码支付成功");
                     return $this->format_ret($res);
                 }else{
                     return $this->format_ret($result);
@@ -961,7 +918,7 @@ class WtService extends APIAuthController
         vendor('alipay.alipay');
         $alipayNotify = new \AlipayNotify($config);
         $verify_result = $alipayNotify->verifyNotify();
-        logResult("outside------notify_alipay Run Success------verify_result = ".serialize($verify_result));
+        logResult("支付宝支付结果通知:verify_result = ".serialize($verify_result));
         if($verify_result) {//验证成功
             $out_trade_no = $_POST['out_trade_no'];//商户订单号
             $trade_no = $_POST['trade_no'];//支付宝交易号
@@ -972,12 +929,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
                 }
             }
             echo "success";  
@@ -985,7 +942,7 @@ class WtService extends APIAuthController
             //验证失败
             echo "fail";
             //写文本函数记录程序运行情况是否正常
-            logResult("fail------notify_alipay Run Success ");
+            logResult("支付宝支付结果通知:fail------notify_alipay Run Success ");
         }
     }
     
@@ -1010,12 +967,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
@@ -1244,7 +1201,7 @@ class WtService extends APIAuthController
             'time_start' => date("YmdHis"),//交易开始时间
             'time_expire' => date("YmdHis", time() + 604800),//一周过期
             'goods_tag' => '购买服务',
-            'notify_url' => request()->domain().'/index/wt_service/WeixinNotify',
+            'notify_url' => request()->domain().'/index/index/WeixinNotify',
             'trade_type' => 'NATIVE',
             'product_id' => rand(1,999999),
         ]);
