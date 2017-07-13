@@ -70,7 +70,7 @@ class Index extends Controller
 	public function tmShopCommodityList()
     {
         if($this->request->method() == 'POST'){
-            $page_index = input('post.page_index') ? intval(input('post.page_index')) : 0;
+            $page_index = input('post.page_index') ? intval(input('post.page_index')) : 1;
 
             //session存在则表示服务时间范围内，不再做检测
             $shopId=session('shopId');
@@ -89,13 +89,10 @@ class Index extends Controller
             }
             if (is_null($shop_info['total_page']) || is_null($shop_info['total_results'])) { //表示没有获取过商品列表页
                 $wei_bao = new WeiBaoData();
-                $res = $wei_bao->getShopGoodsDataByUrl($shop_url);
+                $res = $wei_bao->getShopGoodsDataByUrl($shop_info['shop_url']);
                 if ($res['errcode']) {
                     return json_encode($res);
                 }else{
-                    if (empty($res['data'])) {
-                        return json_encode(array('errcode'=>1,'msg'=>'获取数据失败'));
-                    }
                     $total_page = $res['total_page'];
                     $page_size = $res['page_size'];
                     $total_results = $res['total_results'];
@@ -560,6 +557,7 @@ class Index extends Controller
      * @return bool
      */
     public function is_weixin(){  
+        // return true;  
         if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {  
             return true;  
         }    
