@@ -70,6 +70,15 @@
 				    </div>
 				</div>
 			</section>
+			<section class="section_swiper">
+				 <div class="swiper-container"  id="conponListSpecail">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide " v-for='item in conponQueryDataSpecail' @click="showKouling">
+				        	<img :src="item"/>
+				        </div>
+				    </div>
+				</div>
+			</section>
 			<section class="shopCmdImageList" v-if='images.length>0'>
 				<div v-for='item in images' v-if='item.length>0&&item[0].imageUrl' >
 					<span v-for="items in item" @click="toDetailByItemSearch(items,$index)" :style="{width:items.styleBinding.width*1.155/75 + 'rem',height:items.styleBinding.height*1.155/75 + 'rem'}">
@@ -217,7 +226,7 @@
 		<script type="text/javascript" src="/static/js/swiper-3.4.1.min.js" ></script>
 		<script type="text/javascript" src="/static/js/vue.min.js" ></script>
 		<script type="text/javascript">
-			var data={$data},shopData={},conponData,itemSearch=[],titleArr=[],rankingData,objImages=[],objImagesIndex=0,objImagesClick=[],getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced=[];
+			var data={$data},shopData={},conponData,conponQueryDataSpecail=[],itemSearch=[],titleArr=[],rankingData,objImages=[],objImagesIndex=0,objImagesClick=[],getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced=[];
 			for(var i=0;i<data.length;i++){
 				var apiData=JSON.parse(data[i].api_data);
 				if(data[i].api_url=="mtop.tmall.shop.page.get"){
@@ -228,7 +237,6 @@
 					conponData=apiData;
 				}else if(data[i].api_url=="mtop.taobao.shop.itemSearch"){
 					itemSearch.push(apiData);
-					console.log(apiData)
 				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get"){
 					enhenced.push(apiData);
 				}else if(data[i].api_url=="mtop.taobao.rankingListRecommendService.getItemLists"){
@@ -297,16 +305,23 @@
 										}else if(shopData.data.view.subViews[k].subViews[i].subViews[l].type=='container'){
 											try{
 												if(shopData.data.view.subViews[k].subViews[i].subViews[l-1]&&shopData.data.view.subViews[k].subViews[i].subViews[l-1].type=='label'){
-													
 													if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews instanceof Array){
 														var objImage={};
 														objImage.arr=[];
 														for(var g=0;g<shopData.data.view.subViews[k].subViews[i].subViews[l].subViews.length;g++){
-															
+															//console.log(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g])
 															if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].type=='image'){
 																var url = shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].dataBinding.url
 																if(url.indexOf('$')<0){
 																	objImage.arr.push(url);
+																}else{
+																	if(shopData.data.view.subViews[k].subViews[i].subViews[l].subViews[g].events){
+																		var specailConponArr = url.split(".");
+																		if(specailConponArr.length==3){
+																			var newStr = specailConponArr[0].replace("$","")+specailConponArr[1]+"."+specailConponArr[2];
+																			eval("conponQueryDataSpecail.push(shopData.data.data."+newStr+")");
+																		}
+																	}
 																}
 															}
 															
@@ -404,7 +419,15 @@
 									}
 									imagesModel.push(modelData);
 									if(objImage){
-										objImages.push(objImage);
+										var objImageFlag=true;
+										for(var h=0;h<objImages.length;h++){
+											if(objImages[h].arr[0]==objImage.arr[0]){
+												objImageFlag=false;
+											}
+										}
+										if(objImageFlag){
+											objImages.push(objImage);
+										}
 									}
 								}else if(shopData.data.view.subViews[k].subViews[i].type=='banner'){
 									try{
@@ -442,6 +465,7 @@
 					objImagesClick,objImagesClick,
 					tmRanking:1,
 					directFlag:false,
+					conponQueryDataSpecail:conponQueryDataSpecail,
 				},
 				created:function(){
 					document.title=this.shopData.data.shop_other_data.shopName;
@@ -551,6 +575,12 @@
 			    loop: true,
 			})
 			var recommend_swiper = new Swiper ('#conponList', {
+			    direction: 'horizontal',
+			    loop: false,
+			    slidesPerView:2, //分组显示 
+			    spaceBetween:10
+			});
+			var recommend_swiper = new Swiper ('#conponListSpecail', {
 			    direction: 'horizontal',
 			    loop: false,
 			    slidesPerView:2, //分组显示 
