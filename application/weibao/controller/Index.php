@@ -308,6 +308,7 @@ class Index extends Controller
                             if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
                                 $is_time_out = 0;
                                 $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                                session('shopId',$v['shop_id']);
                                 break;
                             }
                         }
@@ -317,7 +318,6 @@ class Index extends Controller
                         }
                     }
 
-                    session('shopId',$service_info['shop_id']);
                 }else{
                     $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
                     $html = file_get_html($url);
@@ -556,8 +556,8 @@ class Index extends Controller
     /**
      * @return bool
      */
-    public function is_weixin(){  
-        // return true;  
+    public function is_weixin(){
+        //return true;
         if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {  
             return true;  
         }    
