@@ -198,7 +198,7 @@ class WeiBaoData {
         //店铺链接
         try{
             $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
-        
+            $add_data['shop_url'] = 'https:'.$shop_url;
             foreach($html->find('script') as $key => $script){
                 $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
                 if (strpos($v,'_DATA_Detail')!==false){
@@ -209,6 +209,87 @@ class WeiBaoData {
                 }
             };
         }catch (\Exception $e){
+            return array('errcode'=>30009);
+        }
+        $add_data['data_other'] = json_encode($arr['dataOther']);
+        $add_data['shop_id'] = $shop_id;
+        if (!$shop_url || !$shop_id) {
+            return array('errcode'=>30009);
+        }
+        //查询服务
+        // $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
+        /*if (empty($service_info)) {
+            echo "该店铺无购买服务，请到微跳上购买";
+            exit;
+        }else{
+            $is_time_out =1;
+            foreach ($service_info as $k => $v) {
+                if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
+                    $is_time_out =0;
+                    $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                    session('shopId',$v['shop_id']);
+                    break;
+                }
+            }
+            if ($is_time_out) {
+                echo "该店铺所购买服务已过期，请到微跳上续费";
+                exit;
+            }
+        }*/
+
+        $arr['shopUrl'] = $shop_url;
+        $assessFlag='https://rate.tmall.com/listTagClouds.htm?itemId='.$item_id;
+        $assessFlag='{'.file_get_contents($assessFlag).'}';
+        $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
+
+        $add_data['assess_flag'] = $arr['assessFlag'];
+        //得到商品图片url
+        foreach($html->find('section#s-showcase') as $pic_contain)
+        {
+
+            foreach($pic_contain->find('div.scroller') as $itembox)
+            {
+                $imgflag=1;
+                foreach ($itembox ->find('div.itbox') as $item) {
+                    if($imgflag==1){
+                        $arr['imgUrl'][]=$item->find('img',0)->src;
+                    }else{
+                        $arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
+                    }
+                    $imgflag++;
+                }
+            }
+        };
+
+        $add_data['img_url'] = json_encode($arr['imgUrl']);
+        //得到店铺score
+        foreach ($html ->find('ul.score') as  $score) {
+            foreach($score->find('li') as $key => $li){
+                $arr['score'][$key]['className']=$li->find('b',0)->class;
+                $arr['score'][$key]['text']=$li->find('b',0)->innertext;
+            }
+        }
+
+        $add_data['score'] = json_encode($arr['score']);
+        //得到商品信息
+        try{
+            if($html ->find('div.mdv-standardItemProps',0)){
+                $string=$html ->find('div.mdv-standardItemProps',0)->attr['mdv-cfg'];
+                if($string){
+                    $arr['cd_parameter']=mb_convert_encoding($string, 'utf-8', 'gbk');
+                }
+            }else{
+                $arr['cd_parameter']="";
+            }
+            $add_data['cd_parameter'] =$arr['cd_parameter'];
+
+            //得到店铺名
+            $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
+            $add_data['shop_name'] =$arr['shopName'];
+
+            $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
+            $add_data['del_price'] =$arr['delPrice'];
+        }catch(Exception  $e){
             return array('errcode'=>30009);
         }
     }
