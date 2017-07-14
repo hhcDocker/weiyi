@@ -289,6 +289,7 @@ class WeiBaoData {
 
             $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
             $add_data['del_price'] =$arr['delPrice'];
+            return array('errcode'=>0,'data'=>$add_data);
         }catch(Exception  $e){
             return array('errcode'=>30009);
         }
