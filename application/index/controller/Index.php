@@ -362,16 +362,19 @@ class Index extends APIController
      */
     public function WeixinNotify()
     {
-        $mail = new AlertMail("微信回调开始".time());
-        $mail->send();
-
         $notify_data = file_get_contents("php://input");//获取由微信传来的数据
         if(!$notify_data){
             $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
         }
+
+        //微信订单异步通知日志
+        Log::init([
+            'type'  =>  'File',
+            'path'  =>  LOG_PATH.'../paylog/'
+        ]);
         if(!$notify_data){
-            $mail = new AlertMail("微信回调校验失败".time());
-            $mail->send();
+            Log::write("微信回调校验失败",'log');
+            exit("微信回调校验失败");
         }
         $wxPay = new WxPay;
         $wxPay->_weixin_config();
@@ -390,21 +393,14 @@ class Index extends APIController
             $res = $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
 
             if ($res['code']) {
-                // 处理支付成功后的逻辑业务
-                Log::init([
-                    'type'  =>  'File',
-                    'path'  =>  LOG_PATH.'../paylog/'
-                ]);
                 Log::write($result,'log');
-                $mail = new AlertMail("微信回调支付成功".time());
-                $mail->send();
             }else{
-                $mail = new AlertMail("微信回调支付失败".time().json($res));
-                $mail->send();
+                Log::write("微信回调校验失败".json($res),'log');
+                exit("微信回调校验失败".json($res));
             }
         }else{
-            $mail = new AlertMail("微信回调支付失败".time());
-            $mail->send();
+            Log::write("微信回调校验失败".json($result),'log');
+            exit("微信回调校验失败".json($result));
         }
     }
 
