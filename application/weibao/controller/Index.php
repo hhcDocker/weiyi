@@ -369,7 +369,7 @@ class Index extends Controller
                             if (($v['service_start_time']<=time() && $v['service_end_time']>=time()) || ($v['experience_start_time']<=time() && $v['experience_end_time']>=time()) ) {
                                 $is_time_out =0;
                                 $arr['shortUrl'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
-                                session('shopId',v['shop_id']);
+                                session('shopId',$v['shop_id']);
                                 break;
                             }
                         }
