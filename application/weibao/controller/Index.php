@@ -236,7 +236,7 @@ class Index extends Controller
                 return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
             }
         }else {//已过期
-            return $this->fetch('service_expired',array('err_msg' => "该服务不在服务时间范围内，请联系管理员"));
+            return $this->fetch('service_expired',array('err_msg' => "该店铺所购买服务已过期，请到微跳上续费"));
         }
     }
 
