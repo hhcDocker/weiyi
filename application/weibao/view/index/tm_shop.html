@@ -73,7 +73,7 @@
 			<section class="section_swiper">
 				 <div class="swiper-container"  id="conponListSpecail">
 				    <div class="swiper-wrapper">
-				        <div class="swiper-slide " v-for='item in conponQueryDataSpecail'>
+				        <div class="swiper-slide " v-for='item in conponQueryDataSpecail' @click="showKouling">
 				        	<img :src="item"/>
 				        </div>
 				    </div>
