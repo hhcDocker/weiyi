@@ -361,12 +361,7 @@ class Index extends APIController
      */
     public function WeixinNotify()
     {
-        /*$log ='成功调用WeixinNotify';
-        $file = 'new_cron_log/'.date("Ymd").'_wxpay_log.txt';
-        $content = date("Y-m-d H:i:s")."\n\n".$log."\n\n";
-        Log::write($content, $file);*/
-
-        $mail = new AlertMail("微信回调".time());
+        $mail = new AlertMail("微信回调开始".time());
         $mail->send();
 
         $notify_data = file_get_contents("php://input");//获取由微信传来的数据
@@ -374,7 +369,8 @@ class Index extends APIController
             $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
         }
         if(!$notify_data){
-            exit('校验失败');
+            $mail = new AlertMail("微信回调校验失败".time());
+            $mail->send();
         }
         $wxPay = new WxPay;
         $wxPay->_weixin_config();
@@ -398,12 +394,15 @@ class Index extends APIController
                     'path'  =>  LOG_PATH.'../paylog/'
                 ]);
                 Log::write($result,'log');
-                exit('支付成功');
+                $mail = new AlertMail("微信回调支付成功".time());
+                $mail->send();
             }else{
-                exit(json($res));
+                $mail = new AlertMail("微信回调支付失败".time().json($res));
+                $mail->send();
             }
         }else{
-            exit('支付失败');
+            $mail = new AlertMail("微信回调支付失败".time());
+            $mail->send();
         }
     }
 }
