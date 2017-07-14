@@ -405,4 +405,42 @@ class Index extends APIController
             $mail->send();
         }
     }
+
+    /**
+     * [updateServiceExpense description]
+     * @param  string $value [description]
+     * @return [type]        [description]
+     */
+    private function updateServiceExpense($expense_num='',$trade_num='',$actually_amount=0,$trade_status=0)
+    {
+        $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($expense_num);
+        if(empty($expense_info)){
+            return array('code'=>0,'msg'=>'没有对应的消费记录');
+        }
+        //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
+        if ($expense_info['payment_amount']!=$actually_amount) {
+            return array('code'=>0,'msg'=>'实际支付金额不对');
+        }
+
+        $has_update = model('ExpenseRecords')->updateExpense($expense_num,$trade_num,$actually_amount,$trade_status);
+        if ($has_update) {
+            $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
+            $service_start_time = $expense_info['service_start_time'];
+            $service_end_time = $expense_info['service_end_time'];
+
+            if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
+                if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) { //体验服务
+                    if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
+                        $remain_expenience_day = date('d',$service_info['service_end_time']) - date('d', $service_start_time); //剩余的体验服务时间
+                        $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
+                    }
+                }
+                $service_start_time = $service_info['service_start_time'];
+            }
+            $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
+            return array('code'=>1);
+        }else{
+            return array('code'=>0,'msg'=>'更新消费记录失败');
+        }
+    }
 }

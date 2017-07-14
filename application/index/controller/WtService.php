@@ -1156,7 +1156,6 @@ class WtService extends APIAuthController
     {
         $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($expense_num);
         if(empty($expense_info)){
-            logResult($expense_num."没有对应的消费记录");
             return array('code'=>0,'msg'=>'没有对应的消费记录');
         }
         //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
