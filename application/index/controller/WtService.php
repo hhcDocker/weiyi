@@ -807,6 +807,33 @@ class WtService extends APIAuthController
     }
 
     /**
+     * [getShopServiceDetail description]
+     * @return [type] [description]
+     */
+    public function getShopServiceDetail()
+    {
+        $service_id = noempty_input('service_id');
+        $service_info = model('ShopServices')->getServicesById($service_id);
+        if (empty($service_info)) {
+            throw new APIException(30021);
+        }
+        if ($service_info['manager_id']!=session('manager_id')) {
+            throw new APIException(30027);
+        }
+        if ($service_info['delete_time']) {
+            throw new APIException(30028);
+        }
+
+        $qrcode_url = 'http://'.$_SERVER['HTTP_HOST'].$service_info['transformed_url'];
+        //二维码
+        $QRCode = new QRCode;
+        $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+
+        $res_data =array('shop_name'=>$service_info['shop_name'],'shop_url'=>$service_info['shop_url'],'service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
+        return $this->format_ret($res_data);
+    }
+
+    /**
      * 更新店铺数据
      * @return [type] [description]
      */
@@ -868,7 +895,7 @@ class WtService extends APIAuthController
             Log::write($content, $file);
         }
     }
-    
+
     // ******************************************************************************支付相关************************************************************************
     
     /**

@@ -387,6 +387,7 @@ class Index extends APIController
             $total_fee = $result['total_fee'] * 0.01;
             
             $res = $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
+            
             if ($res['code']) {
                 // 处理支付成功后的逻辑业务
                 Log::init([
