@@ -111,6 +111,11 @@ class WeiBaoData {
         }
     }
 
+    /**
+     * 获取商品列表
+     * @param  string $url [description]
+     * @return [type]      [description]
+     */
 	public function getShopGoodsDataByUrl($url='') {
      	if (!$url) {
      		return array('errcode'=>10001,'msg'=>'参数错误');
