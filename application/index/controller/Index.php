@@ -19,7 +19,8 @@ use api\APIController;
 use api\APIException;
 use think\Config;
 use think\Request;
-use  app\index\AlertMail;
+use app\index\AlertMail;
+use app\common\service\WxPay;
 
 
 class Index extends APIController
