@@ -824,7 +824,7 @@ class WtService extends APIAuthController
             throw new APIException(30028);
         }
 
-        $qrcode_url = 'http://'.$_SERVER['HTTP_HOST'].$service_info['transformed_url'];
+        $qrcode_url = 'http://'.$_SERVER['HTTP_HOST'].'/'.$service_info['transformed_url'];
         //二维码
         $QRCode = new QRCode;
         $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
