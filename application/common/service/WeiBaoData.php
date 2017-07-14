@@ -175,4 +175,41 @@ class WeiBaoData {
 
         return array('errcode'=>0,'goods_data'=>$goods_data,'total_page'=>$total_page,'page_size'=>$page_size,'total_results'=>$total_results);
     }
+
+    /**
+     * 获取天猫商品详情
+     * @param string $item_id [description]
+     */
+    public function getTmGoodsDetail($item_id='')
+    {
+        if (!$item_id) {
+            return array('errcode'=>10001);
+        }
+
+        $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
+        vendor('simple_html_dom.simple_html_dom');
+        header("Connection:Keep-Alive");
+        header("Proxy-Connection:Keep-Alive");
+        try{
+            $html = file_get_html($url);
+        }catch (\Exception $e){
+            return array('errcode'=>30009);
+        }
+        //店铺链接
+        try{
+            $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
+        
+            foreach($html->find('script') as $key => $script){
+                $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+                if (strpos($v,'_DATA_Detail')!==false){
+                    preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
+                    $id_str = $id_str[0];
+                    $shop_id = str_replace('"rstShopId":','',$id_str);
+                    break;
+                }
+            };
+        }catch (\Exception $e){
+            return array('errcode'=>30009);
+        }
+    }
 }

@@ -32,7 +32,7 @@ class WtService extends APIAuthController
      * 首页转换网址
      * 1.判断链接合法性与否
      * 2.验证登录与否
-     * 3.判断天猫or淘宝，店铺则转换地址查表；商品详情则调用爬取函数，天猫取得shopId，淘宝取得userId
+     * 3.判断天猫or淘宝，店铺则转换地址查表；商品详情则区分天猫淘宝，天猫先查表确认是否存在，否则调用爬取函数，取得shopId，淘宝则直接爬取数据，取得userId
      * 4.查表获取该链接所属店铺是否已购买服务，是否已过期
      * 5.如果从未购买，则爬取店铺数据，生成体验记录，默认3天，生成服务记录，返回短链接
      * 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
@@ -67,6 +67,7 @@ class WtService extends APIAuthController
                     throw new APIException(30001,['url'=>$url]);
                 }
                 $item_id =$m[1];
+                
                 $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
                 vendor('simple_html_dom.simple_html_dom');
                 header("Connection:Keep-Alive");
