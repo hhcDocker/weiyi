@@ -97,7 +97,7 @@
 			    		<div  v-if="item.moduleKey=='hot_recommanded'">
 			    			<h4  v-text="item.moduleName"></h4>
 				    		<div class="module_box" >
-				    			<div class="module_item" v-for="items in item.data">
+				    			<div class="module_item" v-for="items in item.data"  @click="lookDetail($event,$index,items)">
 				    				<img :src="items.img"/>
 				    				<p class="module_title"  v-text="items.title"></p>
 				    				<span class="module_price">￥<i v-text="items.price"></i></span>
@@ -455,7 +455,12 @@
 						return true;
 					},
 					lookDetail:function (event,index,item){
+						if(item.id){
 							location.href='/detail/1/'+item.id;
+						}else if(item.itemId){
+							location.href='/detail/1/'+item.itemId;
+						}
+							
 	
 				  	}
 				}
