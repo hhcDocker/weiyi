@@ -33,7 +33,7 @@ class Index extends Controller
      */
     public function index()
     {
-        return $this->fetch('frontend/html/index.html');
+        header("Location:/frontend/html/index.html");
     }
 
 	/**

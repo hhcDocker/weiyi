@@ -32,7 +32,7 @@ class Index extends APIController
      */
     public function index()
     {
-        return $this->fetch('frontend/html/index.html');
+        header("Location:/frontend/html/index.html");
     }
 
     /**
