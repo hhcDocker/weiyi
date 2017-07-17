@@ -27,6 +27,15 @@ use think\Db;
 
 class Index extends Controller
 {
+    /**
+     * 微跳首页
+     * @return [type] [description]
+     */
+    public function index()
+    {
+        return $this->fetch('frontend/html/index.html');
+    }
+
 	/**
      * 商品搜索页
      * @return [type] [description]
