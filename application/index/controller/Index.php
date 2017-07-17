@@ -27,6 +27,15 @@ use app\common\service\WxPay;
 class Index extends APIController
 {
     /**
+     * [index description]
+     * @return [type] [description]
+     */
+    public function index()
+    {
+        $this->fetch('frontend/html/index.html');
+    }
+
+    /**
      * 发送注册短信验证码
      * @return array
      */ 
