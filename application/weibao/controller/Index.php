@@ -210,8 +210,7 @@ class Index extends Controller
                 $res = $wei_bao->getShopDataByUrl($shop_info['shop_url']);
 
                 if ($res['errcode']) {
-                    var_dump($res);
-                    exit;
+                    return $this->fetch('service_expired',array('err_msg' => "获取数据失败"));
                 }
 
                 //添加店铺数据记录
