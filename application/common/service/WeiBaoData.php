@@ -42,7 +42,7 @@ class WeiBaoData {
          * @see JonnyW\PhantomJs\Http\Request
          **/
         $request = $client->getMessageFactory()->createRequest($url, 'GET');
-        $request->setDelay(20000);
+        //$request->setDelay(20000);
         /**
          * @see JonnyW\PhantomJs\Http\Response
          **/
