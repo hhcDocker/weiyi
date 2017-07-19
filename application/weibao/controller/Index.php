@@ -509,6 +509,7 @@ class Index extends Controller
             $cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
             $client = Client::getInstance();
             $client->getEngine()->setPath(config('PhantomjsPath'));
+            $client->getEngine()->addOption('--ssl-protocol=any')->addOption('--web-security=no');
             /**
              * @see JonnyW\PhantomJs\Http\Request
              **/
