@@ -130,8 +130,7 @@ class WeiBaoData {
         $client = Client::getInstance();
 		$client->setProcedure('my_procedure');
 		$client->getProcedureLoader()->addLoader($procedureLoader);
-		
-		$client->getEngine()->addOption('--web-security=no');
+		$client->getEngine()->addOption('--ssl-protocol=any')->addOption('--web-security=no');
         $client->getProcedureCompiler()->clearCache();
         $client->getEngine()->setPath(config('PhantomjsPath'));
         //$client->isLazy();
