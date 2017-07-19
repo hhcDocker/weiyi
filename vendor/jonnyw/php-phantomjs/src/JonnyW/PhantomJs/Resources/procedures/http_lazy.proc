@@ -130,7 +130,6 @@ procedure.execute = function (status) {
 					var xhr = new XMLHttpRequest(); 
 				    if(xhr){ 
 			    		var urlToken=url[i];
-				        xhr.withCredentials = true;
 				        xhr.onreadystatechange = function(){  
 				            if(xhr.readyState == 4){  
 				                if(xhr.status == 200){  
@@ -139,6 +138,7 @@ procedure.execute = function (status) {
 				            }  
 				        }  
 				        xhr.open("GET", urlToken, false);  
+				        xhr.withCredentials = true;
 				        xhr.send(null);  
 				    } 
 			}
@@ -148,7 +148,6 @@ procedure.execute = function (status) {
 					var xhr = new XMLHttpRequest(); 
 				    if(xhr){ 
 			    		var urlToken=url[i];
-				        xhr.withCredentials = true;
 				        xhr.onreadystatechange = function(){  
 				            if(xhr.readyState == 4){  
 				                if(xhr.status == 200){  
@@ -157,6 +156,7 @@ procedure.execute = function (status) {
 				            }  
 				        }  
 				        xhr.open("GET", urlToken, false);  
+				        xhr.withCredentials = true;
 				        xhr.send(null);  
 				    }
 			    break; 
