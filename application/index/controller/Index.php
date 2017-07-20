@@ -82,6 +82,7 @@ class Index extends APIController
             session('manager_id', $manager_id);// 当前用户id
             session('manager_uid', $uid);// 当前用户uid
             session('manager_mobilephone',$mobilephone);
+            session('weitiao_sms_code',null);
             return $this->format_ret();
         } else {
             throw new APIException(10006);
@@ -316,6 +317,7 @@ class Index extends APIController
         $time_elapsed = time() - session('weitiao_sms_code_time');
         if($sms_code == session('weitiao_sms_code') && $mobilephone == session('weitiao_sms_mobilephone') && $time_elapsed < 600) {
             session('weitiao_sms_tag',1);
+            session('weitiao_sms_code',null);
             return $this->format_ret();
         } else {
             throw new APIException(10005);
