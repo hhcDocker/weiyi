@@ -75,7 +75,8 @@
 			</div>
 			<div  id="tab_contain" class="infomain_tab">
 				<div id="tabbar" class="tabbar" >
-					<a <!--@click="tab($index ,item.view)"--> v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>
+					<!--<a @click="tab($index ,item.view)" v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>-->
+					<a  v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>
 				</div>
 				<keep-alive>
 					<component :is="currentView" v-bind:comdata="commodityData"></component>
