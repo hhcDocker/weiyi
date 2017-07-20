@@ -68,31 +68,23 @@ class WtService extends APIAuthController
                 }
                 $item_id =$m[1];
                 
-                $url='https://detail.m.tmall.com/item.htm?abtest=_AB-LR90-PR90&pos=1&abbucket=_AB-M90_B17&acm=03080.1003.1.1287876&id='.$item_id.'&scm=1007.12913.42100.100200300000000';
-                vendor('simple_html_dom.simple_html_dom');
-                header("Connection:Keep-Alive");
-                header("Proxy-Connection:Keep-Alive");
-                try{
-                    $html = file_get_html($url);
-                }catch (\Exception $e){
-                    throw new APIException(30009);
+                $item_info = model('AliTmGoodsDetail')->getGoodsDetailByItemId($item_id);
+                if (!empty($item_info)) {
+                    $shop_id =  $item_info['shop_id'];
+                    $shop_url =  $item_info['shop_url'];
+                }else{
+                    $wei_bao = new WeiBaoData();
+                    $tm_res = $wei_bao->getTmGoodsDetail($item_id);
+                    if ($tm_res['errcode']) {
+                        throw new APIException($tm_res['errcode']);
+                    }else{
+                        //存储商品详情数据，获取服务是否在服务时间范围内
+                        $shop_id =  $tm_res['data']['shop_id'];
+                        $shop_url =  $tm_res['data']['shop_url'];
+                        $has_add = model('AliTmGoodsDetail')->addGoodsDetailData($item_id,$tm_res['data']);
+                    }
                 }
-                //店铺链接
-                try{
-                    $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
-                
-                    foreach($html->find('script') as $key => $script){
-                        $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
-                        if (strpos($v,'_DATA_Detail')!==false){
-                            preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
-                            $id_str = $id_str[0];
-                            $shop_id = str_replace('"rstShopId":','',$id_str);
-                            break;
-                        }
-                    };
-                }catch (\Exception $e){
-                    throw new APIException(30009);
-                }
+
                 if (!$shop_url || !$shop_id) {
                     throw new APIException(30009);
                 }
@@ -438,7 +430,8 @@ class WtService extends APIAuthController
                 $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
             }
             if (!empty($service_info)){
-                if ($service_info['service_end_time'] - time()>3*60*60*24) { //不是体验服务
+                $experience_days = config('experience_days');
+                if ($service_info['service_end_time'] - time()>$experience_days*60*60*24) { //不是体验服务
                     throw new APIException(30020);
                 }
             }
@@ -542,7 +535,8 @@ class WtService extends APIAuthController
         }
 
         //校验服务，防止重复购买
-        if (!empty($service_info) && ($service_info['service_end_time'] - time()>3*60*60*24)){
+        $experience_days = config('experience_days');
+        if (!empty($service_info) && ($service_info['service_end_time'] - time()>$experience_days*60*60*24)){
             throw new APIException(30020);
         }
 
@@ -1085,15 +1079,11 @@ class WtService extends APIAuthController
             throw new APIException(30010);
         }
         $img ='';
+        $experience_days = config('experience_days');
         if (empty($service_info)){
             //新增体验服务
-            //mc 方便测试改为10分钟
-            $experience_days = config('experience_days');
             $time_start = time();
             $time_end = strtotime("+".$experience_days." day");
-
-            // $time_end = $time_start+600;
-            //mc end
             
             //mc 改用shop_id+manager_id
             $o = new ShortUrl($wj_shop_id,session('manager_id'));
@@ -1127,7 +1117,7 @@ class WtService extends APIAuthController
             $service_type =1;
         }
 
-        if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) { //体验期，包括新转化情况
+        if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验期，包括新转化情况
             if ($service_info['service_end_time']>=time()) {//体验期内
                 $service_type =1;
                 //设置路由，获取链接，生成二维码
@@ -1199,7 +1189,8 @@ class WtService extends APIAuthController
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
-                if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) { //体验服务
+                $experience_days = config('experience_days');
+                if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验服务
                     if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
                         $remain_expenience_day = date('d',$service_info['service_end_time']) - date('d', $service_start_time); //剩余的体验服务时间
                         $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;

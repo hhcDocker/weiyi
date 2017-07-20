@@ -79,6 +79,7 @@ class ShopServices extends Base
         if (!$manager_id) {
             return array();
         }
+        $experience_days = config('experience_days');
         $where = '';
         if ($service_type==1) { //已过期
             $where ='service_end_time <= unix_timestamp(now())';
@@ -92,7 +93,7 @@ class ShopServices extends Base
                 ->field('id,transformed_url,shop_name,shop_url,service_start_time,service_end_time,service_start_time<UNIX_TIMESTAMP(NOW()) as is_start,service_end_time<unix_timestamp(now()) as is_end')
                 ->where('manager_id',$manager_id)
                 ->where('is_deleted',0)
-                ->where('service_end_time-service_start_time>3*24*60*60')
+                ->where('service_end_time-service_start_time>'.$experience_days.'*24*60*60+1')
                 ->where($where)
                 ->limit($offset, $pageSize)
                 ->select();
@@ -110,6 +111,7 @@ class ShopServices extends Base
         if (!$manager_id) {
             return 0;
         }
+        $experience_days = config('experience_days');
         $where = '';
         if ($service_type==1) { //已过期
             $where ='service_end_time <= unix_timestamp(now())';
@@ -121,7 +123,7 @@ class ShopServices extends Base
         $res = Db::table('wj_shop_services')
                 ->where('manager_id',$manager_id)
                 ->where('is_deleted',0)
-                ->where('service_end_time-service_start_time>3*24*60*60')
+                ->where('service_end_time-service_start_time>'.$experience_days.'*24*60*60+1')
                 ->where($where)
                 ->count();
         return $res;

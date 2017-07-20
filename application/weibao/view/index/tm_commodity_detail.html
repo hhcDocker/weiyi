@@ -204,6 +204,7 @@
 		<script type="text/javascript" src="/static/js/myBaseLibrary.js" ></script>
     	<script src="/static/js/clipboard.min.js"></script>
 		<script type="text/javascript">
+		var _DATA_Mdskip=null,_DATA_Detail=null;
 			try{
 				var data={$data},dataMdsKig,cmdPrice;
 				console.log(data)
@@ -534,44 +535,46 @@
 //			};
 		</script>
 		<script type="text/javascript">
-			
-			var scriptRecommend=null,scriptTag,scriptAccess=null;
-			scriptRecommend = document.createElement('script');
-            //scriptRecommend.src = "https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444&callback=jsonp";
-            scriptRecommend.src="https://rate.tmall.com/listTagClouds.htm?itemId="+_DATA_Detail.itemDO.itemId+"&isAll=true&isInner=true&callback=jsonp_tag";
-            document.body.appendChild(scriptRecommend);
-            setTimeout(function(){
-            	scriptRecommend.parentNode.removeChild(scriptRecommend);
-            },1000)
-            function jsonp_tag(a){
-				vm.commodityData.label=a.tags.tagClouds;
-            }
-            
-            /*$url='https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444';
-		$url2='https://detailskip.taobao.com/json/wap/tmallH5Desc.do?_ksTS=1489820826429_496&callback=setMdskip&itemId='.$_GET['itemId'].'&sellerId='.$_GET['sellerId'].'&isPreview=false&isg=AuDgXeh1rO_KJxDslDcORQ7Gse4-_2Aoq6eCMlrxrPuOVYB_AvmUQ7Zjn0eq&isg2=AsjIpAa3XVo%2FHf0FqOwc%2FzrXGC3acSx7';*/
-			function getRecommend(){
-			 	$.ajax({
-			 		type:"get",
-			 		url:"/weibao/index/GetTMRecommend?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId,
-			 		async:true,
-			 		success:function(res){
-			 			commodityData.recommend=JSON.parse(JSON.parse(res)[0]).list;
-			 			commodityData.ortherData=JSON.parse(JSON.parse(res)[1]);
-			 			setTimeout(function(){
-			 				var recommend_swiper = new Swiper ('#recommend_swiper', {
-							    direction: 'horizontal',
-							    loop: false,
-							    slidesPerView:3, //分组显示 
-							    spaceBetween:30
-							});
-			 			},1000);
-			 		},
-			 		error:function(err){
-			 			accessFlag=true;
-	                }
-			 	});
+			if (_DATA_Detail) {
+				var scriptRecommend=null,scriptTag,scriptAccess=null;
+				scriptRecommend = document.createElement('script');
+	            //scriptRecommend.src = "https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444&callback=jsonp";
+	            
+	            scriptRecommend.src="https://rate.tmall.com/listTagClouds.htm?itemId="+_DATA_Detail.itemDO.itemId+"&isAll=true&isInner=true&callback=jsonp_tag";
+	            document.body.appendChild(scriptRecommend);
+	            setTimeout(function(){
+	            	scriptRecommend.parentNode.removeChild(scriptRecommend);
+	            },1000)
+	            function jsonp_tag(a){
+					vm.commodityData.label=a.tags.tagClouds;
+	            }
+	            
+	            /*$url='https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444';
+			$url2='https://detailskip.taobao.com/json/wap/tmallH5Desc.do?_ksTS=1489820826429_496&callback=setMdskip&itemId='.$_GET['itemId'].'&sellerId='.$_GET['sellerId'].'&isPreview=false&isg=AuDgXeh1rO_KJxDslDcORQ7Gse4-_2Aoq6eCMlrxrPuOVYB_AvmUQ7Zjn0eq&isg2=AsjIpAa3XVo%2FHf0FqOwc%2FzrXGC3acSx7';*/
+				function getRecommend(){
+				 	$.ajax({
+				 		type:"get",
+				 		url:"/weibao/index/GetTMRecommend?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId,
+				 		async:true,
+				 		success:function(res){
+				 			commodityData.recommend=JSON.parse(JSON.parse(res)[0]).list;
+				 			commodityData.ortherData=JSON.parse(JSON.parse(res)[1]);
+				 			setTimeout(function(){
+				 				var recommend_swiper = new Swiper ('#recommend_swiper', {
+								    direction: 'horizontal',
+								    loop: false,
+								    slidesPerView:3, //分组显示 
+								    spaceBetween:30
+								});
+				 			},1000);
+				 		},
+				 		error:function(err){
+				 			accessFlag=true;
+		                }
+				 	});
+				}
+				getRecommend();
 			}
-			getRecommend();
 		</script>
 		<script type="text/javascript">
 			document.getElementById("J_DroplistMask").ontouchmove=function(e){

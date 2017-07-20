@@ -20,5 +20,6 @@ return [
 
     ":str_url$" => ["weibao/index/getShopDataByShortUrl",['str_url' => '^[\w\d]{6}$']],
     "detail/:isTm/:item_id" => "weibao/index/getGoodsDetail",
+    "Pdetail/:isTm/:item_id" => "weibao/index/getPromotionalGoodsDetail",
     ""=>"index/index/index"
 ];

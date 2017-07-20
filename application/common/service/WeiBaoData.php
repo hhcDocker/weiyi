@@ -177,11 +177,12 @@ class WeiBaoData {
 
     /**
      * 获取天猫商品详情
-     * @param string $item_id [description]
+     * @param  string  $item_id [商品id]
+     * @return [type]           [description]
      */
-    public function getTmGoodsDetail($item_id='')
+    public function getTmGoodsDetail($item_id=0)
     {
-        if (!$item_id) {
+        if (!$item_id ) {
             return array('errcode'=>10001);
         }
 
@@ -189,15 +190,18 @@ class WeiBaoData {
         vendor('simple_html_dom.simple_html_dom');
         header("Connection:Keep-Alive");
         header("Proxy-Connection:Keep-Alive");
+        $add_data = array();
         try{
             $html = file_get_html($url);
         }catch (\Exception $e){
             return array('errcode'=>30009);
         }
-        //店铺链接
+        //店铺链接,shopid
         try{
             $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href));
             $add_data['shop_url'] = 'https:'.$shop_url;
+            //得到dataDetail对象
+            //获取shopid
             foreach($html->find('script') as $key => $script){
                 $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
                 if (strpos($v,'_DATA_Detail')!==false){
@@ -206,6 +210,7 @@ class WeiBaoData {
                     $shop_id = str_replace('"rstShopId":','',$id_str);
                     break;
                 }
+                $arr['dataOther'][]=iconv("GB2312//IGNORE","UTF-8",$script->innertext);;
             };
         }catch (\Exception $e){
             return array('errcode'=>30009);
@@ -215,6 +220,7 @@ class WeiBaoData {
         if (!$shop_url || !$shop_id) {
             return array('errcode'=>30009);
         }
+
         //查询服务
         // $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
         /*if (empty($service_info)) {
