@@ -1223,6 +1223,7 @@ class WtService extends APIAuthController
 
     public function testExpense()
     {
-        $this->updateServiceExpense('72170720195212002382','4001052001201707201781623358',0.01,1);
+        $res = $this->updateServiceExpense('72170720195212002382','4001052001201707201781623358',0.01,1);
+        return $res;
     }
 }
