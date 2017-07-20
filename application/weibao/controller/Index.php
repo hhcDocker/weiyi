@@ -565,6 +565,34 @@ class Index extends Controller
         }
     }
 
+
+    /**
+     * [testGoods description]
+     * @return [type] [description]
+     */
+    public function testGoods()
+    {
+        $item_id = input('param.item_id') ? input('param.item_id') : '';
+        $wei_bao = new WeiBaoData();
+        $tm_res = $wei_bao->getTmGoodsDetail($item_id);
+        if ($tm_res['errcode']) {
+            return $this->fetch('service_expired',array('err_msg' => "获取数据失败"));
+        }else{
+            //存储商品详情数据
+            $shop_id =  $tm_res['data']['shop_id'];
+            $shop_url =  $tm_res['data']['shop_url'];
+            $arr['shop_id'] = $shop_id;
+            $arr['dataOther'] = json_decode($tm_res['data']['data_other'],true);
+            $arr['assess_flag'] = $tm_res['data']['assess_flag'];
+            $arr['imgUrl'] = json_decode($tm_res['data']['img_url'],true);
+            $arr['score'] = $tm_res['data']['score'];
+            $arr['cd_parameter'] = $tm_res['data']['cd_parameter'];
+            $arr['shopName'] = $tm_res['data']['shop_name'];
+            $arr['delPrice'] = $tm_res['data']['del_price'];
+        }
+        return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
+    }
+
     /**
      * @return bool
      */
