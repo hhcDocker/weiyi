@@ -1173,6 +1173,10 @@ class WtService extends APIAuthController
     private function updateServiceExpense($expense_num='',$trade_num='',$actually_amount=0,$trade_status=0)
     {
         $data =array();
+        $data['expense_num'] = $expense_num;
+        $data['trade_num'] = $trade_num;
+        $data['actually_amount'] = $actually_amount;
+        $data['trade_status'] = $trade_status;
         $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($expense_num);
         $data['expense_info'] = $expense_info;
         if(empty($expense_info)){
@@ -1209,9 +1213,16 @@ class WtService extends APIAuthController
                 $data['service_start_time'] = $service_start_time;
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
+            $data['has_update'] = $has_update;
             return array('code'=>1,'data'=>$data);
         }else{
             return array('code'=>0,'msg'=>'更新消费记录失败');
         }
+    }
+
+
+    public function testExpense()
+    {
+        $this->updateServiceExpense('72170720195212002382','4001052001201707201781623358',0.01,1);
     }
 }
