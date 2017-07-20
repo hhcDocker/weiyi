@@ -210,7 +210,6 @@ class WeiBaoData {
                     preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
                     $id_str = $id_str[0];
                     $shop_id = str_replace('"rstShopId":','',$id_str);
-                    break;
                 }
                 $arr['dataOther'][]=iconv("GB2312//IGNORE","UTF-8",$script->innertext);;
             };
