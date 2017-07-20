@@ -1172,7 +1172,9 @@ class WtService extends APIAuthController
      */
     private function updateServiceExpense($expense_num='',$trade_num='',$actually_amount=0,$trade_status=0)
     {
+        $data =array();
         $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($expense_num);
+        $data['expense_info'] = $expense_info;
         if(empty($expense_info)){
             return array('code'=>0,'msg'=>'没有对应的消费记录');
         }
@@ -1183,46 +1185,33 @@ class WtService extends APIAuthController
         }
 
         $has_update = model('ExpenseRecords')->updateExpense($expense_num,$trade_num,$actually_amount,$trade_status);
+        $data['has_update'] = $has_update;
         if ($has_update) {
             $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
+            $data['service_info'] = $service_info;
+
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
                 $experience_days = config('experience_days');
+                $data['experience_days'] = $experience_days;
+
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验服务
                     if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
                         $remain_expenience_day = date('d',$service_info['service_end_time']) - date('d', $service_start_time); //剩余的体验服务时间
+                        $data['remain_expenience_day'] = $remain_expenience_day;
                         $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
+                        $data['service_end_time'] = $service_end_time;
                     }
                 }
                 $service_start_time = $service_info['service_start_time'];
+                $data['service_start_time'] = $service_start_time;
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-            return array('code'=>1);
+            return array('code'=>1,'data'=>$data);
         }else{
             return array('code'=>0,'msg'=>'更新消费记录失败');
         }
-    }
-
-    public function testWxPay()
-    {
-        $expense_num = '72170621142433765409';
-        $payment_amount = 0.01;
-        $wxPay = new WxPay;
-        $result = $wxPay->wxPay([
-            'body' => '微跳-购买服务',
-            'attach' => '微跳-购买服务',
-            'out_trade_no' => $expense_num,
-            'total_fee' => $payment_amount*100,//订单金额，单位为分，如果你的订单是100元那么此处应该为 100*100
-            'time_start' => date("YmdHis"),//交易开始时间
-            'time_expire' => date("YmdHis", time() + 604800),//一周过期
-            'goods_tag' => '购买服务',
-            'notify_url' => request()->domain().'/index/index/WeixinNotify',
-            'trade_type' => 'NATIVE',
-            'product_id' => rand(1,999999),
-        ]);
-        echo $result['msg'];
-        var_dump($result);
     }
 }
