@@ -75,7 +75,8 @@
 			</div>
 			<div  id="tab_contain" class="infomain_tab">
 				<div id="tabbar" class="tabbar" >
-					<a @click="tab($index ,item.view)" v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>
+					<!--<a @click="tab($index ,item.view)" v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>-->
+					<a  v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>
 				</div>
 				<keep-alive>
 					<component :is="currentView" v-bind:comdata="commodityData"></component>
@@ -231,7 +232,7 @@
 				 vm = new Vue({
 					el:"#body_container",
 				  	data:{
-				  		currentView:"detail",
+				  		currentView:"parameter",
 				  		active: 0,
 				  		showFlag:false,
 				  		skuPrice:apiStackValue.skuCore.sku2info['0'].price.priceText,
@@ -243,10 +244,10 @@
 				  		isVisible:"auto",
 				  		directFlag:false,
 						tabs: [   
-						    {       
-						       name: '图文详情',   
-						       view: 'detail'  
-						    },     
+//						    {       
+//						       name: '图文详情',   
+//						       view: 'detail'  
+//						    },     
 						    {       
 						       name: '产品参数',    
 						       view: 'parameter'    
@@ -343,7 +344,8 @@
 	            setTimeout(function(){
 	            	scriptAccess.parentNode.removeChild(scriptAccess);
 	            },1000)
-				$.ajax({
+	            //请求图文详情数据
+				/*$.ajax({
 			 		type:"get",
 			 		url:"/weibao/index/getTbGoodsDescription?itemId="+data.data.item.itemId,
 			 		async:true,
@@ -353,7 +355,7 @@
 			 		},
 			 		error:function(err){
 	                }
-			 	});
+			 	});*/
 	        }
 			
 			function jsonp2(a){
