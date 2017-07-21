@@ -889,7 +889,7 @@ class WtService extends APIAuthController
         $res = array('expense_num'=>$expense_num,'shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
         return $this->format_ret($res);
     }
-    
+
     /**
      * [renewalShopService description]
      * @return [type] [description]
@@ -1402,13 +1402,7 @@ class WtService extends APIAuthController
      */
     private function updateServiceExpense($expense_num='',$trade_num='',$actually_amount=0,$trade_status=0)
     {
-        $data =array();
-        $data['expense_num'] = $expense_num;
-        $data['trade_num'] = $trade_num;
-        $data['actually_amount'] = $actually_amount;
-        $data['trade_status'] = $trade_status;
         $expense_info = model('ExpenseRecords')->getRecordsByExpenseNum($expense_num);
-        $data['expense_info'] = $expense_info;
         if(empty($expense_info)){
             return array('code'=>0,'msg'=>'没有对应的消费记录');
         }
@@ -1418,33 +1412,34 @@ class WtService extends APIAuthController
             return array('code'=>0,'msg'=>'实际支付金额不对');
         }
 
+        if ($expense_info['trade_status']==1) {
+            $file = LOG_PATH.'../paylog/'.date("Ymd").'_repeat_pay_log.txt'
+            $content = date("Y-m-d H:i:s")."重复发送请求\n\n";
+            Log::write($content, $file);
+            return array('code'=>1,'msg'=>'已于'.date("Y-m-d H:i:s",$expense_info['update_time']).'更新过');
+        }
+
         $has_update = model('ExpenseRecords')->updateExpense($expense_num,$trade_num,$actually_amount,$trade_status);
-        $data['has_update'] = $has_update;
+
         if ($has_update) {
             $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
-            $data['service_info'] = $service_info;
 
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
                 $experience_days = config('experience_days');
-                $data['experience_days'] = $experience_days;
 
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验服务
                     if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
                         $remain_expenience_day = date('d',$service_info['service_end_time']) - date('d', $service_start_time); //剩余的体验服务时间
-                        $data['remain_expenience_day'] = $remain_expenience_day;
                         $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
-                        $data['service_end_time'] = $service_end_time;
                     }
                 }
                 $service_start_time = $service_info['service_start_time'];
-                $data['service_start_time'] = $service_start_time;
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-            $data['has_update'] = $has_update;
-            return array('code'=>1,'data'=>$data);
+            return array('code'=>1);
         }else{
             return array('code'=>0,'msg'=>'更新消费记录失败');
         }
