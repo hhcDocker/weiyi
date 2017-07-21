@@ -1219,11 +1219,4 @@ class WtService extends APIAuthController
             return array('code'=>0,'msg'=>'更新消费记录失败');
         }
     }
-
-
-    public function testExpense()
-    {
-        $res = $this->updateServiceExpense('72170720195212002382','4001052001201707201781623358',0.01,1);
-        return $res;
-    }
 }

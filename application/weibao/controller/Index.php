@@ -547,9 +547,9 @@ class Index extends Controller
                     }
                 }
                 // var_dump($arr);exit;
-                return $this->fetch('tm_commodity_detail',array('data' => json_encode($arr)));
+                return $this->fetch('tm_pro_commodity_detail',array('data' => json_encode($arr)));
             }else{
-                return $this->fetch('tb_commodity_detail',array('data' => $item_id));
+                return $this->fetch('tb_pro_commodity_detail',array('data' => $item_id));
             }
 
         }
@@ -597,7 +597,7 @@ class Index extends Controller
      * @return bool
      */
     public function is_weixin(){
-        // return true;
+         // return true;
         if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
             return true;  
         }    
