@@ -205,7 +205,7 @@ class WeiBaoData {
             }
             
             $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$shop_href_str));
-            $add_data['shop_url'] = 'https:'.$shop_url;
+            $add_data['shop_url'] = $shop_url;
             //得到dataDetail对象
             //获取shopid
             foreach($html->find('script') as $key => $script){
