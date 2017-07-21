@@ -378,13 +378,7 @@ class Index extends APIController
             $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
         }
 
-        //微信订单异步通知日志
-        Log::init([
-            'type'  =>  'File',
-            'path'  =>  LOG_PATH.'../paylog/'
-        ]);
         if(!$notify_data){
-            Log::write("微信订单异步通知校验失败",'log');
             exit("微信订单异步通知校验失败");
         }
         $wxPay = new WxPay;
@@ -405,14 +399,12 @@ class Index extends APIController
 
             if ($res['code']) {
                 Log::write($result,'log');
-                return 'SUCCESS';
+                exit('SUCCESS');
             }else{
-                Log::write("微信订单异步通知校验失败".json($res),'log');
-                exit("微信订单异步通知校验失败".json($res));
+                exit('');
             }
         }else{
-            Log::write("微信订单异步通知校验失败".json($result),'log');
-            exit("微信订单异步通知校验失败".json($result));
+            exit('');
         }
     }
 
@@ -432,7 +424,7 @@ class Index extends APIController
             return array('code'=>0,'msg'=>'实际支付金额不对');
         }
         if ($expense_info['trade_status']==1) {
-            $file = LOG_PATH.'../paylog/'.date("Ymd").'_repeat_pay_log.txt'
+            $file = LOG_PATH.'../paylog/'.date("Ymd").'_repeat_pay_log.txt';
             $content = date("Y-m-d H:i:s")."微信订单异步通知重复发送请求\n\n";
             Log::write($content, $file);
 

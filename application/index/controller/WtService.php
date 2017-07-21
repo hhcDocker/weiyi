@@ -1413,7 +1413,7 @@ class WtService extends APIAuthController
         }
 
         if ($expense_info['trade_status']==1) {
-            $file = LOG_PATH.'../paylog/'.date("Ymd").'_repeat_pay_log.txt'
+            $file = LOG_PATH.'../paylog/'.date("Ymd").'_repeat_pay_log.txt';
             $content = date("Y-m-d H:i:s")."重复发送请求\n\n";
             Log::write($content, $file);
             return array('code'=>1,'msg'=>'已于'.date("Y-m-d H:i:s",$expense_info['update_time']).'更新过');
