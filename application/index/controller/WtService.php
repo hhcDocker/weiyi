@@ -1184,7 +1184,7 @@ class WtService extends APIAuthController
         }
         //判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id
         if ($expense_info['payment_amount']!=$actually_amount) {
-            logResult($expense_num."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$actually_amount);
+            // logResult($expense_num."实际支付金额不对：消费记录金额".$expense_info['payment_amount']."，实际支付金额".$actually_amount);
             return array('code'=>0,'msg'=>'实际支付金额不对');
         }
 
