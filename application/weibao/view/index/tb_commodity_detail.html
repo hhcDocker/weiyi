@@ -75,8 +75,7 @@
 			</div>
 			<div  id="tab_contain" class="infomain_tab">
 				<div id="tabbar" class="tabbar" >
-					<!--<a @click="tab($index ,item.view)" v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>-->
-					<a  v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>
+					<a @click="tab($index ,item.view)" v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>
 				</div>
 				<keep-alive>
 					<component :is="currentView" v-bind:comdata="commodityData"></component>
@@ -135,7 +134,6 @@
 		<script type="text/javascript">
 			var vm=null,data=null,scriptDetail=null,scriptAccess=null;
 			function jsonp(d){
-				console.log(data.data)
 				data=d;
 	        	if(data.data.apiStack){
 	        		if(data.data.apiStack[0].value){
@@ -232,7 +230,7 @@
 				 vm = new Vue({
 					el:"#body_container",
 				  	data:{
-				  		currentView:"parameter",
+				  		currentView:"detail",
 				  		active: 0,
 				  		showFlag:false,
 				  		skuPrice:apiStackValue.skuCore.sku2info['0'].price.priceText,
@@ -244,10 +242,10 @@
 				  		isVisible:"auto",
 				  		directFlag:false,
 						tabs: [   
-//						    {       
-//						       name: '图文详情',   
-//						       view: 'detail'  
-//						    },     
+						    {       
+						       name: '图文详情',   
+						       view: 'detail'  
+						    },     
 						    {       
 						       name: '产品参数',    
 						       view: 'parameter'    
@@ -350,10 +348,14 @@
 			 		url:"/weibao/index/getTbGoodsDescription?itemId="+data.data.item.itemId,
 			 		async:true,
 			 		success:function(res){
-			 			console.log(res);
 			 			var res =JSON.parse(res);
-			 			console.log(res);
-			 			vm.commodityData.pictureDetail=res.data.images;
+			 			var imageArr=[];
+			 			for(var a in res){
+			 				var start = res[a].indexOf("//");
+			 				var end = res[a].indexOf("</img>");
+			 				imageArr.push(res[a].slice(start,end))
+			 			}
+			 			vm.commodityData.pictureDetail=imageArr;
 			 		},
 			 		error:function(err){
 	                }
