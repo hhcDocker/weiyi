@@ -198,10 +198,14 @@ class WeiBaoData {
         }
         //店铺链接,shopid
         try{
-            $shop_href_str = $html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href;
-
+            if($html->find('div#s-actionbar',0)){
+                $shop_href_str = $html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href;
+            }else{
+                return array('errcode'=>30009);
+            }
+            
             $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$shop_href_str));
-            $add_data['shop_url'] = 'https:'.$shop_url;
+            $add_data['shop_url'] = $shop_url;
             //得到dataDetail对象
             //获取shopid
             foreach($html->find('script') as $key => $script){

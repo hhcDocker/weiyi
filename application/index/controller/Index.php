@@ -184,6 +184,7 @@ class Index extends APIController
                 if (!$has_update) {
                     throw new APIException(10014);
                 }
+                session('weitiao_sms_code',null);
                 session('weitiao_sms_tag', null);
                 return $this->format_ret();
             }else{
@@ -378,14 +379,8 @@ class Index extends APIController
             $notify_data = $GLOBALS['HTTP_RAW_POST_DATA'] ?: '';//以防上面函数获取到的内容为空
         }
 
-        //微信订单异步通知日志
-        Log::init([
-            'type'  =>  'File',
-            'path'  =>  LOG_PATH.'../paylog/'
-        ]);
         if(!$notify_data){
-            Log::write("微信回调校验失败",'log');
-            exit("微信回调校验失败");
+            exit("微信订单异步通知校验失败");
         }
         $wxPay = new WxPay;
         $wxPay->_weixin_config();
@@ -405,13 +400,12 @@ class Index extends APIController
 
             if ($res['code']) {
                 Log::write($result,'log');
+                exit('SUCCESS');
             }else{
-                Log::write("微信回调校验失败".json($res),'log');
-                exit("微信回调校验失败".json($res));
+                exit('');
             }
         }else{
-            Log::write("微信回调校验失败".json($result),'log');
-            exit("微信回调校验失败".json($result));
+            exit('');
         }
     }
 
@@ -430,15 +424,24 @@ class Index extends APIController
         if ($expense_info['payment_amount']!=$actually_amount) {
             return array('code'=>0,'msg'=>'实际支付金额不对');
         }
+        if ($expense_info['trade_status']==1) {
+            $file = LOG_PATH.'../paylog/'.date("Ymd").'_repeat_pay_log.txt';
+            $content = date("Y-m-d H:i:s")."微信订单异步通知重复发送请求\n\n";
+            Log::write($content, $file);
 
+            return array('code'=>1,'msg'=>'已于'.date("Y-m-d H:i:s",$expense_info['update_time']).'更新过');
+        }
         $has_update = model('ExpenseRecords')->updateExpense($expense_num,$trade_num,$actually_amount,$trade_status);
+
         if ($has_update) {
             $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
+
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
-                if ($service_info['service_end_time'] - $service_info['service_start_time'] == 3*24*60*60) { //体验服务
+                $experience_days = config('experience_days');
+                if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验服务
                     if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
                         $remain_expenience_day = date('d',$service_info['service_end_time']) - date('d', $service_start_time); //剩余的体验服务时间
                         $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
@@ -447,6 +450,7 @@ class Index extends APIController
                 $service_start_time = $service_info['service_start_time'];
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
+
             return array('code'=>1);
         }else{
             return array('code'=>0,'msg'=>'更新消费记录失败');

@@ -15,7 +15,7 @@ return [
     // +----------------------------------------------------------------------
 
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -250,8 +250,8 @@ return [
     ],
 
     'experience_days' =>3,//免费体验时间
-    'PhantomjsPath' =>'/usr/bin/phantomjs', //执行文件位置
-    // 'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe',
+    // 'PhantomjsPath' =>'/usr/bin/phantomjs', //执行文件位置
+    'PhantomjsPath' => $_SERVER['DOCUMENT_ROOT'].'/../vendor/bin/phantomjs.exe',
     'service_cost' =>0.01,
     'description_cache_day' =>1,//商品详情图文详情保留时间
     'tm_detail_cache_day' =>3,//天猫商品详情保留时间
