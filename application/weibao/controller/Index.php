@@ -144,7 +144,6 @@ class Index extends Controller
      * @return [data]
      */
 	public function GetAccessData(){
-
 		$url='https://rate.tmall.com/list_detail_rate.htm?itemId='.$_POST['itemID'].'&sellerId='.$_POST['sellerID'].'&order=3&append=0&content=0&currentPage='.$_POST['page'].'&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp';
 		$data = file_get_contents($url);
 		$data = str_replace('jsonp(','',$data);
@@ -431,30 +430,18 @@ class Index extends Controller
         }else{
             //获取数据
             try{
-                $url='https://item.taobao.com/modulet/v5/wItemDesc.do?id ='.$itemId.'&type=0';
+                $url='https://item.taobao.com/modulet/v5/wItemDesc.do?id='.$itemId.'&type=0';
                 $opts = array('http'=>array('header' => "User-Agent:Mozilla/4.0"));
                 $context = stream_context_create($opts);
                 $response = file_get_contents($url,false,$context);
-                // var_dump(file_get_contents($url));
-                var_dump($response);
+                $response_data = json_decode($response,true);
+                // var_dump($response_data);
+                $des_data = $response_data['wdescContent']['pages'];
+                echo json_encode($des_data);
             }catch(Exception $e){
                 echo '获取数据失败，请刷新重试';
                 exit;
             }
-
-            /*$data=$response->getUrlData();
-            if (empty($data)){
-                echo "获取数据失败";
-            }else{
-                $des_data = preg_replace('/^mtopjsonp\d+\(([\s\S]+)\)/','$1', $data[0]);
-
-                if (empty($des_info)) {
-                    $has_add = model('AliGoodsDes')->addShopData($itemId,$des_data);
-                }else{
-                    $has_update = model('AliGoodsDes')->updateDesDataById($des_info['id'],$des_data);
-                }
-                echo $des_data;
-            }*/
         }
     }
 

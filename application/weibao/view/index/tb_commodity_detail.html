@@ -345,17 +345,19 @@
 	            	scriptAccess.parentNode.removeChild(scriptAccess);
 	            },1000)
 	            //请求图文详情数据
-				/*$.ajax({
+				$.ajax({
 			 		type:"get",
 			 		url:"/weibao/index/getTbGoodsDescription?itemId="+data.data.item.itemId,
 			 		async:true,
 			 		success:function(res){
+			 			console.log(res);
 			 			var res =JSON.parse(res);
+			 			console.log(res);
 			 			vm.commodityData.pictureDetail=res.data.images;
 			 		},
 			 		error:function(err){
 	                }
-			 	});*/
+			 	});
 	        }
 			
 			function jsonp2(a){
