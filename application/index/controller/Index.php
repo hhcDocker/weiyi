@@ -184,6 +184,7 @@ class Index extends APIController
                 if (!$has_update) {
                     throw new APIException(10014);
                 }
+                session('weitiao_sms_code',null);
                 session('weitiao_sms_tag', null);
                 return $this->format_ret();
             }else{
