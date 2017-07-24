@@ -430,30 +430,19 @@ class Index extends Controller
             echo $des_info['data'];
         }else{
             //获取数据
-            $cmd_url='https://h5.m.taobao.com/awp/core/detail.htm?id='.$itemId;
-            $client = Client::getInstance();
-            $client->getEngine()->setPath(config('PhantomjsPath'));
-            $client->getEngine()->addOption('--ssl-protocol=any')->addOption('--web-security=no');
-            /**
-             * @see JonnyW\PhantomJs\Http\Request
-             **/
-            $request = $client->getMessageFactory()->createRequest($cmd_url, 'GET');
-            //$request->setDelay(1000);
-            /**
-             * @see JonnyW\PhantomJs\Http\Response
-             **/
-            $response = $client->getMessageFactory()->createResponse();
+            try{
+                $url='https://item.taobao.com/modulet/v5/wItemDesc.do?id ='.$itemId.'&type=0';
+                $opts = array('http'=>array('header' => "User-Agent:Mozilla/4.0"));
+                $context = stream_context_create($opts);
+                $response = file_get_contents($url,false,$context);
+                // var_dump(file_get_contents($url));
+                var_dump($response);
+            }catch(Exception $e){
+                echo '获取数据失败，请刷新重试';
+                exit;
+            }
 
-            var_dump($console);
-            // Send the request
-            $client->send($request, $response);
-            $urls = $response->getUrls();
-            var_dump($urls);
-            $console = $response->getConsole();
-            var_dump($console);
-            exit;
-
-            $data=$response->getUrlData();
+            /*$data=$response->getUrlData();
             if (empty($data)){
                 echo "获取数据失败";
             }else{
@@ -465,7 +454,7 @@ class Index extends Controller
                     $has_update = model('AliGoodsDes')->updateDesDataById($des_info['id'],$des_data);
                 }
                 echo $des_data;
-            }
+            }*/
         }
     }
 
