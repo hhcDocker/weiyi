@@ -243,7 +243,7 @@ class Index extends Controller
                 return $this->fetch('tb_shop',array('data' => json_encode($shop_data)));
             }
         }else {//已过期
-            return $this->fetch('service_expired',array('err_msg' => "该店铺所购买服务已过期，请到微跳上续费"));
+            return $this->fetch('service_expired',array('err_msg' => "该店铺不在服务时间范围内"));
         }
     }
 
@@ -313,7 +313,7 @@ class Index extends Controller
                             }
                         }
                         if ($is_time_out) {
-                        return $this->fetch('service_expired',array('err_msg' => "该店铺所购买服务已过期，请到微跳上续费"));
+                        return $this->fetch('service_expired',array('err_msg' => "该店铺不在服务时间范围内"));
                         }
                     }
                 }else{
@@ -340,7 +340,7 @@ class Index extends Controller
                                 }
                             }
                             if ($is_time_out) {
-                                return $this->fetch('service_expired',array('err_msg' => "该店铺所购买服务已过期，请到微跳上续费"));
+                                return $this->fetch('service_expired',array('err_msg' => "该店铺不在服务时间范围内"));
                             }
                             if (empty($item_info)) {
                                 $has_add = model('AliTmGoodsDetail')->addGoodsDetailData($item_id,$tm_res['data']);
@@ -392,7 +392,7 @@ class Index extends Controller
                         }
                     }
                     if ($is_time_out) {
-                        return $this->fetch('service_expired',array('err_msg' => "该店铺所购买服务已过期，请到微跳上续费"));
+                        return $this->fetch('service_expired',array('err_msg' => "该店铺不在服务时间范围内"));
                     }
                 }
                 return $this->fetch('tb_commodity_detail',array('data' => $item_id,'shortUrl'=>$shortUrl));
