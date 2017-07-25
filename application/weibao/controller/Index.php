@@ -436,8 +436,14 @@ class Index extends Controller
                 $response = file_get_contents($url,false,$context);
                 $response_data = json_decode($response,true);
                 // var_dump($response_data);
-                $des_data = $response_data['wdescContent']['pages'];
-                echo json_encode($des_data);
+                $des_data = json_encode($response_data['wdescContent']['pages']);
+
+                if (empty($des_info)) {
+                    $has_add = model('AliGoodsDes')->addShopData($itemId,$des_data);
+                }else{
+                    $has_update = model('AliGoodsDes')->updateDesDataById($des_info['id'],$des_data);
+                }
+                echo $des_data;
             }catch(Exception $e){
                 echo '获取数据失败，请刷新重试';
                 exit;
