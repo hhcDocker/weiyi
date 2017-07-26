@@ -44,8 +44,9 @@ class TransRecords extends Base
         }
         $offset = ($pageIndex-1)*$pageSize;
         $res = Db::table('wj_trans_records r')
-                ->field('r.id,r.transnum,r.type_id,r.object_id,r.original_url,s.id,s.shop_id,s.shop_url,s.transformed_url,s.service_start_time,s.service_end_time,s.service_start_time<UNIX_TIMESTAMP(NOW()) as is_start,s.service_end_time<unix_timestamp(now()) as is_end')
+                ->field('r.id,r.transnum,r.type_id,r.object_id,r.original_url,s.id,s.shop_id,s.shop_url,s.transformed_url,s.service_start_time,s.service_end_time,a.ali_shop_id')
                 ->join('wj_shop_services s','r.wj_shop_id=s.shop_id')
+                ->join('wj_ali_shops a','a.id =s.shop_id')
                 ->where('s.manager_id',$manager_id)
                 ->where('r.is_deleted',0)
                 ->where('s.is_deleted',0)

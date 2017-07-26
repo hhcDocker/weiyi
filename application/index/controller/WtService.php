@@ -120,7 +120,6 @@ class WtService extends APIAuthController
                 $transnum = $o->getSN();
                 $has_add = model('TransRecords')->addRecords($transnum,$item_id,$type_id,$wj_shop_id,$full_url);
 
-
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
                 $qrcode_url ='/detail/1/'.$item_id;
                 $res =$this->manageServiceInfo($service_info,$qrcode_url,$wj_shop_id,$shop_url,$shop_id);
