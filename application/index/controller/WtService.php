@@ -322,18 +322,37 @@ class WtService extends APIAuthController
     }
 
     /**
+     * 获取支付费用
+     * @return [type] [description]
+     */
+    public function getServicePayAmount()
+    {
+        $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
+        $service_pay_array = json_decode($service_pay_amount,true);
+
+        return $this->format_ret($service_pay_array);
+    }
+
+    /**
+     * 获取体验时间
+     * @return [type] [description]
+     */
+    public function getExperienceDays()
+    {
+        $experience_days = model('Others')-> getValueByKey('experience_days');
+        return $this->format_ret($experience_days);
+    }
+
+    /**
      * [AddShopService description]
      * 购买服务未付费成功，时间保留，付费成功后再修改时间
      * @param string $value [description]
      */
-    public function buyShopService_old()
+    public function buyShopService()
     {
         $shop_url = noempty_input('shop_url','/^http/'); //客户填写的网址
         $shop_name = noempty_input('shop_name');
-        $service_start_time = noempty_input('service_start_time');
         $service_time = noempty_input('service_time','/\d+/');
-        $_payment_amount = config('service_cost');//每年支付费用
-        $payment_amount = $service_time * $_payment_amount;
         $payment_method = noempty_input('payment_method','/\d/');//1-微信，2-支付宝
 
         //校验
@@ -352,24 +371,12 @@ class WtService extends APIAuthController
         //店铺名称
         
         //服务时长
-        if ($service_time>5 || $service_time<1) {
+        if ($service_time<1) {
             throw new APIException(30016);
         }
 
-        //服务开始时间，格式yyyy-mm-dd,换算为time
-        $_service_start_time = explode('-', $service_start_time);
-        $_year = $_service_start_time[0];
-        $_month = $_service_start_time[1];
-        $_day = $_service_start_time[2];
-        if (!$_year || !$_month || !$_day){
-            throw new APIException(30017);
-        }
-        // $service_start_time = mktime(hour, minute, second, month, day, year);
-        $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
-        $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
-        if ($_year <date("Y") || $_month>12 ||$_day>31 || time() - $service_start_time>24*60*60) {
-            throw new APIException(30017);
-        }
+        $service_start_time = time();
+        $service_end_time = strtotime("+".$service_time." year",$service_start_time);
 
         //支付方式
         if ($payment_method!=1 &&$payment_method!=2) {
@@ -428,12 +435,6 @@ class WtService extends APIAuthController
             }else{
                 $wj_shop_id = $shop_info['id'];
                 $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
-            }
-            if (!empty($service_info)){
-                $experience_days = config('experience_days');
-                if ($service_info['service_end_time'] - time()>$experience_days*60*60*24) { //不是体验服务
-                    throw new APIException(30020);
-                }
             }
         }elseif (strpos($shop_url, 'shop.m.taobao.com')) { //淘宝店铺移动端1
             //获取userid
@@ -535,11 +536,16 @@ class WtService extends APIAuthController
         }
 
         //校验服务，防止重复购买
-        $experience_days = config('experience_days');
+        $experience_days = model('Others')-> getValueByKey('experience_days');
         if (!empty($service_info) && ($service_info['service_end_time'] - time()>$experience_days*60*60*24)){
             throw new APIException(30020);
         }
-
+        $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
+        $service_pay_array = json_decode($service_pay_amount,true);
+        if (!array_key_exists($service_time, $service_pay_array)) {
+            throw new APIException(30016);
+        }
+        $payment_amount = $service_pay_array[$service_time];
         //发起微信或支付宝支付，微信则取得链接，生成二维码，支付宝则取得链接
         $expense_model = new ExpenseSN();
         $expense_num = $expense_model->getSN();
@@ -623,7 +629,6 @@ class WtService extends APIAuthController
 
                 //添加体验记录
                 //添加消费记录，体验3天
-                $experience_days = config('experience_days');
                 $time_start = time();
                 $time_end = strtotime("+".$experience_days." day");
                 $expense_model = new ExpenseSN();
@@ -653,7 +658,6 @@ class WtService extends APIAuthController
                 $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
             }
         }else{
-            $experience_days = config('experience_days');
             $service_end_time = $service_end_time + $experience_days*24*60*60;
         }
         $res = array('expense_num'=>$expense_num,'shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
@@ -665,7 +669,7 @@ class WtService extends APIAuthController
      * 购买服务未付费成功，时间保留，付费成功后再修改时间
      * @param string $value [description]
      */
-    public function buyShopService()
+    public function buyShopService_2()
     {
         $shop_url = noempty_input('shop_url','/^http/'); //客户填写的网址
         $shop_name = noempty_input('shop_name');
@@ -690,7 +694,7 @@ class WtService extends APIAuthController
         //店铺名称
         
         //服务时长
-        if ($service_time>5 || $service_time<1) {
+        if ($service_time<1) {
             throw new APIException(30016);
         }
 
@@ -899,12 +903,10 @@ class WtService extends APIAuthController
         $service_id = noempty_input('service_id','/\d+/');
         $service_start_time = noempty_input('service_start_time');
         $service_time = noempty_input('service_time','/\d+/');
-        $_payment_amount = config('service_cost');//每年支付费用
-        $payment_amount = $service_time * $_payment_amount;
         $payment_method = noempty_input('payment_method','/\d/');//1-微信，2-支付宝
         
         //服务时长
-        if ($service_time>5 || $service_time<1) {
+        if ($service_time<1) {
             throw new APIException(30016);
         }
 
@@ -946,6 +948,12 @@ class WtService extends APIAuthController
         $expense_model = new ExpenseSN();
         $expense_num = $expense_model->getSN();
 
+        $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
+        $service_pay_array = json_decode($service_pay_amount,true);
+        if (!array_key_exists($service_time, $service_pay_array)) {
+            throw new APIException(30016);
+        }
+        $payment_amount = $service_pay_array[$service_time];
         if ($payment_method==1) { //微信
             //发起支付
             $wxPay = new WxPay;
@@ -1309,7 +1317,7 @@ class WtService extends APIAuthController
             throw new APIException(30010);
         }
         $img ='';
-        $experience_days = config('experience_days');
+        $experience_days = model('Others')-> getValueByKey('experience_days');
         if (empty($service_info)){
             //新增体验服务
             $time_start = time();
@@ -1413,9 +1421,6 @@ class WtService extends APIAuthController
         }
 
         if ($expense_info['trade_status']==1) {
-            $file = LOG_PATH.'../paylog/'.date("Ymd").'_repeat_pay_log.txt';
-            $content = date("Y-m-d H:i:s")."重复发送请求\n\n";
-            Log::write($content, $file);
             return array('code'=>1,'msg'=>'已于'.date("Y-m-d H:i:s",$expense_info['update_time']).'更新过');
         }
 
@@ -1428,7 +1433,7 @@ class WtService extends APIAuthController
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
-                $experience_days = config('experience_days');
+                $experience_days = model('Others')-> getValueByKey('experience_days');
 
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验服务
                     if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
