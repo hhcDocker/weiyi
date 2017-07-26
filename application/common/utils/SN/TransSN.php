@@ -38,4 +38,11 @@ class TransSN extends RandBase {
         return self::$typecode['trans']['code'].$date.$this->type_id.$this->object_id.$rand;
     }
 
+    // 8位数字+字母
+    /*public function getSN(){
+        $rand = self::random_per_duration(100000000000, 999999999999, self::PREFIX, self::DURATION);
+        $rand =  base_convert($rand, 10, 36);
+        $rand = strtoupper($rand);
+        return $rand;
+    }*/
 }
