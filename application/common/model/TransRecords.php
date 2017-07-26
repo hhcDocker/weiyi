@@ -44,7 +44,7 @@ class TransRecords extends Base
         }
         $offset = ($pageIndex-1)*$pageSize;
         $res = Db::table('wj_trans_records r')
-                ->field('r.id,r.transnum,r.type_id,r.original_url,s.service_start_time,s.service_end_time,s.service_start_time<UNIX_TIMESTAMP(NOW()) as is_start,s.service_end_time<unix_timestamp(now()) as is_end')
+                ->field('r.id,r.transnum,r.type_id,r.object_id,r.original_url,s.service_start_time,s.service_end_time,s.service_start_time<UNIX_TIMESTAMP(NOW()) as is_start,s.service_end_time<unix_timestamp(now()) as is_end,s.transformed_url')
                 ->join('wj_shop_services s','r.wj_shop_id=s.shop_id')
                 ->where('s.manager_id',$manager_id)
                 ->where('r.is_deleted',0)
@@ -88,7 +88,7 @@ class TransRecords extends Base
     /**
      * 根据objectid，类型，manager_id查询服务
      * @param  integer $object_id  [description]
-     * @param  integer $type_id    [description]
+     * @param  integer $type_id    [类型：1-店铺，2-天猫商品，3-淘宝商品]
      * @param  integer $manager_id [description]
      * @return [type]              [description]
      */
@@ -116,7 +116,7 @@ class TransRecords extends Base
      * @param  string  $transnum     [description]
      * @param  integer $wj_shop_id   [description]
      * @param  integer $object_id    [description]
-     * @param  integer $type_id      [description]
+     * @param  integer $type_id      [类型：1-店铺，2-天猫商品，3-淘宝商品]
      * @param  string  $original_url [description]
      * @return [type]                [description]
      */
@@ -144,7 +144,7 @@ class TransRecords extends Base
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `transnum` char(19) NOT NULL COMMENT '转换编号',
   `object_id` bigint(18) unsigned NOT NULL COMMENT '商品或店铺id',
-  `type_id` tinyint(1) unsigned NOT NULL COMMENT '类型：1-店铺，2-商品',
+  `type_id` tinyint(1) unsigned NOT NULL COMMENT '类型：1-店铺，2-天猫商品，3-淘宝商品',
   `wj_shop_id` int(10) unsigned NOT NULL COMMENT '对应店铺表id',
   `original_url` varchar(255) NOT NULL COMMENT '转换的链接',
   `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',

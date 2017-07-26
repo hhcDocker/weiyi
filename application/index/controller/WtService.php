@@ -69,7 +69,7 @@ class WtService extends APIAuthController
                     throw new APIException(30001,['url'=>$url]);
                 }
                 $item_id =$m[1];
-                $type_id =2;
+                $type_id =2;//天猫详情
                 //查询记录
                 $record_info = model('TransRecords')->getServiceByRecord($item_id,$type_id,session('manager_id'));
                 //记录存在则直接返回
@@ -182,10 +182,10 @@ class WtService extends APIAuthController
                     $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                 }
 
-                $type_id =1;
+                $type_id =1;//店铺
                 //查询记录
                 $record_info = model('TransRecords')->getServiceByRecord($shop_id,$type_id,session('manager_id'));
-                ////记录不存在则生成
+                //记录不存在则生成
                 if(empty($record_info)){
                     //生成转换记录
                     $o = new TransSN($type_id,$shop_id);
@@ -307,7 +307,7 @@ class WtService extends APIAuthController
                     throw new APIException(30008);
                 }
 
-                $type_id =1;
+                $type_id =1;//店铺
                 //查询记录
                 $record_info = model('TransRecords')->getServiceByRecord($shop_id,$type_id,session('manager_id'));
                 //记录不存在则生成
@@ -329,7 +329,7 @@ class WtService extends APIAuthController
                 }
                 $item_id =$m[1];
 
-                $type_id =2;
+                $type_id =3;//淘宝商品
                 //查询记录
                 $record_info = model('TransRecords')->getServiceByRecord($item_id,$type_id,session('manager_id'));
                 //记录存在则直接返回
@@ -1136,6 +1136,28 @@ class WtService extends APIAuthController
             throw new APIException(10001);
         }
         $service_list = model('TransRecords')->getRecordsByManagerId(session('manager_id'),$page_index, $page_size,$service_type);
+        if (!empty($service_list)) {
+            foreach ($service_list as $k => $v) {
+                //短链接
+                if ($v['type_id']==1) { //店铺
+                    $service_list[$k]['short_url'] = $_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                }elseif ($v['type_id']==2) { //天猫商品
+                    $service_list[$k]['short_url'] = $_SERVER['HTTP_HOST'].'/1/'.$v['object_id'];
+                }else{
+                    $service_list[$k]['short_url'] = $_SERVER['HTTP_HOST'].'/0/'.$v['object_id'];
+                }
+                //状态
+                $experience_days = model('Others')-> getValueByKey('experience_days');
+                if ($v['service_end_time'] - $v['service_start_time'] <= $experience_days *24*60*60+1) { //未支付
+                    $service_list[$k]['service_type'] = 1;
+                }elseif ($v['is_start'] ==1 && $v['is_end'] ==0){ //生效中
+                    $service_list[$k]['service_type'] = 2;
+
+                }elseif ($v['is_start'] ==0 || $v['is_end'] ==1) { //已到期
+                    $service_list[$k]['service_type'] = 3;
+                }
+            }
+        }
         $service_count = model('TransRecords')->countRecordsByManagerId(session('manager_id'),$service_type);
         $service_page = ceil($service_count/$page_size);
         $res_array = array('page_index'=>$page_index,'page_all'=>$service_page,'service_list'=>$service_list);
