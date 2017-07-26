@@ -27,6 +27,7 @@ abstract class RandBase implements RandInterface {
      */ 
     static $typecode = [
          "expense" => ['code'=>72, 'len'=>20],
+         "trans" =>['code'=>61,'length'=>19],
     ];
     
     /**

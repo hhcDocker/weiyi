@@ -19,6 +19,7 @@ namespace app\weibao\controller;
 use app\common\service\WeiBaoData;
 use app\common\utils\SN\ShortUrl;
 use app\common\utils\SN\ExpenseSN;
+use app\common\utils\SN\TransSN;
 use JonnyW\PhantomJs\Client;
 use think\Controller;
 use think\Request;
@@ -322,4 +323,16 @@ class Index1 extends Controller
         }
         return array('code'=>1,'url'=>$url,'msg'=>'');
     }
+
+
+
+
+
+    public function testTransSn()
+    {
+        $trans_model = new TransSN();
+        $trans_num = $trans_model->getSN();
+        echo $trans_num;
+    }
+    
 }

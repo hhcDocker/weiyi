@@ -79,7 +79,7 @@ class ShopServices extends Base
         if (!$manager_id) {
             return array();
         }
-        $experience_days = config('experience_days');
+        $experience_days = model('Others')-> getValueByKey('experience_days');
         $where = '';
         if ($service_type==1) { //已过期
             $where ='service_end_time <= unix_timestamp(now())';
@@ -111,7 +111,7 @@ class ShopServices extends Base
         if (!$manager_id) {
             return 0;
         }
-        $experience_days = config('experience_days');
+        $experience_days = model('Others')-> getValueByKey('experience_days');
         $where = '';
         if ($service_type==1) { //已过期
             $where ='service_end_time <= unix_timestamp(now())';

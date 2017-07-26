@@ -16,6 +16,7 @@
 namespace app\index\controller;
 
 use app\common\utils\SN\ExpenseSN;
+use app\common\utils\SN\TransSN;
 use app\common\utils\SN\ShortUrl;
 use app\common\service\WeiBaoData;
 use app\common\service\QRCode;
@@ -35,6 +36,7 @@ class WtService extends APIAuthController
      * 3.判断天猫or淘宝，店铺则转换地址查表；商品详情则区分天猫淘宝，天猫先查表确认是否存在，否则调用爬取函数，取得shopId，淘宝则直接爬取数据，取得userId
      * 4.查表获取该链接所属店铺是否已购买服务，是否已过期
      * 5.如果从未购买，则爬取店铺数据，生成体验记录，默认3天，生成服务记录，返回短链接
+     * 6.生成转换记录
      * 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
      * @return [type] [description]
      */
@@ -67,7 +69,20 @@ class WtService extends APIAuthController
                     throw new APIException(30001,['url'=>$url]);
                 }
                 $item_id =$m[1];
-                
+                $type_id =2;
+                //查询记录
+                $record_info = model('TransRecords')->getServiceByRecord($item_id,$type_id,session('manager_id'));
+                //记录存在则直接返回
+                if(!empty($record_info)){
+                    $qrcode_url ='/detail/1/'.$item_id;
+                    $wj_shop_id = $record_info['shop_id'];
+                    $shop_url = $record_info['shop_url'];
+                    $ali_shop_id = $record_info['ali_shop_id'];
+                    $res =$this->manageServiceInfo($record_info,$qrcode_url,$wj_shop_id,$shop_url,$ali_shop_id);
+                    //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
+                    return $this->format_ret($res);
+                }
+
                 $item_info = model('AliTmGoodsDetail')->getGoodsDetailByItemId($item_id);
                 if (!empty($item_info)) {
                     $shop_id =  $item_info['shop_id'];
@@ -99,6 +114,13 @@ class WtService extends APIAuthController
                     $wj_shop_id = $shop_info['id'];
                     $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                 }
+
+                //生成转换记录
+                $o = new TransSN($type_id,$item_id);
+                $transnum = $o->getSN();
+                $has_add = model('TransRecords')->addRecords($transnum,$item_id,$type_id,$wj_shop_id,$full_url);
+
+
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
                 $qrcode_url ='/detail/1/'.$item_id;
                 $res =$this->manageServiceInfo($service_info,$qrcode_url,$wj_shop_id,$shop_url,$shop_id);
@@ -158,6 +180,17 @@ class WtService extends APIAuthController
                     $shop_id = $shop_info['ali_shop_id'];
                     $wj_shop_id =$shop_info['id'];
                     $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
+                }
+
+                $type_id =1;
+                //查询记录
+                $record_info = model('TransRecords')->getServiceByRecord($shop_id,$type_id,session('manager_id'));
+                ////记录不存在则生成
+                if(empty($record_info)){
+                    //生成转换记录
+                    $o = new TransSN($type_id,$shop_id);
+                    $transnum = $o->getSN();
+                    $has_add = model('TransRecords')->addRecords($transnum,$shop_id,$type_id,$wj_shop_id,$full_url);
                 }
 
                 //链接从$service_info取短链拼接而成，指向店铺数据，路由映射
@@ -274,6 +307,17 @@ class WtService extends APIAuthController
                     throw new APIException(30008);
                 }
 
+                $type_id =1;
+                //查询记录
+                $record_info = model('TransRecords')->getServiceByRecord($shop_id,$type_id,session('manager_id'));
+                //记录不存在则生成
+                if(empty($record_info)){
+                    //生成转换记录
+                    $o = new TransSN($type_id,$shop_id);
+                    $transnum = $o->getSN();
+                    $has_add = model('TransRecords')->addRecords($transnum,$shop_id,$type_id,$wj_shop_id,$full_url);
+                }
+
                 //链接从$service_info取短链拼接而成，指向店铺数据，路由映射
                 $res =$this->manageServiceInfo($service_info,'',$wj_shop_id,$shop_url,$shop_id);
                 //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
@@ -284,6 +328,21 @@ class WtService extends APIAuthController
                     throw new APIException(30001,['url'=>$full_url]);
                 }
                 $item_id =$m[1];
+
+                $type_id =2;
+                //查询记录
+                $record_info = model('TransRecords')->getServiceByRecord($item_id,$type_id,session('manager_id'));
+                //记录存在则直接返回
+                if(!empty($record_info)){
+                    $qrcode_url ='/detail/0/'.$item_id;
+                    $wj_shop_id = $record_info['shop_id'];
+                    $shop_url = $record_info['shop_url'];
+                    $ali_shop_id = $record_info['ali_shop_id'];
+                    $res =$this->manageServiceInfo($record_info,$qrcode_url,$wj_shop_id,$shop_url,$ali_shop_id);
+                    //mc 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
+                    return $this->format_ret($res);
+                }
+
                 $url='https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$item_id.'%22%7D';
                 $data=file_get_contents($url);
                 $data=json_decode($data,true);
@@ -322,7 +381,7 @@ class WtService extends APIAuthController
     }
 
     /**
-     * 获取支付费用
+     * 获取服务费用
      * @return [type] [description]
      */
     public function getServicePayAmount()
@@ -721,6 +780,8 @@ class WtService extends APIAuthController
         $service_info = array();
         //检测是否在alishop表中
         //天猫店铺
+        
+        $experience_days = model('Others')-> getValueByKey('experience_days');
         if (strpos($shop_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$shop_url)){ //天猫店铺
             $ali_shop_url = preg_replace('/(\w+)[\.m]*\.tmall.com.*/','$1'.'.m.tmall.com',$shop_url);//获取数据的网址
 
@@ -732,7 +793,6 @@ class WtService extends APIAuthController
                 $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
             }
             if (!empty($service_info)){
-                $experience_days = config('experience_days');
                 if ($service_info['service_end_time'] - time()>$experience_days*60*60*24) { //不是体验服务
                     throw new APIException(30020);
                 }
@@ -769,7 +829,6 @@ class WtService extends APIAuthController
         }
 
         //校验服务，防止重复购买
-        $experience_days = config('experience_days');
         if (!empty($service_info) && ($service_info['service_end_time'] - time()>$experience_days*60*60*24)){
             throw new APIException(30020);
         }
@@ -857,7 +916,6 @@ class WtService extends APIAuthController
 
                 //添加体验记录
                 //添加消费记录，体验3天
-                $experience_days = config('experience_days');
                 $time_start = time();
                 $time_end = strtotime("+".$experience_days." day");
                 $expense_model = new ExpenseSN();
@@ -887,7 +945,6 @@ class WtService extends APIAuthController
                 $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
             }
         }else{
-            $experience_days = config('experience_days');
             $service_end_time = $service_end_time + $experience_days*24*60*60;
         }
         $res = array('expense_num'=>$expense_num,'shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
@@ -1064,6 +1121,38 @@ class WtService extends APIAuthController
 
         $res_data =array('shop_name'=>$service_info['shop_name'],'shop_url'=>$service_info['shop_url'],'service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $this->format_ret($res_data);
+    }
+
+    /**
+     * [getShopService description]
+     * @return [type] [description]
+     */
+    public function getTransRecords()
+    {
+        $page_index = input('param.page_index') ? intval(input('param.page_index')):1;
+        $page_size = input('param.page_size') ? intval(input('param.page_size')):10;
+        $service_type = input('param.service_type') ? intval(input('param.service_type')):0;//0-全部，1-未支付，2-生效中，3-已到期
+        if (!$page_size) {
+            throw new APIException(10001);
+        }
+        $service_list = model('TransRecords')->getRecordsByManagerId(session('manager_id'),$page_index, $page_size,$service_type);
+        $service_count = model('TransRecords')->countRecordsByManagerId(session('manager_id'),$service_type);
+        $service_page = ceil($service_count/$page_size);
+        $res_array = array('page_index'=>$page_index,'page_all'=>$service_page,'service_list'=>$service_list);
+        return $this->format_ret($res_array);
+    }
+
+    /**
+     * [getQrcodeImg description]
+     * @return [type] [description]
+     */
+    public function getQrcodeImg()
+    {
+        $qrcode_url = noempty_input('qrcode_url');
+        //二维码
+        $QRCode = new QRCode;
+        $qrcode_img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+        return $this->format_ret($qrcode_img);
     }
 
     /**
