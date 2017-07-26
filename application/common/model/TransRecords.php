@@ -38,9 +38,9 @@ class TransRecords extends Base
         if ($service_type==1) { //未支付
             $where ='s.service_end_time-s.service_start_time<='.$experience_days.'*24*60*60+1';
         }elseif ($service_type==2) { //生效中
-            $where ='is_start=1 and is_end=0';
+            $where ='s.service_start_time<UNIX_TIMESTAMP(NOW()) and s.service_end_time>unix_timestamp(now())';
         }elseif ($service_type==3) { //已到期
-            $where ='is_start=0 or is_end=1';
+            $where ='s.service_start_time>UNIX_TIMESTAMP(NOW()) or s.service_end_time<unix_timestamp(now())';
         }
         $offset = ($pageIndex-1)*$pageSize;
         $res = Db::table('wj_trans_records r')
