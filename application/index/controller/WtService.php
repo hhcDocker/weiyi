@@ -1140,11 +1140,11 @@ class WtService extends APIAuthController
             foreach ($service_list as $k => $v) {
                 //短链接
                 if ($v['type_id']==1) { //店铺
-                    $service_list[$k]['short_url'] = $_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                    $service_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                 }elseif ($v['type_id']==2) { //天猫商品
-                    $service_list[$k]['short_url'] = $_SERVER['HTTP_HOST'].'/1/'.$v['object_id'];
+                    $service_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/1/'.$v['object_id'];
                 }else{
-                    $service_list[$k]['short_url'] = $_SERVER['HTTP_HOST'].'/0/'.$v['object_id'];
+                    $service_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/0/'.$v['object_id'];
                 }
                 //状态
                 $experience_days = model('Others')-> getValueByKey('experience_days');

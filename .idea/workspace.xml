@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/weibao/controller/Index.php" afterPath="$PROJECT_DIR$/application/weibao/controller/Index.php" />
-    </list>
+    <list default="true" id="a36d0b07-8025-45f5-bde5-56eafc4a98ac" name="Default" comment="" />
     <ignored path="wtiao.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -34,33 +31,6 @@
                 <element signature="e#1113#1202#0#PHP" expanded="false" />
                 <element signature="e#1205#1265#0#PHP" expanded="false" />
                 <element signature="e#1267#1368#0#PHP" expanded="false" />
-                <element signature="e#20240#20333#0#PHP" expanded="false" />
-                <element signature="e#20347#20866#0#PHP" expanded="false" />
-                <element signature="e#20888#20957#0#PHP" expanded="false" />
-                <element signature="e#20962#25794#0#PHP" expanded="false" />
-                <element signature="e#21158#22175#0#PHP" expanded="false" />
-                <element signature="e#21197#22165#0#PHP" expanded="false" />
-                <element signature="e#21443#22165#0#PHP" expanded="false" />
-                <element signature="e#22375#25788#0#PHP" expanded="false" />
-                <element signature="e#22436#25550#0#PHP" expanded="false" />
-                <element signature="e#22640#22771#0#PHP" expanded="false" />
-                <element signature="e#22963#25288#0#PHP" expanded="false" />
-                <element signature="e#23133#23694#0#PHP" expanded="false" />
-                <element signature="e#23713#25288#0#PHP" expanded="false" />
-                <element signature="e#23856#25270#0#PHP" expanded="false" />
-                <element signature="e#23996#25270#0#PHP" expanded="false" />
-                <element signature="e#24319#24646#0#PHP" expanded="false" />
-                <element signature="e#24481#24646#0#PHP" expanded="false" />
-                <element signature="e#25441#25550#0#PHP" expanded="false" />
-                <element signature="e#25570#25788#0#PHP" expanded="false" />
-                <element signature="e#25607#25722#0#PHP" expanded="false" />
-                <element signature="e#25801#25879#0#PHP" expanded="false" />
-                <element signature="e#25884#26951#0#PHP" expanded="false" />
-                <element signature="e#26092#26858#0#PHP" expanded="false" />
-                <element signature="e#26208#26858#0#PHP" expanded="false" />
-                <element signature="e#26957#26988#0#PHP" expanded="false" />
-                <element signature="e#26993#27197#0#PHP" expanded="false" />
-                <element signature="e#27054#27163#0#PHP" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -121,7 +91,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1936" />
+    <option name="width" value="1924" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -149,8 +119,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -383,33 +353,34 @@
       <workItem from="1499943198327" duration="457000" />
       <workItem from="1500550184358" duration="1332000" />
       <workItem from="1500860691476" duration="7117000" />
+      <workItem from="1501063050880" duration="5000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="161541000" />
+    <option name="totallyTimeSpent" value="161546000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1924" height="1056" extended-state="1" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14696486" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14844587" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17405406" sideWeight="0.5042598" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46810812" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972974" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46810812" sideWeight="0.49574015" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -502,18 +473,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>451</line>
-          <option name="timeStamp" value="222" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
           <line>413</line>
           <option name="timeStamp" value="223" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>419</line>
-          <option name="timeStamp" value="224" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/application/index/controller/WtService.php</url>
@@ -569,11 +530,6 @@
           <url>file://$PROJECT_DIR$/application/index/controller/Index.php</url>
           <line>177</line>
           <option name="timeStamp" value="278" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/application/weibao/controller/Index.php</url>
-          <line>433</line>
-          <option name="timeStamp" value="280" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -921,9 +877,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="54" column="37" selection-start-line="54" selection-start-column="37" selection-end-line="54" selection-end-column="37" />
-          <folding>
-            <element signature="e#6#623#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1136,15 +1089,9 @@
             <element signature="e#13302#13347#0#PHP" expanded="false" />
             <element signature="e#13357#13394#0#PHP" expanded="false" />
             <element signature="e#13406#13545#0#PHP" expanded="false" />
-            <element signature="e#13550#15784#0#PHP" expanded="false" />
             <element signature="e#13755#13846#0#PHP" expanded="false" />
             <element signature="e#13917#14038#0#PHP" expanded="false" />
             <element signature="e#14047#14384#0#PHP" expanded="false" />
-            <element signature="e#14512#15778#0#PHP" expanded="false" />
-            <element signature="e#14780#15518#0#PHP" expanded="false" />
-            <element signature="e#14939#15429#0#PHP" expanded="false" />
-            <element signature="e#15076#15411#0#PHP" expanded="false" />
-            <element signature="e#15708#15778#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1171,7 +1118,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="227">
           <caret line="35" column="7" selection-start-line="35" selection-start-column="7" selection-end-line="35" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1179,7 +1125,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="327">
           <caret line="295" column="0" selection-start-line="295" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1192,33 +1137,6 @@
             <element signature="e#1113#1202#0#PHP" expanded="false" />
             <element signature="e#1205#1265#0#PHP" expanded="false" />
             <element signature="e#1267#1368#0#PHP" expanded="false" />
-            <element signature="e#20240#20333#0#PHP" expanded="false" />
-            <element signature="e#20347#20866#0#PHP" expanded="false" />
-            <element signature="e#20888#20957#0#PHP" expanded="false" />
-            <element signature="e#20962#25794#0#PHP" expanded="false" />
-            <element signature="e#21158#22175#0#PHP" expanded="false" />
-            <element signature="e#21197#22165#0#PHP" expanded="false" />
-            <element signature="e#21443#22165#0#PHP" expanded="false" />
-            <element signature="e#22375#25788#0#PHP" expanded="false" />
-            <element signature="e#22436#25550#0#PHP" expanded="false" />
-            <element signature="e#22640#22771#0#PHP" expanded="false" />
-            <element signature="e#22963#25288#0#PHP" expanded="false" />
-            <element signature="e#23133#23694#0#PHP" expanded="false" />
-            <element signature="e#23713#25288#0#PHP" expanded="false" />
-            <element signature="e#23856#25270#0#PHP" expanded="false" />
-            <element signature="e#23996#25270#0#PHP" expanded="false" />
-            <element signature="e#24319#24646#0#PHP" expanded="false" />
-            <element signature="e#24481#24646#0#PHP" expanded="false" />
-            <element signature="e#25441#25550#0#PHP" expanded="false" />
-            <element signature="e#25570#25788#0#PHP" expanded="false" />
-            <element signature="e#25607#25722#0#PHP" expanded="false" />
-            <element signature="e#25801#25879#0#PHP" expanded="false" />
-            <element signature="e#25884#26951#0#PHP" expanded="false" />
-            <element signature="e#26092#26858#0#PHP" expanded="false" />
-            <element signature="e#26208#26858#0#PHP" expanded="false" />
-            <element signature="e#26957#26988#0#PHP" expanded="false" />
-            <element signature="e#26993#27197#0#PHP" expanded="false" />
-            <element signature="e#27054#27163#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
