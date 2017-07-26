@@ -664,7 +664,7 @@ class WtService extends APIAuthController
             //生成或修改服务记录
             if (empty($service_info)) {
                 //短链接
-                $o = new ShortUrl($wj_shop_id,session('manager_id'));
+                $o = new ShortUrl();
                 $shop_url_str = $o->getSN();
                 //查询短链接是否存在
                 $i=1;
@@ -892,7 +892,7 @@ class WtService extends APIAuthController
             //生成或修改服务记录
             if (empty($service_info)) {
                 //短链接
-                $o = new ShortUrl($wj_shop_id,session('manager_id'));
+                $o = new ShortUrl();
                 $shop_url_str = $o->getSN();
                 //查询短链接是否存在
                 $i=1;
@@ -1446,8 +1446,7 @@ class WtService extends APIAuthController
             $time_start = time();
             $time_end = strtotime("+".$experience_days." day");
             
-            //mc 改用shop_id+manager_id
-            $o = new ShortUrl($wj_shop_id,session('manager_id'));
+            $o = new ShortUrl();
             $shop_url_str = $o->getSN();
             //查询短链接是否存在
             $i=1;
