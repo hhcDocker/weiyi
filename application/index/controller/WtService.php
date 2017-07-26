@@ -1135,32 +1135,41 @@ class WtService extends APIAuthController
         if (!$page_size) {
             throw new APIException(10001);
         }
-        $service_list = model('TransRecords')->getRecordsByManagerId(session('manager_id'),$page_index, $page_size,$service_type);
-        if (!empty($service_list)) {
-            foreach ($service_list as $k => $v) {
+        $record_list = model('TransRecords')->getRecordsByManagerId(session('manager_id'),$page_index, $page_size,$service_type);
+        if (!empty($record_list)) {
+            foreach ($record_list as $k => $v) {
                 //短链接
                 if ($v['type_id']==1) { //店铺
-                    $service_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                    $record_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                    $record_list[$k]['url_type'] = 1;
                 }elseif ($v['type_id']==2) { //天猫商品
-                    $service_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/1/'.$v['object_id'];
+                    $record_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/1/'.$v['object_id'];
+                    $record_list[$k]['url_type'] = 2;
                 }else{
-                    $service_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/0/'.$v['object_id'];
+                    $record_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/0/'.$v['object_id'];
+                    $record_list[$k]['url_type'] = 2;
                 }
+                unset($record_list[$k]['type_id']);
+                unset($record_list[$k]['object_id']);
+                unset($record_list[$k]['transformed_url']);
                 //状态
                 $experience_days = model('Others')-> getValueByKey('experience_days');
                 if ($v['service_end_time'] - $v['service_start_time'] <= $experience_days *24*60*60+1) { //未支付
-                    $service_list[$k]['service_type'] = 1;
+                    $record_list[$k]['service_type'] = 1;
                 }elseif ($v['is_start'] ==1 && $v['is_end'] ==0){ //生效中
-                    $service_list[$k]['service_type'] = 2;
+                    $record_list[$k]['service_type'] = 2;
 
                 }elseif ($v['is_start'] ==0 || $v['is_end'] ==1) { //已到期
-                    $service_list[$k]['service_type'] = 3;
+                    $record_list[$k]['service_type'] = 3;
                 }
+                unset($record_list[$k]['service_start_time']);
+                unset($record_list[$k]['is_start']);
+                unset($record_list[$k]['is_end']);
             }
         }
         $service_count = model('TransRecords')->countRecordsByManagerId(session('manager_id'),$service_type);
         $service_page = ceil($service_count/$page_size);
-        $res_array = array('page_index'=>$page_index,'page_all'=>$service_page,'service_list'=>$service_list);
+        $res_array = array('page_index'=>$page_index,'page_all'=>$service_page,'record_list'=>$record_list);
         return $this->format_ret($res_array);
     }
 
