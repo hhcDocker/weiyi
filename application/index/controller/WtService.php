@@ -69,7 +69,7 @@ class WtService extends APIAuthController
                     throw new APIException(30001,['url'=>$url]);
                 }
                 $item_id =$m[1];
-                $type_id =2;//天猫详情
+                $type_id = 2;//天猫详情
                 //查询记录
                 $record_info = model('TransRecords')->getServiceByRecord($item_id,$type_id,session('manager_id'));
                 //记录存在则直接返回
@@ -958,7 +958,6 @@ class WtService extends APIAuthController
     public function renewalShopService()
     {
         $service_id = noempty_input('service_id','/\d+/');
-        $service_start_time = noempty_input('service_start_time');
         $service_time = noempty_input('service_time','/\d+/');
         $payment_method = noempty_input('payment_method','/\d/');//1-微信，2-支付宝
         
@@ -972,45 +971,30 @@ class WtService extends APIAuthController
             throw new APIException(30018);
         }
 
-        //服务开始时间，格式yyyy-mm-dd,换算为time
-        $_service_start_time =explode('-', $service_start_time);
-        $_year = $_service_start_time[0];
-        $_month = $_service_start_time[1];
-        $_day = $_service_start_time[2];
-
-        if (!$_year || !$_month || !$_day){
-            throw new APIException(30017);
-        }
-        // $service_start_time = mktime(hour, minute, second, month, day, year);
-        $service_start_time = mktime(0, 0, 0, $_month, $_day, $_year);
-        $service_end_time = mktime(23, 59, 59, $_month, $_day, $_year+$service_time);
-        if ($_year <date("Y") || $_month>12 ||$_day>31 ||time() - $service_start_time>24*60*60) {
-            throw new APIException(30017);
-        }
-
         $service_info = model('ShopServices')->getServicesById($service_id);
         if (empty($service_info)) {
             throw new APIException(30021);
         }
         if ($service_info['service_end_time'] >time()) { //还未过期
-            //续费开始时间比之前结束时间多出至少一天
-            if ($service_start_time - $service_info['service_end_time'] > 24*60*60) {
-                throw new APIException(30022);
-            }elseif ($service_end_time - $service_info['service_end_time'] < 364*24*60*60) { //续费结束时间和当前服务结束时间相差不到1年，表示重复付费
-                throw new APIException(30022);
-            }
+            $service_start_time=$service_info['service_end_time']+1;
+            $service_end_time = strtotime("+".$service_time." year",$service_start_time);
+        }else{
+            $service_start_time = time();
+            $service_end_time = strtotime("+".$service_time." year",$service_start_time);
         }
 
         //发起微信或支付宝支付，微信则取得链接，生成二维码，支付宝则取得链接
         $expense_model = new ExpenseSN();
         $expense_num = $expense_model->getSN();
 
+        //服务费用
         $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
         $service_pay_array = json_decode($service_pay_amount,true);
         if (!array_key_exists($service_time, $service_pay_array)) {
             throw new APIException(30016);
         }
         $payment_amount = $service_pay_array[$service_time];
+
         if ($payment_method==1) { //微信
             //发起支付
             $wxPay = new WxPay;
@@ -1085,11 +1069,29 @@ class WtService extends APIAuthController
     {
         $page_index = input('param.page_index') ? intval(input('param.page_index')):1;
         $page_size = input('param.page_size') ? intval(input('param.page_size')):10;
-        $service_type = input('param.service_type') ? intval(input('param.service_type')):0;//0-全部，1-已过期，2-未开始，3-未过期
+        $service_type = input('param.service_type') ? intval(input('param.service_type')):0;//0-全部，1-已过期，2-未过期
         if (!$page_size) {
             throw new APIException(10001);
         }
         $service_list = model('ShopServices')->getServicesByManagerId(session('manager_id'),$page_index, $page_size,$service_type);
+        $QRCode = new QRCode;
+        if (!empty($service_list)) {
+            foreach ($service_list as $k => $v) {
+                //短链接
+                $service_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                unset($service_list[$k]['transformed_url']);
+                //状态
+                $experience_days = model('Others')-> getValueByKey('experience_days');
+                if ($v['service_end_time'] > time()){ //已过期
+                    $service_list[$k]['service_type'] = 1;
+                }elseif ($v['service_end_time'] <= time()) { //已到期
+                    $service_list[$k]['service_type'] = 2;
+                }
+                // unset($service_list[$k]['service_start_time']);
+                $service_list[$k]['qrcode_img'] = base64_encode($QRCode->createQRCodeImg($service_list[$k]['short_url']));
+            }
+        }
+
         $service_count = model('ShopServices')->countServicesByManagerId(session('manager_id'),$service_type);
         $service_page = ceil($service_count/$page_size);
         $res_array = array('page_index'=>$page_index,'page_all'=>$service_page,'service_list'=>$service_list);
@@ -1464,7 +1466,7 @@ class WtService extends APIAuthController
             }
 
             //新增服务
-            $service_id = model('ShopServices')->saveServices(session('manager_id'),$wj_shop_id,$shop_url_str,$time_start,$time_end);
+            $service_id = model('ShopServices')->saveServices(session('manager_id'),$wj_shop_id,$shop_url,$shop_url_str,$time_start,$time_end);
             $service_info = model('ShopServices')->getServicesById($service_id);
             if (empty($service_info)) {
                 throw new APIException(30010);

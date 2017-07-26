@@ -115,9 +115,7 @@ class ShopServices extends Base
         $where = '';
         if ($service_type==1) { //已过期
             $where ='service_end_time <= unix_timestamp(now())';
-        }elseif ($service_type==2) { //未开始
-            $where ='service_start_time > UNIX_TIMESTAMP(NOW())';
-        }elseif ($service_type==3) { //未过期
+        }elseif ($service_type==2) { //未过期
             $where ='service_start_time < UNIX_TIMESTAMP(NOW()) AND service_end_time > unix_timestamp(now())';
         }
         $res = Db::table('wj_shop_services')
@@ -179,7 +177,7 @@ class ShopServices extends Base
      * @param  integer $service_end_time   [description]
      * @return [type]                      [description]
      */
-    public function saveServices($manager_id=0,$shop_id='',$transformed_url='',$service_start_time=0,$service_end_time=0)
+    public function saveServices($manager_id=0,$shop_id='',$shop_url='',$transformed_url='',$service_start_time=0,$service_end_time=0)
     {
     	if (!$manager_id ||!$shop_id ||!$transformed_url ||!$service_start_time ||!$service_end_time) {
     		return 0;
@@ -188,6 +186,7 @@ class ShopServices extends Base
             'manager_id'=>$manager_id,
     		'shop_id'=> $shop_id,
     		'transformed_url'=> $transformed_url,
+            'shop_url'=>$shop_url,
     		'service_start_time'=> $service_start_time,
             'service_end_time'=>$service_end_time,
     		'is_deleted'=> 0,
