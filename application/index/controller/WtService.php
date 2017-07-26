@@ -1159,15 +1159,14 @@ class WtService extends APIAuthController
                 $experience_days = model('Others')-> getValueByKey('experience_days');
                 if ($v['service_end_time'] - $v['service_start_time'] <= $experience_days *24*60*60+1) { //未支付
                     $record_list[$k]['service_type'] = 1;
-                }elseif ($v['is_start'] ==1 && $v['is_end'] ==0){ //生效中
+                }elseif ($v['service_end_time'] > time()){ //生效中
                     $record_list[$k]['service_type'] = 2;
 
-                }elseif ($v['is_start'] ==0 || $v['is_end'] ==1) { //已到期
+                }elseif ($v['service_end_time'] <= time()) { //已到期
                     $record_list[$k]['service_type'] = 3;
                 }
+
                 unset($record_list[$k]['service_start_time']);
-                unset($record_list[$k]['is_start']);
-                unset($record_list[$k]['is_end']);
                 $record_list[$k]['qrcode_img'] = base64_encode($QRCode->createQRCodeImg($record_list[$k]['short_url']));
             }
         }
