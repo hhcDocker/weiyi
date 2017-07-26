@@ -1136,6 +1136,7 @@ class WtService extends APIAuthController
             throw new APIException(10001);
         }
         $record_list = model('TransRecords')->getRecordsByManagerId(session('manager_id'),$page_index, $page_size,$service_type);
+        $QRCode = new QRCode;
         if (!empty($record_list)) {
             foreach ($record_list as $k => $v) {
                 //短链接
@@ -1165,6 +1166,7 @@ class WtService extends APIAuthController
                 unset($record_list[$k]['service_start_time']);
                 unset($record_list[$k]['is_start']);
                 unset($record_list[$k]['is_end']);
+                $record_list[$k]['qrcode_img'] = base64_encode($QRCode->createQRCodeImg($record_list[$k]['short_url']));
             }
         }
         $service_count = model('TransRecords')->countRecordsByManagerId(session('manager_id'),$service_type);
