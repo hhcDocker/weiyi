@@ -256,6 +256,28 @@ class Index extends APIController
         return $login_info;
     }
 
+    /**
+     * 获取服务费用
+     * @return [type] [description]
+     */
+    public function getServicePayAmount()
+    {
+        $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
+        $service_pay_array = json_decode($service_pay_amount,true);
+
+        return $this->format_ret($service_pay_array);
+    }
+
+    /**
+     * 获取体验时间
+     * @return [type] [description]
+     */
+    public function getExperienceDays()
+    {
+        $experience_days = model('Others')-> getValueByKey('experience_days');
+        return $this->format_ret($experience_days);
+    }
+
     /********************************************* 公用函数 ********************************************/
     /**
      * 检测手机号是否注册过

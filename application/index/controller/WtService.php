@@ -380,28 +380,6 @@ class WtService extends APIAuthController
     }
 
     /**
-     * 获取服务费用
-     * @return [type] [description]
-     */
-    public function getServicePayAmount()
-    {
-        $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
-        $service_pay_array = json_decode($service_pay_amount,true);
-
-        return $this->format_ret($service_pay_array);
-    }
-
-    /**
-     * 获取体验时间
-     * @return [type] [description]
-     */
-    public function getExperienceDays()
-    {
-        $experience_days = model('Others')-> getValueByKey('experience_days');
-        return $this->format_ret($experience_days);
-    }
-
-    /**
      * [AddShopService description]
      * 购买服务未付费成功，时间保留，付费成功后再修改时间
      * @param string $value [description]
