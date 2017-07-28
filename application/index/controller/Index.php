@@ -264,7 +264,6 @@ class Index extends APIController
     {
         $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
         $service_pay_array = json_decode($service_pay_amount,true);
-
         return $this->format_ret($service_pay_array);
     }
 

@@ -573,7 +573,7 @@ class WtService extends APIAuthController
 
         //校验服务，防止重复购买
         $experience_days = model('Others')-> getValueByKey('experience_days');
-        if (!empty($service_info) && ($service_info['service_end_time'] - time()>$experience_days*60*60*24)){
+        if (!empty($service_info) && ($service_info['service_end_time'] - time()>$experience_days*60*60*24+1)){
             throw new APIException(30020);
         }
         $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
@@ -770,7 +770,7 @@ class WtService extends APIAuthController
                 $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
             }
             if (!empty($service_info)){
-                if ($service_info['service_end_time'] - time()>$experience_days*60*60*24) { //不是体验服务
+                if ($service_info['service_end_time'] - time()>$experience_days*60*60*24+1) { //不是体验服务
                     throw new APIException(30020);
                 }
             }
@@ -806,7 +806,7 @@ class WtService extends APIAuthController
         }
 
         //校验服务，防止重复购买
-        if (!empty($service_info) && ($service_info['service_end_time'] - time()>$experience_days*60*60*24)){
+        if (!empty($service_info) && ($service_info['service_end_time'] - time()>$experience_days*60*60*24+1)){
             throw new APIException(30020);
         }
 
@@ -1055,7 +1055,7 @@ class WtService extends APIAuthController
         if (!empty($service_list)) {
             foreach ($service_list as $k => $v) {
                 //短链接
-                $service_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                $service_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                 unset($service_list[$k]['transformed_url']);
                 //状态
                 $experience_days = model('Others')-> getValueByKey('experience_days');
@@ -1120,13 +1120,13 @@ class WtService extends APIAuthController
             foreach ($record_list as $k => $v) {
                 //短链接
                 if ($v['type_id']==1) { //店铺
-                    $record_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
+                    $record_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                     $record_list[$k]['url_type'] = 1;
                 }elseif ($v['type_id']==2) { //天猫商品
-                    $record_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/1/'.$v['object_id'];
+                    $record_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/1/'.$v['object_id'];
                     $record_list[$k]['url_type'] = 2;
                 }else{
-                    $record_list[$k]['short_url'] = 'https://'.$_SERVER['HTTP_HOST'].'/0/'.$v['object_id'];
+                    $record_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/0/'.$v['object_id'];
                     $record_list[$k]['url_type'] = 2;
                 }
                 unset($record_list[$k]['type_id']);
@@ -1136,10 +1136,10 @@ class WtService extends APIAuthController
                 $experience_days = model('Others')-> getValueByKey('experience_days');
                 if ($v['service_end_time'] - $v['service_start_time'] <= $experience_days *24*60*60+1) { //未支付
                     $record_list[$k]['service_type'] = 1;
-                }elseif ($v['service_end_time'] > time()){ //生效中
+                }elseif ($v['service_end_time'] > time() && ($v['service_end_time'] - $v['service_start_time'] > $experience_days *24*60*60+1)){ //生效中
                     $record_list[$k]['service_type'] = 2;
 
-                }elseif ($v['service_end_time'] <= time()) { //已到期
+                }elseif ($v['service_end_time'] <= time() && ($v['service_end_time'] - $v['service_start_time'] > $experience_days *24*60*60+1)) { //已到期
                     $record_list[$k]['service_type'] = 3;
                 }
 
