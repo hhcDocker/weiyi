@@ -438,6 +438,7 @@ class WtService extends APIAuthController
                 $remain_expenience_time = $service_info['service_end_time'] - time();
             }
         }
+        return $this->format_ret($remain_expenience_time);
     }
 
     /**
