@@ -430,12 +430,13 @@ class WtService extends APIAuthController
             }
             $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
 
-            if (!empty($service_info) && ($service_info['service_end_time'] - time()>=$experience_days*60*60*24+1)){
+            if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time']>=$experience_days*60*60*24+1)){
                 throw new APIException(30020);
             }elseif(empty($service_info)){
                 $remain_expenience_time = $experience_days *24*60*60;
             }else{
                 $remain_expenience_time = $service_info['service_end_time'] - time();
+                $remain_expenience_time = $remain_expenience_time>0? $remain_expenience_time : 0;
             }
         }
         return $this->format_ret($remain_expenience_time);
@@ -1185,10 +1186,10 @@ class WtService extends APIAuthController
                     $record_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                     $record_list[$k]['url_type'] = 1;
                 }elseif ($v['type_id']==2) { //天猫商品
-                    $record_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/1/'.$v['object_id'];
+                    $record_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/detail/1/'.$v['object_id'];
                     $record_list[$k]['url_type'] = 2;
                 }else{
-                    $record_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/0/'.$v['object_id'];
+                    $record_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/detail/0/'.$v['object_id'];
                     $record_list[$k]['url_type'] = 2;
                 }
                 unset($record_list[$k]['type_id']);
