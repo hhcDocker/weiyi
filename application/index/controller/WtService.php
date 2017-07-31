@@ -209,14 +209,22 @@ class WtService extends APIAuthController
                     //获取userid
                     preg_match('/(?:user_(number_)?id=)(\d+)/',$full_url,$m);
                     if (empty($m) || !isset($m[1])) {
-                        throw new APIException(30001, ['url' => $shop_url]);
+                        preg_match('/shop_id=(\d+)/',$full_url,$m);
+                        if (empty($m) || !isset($m[1])) {
+                            throw new APIException(30001, ['url' => $full_url]);
+                        }else{
+                            $shop_id = $m[1];
+                            //根据shopid查表
+                            $shop_url='http://shop.m.taobao.com/shop/shop_index.htm?shop_id='.$shop_id;
+                            $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
+                        }
                     }else{
-                        $shop_id = $m[1];
-                        //根据shopid查表
-                        $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
+                        $user_id =end($m);
+                        $shop_url='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
+                        //查询店铺
+                        $shop_info = model('AliShops')->getShopInfoByUrl($shop_url);
                     }
-                    $user_id =end($m);
-                    $shop_url='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
+
                     //查询店铺
                     $shop_info = model('AliShops')->getShopInfoByUrl($shop_url);
                     if (!empty($shop_info)) {
@@ -415,6 +423,7 @@ class WtService extends APIAuthController
                 }else{
                     $shop_id = $m[1];
                     //根据shopid查表
+                    $ali_shop_url='https://shop.m.taobao.com/shop/shop_index.htm?shop_id='.$user_id;
                     $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
                 }
             }else{
@@ -557,6 +566,7 @@ class WtService extends APIAuthController
                     throw new APIException(30001, ['url' => $shop_url]);
                 }else{
                     $shop_id = $m[1];
+                    $ali_shop_url = 'http://shop.m.taobao.com/shop/shop_index.htm?shop_id='.$shop_id;
                     //根据shopid查表
                     $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
                 }
@@ -566,6 +576,7 @@ class WtService extends APIAuthController
                 //查询店铺
                 $shop_info = model('AliShops')->getShopInfoByUrl($ali_shop_url);
             }
+
             if (!empty($shop_info)) {
                 $wj_shop_id =$shop_info['id'];
                 $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
@@ -868,6 +879,7 @@ class WtService extends APIAuthController
                 }else{
                     $shop_id = $m[1];
                     //根据shopid查表
+                    $ali_shop_url='https://shop.m.taobao.com/shop/shop_index.htm?shop_id='.$user_id;
                     $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
                 }
             }else{
