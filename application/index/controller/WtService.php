@@ -452,7 +452,7 @@ class WtService extends APIAuthController
             }
             $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
 
-            if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time']>=$experience_days*60*60*24+1)){
+            if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time'] >=$experience_days*60*60*24+1)){
                 throw new APIException(30020);
             }elseif(empty($service_info)){
                 $remain_expenience_time = $experience_days *24*60*60;
@@ -786,6 +786,7 @@ class WtService extends APIAuthController
         if (!empty($service_info)) {
             if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
                 $remain_expenience_time = $service_info['service_end_time'] - $service_start_time;
+                $remain_expenience_time = $remain_expenience_time >0 ?$remain_expenience_time :0;
                 $service_end_time = $service_end_time + $remain_expenience_time;
             }
         }else{
@@ -1023,6 +1024,7 @@ class WtService extends APIAuthController
         if (!empty($service_info)) {
             if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
                 $remain_expenience_time = $service_info['service_end_time'] - $service_start_time;
+                $remain_expenience_time = $remain_expenience_time>0? $remain_expenience_time :0;
                 $service_end_time = $service_end_time + $remain_expenience_time;
             }
         }else{
