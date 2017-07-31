@@ -1392,12 +1392,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n\n更新结果：".json_encode($res));
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n\n更新结果：".json_encode($res));
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }
             echo "success";  
@@ -1430,12 +1430,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n\n更新结果：".json_encode($res));
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n\n更新结果：".json_encode($res));
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
