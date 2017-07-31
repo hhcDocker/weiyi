@@ -388,6 +388,7 @@ class WtService extends APIAuthController
         $shop_url = noempty_input('shop_url','/^http/'); //客户填写的网址
         //校验网址
         $shop_url = strtolower($shop_url);
+
         if (strpos($shop_url,'http://')===false && strpos($shop_url,'https://')===false){
             throw new APIException(30001);
         }
@@ -404,12 +405,21 @@ class WtService extends APIAuthController
         }elseif (strpos($shop_url, 'shop.m.taobao.com')) { //淘宝店铺移动端1
             preg_match('/(?:user_(number_)?id=)(\d+)/',$shop_url,$m);
             if (empty($m) || !isset($m[1])){
-                throw new APIException(30001,['url'=>$shop_url]);
+                preg_match('/shop_id=(\d+)/',$shop_url,$m);
+                $shop_id = $m[1];
+                if (empty($m) || !isset($m[1])) {
+                    throw new APIException(30001, ['url' => $shop_url]);
+                }else{
+                    $shop_id = $m[1];
+                    //根据shopid查表
+                    $shop_info = model('AliShops')->getShopInfoByShopId($shop_id);
+                }
+            }else{
+                $user_id =end($m);
+                $ali_shop_url='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
+                //查询店铺
+                $shop_info = model('AliShops')->getShopInfoByUrl($ali_shop_url);
             }
-            $user_id =end($m);
-            $ali_shop_url='https://shop.m.taobao.com/shop/shop_index.htm?user_id='.$user_id;
-            //查询店铺
-            $shop_info = model('AliShops')->getShopInfoByUrl($ali_shop_url);
         }elseif (preg_match('/shop\d+\.[m.]{0,2}taobao/', $shop_url)){
             $shop_id = preg_replace('/.+shop(\d+).+/','\1',$shop_url);
             //根据shopid查表
@@ -1432,7 +1442,7 @@ class WtService extends APIAuthController
         }
         catch(\Exception $e)
         {
-            throw new APIException(30003);
+             throw new APIException(30003);
         }
 	    if (!is_array($url_header)) {
             $url = str_replace('https://', '', $url);
