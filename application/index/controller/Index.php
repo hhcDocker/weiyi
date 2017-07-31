@@ -472,7 +472,7 @@ class Index extends APIController
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
 
-            return array('code'=>1);
+            return array('code'=>1,'msg'=>'更新id为'.$expense_info['service_id'].'消费记录成功');
         }else{
             return array('code'=>0,'msg'=>'更新消费记录失败');
         }

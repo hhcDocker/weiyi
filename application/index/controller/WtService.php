@@ -1351,12 +1351,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n\n更新结果：".json_encode($res));
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n\n更新结果：".json_encode($res));
                 }
             }
             echo "success";  
@@ -1389,12 +1389,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n\n更新结果：".json_encode($res));
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success");
+                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n\n更新结果：".json_encode($res));
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
@@ -1606,7 +1606,7 @@ class WtService extends APIAuthController
                 $service_start_time = $service_info['service_start_time'];
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-            return array('code'=>1);
+            return array('code'=>1,'msg'=>'更新消费记录成功');
         }else{
             return array('code'=>0,'msg'=>'更新消费记录失败');
         }
