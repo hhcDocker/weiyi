@@ -1383,7 +1383,7 @@ class WtService extends APIAuthController
         vendor('alipay.alipay');
         $alipayNotify = new \AlipayNotify($config);
         $verify_result = $alipayNotify->verifyNotify();
-        logResult("支付宝支付结果通知:verify_result = ".serialize($verify_result));
+        logResult(date("y-m-d H:i:s")."支付宝支付结果通知:verify_result = ".serialize($verify_result));
         if($verify_result) {//验证成功
             $out_trade_no = $_POST['out_trade_no'];//商户订单号
             $trade_no = $_POST['trade_no'];//支付宝交易号
@@ -1394,12 +1394,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
+                    logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
+                    logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }
             echo "success";  
@@ -1407,7 +1407,7 @@ class WtService extends APIAuthController
             //验证失败
             echo "fail";
             //写文本函数记录程序运行情况是否正常
-            logResult("支付宝支付结果通知:fail------notify_alipay Run Success ");
+            logResult(date("y-m-d H:i:s")."支付宝支付结果通知:fail------notify_alipay Run Success ");
         }
     }
     
@@ -1432,12 +1432,12 @@ class WtService extends APIAuthController
             if($trade_status == 'TRADE_FINISHED') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
+                    logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }elseif ($trade_status == 'TRADE_SUCCESS') {
                 $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
                 if ($res) {
-                    logResult("支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
+                    logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }
             $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
@@ -1637,22 +1637,24 @@ class WtService extends APIAuthController
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
 
-            if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
+            if ($service_start_time < $service_info['service_end_time']) { //时间不间断
                 $experience_days = model('Others')-> getValueByKey('experience_days');
 
-                if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验服务
-                    if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
-                        $remain_expenience_time = $service_info['service_end_time'] - $service_start_time;
-                        $remain_expenience_time = $remain_expenience_time>0 ?$remain_expenience_time :0;
-                        $service_end_time = $service_end_time + $remain_expenience_time;
-                    }
+                if ($service_info['service_end_time'] - $service_info['service_start_time'] < 364*24*60*60) { //体验服务
+                    $remain_expenience_time = $service_info['service_end_time'] - $service_start_time;
+                    $remain_expenience_time = $remain_expenience_time>0 ?$remain_expenience_time :0;
+                    $service_end_time = $service_end_time + $remain_expenience_time;
                 }
                 $service_start_time = $service_info['service_start_time'];
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-            return array('code'=>1,'msg'=>'更新消费记录成功');
+            if ($has_update) {
+                return array('code'=>1,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录成功');
+            }else{
+            return array('code'=>0,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录失败');
+            }
         }else{
-            return array('code'=>0,'msg'=>'更新消费记录失败');
+            return array('code'=>0,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录失败');
         }
     }
 }
