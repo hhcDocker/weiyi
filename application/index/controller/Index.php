@@ -455,26 +455,29 @@ class Index extends APIController
         $has_update = model('ExpenseRecords')->updateExpense($expense_num,$trade_num,$actually_amount,$trade_status);
 
         if ($has_update) {
+            //消费对应的服务
             $service_info = model('ShopServices')->getServicesById($expense_info['service_id']);
-
+            //此订单购买的服务时间
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
 
-            if ($service_start_time - $service_info['service_end_time'] <24*60*60) { //时间不间断
+            if ($service_start_time < $service_info['service_end_time']) { //时间不间断
                 $experience_days = model('Others')-> getValueByKey('experience_days');
-                if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验服务
-                    if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
-                        $remain_expenience_day = date('d',$service_info['service_end_time']) - date('d', $service_start_time); //剩余的体验服务时间
-                        $service_end_time = $service_end_time + $remain_expenience_day*24*60*60;
-                    }
+                if ($service_info['service_end_time'] - $service_info['service_start_time'] <= 364*24*60*60) { //体验服务
+                    $remain_expenience_time = $service_info['service_end_time']- $service_start_time; //剩余的体验服务时间
+                    $remain_expenience_time = $remain_expenience_time>0 ? $remain_expenience_time :0;
+                    $service_end_time = $service_end_time + $remain_expenience_time;
                 }
                 $service_start_time = $service_info['service_start_time'];
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
-
-            return array('code'=>1);
+            if ($has_update) {
+                return array('code'=>1,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录成功');
+            }else{
+            return array('code'=>0,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录失败');
+            }
         }else{
-            return array('code'=>0,'msg'=>'更新消费记录失败');
+            return array('code'=>0,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录失败');
         }
     }
 }
