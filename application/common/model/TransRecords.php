@@ -108,6 +108,7 @@ class TransRecords extends Base
                 ->where('s.is_deleted',0)
                 ->where('object_id',$object_id)
                 ->where('type_id',$type_id)
+                ->order('id desc')
                 ->find();
         return $res?$res:array();
     }
