@@ -62,7 +62,7 @@
 				<div class="swiper-container"  id="swiper1">
 				    <div class="swiper-wrapper">
 				        <div class="swiper-slide " v-for='item in banner[0].bannerArrData'>
-				        	<img :src="item.image" @click="todetailByBanner(item)"/>
+				        	<img :src="item|filterImage" @click="todetailByBanner(item)"/>
 				        </div>
 				    </div>
 				</div>
@@ -296,7 +296,6 @@
 													modelData.push(obj);
 												}
 											}catch(e){
-												console.log(e);
 											}
 											try{
 												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events){
@@ -386,6 +385,16 @@
 					titleArr:titleArr,
 					tbRanking:1,
 					directFlag:false,
+				},
+				filters:{
+					filterImage:function(val){
+						console.log(val)
+						if(val.image){
+							return val.image;
+						}else if(val.slide_array_image){
+							return val.slide_array_image;
+						}
+					}
 				},
 				methods:{
 					showKouling:function(){
