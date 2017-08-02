@@ -378,6 +378,12 @@ class WtService extends APIAuthController
                     //mc 测试是否有shop_url无shop_id的情况，或者有shop_if无shop_url的情况
                     $service_info = model('ShopServices')->getServicesByShopId($wj_shop_id,session('manager_id'));
                 }
+
+                //生成转换记录
+                $o = new TransSN($type_id,$shop_id);
+                $transnum = $o->getSN();
+                $has_add = model('TransRecords')->addRecords($transnum,$shop_id,$type_id,$wj_shop_id,$full_url);
+
                 //要生成二维码的链接，指向爬取详情函数，路由缩短，携带参数：商品id、是否天猫商品
                 $qrcode_url ='/detail/0/'.$item_id;
                 $res =$this->manageServiceInfo($service_info,$qrcode_url,$wj_shop_id,$shop_url,$shop_id);
@@ -1165,9 +1171,9 @@ class WtService extends APIAuthController
                 unset($service_list[$k]['transformed_url']);
                 //状态
                 $experience_days = model('Others')-> getValueByKey('experience_days');
-                if ($v['service_end_time'] > time()){ //已过期
+                if ($v['service_end_time'] <= time()){ //已过期
                     $service_list[$k]['service_type'] = 1;
-                }elseif ($v['service_end_time'] <= time()) { //已到期
+                }elseif ($v['service_end_time'] > time()) { //未过期
                     $service_list[$k]['service_type'] = 2;
                 }
                 // unset($service_list[$k]['service_start_time']);

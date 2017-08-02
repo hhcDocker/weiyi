@@ -71,8 +71,11 @@ class ShopServices extends Base
 
     /**
      * 服务列表
-     * @param  integer $manager_id [description]
-     * @return [type]              [description]
+     * @param  integer $manager_id   [description]
+     * @param  integer $pageIndex    [description]
+     * @param  integer $pageSize     [description]
+     * @param  integer $service_type [description]
+     * @return [type]                [description]
      */
     public function getServicesByManagerId($manager_id=0,$pageIndex=1, $pageSize=10,$service_type=0)
     {
