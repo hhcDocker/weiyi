@@ -286,6 +286,19 @@
 											}
 										}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].type=='container'){
 											try{
+												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.url){
+													var obj={
+														bannerArrName:"",
+														imageUrl:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.url,
+														cmdId:"",
+														styleBinding:""
+													};
+													modelData.push(obj);
+												}
+											}catch(e){
+												console.log(e);
+											}
+											try{
 												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events){
 													var len5=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions.length;
 													for(j=0;j<len5;j++){
