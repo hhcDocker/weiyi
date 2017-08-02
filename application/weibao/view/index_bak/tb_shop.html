@@ -115,7 +115,7 @@
 				<div class="ranking_data">
 					<div class="ranking_left" @click="toDetailByRank(0)">
 						<span class="topImg">
-							<img src="/static/images/topOneTb.jpg"/>
+							<img src="/static/images/topOneTb.png"/>
 						</span>
 						<img :src="rankingData[0].imgUrl"/>
 						<p class="solePrice" v-if="tbRanking">
@@ -130,9 +130,9 @@
 					<div class="ranking_right">
 						<div @click="toDetailByRank(1)">
 							<span class="topImg">
-								<img src="/static/images/topTwoTb.jpg"/>
+								<img src="/static/images/topTwoTb.png"/>
 							</span>
-							<img :src="rankingData[1].imgUrl"/>>
+							<img :src="rankingData[1].imgUrl"/>
 							<p class="solePrice" v-if="tbRanking">
 								已售 {{rankingData[1].totalSold}}
 							</p>
@@ -142,7 +142,7 @@
 						</div>
 						<div @click="toDetailByRank(2)">
 							<span class="topImg">
-								<img src="/static/images/topThreeTb.jpg"/>
+								<img src="/static/images/topThreeTb.png"/>
 							</span>
 							<img :src="rankingData[2].imgUrl"/>
 							<p class="solePrice" v-if="tbRanking">
@@ -285,6 +285,19 @@
 												//alert(e)
 											}
 										}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].type=='container'){
+											try{
+												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.url){
+													var obj={
+														bannerArrName:"",
+														imageUrl:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].subViews[0].dataBinding.url,
+														cmdId:"",
+														styleBinding:""
+													};
+													modelData.push(obj);
+												}
+											}catch(e){
+												console.log(e);
+											}
 											try{
 												if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events){
 													var len5=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].events[0].actions.length;
