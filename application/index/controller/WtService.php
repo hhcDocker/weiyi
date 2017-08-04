@@ -669,7 +669,7 @@ class WtService extends APIAuthController
                 $service_info =model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
             }
         }else{
-            throw new APIException(30008);
+            throw new APIException(30031);
         }
 
         //校验服务，防止重复购买
