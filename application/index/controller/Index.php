@@ -267,16 +267,6 @@ class Index extends APIController
         return $this->format_ret($service_pay_array);
     }
 
-    /**
-     * 获取体验时间
-     * @return [type] [description]
-     */
-    public function getExperienceDays()
-    {
-        $experience_days = model('Others')-> getValueByKey('experience_days');
-        return $this->format_ret($experience_days);
-    }
-
     /********************************************* 公用函数 ********************************************/
     /**
      * 检测手机号是否注册过
@@ -462,7 +452,6 @@ class Index extends APIController
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time < $service_info['service_end_time']) { //时间不间断
-                $experience_days = model('Others')-> getValueByKey('experience_days');
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] <= 364*24*60*60) { //体验服务
                     $remain_expenience_time = $service_info['service_end_time']- $service_start_time; //剩余的体验服务时间
                     $remain_expenience_time = $remain_expenience_time>0 ? $remain_expenience_time :0;

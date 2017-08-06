@@ -446,11 +446,11 @@ class WtService extends APIAuthController
             throw new APIException(30008);
         }
 
-        $experience_days = model('Others')-> getValueByKey('experience_days');
-        $remain_expenience_time = $experience_days * 24 *60 *60;//体验时间
+        $experience_time = model('Others')-> getValueByKey('experience_time');
+        $remain_expenience_time = $experience_time ;//体验时间
 
         if (empty($shop_info)) { //表示从来没抓取过该店铺数据，或者信息不全
-            $remain_expenience_time = $experience_days * 24 *60 *60;
+            $remain_expenience_time = $experience_time ;
         }else{
             $wj_shop_id = $shop_info['id'];
             if ($shop_info['shop_url'] && $shop_info['shop_url']!=$ali_shop_url) {
@@ -458,10 +458,10 @@ class WtService extends APIAuthController
             }
             $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
 
-            if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time'] >=$experience_days*60*60*24+1)){
+            if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time'] >=$experience_time+1)){
                 throw new APIException(30020);
             }elseif(empty($service_info)){
-                $remain_expenience_time = $experience_days *24*60*60;
+                $remain_expenience_time = $experience_time;
             }else{
                 $remain_expenience_time = $service_info['service_end_time'] - time();
                 $remain_expenience_time = $remain_expenience_time>0? $remain_expenience_time : 0;
@@ -673,16 +673,20 @@ class WtService extends APIAuthController
         }
 
         //校验服务，防止重复购买
-        $experience_days = model('Others')-> getValueByKey('experience_days');
-        if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time']>$experience_days*60*60*24+1)){
+        $experience_time = model('Others')-> getValueByKey('experience_time');
+        if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time']>$experience_time+1)){
             throw new APIException(30020);
         }
         $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
         $service_pay_array = json_decode($service_pay_amount,true);
-        if (!array_key_exists($service_time, $service_pay_array)) {
-            throw new APIException(30016);
+        if (count($service_pay_array)>1) {
+            if (!array_key_exists($service_time, $service_pay_array)) {
+                throw new APIException(30016);
+            }
+            $payment_amount = $service_pay_array[$service_time];
+        }else{
+            $payment_amount = $service_pay_array[1] * $service_time;
         }
-        $payment_amount = $service_pay_array[$service_time];
         //发起微信或支付宝支付，微信则取得链接，生成二维码，支付宝则取得链接
         $expense_model = new ExpenseSN();
         $expense_num = $expense_model->getSN();
@@ -767,7 +771,7 @@ class WtService extends APIAuthController
                 //添加体验记录
                 //添加消费记录，体验3天
                 $time_start = time();
-                $time_end = strtotime("+".$experience_days." day");
+                $time_end = time() + $experience_time;
                 $expense_model = new ExpenseSN();
                 $experience_expense_num = $expense_model->getSN();
                 $expense_id = model('ExpenseRecords')->addExpense($experience_expense_num, 0,$service_id,session('manager_id'),0,$time_start,$time_end,1);
@@ -796,7 +800,7 @@ class WtService extends APIAuthController
                 $service_end_time = $service_end_time + $remain_expenience_time;
             }
         }else{
-            $service_end_time = $service_end_time + $experience_days*24*60*60;
+            $service_end_time = $service_end_time + $experience_time;
         }
         $res = array('expense_num'=>$expense_num,'shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
         return $this->format_ret($res);
@@ -860,7 +864,7 @@ class WtService extends APIAuthController
         //检测是否在alishop表中
         //天猫店铺
         
-        $experience_days = model('Others')-> getValueByKey('experience_days');
+        $experience_time = model('Others')-> getValueByKey('experience_time');
         if (strpos($shop_url, 'tmall.com/shop') || preg_match('/\w+[.\w]+tmall.com/',$shop_url)){ //天猫店铺
             $ali_shop_url = preg_replace('/(\w+)[\.m]*\.tmall.com.*/','$1'.'.m.tmall.com',$shop_url);//获取数据的网址
 
@@ -872,7 +876,7 @@ class WtService extends APIAuthController
                 $service_info = model('ShopServices')->getServicesExpenseByShopId($wj_shop_id,session('manager_id'));
             }
             if (!empty($service_info)){
-                if ($service_info['service_end_time'] - $service_info['service_start_time']>$experience_days*60*60*24+1) { //不是体验服务
+                if ($service_info['service_end_time'] - $service_info['service_start_time']>$experience_time+1) { //不是体验服务
                     throw new APIException(30020);
                 }
             }
@@ -917,7 +921,7 @@ class WtService extends APIAuthController
         }
 
         //校验服务，防止重复购买
-        if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time']>$experience_days*60*60*24+1)){
+        if (!empty($service_info) && ($service_info['service_end_time'] - $service_info['service_start_time']>$experience_time+1)){
             throw new APIException(30020);
         }
 
@@ -1005,7 +1009,7 @@ class WtService extends APIAuthController
                 //添加体验记录
                 //添加消费记录，体验3天
                 $time_start = time();
-                $time_end = strtotime("+".$experience_days." day");
+                $time_end = $time_start + $experience_time;
                 $expense_model = new ExpenseSN();
                 $experience_expense_num = $expense_model->getSN();
                 $expense_id = model('ExpenseRecords')->addExpense($experience_expense_num, 0,$service_id,session('manager_id'),0,$time_start,$time_end,1);
@@ -1026,7 +1030,7 @@ class WtService extends APIAuthController
             Db::rollback();
             throw new APIException(30019);
         }
-        //如果体验未过期，加上剩余天数
+        //如果体验未过期，加上剩余时间
         if (!empty($service_info)) {
             if ($service_start_time <= $service_info['service_end_time']) { //且选择了体验服务时间内
                 $remain_expenience_time = $service_info['service_end_time'] - $service_start_time;
@@ -1034,7 +1038,7 @@ class WtService extends APIAuthController
                 $service_end_time = $service_end_time + $remain_expenience_time;
             }
         }else{
-            $service_end_time = $service_end_time + $experience_days*24*60*60;
+            $service_end_time = $service_end_time + $experience_time;
         }
         $res = array('expense_num'=>$expense_num,'shop_url'=>$shop_url,'shop_name'=>$shop_name,'payment_amount'=>$payment_amount,'service_start_time'=>$service_start_time,'service_end_time'=>$service_end_time,'pay_data'=>$response_data);
         return $this->format_ret($res);
@@ -1079,11 +1083,15 @@ class WtService extends APIAuthController
         //服务费用
         $service_pay_amount = model('Others')-> getValueByKey('service_pay_amount');
         $service_pay_array = json_decode($service_pay_amount,true);
-        if (!array_key_exists($service_time, $service_pay_array)) {
-            throw new APIException(30016);
-        }
-        $payment_amount = $service_pay_array[$service_time];
 
+        if (count($service_pay_array)>1) {
+            if (!array_key_exists($service_time, $service_pay_array)) {
+                throw new APIException(30016);
+            }
+            $payment_amount = $service_pay_array[$service_time];
+        }else{
+            $payment_amount = $service_pay_array[1] * $service_time;
+        }
         if ($payment_method==1) { //微信
             //发起支付
             $wxPay = new WxPay;
@@ -1170,7 +1178,7 @@ class WtService extends APIAuthController
                 $service_list[$k]['short_url'] = 'http://'.$_SERVER['HTTP_HOST'].'/'.$v['transformed_url'];
                 unset($service_list[$k]['transformed_url']);
                 //状态
-                $experience_days = model('Others')-> getValueByKey('experience_days');
+                $experience_time = model('Others')-> getValueByKey('experience_time');
                 if ($v['service_end_time'] <= time()){ //已过期
                     $service_list[$k]['service_type'] = 1;
                 }elseif ($v['service_end_time'] > time()) { //未过期
@@ -1245,13 +1253,13 @@ class WtService extends APIAuthController
                 unset($record_list[$k]['object_id']);
                 unset($record_list[$k]['transformed_url']);
                 //状态
-                $experience_days = model('Others')-> getValueByKey('experience_days');
-                if ($v['service_end_time'] - $v['service_start_time'] <= $experience_days *24*60*60+1) { //未支付
+                $experience_time = model('Others')-> getValueByKey('experience_time');
+                if ($v['service_end_time'] - $v['service_start_time'] <= $experience_time+1) { //未支付
                     $record_list[$k]['service_type'] = 1;
-                }elseif ($v['service_end_time'] > time() && ($v['service_end_time'] - $v['service_start_time'] > $experience_days *24*60*60+1)){ //生效中
+                }elseif ($v['service_end_time'] > time() && ($v['service_end_time'] - $v['service_start_time'] > $experience_time +1)){ //生效中
                     $record_list[$k]['service_type'] = 2;
 
-                }elseif ($v['service_end_time'] <= time() && ($v['service_end_time'] - $v['service_start_time'] > $experience_days *24*60*60+1)) { //已到期
+                }elseif ($v['service_end_time'] <= time() && ($v['service_end_time'] - $v['service_start_time'] > $experience_time +1)) { //已到期
                     $record_list[$k]['service_type'] = 3;
                 }
 
@@ -1529,11 +1537,11 @@ class WtService extends APIAuthController
             throw new APIException(30010);
         }
         $img ='';
-        $experience_days = model('Others')-> getValueByKey('experience_days');
+        $experience_time = model('Others')-> getValueByKey('experience_time');
         if (empty($service_info)){
             //新增体验服务
             $time_start = time();
-            $time_end = strtotime("+".$experience_days." day");
+            $time_end = $time_start + $experience_time;
             
             $o = new ShortUrl();
             $shop_url_str = $o->getSN();
@@ -1566,7 +1574,7 @@ class WtService extends APIAuthController
             $service_type =1;
         }
 
-        if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_days*24*60*60+1) { //体验期，包括新转化情况
+        if ($service_info['service_end_time'] - $service_info['service_start_time'] <= $experience_time+1) { //体验期，包括新转化情况
             if ($service_info['service_end_time']>=time()) {//体验期内
                 $service_type =1;
                 //设置路由，获取链接，生成二维码
@@ -1644,7 +1652,6 @@ class WtService extends APIAuthController
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time < $service_info['service_end_time']) { //时间不间断
-                $experience_days = model('Others')-> getValueByKey('experience_days');
 
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] < 364*24*60*60) { //体验服务
                     $remain_expenience_time = $service_info['service_end_time'] - $service_start_time;
