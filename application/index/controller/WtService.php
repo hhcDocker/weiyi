@@ -1353,7 +1353,8 @@ class WtService extends APIAuthController
 
     public function testPay()
     {
-        $out_trade_no = '72170807025310744318';
+
+        $out_trade_no = input('param.trade_no');
         $transaction_id = '2017080721001004530285082170';
         $total_fee = 0.01;
         $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
