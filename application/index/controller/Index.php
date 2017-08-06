@@ -582,7 +582,7 @@ class Index extends APIController
                     logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
                 }
             }
-            echo "success";  
+            echo "success";
         }else {
             //验证失败
             echo "fail";
@@ -590,7 +590,7 @@ class Index extends APIController
             logResult(date("y-m-d H:i:s")."支付宝支付结果通知:fail------notify_alipay Run Success ");
         }
     }
-    
+
     /**
      * 支付宝支付结果通知 return_url
      * @return [type] [<description>]

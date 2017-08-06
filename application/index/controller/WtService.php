@@ -1350,7 +1350,16 @@ class WtService extends APIAuthController
     }
 
     // ******************************************************************************支付相关************************************************************************
-    
+
+    public function testPay()
+    {
+        $out_trade_no = '72170807025310744318';
+        $transaction_id = '2017080721001004530285082170';
+        $total_fee = 0.01;
+        $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
+        echo "1";
+    }
+
     /**
      * 查询微信或支付宝订单结果
      * @return \think\response\Json
@@ -1620,15 +1629,6 @@ class WtService extends APIAuthController
 
         $res_data =array('shop_url'=>$shop_url,'ali_shop_id'=>$ali_shop_id,'service_id'=>$service_info['id'],'service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'service_type'=>$service_type,'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $res_data;
-    }
-
-    public function testPay()
-    {
-        $out_trade_no = '72170807023935987741';
-        $transaction_id = '2017080721001004530285082170';
-        $total_fee = 0.01;
-        $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
-        echo "1";
     }
 
     /**
