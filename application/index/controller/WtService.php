@@ -1351,16 +1351,6 @@ class WtService extends APIAuthController
 
     // ******************************************************************************支付相关************************************************************************
 
-    public function testPay()
-    {
-
-        $out_trade_no = input('param.trade_no');
-        $transaction_id = '2017080721001004530285082170';
-        $total_fee = 0.01;
-        $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
-        echo "1";
-    }
-
     /**
      * 查询微信或支付宝订单结果
      * @return \think\response\Json
