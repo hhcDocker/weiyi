@@ -233,21 +233,11 @@ class Index extends APIController
                 try{
                     $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
                     if (!$has_update) {
+                        Db::rollback();
                         throw new APIException(10014);
                     }
 
-                    //修改原系统密码
-                    $manager_info = $user_info['manager_info'];
-                    $origin_role = $manager_info['origin_role'];//1-电商，2-网点，3-工厂，5-官网
-                    $origin_id = $manager_info['origin_id'];
-                    if ($origin_role && $origin_role !=4 && $origin_id) {
-                        //修改原系统密码
-                        $has_update = $this->updateOtherMangerPwd($origin_role,$origin_id,$password);
-                        if (!$has_update) {
-                            Db::rollback();
-                            throw new APIException(10014);
-                        }
-                    }
+                    //修改原系统密码暂时不做
                     Db::commit();
                 }catch(Exception $e){
                     Db::rollback();
@@ -269,12 +259,7 @@ class Index extends APIController
                         throw new APIException(10014);
                     }
 
-                    //修改原系统密码
-                    $has_update = $this->updateOtherMangerPwd($origin_role,$origin_id,$password);
-                    if (!$has_update) {
-                        Db::rollback();
-                        throw new APIException(10014);
-                    }
+                    //修改原系统密码暂时不做
                     Db::commit();
                 }catch(Exception $e){
                     Db::rollback();
@@ -333,18 +318,7 @@ class Index extends APIController
                 throw new APIException(10014);
             }
 
-            //修改原系统密码
-            $manager_info = $user_info['manager_info'];
-            $origin_role = $manager_info['origin_role'];//1-电商，2-网点，3-工厂，5-官网
-            $origin_id = $manager_info['origin_id'];
-            if ($origin_role && $origin_role !=4 && $origin_id) {
-                //修改原系统密码
-                $has_update = $this->updateOtherMangerPwd($origin_role,$origin_id,$password);
-                if (!$has_update) {
-                    Db::rollback();
-                    throw new APIException(10014);
-                }
-            }
+            //修改原系统密码暂时不做
             Db::commit();
         }catch(Exception $e){
             Db::rollback();
