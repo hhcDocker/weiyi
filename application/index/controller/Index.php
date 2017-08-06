@@ -17,10 +17,9 @@ namespace app\index\controller;
 use app\common\service\SMS;
 use api\APIController;
 use api\APIException;
-use think\Config;
 use think\Request;
 use think\Log;
-use app\index\AlertMail;
+use think\Db;
 use app\common\service\WxPay;
 use app\common\service\AliPay;
 
@@ -632,6 +631,7 @@ class Index extends APIController
             echo '<meta charset="utf-8" /><div style="text-align: center;"><div style="font-size: x-large; margin-top: 30px;">验证失败！</div></div>';
         }
     }
+
     /*********************************************账号体系********************************************/
 
     /**
