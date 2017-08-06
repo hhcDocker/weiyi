@@ -769,13 +769,13 @@ class WtService extends APIAuthController
                 }
 
                 //添加体验记录
-                //添加消费记录，体验3天
+                //添加消费记录，体验
                 $time_start = time();
                 $time_end = time() + $experience_time;
                 $expense_model = new ExpenseSN();
                 $experience_expense_num = $expense_model->getSN();
                 $expense_id = model('ExpenseRecords')->addExpense($experience_expense_num, 0,$service_id,session('manager_id'),0,$time_start,$time_end,1);
-                //修改服务时间为3天，付款后再修改具体服务时间
+                //修改服务时间，付款后再修改具体服务时间
                 $has_update = model('ShopServices')->updateShopServiceTime($service_id, $time_start, $time_end);
             }else{
                 //更新服务信息
@@ -1652,7 +1652,6 @@ class WtService extends APIAuthController
             $service_end_time = $expense_info['service_end_time'];
 
             if ($service_start_time < $service_info['service_end_time']) { //时间不间断
-
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] < 364*24*60*60) { //体验服务
                     $remain_expenience_time = $service_info['service_end_time'] - $service_start_time;
                     $remain_expenience_time = $remain_expenience_time>0 ?$remain_expenience_time :0;
@@ -1662,7 +1661,7 @@ class WtService extends APIAuthController
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
             if ($has_update) {
-                return array('code'=>1,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录成功');
+                return array('code'=>1,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录成功'.json_encode($service_info).'还有消费记录'.json_encode($expense_info));
             }else{
             return array('code'=>0,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录失败');
             }
