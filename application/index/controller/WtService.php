@@ -1661,7 +1661,7 @@ class WtService extends APIAuthController
             }
             $has_update = model('ShopServices')->updateShopServiceTime($expense_info['service_id'] , $service_start_time ,$service_end_time);
             if ($has_update) {
-                return array('code'=>1,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录成功'.json_encode($service_info).'还有消费记录'.json_encode($expense_info));
+                return array('code'=>1,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录成功');
             }else{
             return array('code'=>0,'msg'=>'更新店铺服务'.$expense_info['service_id'].'消费记录失败');
             }

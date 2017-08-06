@@ -530,7 +530,7 @@ class Index extends APIController
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
 
-            if ($service_start_time < $service_info['service_end_time']) { //时间不间断
+            if ($service_start_time <= $service_info['service_end_time']+1) { //时间不间断
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] <= 364*24*60*60) { //体验服务
                     $remain_expenience_time = $service_info['service_end_time']- $service_start_time; //剩余的体验服务时间
                     $remain_expenience_time = $remain_expenience_time>0 ? $remain_expenience_time :0;
@@ -760,13 +760,13 @@ class Index extends APIController
      * @param  [type]  $password    [description]
      * @return [type]               [description]
      */
-    public function updateOtherMangerPwd($origin_role=0,$origin_id=0,$password)
+    public function updateOtherMangerPwd($origin_role=0,$origin_id=0,$password='')
     {
         if (!$origin_role || !$origin_id || !$password) {
             return 0;
         }
         $has_update=0;
-        switch ($type) {
+        switch ($origin_role) {
             case 1:
                 $has_update = model('EcommerceShop')->updateEcommerceManagerPassword($origin_id, $password);
                 break;
