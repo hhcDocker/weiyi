@@ -22,6 +22,7 @@ use think\Request;
 use think\Log;
 use app\index\AlertMail;
 use app\common\service\WxPay;
+use app\common\service\AliPay;
 
 
 class Index extends APIController
@@ -515,7 +516,7 @@ class Index extends APIController
         }
         if ($expense_info['trade_status']==1) {
             $file = LOG_PATH.'../paylog/'.date("Ymd").'_repeat_pay_log.txt';
-            $content = date("Y-m-d H:i:s")."微信订单异步通知重复发送请求\n\n";
+            $content = date("Y-m-d H:i:s")."订单异步通知重复发送请求\n\n";
             Log::write($content, $file);
 
             return array('code'=>1,'msg'=>'已于'.date("Y-m-d H:i:s",$expense_info['update_time']).'更新过');
@@ -548,6 +549,89 @@ class Index extends APIController
         }
     }
 
+
+    /**
+     * 支付宝支付结果通知
+     * @return [type] [description]
+     */
+    public function AlipayNotifyUrl()
+    {
+        $aliPay = new AliPay;
+
+        //异步订单结果通知
+        $config = $aliPay::$alipay_config;
+        vendor('alipay.alipay');
+        $alipayNotify = new \AlipayNotify($config);
+        $verify_result = $alipayNotify->verifyNotify();
+        logResult(date("y-m-d H:i:s")."支付宝支付结果通知:verify_result = ".serialize($verify_result));
+        if($verify_result) {//验证成功
+            $out_trade_no = $_POST['out_trade_no'];//商户订单号
+            $trade_no = $_POST['trade_no'];//支付宝交易号
+            $trade_status = $_POST['trade_status']; //交易状态
+            $total_fee = $_POST['total_fee'];//交易金额
+            $seller_id = $_POST['seller_id'];//支付宝partner
+
+            if($trade_status == 'TRADE_FINISHED') {
+                $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($res) {
+                    logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
+                }
+            }elseif ($trade_status == 'TRADE_SUCCESS') {
+                $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($res) {
+                    logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
+                }
+            }
+            echo "success";  
+        }else {
+            //验证失败
+            echo "fail";
+            //写文本函数记录程序运行情况是否正常
+            logResult(date("y-m-d H:i:s")."支付宝支付结果通知:fail------notify_alipay Run Success ");
+        }
+    }
+    
+    /**
+     * 支付宝支付结果通知 return_url
+     * @return [type] [<description>]
+     */
+    public function AlipayReturnUrl()
+    {
+        $aliPay = new AliPay;
+        $config = $aliPay::$alipay_config;
+        vendor('alipay.alipay');
+        $alipayNotify = new \AlipayNotify($config);
+        $verify_result = $alipayNotify->verifyReturn();
+        if($verify_result) { //验证成功
+            $out_trade_no = $_GET['out_trade_no'];//商户订单号
+            $trade_no = $_GET['trade_no'];//支付宝交易号
+            $trade_status = $_GET['trade_status']; //交易状态
+            $total_fee = $_GET['total_fee'];//交易金额
+            $seller_id = $_GET['seller_id'];//支付宝partner
+
+            if($trade_status == 'TRADE_FINISHED') {
+                $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($res) {
+                    logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
+                }
+            }elseif ($trade_status == 'TRADE_SUCCESS') {
+                $res = $this->updateServiceExpense($out_trade_no,$trade_no,$total_fee,$seller_id==$config['seller_id']);
+                if ($res) {
+                    logResult(date("y-m-d H:i:s")."支付宝支付结果通知:TRADE_FINISHED------notify_alipay Run Success\n编号为".$out_trade_no."的消费记录更新结果：".json_encode($res));
+                }
+            }
+            $url = $_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
+
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Cache-Control: no-cache");
+            header("Pragma: no-cache");
+            $url = 'http://'.$_SERVER['HTTP_HOST'] . '/frontend/html/service.html';
+            header("Location:".$url);
+            exit;
+        }else{
+            echo '<meta charset="utf-8" /><div style="text-align: center;"><div style="font-size: x-large; margin-top: 30px;">验证失败！</div></div>';
+        }
+    }
     /*********************************************账号体系********************************************/
 
     /**

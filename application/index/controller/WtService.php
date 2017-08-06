@@ -722,8 +722,8 @@ class WtService extends APIAuthController
             //发起支付
             $aliPay = new AliPay;
             $result = $aliPay->alipay([
-                'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
-                'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
+                'notify_url' => request()->domain().'/index/index/AlipayNotifyUrl',
+                'return_url' => request()->domain().'/index/index/AlipayReturnUrl',
                 'out_trade_no' => $expense_num,
                 'subject' => "微驿-购买服务",
                 'total_fee' => $payment_amount,//订单金额，单位为元
@@ -960,8 +960,8 @@ class WtService extends APIAuthController
             //发起支付
             $aliPay = new AliPay;
             $result = $aliPay->alipay([
-                'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
-                'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
+                'notify_url' => request()->domain().'/index/index/AlipayNotifyUrl',
+                'return_url' => request()->domain().'/index/index/AlipayReturnUrl',
                 'out_trade_no' => $expense_num,
                 'subject' => "微驿-购买服务",
                 'total_fee' => $payment_amount,//订单金额，单位为元
