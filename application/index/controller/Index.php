@@ -275,6 +275,9 @@ class Index extends APIController
      */ 
     public function resetPasswd() {
         $mobilephone = session('manager_mobilephone');
+        if (!$mobilephone){
+            throw new APIException(10018);
+        }
         $old_password = input('old_password');
         $password = input('password');
         $re_password =input('re_password');
