@@ -266,6 +266,15 @@ class Index extends APIController
         $service_pay_array = json_decode($service_pay_amount,true);
         return $this->format_ret($service_pay_array);
     }
+    /**
+     * 获取体验时间
+     * @return [type] [description]
+     */
+    public function getExperienceDays()
+    {
+        $experience_days = model('Others')-> getValueByKey('experience_time');
+        return $this->format_ret($experience_days);
+    }
 
     /********************************************* 公用函数 ********************************************/
     /**
