@@ -499,15 +499,6 @@ class Index extends APIController
         }
     }
 
-    public function testPay()
-    {
-        $out_trade_no = '72170807023935987741';
-        $transaction_id = '2017080721001004530285082170';
-        $total_fee = 0.01;
-        $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
-        echo "1";
-    }
-
     /**
      * [updateServiceExpense description]
      * @param  string $value [description]

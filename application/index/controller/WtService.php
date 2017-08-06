@@ -1622,6 +1622,15 @@ class WtService extends APIAuthController
         return $res_data;
     }
 
+    public function testPay()
+    {
+        $out_trade_no = '72170807023935987741';
+        $transaction_id = '2017080721001004530285082170';
+        $total_fee = 0.01;
+        $this->updateServiceExpense($out_trade_no,$transaction_id,$total_fee,1);
+        echo "1";
+    }
+
     /**
      * [updateServiceExpense description]
      * @param  string $value [description]
@@ -1651,7 +1660,7 @@ class WtService extends APIAuthController
             $service_start_time = $expense_info['service_start_time'];
             $service_end_time = $expense_info['service_end_time'];
 
-            if ($service_start_time < $service_info['service_end_time']) { //时间不间断
+            if ($service_start_time <= $service_info['service_end_time']+1) { //时间不间断
                 if ($service_info['service_end_time'] - $service_info['service_start_time'] < 364*24*60*60) { //体验服务
                     $remain_expenience_time = $service_info['service_end_time'] - $service_start_time;
                     $remain_expenience_time = $remain_expenience_time>0 ?$remain_expenience_time :0;
