@@ -4,7 +4,7 @@
  * | Copyright (C) 2016-2017 深圳市紫雷科技有限公司 All rights reserved.
  * +----------------------------------------------------------------------
  * | Filename: WtService.php
- * | Description: 微跳端转换地址以及服务
+ * | Description: 微驿端转换地址以及服务
  * +----------------------------------------------------------------------
  * | Created by equinox at 2017-06-13 14:57
  * | Email: equinox@purplethunder.cn
@@ -695,8 +695,8 @@ class WtService extends APIAuthController
             //发起支付
             $wxPay = new WxPay;
             $result = $wxPay->wxPay([
-                'body' => '微跳-购买服务',
-                'attach' => '微跳-购买服务',
+                'body' => '微驿-购买服务',
+                'attach' => '微驿-购买服务',
                 'out_trade_no' => $expense_num,
                 'total_fee' => $payment_amount*100,//订单金额，单位为分，如果你的订单是100元那么此处应该为 100*100
                 'time_start' => date("YmdHis"),//交易开始时间
@@ -725,9 +725,9 @@ class WtService extends APIAuthController
                 'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
                 'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
                 'out_trade_no' => $expense_num,
-                'subject' => "微跳-购买服务",
+                'subject' => "微驿-购买服务",
                 'total_fee' => $payment_amount,//订单金额，单位为元
-                'body' => "微跳",
+                'body' => "微驿",
             ]);
             if(!$result['code']){
                 throw new APIException(30019, ['msg'=>$result['msg']]);
@@ -933,8 +933,8 @@ class WtService extends APIAuthController
             //发起支付
             $wxPay = new WxPay;
             $result = $wxPay->wxPay([
-                'body' => '微跳-购买服务',
-                'attach' => '微跳-购买服务',
+                'body' => '微驿-购买服务',
+                'attach' => '微驿-购买服务',
                 'out_trade_no' => $expense_num,
                 'total_fee' => $payment_amount*100,//订单金额，单位为分，如果你的订单是100元那么此处应该为 100*100
                 'time_start' => date("YmdHis"),//交易开始时间
@@ -963,9 +963,9 @@ class WtService extends APIAuthController
                 'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
                 'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
                 'out_trade_no' => $expense_num,
-                'subject' => "微跳-购买服务",
+                'subject' => "微驿-购买服务",
                 'total_fee' => $payment_amount,//订单金额，单位为元
-                'body' => "微跳",
+                'body' => "微驿",
             ]);
             if(!$result['code']){
                 throw new APIException(30019, ['msg'=>$result['msg']]);
@@ -1096,8 +1096,8 @@ class WtService extends APIAuthController
             //发起支付
             $wxPay = new WxPay;
             $result = $wxPay->wxPay([
-                'body' => '微跳-服务续费',
-                'attach' => '微跳-服务续费',
+                'body' => '微驿-服务续费',
+                'attach' => '微驿-服务续费',
                 'out_trade_no' => $expense_num,
                 'total_fee' => $payment_amount*100,//订单金额，单位为分，如果你的订单是100元那么此处应该为 100*100
                 'time_start' => date("YmdHis"),//交易开始时间
@@ -1126,9 +1126,9 @@ class WtService extends APIAuthController
                 'notify_url' => request()->domain().'/index/wt_service/AlipayNotifyUrl',
                 'return_url' => request()->domain().'/index/wt_service/AlipayReturnUrl',
                 'out_trade_no' => $expense_num,
-                'subject' => "微跳-服务续费",
+                'subject' => "微驿-服务续费",
                 'total_fee' => $payment_amount,//订单金额，单位为元
-                'body' => "微跳",
+                'body' => "微驿",
             ]);
             if(!$result['code']){
                 throw new APIException(30019, ['msg'=>$result['msg']]);

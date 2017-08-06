@@ -155,6 +155,6 @@ class TransRecords extends Base
   `delete_time` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `item_id` (`object_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微跳转换记录';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微驿转换记录';
 */
 

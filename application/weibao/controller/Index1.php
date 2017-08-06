@@ -6,7 +6,7 @@
  * | Internal procedure is strictly prohibited.
  * +----------------------------------------------------------------------
  * | Filename: Index.php
- * | Description: 微信端获取微跳数据
+ * | Description: 微信端获取微驿数据
  * +----------------------------------------------------------------------
  * | Created by equinox at 2017-06-15 11:00 
  * | Email: equinoxsun@purplethunder.cn

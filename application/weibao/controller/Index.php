@@ -6,7 +6,7 @@
  * | Internal procedure is strictly prohibited.
  * +----------------------------------------------------------------------
  * | Filename: Index.php
- * | Description: 微信端获取微跳数据
+ * | Description: 微信端获取微驿数据
  * +----------------------------------------------------------------------
  * | Created by equinox at 2017-06-15 11:00
  * | Email: equinoxsun@purplethunder.cn
@@ -28,7 +28,7 @@ use think\Db;
 class Index extends Controller
 {
     /**
-     * 微跳首页
+     * 微驿首页
      * @return [type] [description]
      */
     public function index()
@@ -301,7 +301,7 @@ class Index extends Controller
                     //查询服务
                     $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
                     if (empty($service_info)) {
-                        return $this->fetch('service_expired',array('err_msg' => "该店铺无购买服务，请到微跳上购买"));
+                        return $this->fetch('service_expired',array('err_msg' => "该店铺无购买服务，请到微驿上购买"));
                     }else{
                         $is_time_out =1;
                         foreach ($service_info as $k => $v) {
@@ -328,7 +328,7 @@ class Index extends Controller
                         //查询服务
                         $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
                         if (empty($service_info)) {
-                            return $this->fetch('service_expired',array('err_msg' => "该店铺无购买服务，请到微跳上购买"));
+                            return $this->fetch('service_expired',array('err_msg' => "该店铺无购买服务，请到微驿上购买"));
                         }else{
                             $is_time_out =1;
                             foreach ($service_info as $k => $v) {
@@ -381,7 +381,7 @@ class Index extends Controller
                 //查询服务
                 $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
                 if (empty($service_info)) {
-                    return $this->fetch('service_expired',array('err_msg' => "该店铺无购买服务，请到微跳上购买"));
+                    return $this->fetch('service_expired',array('err_msg' => "该店铺无购买服务，请到微驿上购买"));
                 }else{
                     $is_time_out =1;
                     foreach ($service_info as $k => $v) {

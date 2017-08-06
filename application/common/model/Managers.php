@@ -6,7 +6,7 @@
  * | Internal procedure is strictly prohibited.
  * +----------------------------------------------------------------------
  * | Filename: Managers.php
- * | Description: 微跳用户数据
+ * | Description: 微驿用户数据
  * +----------------------------------------------------------------------
  * | Created by equinox at 2017-6-15 15:00 
  * | Email: equinox@purplethunder.cn
@@ -162,5 +162,5 @@ class Managers extends Base
   `delete_time` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `info` (`is_deleted`,`mobilephone`,`password`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='微跳客户信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='微驿客户信息表';
 */

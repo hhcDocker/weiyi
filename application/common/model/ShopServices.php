@@ -306,6 +306,6 @@ class ShopServices extends Base
   `update_time` int(11) unsigned DEFAULT NULL,
   `delete_time` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8 COMMENT='微跳服务信息';
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8 COMMENT='微驿服务信息';
 */
 

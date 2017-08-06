@@ -97,7 +97,7 @@ class Index extends APIController
     }
 
     /**
-     * 微跳客户登录
+     * 微驿客户登录
      * @return array
      */ 
     public function login(){

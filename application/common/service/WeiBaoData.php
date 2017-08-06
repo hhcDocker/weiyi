@@ -229,7 +229,7 @@ class WeiBaoData {
         //查询服务
         // $service_info = model('ShopServices')->getServicesByAliShopId($shop_id);
         /*if (empty($service_info)) {
-            echo "该店铺无购买服务，请到微跳上购买";
+            echo "该店铺无购买服务，请到微驿上购买";
             exit;
         }else{
             $is_time_out =1;
@@ -242,7 +242,7 @@ class WeiBaoData {
                 }
             }
             if ($is_time_out) {
-                echo "该店铺所购买服务已过期，请到微跳上续费";
+                echo "该店铺所购买服务已过期，请到微驿上续费";
                 exit;
             }
         }*/
