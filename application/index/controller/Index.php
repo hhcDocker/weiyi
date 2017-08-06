@@ -138,12 +138,8 @@ class Index extends APIController
 
                 //是否存在于其他系统
                 $user_info = $this->ergodicSearchOtherManager($mobilephone,$password);
-                if (!$user_info['code']) { 
-                    $result = [
-                        'code' => 0,
-                        'msg'  => '登录失败，手机号或密码不正确！',
-                        'data' => '{}',
-                    ];
+                if (!$user_info['code']) {
+                    throw new APIException(10008);
                 }else{
                     //将账号保存到当前账号，资金分开
                     $origin_role = $user_info['code'];//1-电商，2-网点，3-工厂，5-官网，
@@ -153,7 +149,7 @@ class Index extends APIController
                     $uid = md5(uniqid(rand(), true));
                     $manager_id = model('Managers')->addManagerInfo($uid,$mobilephone,$password,$client_ip,$origin_role,$origin_id);
                     if (!$manager_id) {
-                        return json_encode(array('code'=>0,'msg'=>'登录失败'));
+                        throw new APIException(10008);
                     }
 
                     // 存储session
@@ -233,21 +229,11 @@ class Index extends APIController
                 try{
                     $has_update = model('Managers')->updateManagerPassword($mobilephone,$password);
                     if (!$has_update) {
+                        Db::rollback();
                         throw new APIException(10014);
                     }
 
-                    //修改原系统密码
-                    $manager_info = $user_info['manager_info'];
-                    $origin_role = $manager_info['origin_role'];//1-电商，2-网点，3-工厂，5-官网
-                    $origin_id = $manager_info['origin_id'];
-                    if ($origin_role && $origin_role !=4 && $origin_id) {
-                        //修改原系统密码
-                        $has_update = $this->updateOtherMangerPwd($origin_role,$origin_id,$password);
-                        if (!$has_update) {
-                            Db::rollback();
-                            throw new APIException(10014);
-                        }
-                    }
+                    //修改原系统密码暂时不做
                     Db::commit();
                 }catch(Exception $e){
                     Db::rollback();
@@ -269,12 +255,7 @@ class Index extends APIController
                         throw new APIException(10014);
                     }
 
-                    //修改原系统密码
-                    $has_update = $this->updateOtherMangerPwd($origin_role,$origin_id,$password);
-                    if (!$has_update) {
-                        Db::rollback();
-                        throw new APIException(10014);
-                    }
+                    //修改原系统密码暂时不做
                     Db::commit();
                 }catch(Exception $e){
                     Db::rollback();
@@ -333,18 +314,7 @@ class Index extends APIController
                 throw new APIException(10014);
             }
 
-            //修改原系统密码
-            $manager_info = $user_info['manager_info'];
-            $origin_role = $manager_info['origin_role'];//1-电商，2-网点，3-工厂，5-官网
-            $origin_id = $manager_info['origin_id'];
-            if ($origin_role && $origin_role !=4 && $origin_id) {
-                //修改原系统密码
-                $has_update = $this->updateOtherMangerPwd($origin_role,$origin_id,$password);
-                if (!$has_update) {
-                    Db::rollback();
-                    throw new APIException(10014);
-                }
-            }
+            //修改原系统密码暂时不做
             Db::commit();
         }catch(Exception $e){
             Db::rollback();
@@ -366,7 +336,6 @@ class Index extends APIController
         }
         $login_info = array('manager_mobilephone'=>session('manager_mobilephone'),'is_login'=>1);
         return $this->format_ret($login_info);
-        // return $login_info;
     }
 
     /**
@@ -379,6 +348,7 @@ class Index extends APIController
         $service_pay_array = json_decode($service_pay_amount,true);
         return $this->format_ret($service_pay_array);
     }
+
     /**
      * 获取体验时间
      * @return [type] [description]
