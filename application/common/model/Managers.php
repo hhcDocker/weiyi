@@ -6,7 +6,7 @@
  * | Internal procedure is strictly prohibited.
  * +----------------------------------------------------------------------
  * | Filename: Managers.php
- * | Description: 店铺接口数据
+ * | Description: 微跳用户数据
  * +----------------------------------------------------------------------
  * | Created by equinox at 2017-6-15 15:00 
  * | Email: equinox@purplethunder.cn
@@ -29,6 +29,7 @@ class Managers extends Base
         $query_manager = array();
         if($mobilephone && $password)
         {
+            $password = md5($password);
             $query_manager = Db::table('wj_managers')
                             ->where('mobilephone', $mobilephone)
                             ->where('password', $password)
@@ -92,23 +93,28 @@ class Managers extends Base
         }
         return $count;
     }
-
+    
     /**
-     * 添加哦那个湖信息
-     * @param string $uid         [description]
-     * @param string $mobilephone [description]
-     * @param string $password    [description]
-     * @param string $register_ip [description]
+     * 添加信息
+     * @param string  $uid         [description]
+     * @param string  $mobilephone [description]
+     * @param string  $password    [description]
+     * @param string  $register_ip [description]
+     * @param integer $origin_role [1-电商，2-网点，3-工厂，4-微驿，5-官网]
+     * @param integer $origin_id   [账号在原先系统对应的id]
      */
-    public function addManagerInfo($uid='',$mobilephone='',$password='',$register_ip='')
+    public function addManagerInfo($uid='',$mobilephone='',$password='',$register_ip='',$origin_role=0,$origin_id=0)
     {
-        if (!$uid || !$mobilephone || !$password || !$register_ip) {
+        if (!$uid || !$mobilephone || !$password || !$register_ip || !$origin_role) {
             return 0;
         }
+        $password = md5($password);
         $manager_id = Db::table('wj_managers')->insertGetId([
                     'uid' => $uid,
                     'mobilephone' => $mobilephone,
                     'password' => $password,
+                    'origin_role' => $origin_role,
+                    'origin_id' => $origin_id,
                     'is_locked' =>0,
                     'create_time' => time(),
                     'register_ip' => $register_ip,
@@ -128,6 +134,7 @@ class Managers extends Base
         if (!$mobilephone || !$password) {
             return 0;
         }
+        $password = md5($password);
         $has_update = Db::table('wj_managers')
                             ->where('mobilephone', $mobilephone)
                             ->update([
@@ -140,17 +147,20 @@ class Managers extends Base
 
 /*CREATE TABLE `wj_managers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` char(32) NOT NULL COMMENT 'md5生成的随机定长字符串',
-  `mobilephone` char(16) DEFAULT NULL,
-  `password` char(64) DEFAULT NULL,
-  `is_locked` tinyint(1) unsigned DEFAULT '0',
-  `is_deleted` tinyint(1) unsigned DEFAULT '0',
-  `create_time` int(11) unsigned NOT NULL,
-  `register_ip` char(16) DEFAULT NULL,
-  `last_login_time` int(10) unsigned DEFAULT NULL,
-  `last_login_ip` char(16) DEFAULT NULL,
-  `update_time` int(11) unsigned NOT NULL,
-  `delete_time` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='微跳客户信息表';
+  `uid` char(32) NOT NULL DEFAULT '' COMMENT 'md5生成的随机定长字符串',
+  `mobilephone` char(16) NOT NULL DEFAULT '',
+  `password` char(64) NOT NULL DEFAULT '',
+  `origin_role` tinyint(1) unsigned NOT NULL DEFAULT '4' COMMENT '账号原先所在系统：1-电商，2-网点，3-工厂，4-微驿，5-官网',
+  `origin_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '账号在原先系统对应的id',
+  `is_locked` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `register_ip` char(16) NOT NULL DEFAULT '',
+  `last_login_ip` char(16) NOT NULL DEFAULT '',
+  `last_login_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `create_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `update_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `delete_time` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `info` (`is_deleted`,`mobilephone`,`password`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='微跳客户信息表';
 */
