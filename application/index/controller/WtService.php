@@ -35,7 +35,7 @@ class WtService extends APIAuthController
      * 2.验证登录与否
      * 3.判断天猫or淘宝，店铺则转换地址查表；商品详情则区分天猫淘宝，天猫先查表确认是否存在，否则调用爬取函数，取得shopId，淘宝则直接爬取数据，取得userId
      * 4.查表获取该链接所属店铺是否已购买服务，是否已过期
-     * 5.如果从未购买，则爬取店铺数据，生成体验记录，默认3天，生成服务记录，返回短链接
+     * 5.如果从未购买，则爬取店铺数据，生成体验记录，生成服务记录，返回短链接
      * 6.生成转换记录
      * 返回值：链接二维码，短链接，有效期（不返回具体数据，只返回链接）
      * @return [type] [description]
@@ -1567,7 +1567,7 @@ class WtService extends APIAuthController
                 throw new APIException(30010);
             }
 
-            //添加消费记录，体验3天
+            //添加消费记录，体验
             $expense_model = new ExpenseSN();
             $expense_num = $expense_model->getSN();
             $has_add = model('ExpenseRecords')->addExpense($expense_num, 0,$service_id,session('manager_id'),0,$time_start,$time_end,1);
