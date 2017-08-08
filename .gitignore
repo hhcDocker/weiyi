@@ -7,3 +7,4 @@ public/static/css/*.scss
 public/static/css/*.map
 *.lockfile
 public/log.txt
+*local

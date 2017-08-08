@@ -358,8 +358,8 @@ class Index extends APIController
      */
     public function getExperienceDays()
     {
-        $experience_days = model('Others')-> getValueByKey('experience_time');
-        return $this->format_ret($experience_days);
+        $experience_time = model('Others')-> getValueByKey('experience_time');
+        return $this->format_ret($experience_time);
     }
 
     /********************************************* 公用函数 ********************************************/
