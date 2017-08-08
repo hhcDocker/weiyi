@@ -586,4 +586,9 @@ class Index extends Controller
         }    
         return false;  
     }
+
+    public function testAlert()
+    {
+        $b= $a+1;
+    }
 }
