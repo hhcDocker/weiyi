@@ -74,7 +74,8 @@ class EcommerceShop extends Base
         if (!$weitiao_link) {
             return array();
         }
-        $link_info = Db::table('tp5_ecommerce_product_links')->where('review_status','审核通过')->where('weitiao_link',$weitiao_link)->where('delete_time',null)->find();
+        $db1 = db('ecommerce_managers', config('_database1'), true);
+        $result = $db1->where('review_status','审核通过')->where('weitiao_link',$weitiao_link)->where('delete_time',null)->find();
         return $link_info?$link_info:array();
     }
 }
