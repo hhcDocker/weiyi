@@ -135,7 +135,6 @@
 		<script type="text/javascript">
 			var vm=null,data=null,scriptDetail=null,scriptAccess=null;
 			function jsonp(d){
-				console.log(data.data)
 				data=d;
 	        	if(data.data.apiStack){
 	        		if(data.data.apiStack[0].value){
@@ -232,7 +231,7 @@
 				 vm = new Vue({
 					el:"#body_container",
 				  	data:{
-				  		currentView:"parameter",
+				  		currentView:"detail",
 				  		active: 0,
 				  		showFlag:false,
 				  		skuPrice:apiStackValue.skuCore.sku2info['0'].price.priceText,
@@ -244,10 +243,10 @@
 				  		isVisible:"auto",
 				  		directFlag:false,
 						tabs: [   
-//						    {       
-//						       name: '图文详情',   
-//						       view: 'detail'  
-//						    },     
+						    {       
+						       name: '图文详情',   
+						       view: 'detail'  
+						    },     
 						    {       
 						       name: '产品参数',    
 						       view: 'parameter'    
@@ -345,17 +344,26 @@
 	            	scriptAccess.parentNode.removeChild(scriptAccess);
 	            },1000)
 	            //请求图文详情数据
-				/*$.ajax({
+				$.ajax({
 			 		type:"get",
 			 		url:"/weibao/index/getTbGoodsDescription?itemId="+data.data.item.itemId,
 			 		async:true,
 			 		success:function(res){
 			 			var res =JSON.parse(res);
-			 			vm.commodityData.pictureDetail=res.data.images;
+			 			var imageArr=[];
+			 			for(var a in res){
+			 				var start = res[a].indexOf("//");
+			 				var end = res[a].indexOf("</img>");
+			 				var img_url=res[a].slice(start,end);
+			 				if(img_url){
+			 					imageArr.push(img_url);
+			 				}
+			 			}
+			 			vm.commodityData.pictureDetail=imageArr;
 			 		},
 			 		error:function(err){
 	                }
-			 	});*/
+			 	});
 	        }
 			
 			function jsonp2(a){

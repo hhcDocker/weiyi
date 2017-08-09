@@ -293,6 +293,15 @@
 					});
 				}else{
 					commodityData.pictureDetail="";
+					var src="https://desc.alicdn.com/i1/550/210/"+_DATA_Detail.itemDO.itemId+"/TB1pRtJRFXXXXbgaXXX8qtpFXlX.desc%7Cvar%5Edesc%3Bsign%5Efc69c0d6d44204553975a2854a87c4de%3Blang%5Egbk%3Bt%5E1500258456";
+					var scriptDesc = document.createElement('script');
+		            scriptDesc.src = src;
+		            document.body.appendChild(scriptDesc);
+		            setTimeout(function(){
+		            	$(".detail ul").html(desc);
+		            	$(".desc_anchor").remove();
+		            	scriptRecommend.parentNode.removeChild(scriptDesc);
+		            },1000)
 				}
 				
 			}catch(e){
