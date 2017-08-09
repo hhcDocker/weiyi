@@ -64,4 +64,17 @@ class EcommerceShop extends Base
         return $result;
     }
 
+    /**
+     * 通过微跳链接获取信息
+     * @param  string $weitiao_link [description]
+     * @return [type]               [description]
+     */
+    public function getLinkInfoByLink($weitiao_link='')
+    {
+        if (!$weitiao_link) {
+            return array();
+        }
+        $link_info = Db::table('tp5_ecommerce_product_links')->where('review_status','审核通过')->where('weitiao_link',$weitiao_link)->where('delete_time',null)->find();
+        return $link_info?$link_info:array();
+    }
 }

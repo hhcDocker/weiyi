@@ -77,7 +77,9 @@
 				<div id="tabbar" class="tabbar" >
 					<a @click="tab($index ,item.view)" v-for="item in tabs" :class="{active:active==$index}" href="javascript:void(0)" v-text="item.name"></a>
 				</div>
-				<component :is="currentView" v-bind:comdata="commodityData" keep-alive></component>
+				<keep-alive>
+					<component :is="currentView" v-bind:comdata="commodityData" keep-alive></component>
+				</keep-alive>
 				<div class="load_access_data" v-show="loadingFlag">
 					<i></i><span>正在加载数据...</span>
 				</div>

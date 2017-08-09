@@ -457,7 +457,7 @@ class Index extends Controller
      */
     public function getPromotionalGoodsDetail()
     {
-        $isTm = input('param.isTm') ? input('param.isTm') : '';
+        $isTm = input('param.isTm') ? input('param.isTm') : 0;
         $item_id = input('param.item_id') ? input('param.item_id') : '';
 
         if (!$this->is_weixin()) {
@@ -469,6 +469,14 @@ class Index extends Controller
                     // https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?appKey=12574478&t=1489817645812&sign=c6259cd8b4facd409f04f6878e84ebce&api=mtop.taobao.detail.getdetail&v=6.0&ttid=2016%40taobao_h5_2.0.0&isSec=0&ecode=0&AntiFlood=true&AntiCreep=true&H5Request=true&type=jsonp&dataType=jsonp&data=%7B%22exParams%22%3A%22%7B%5C%22id%5C%22%3A%5C%22521783759898%5C%22%2C%5C%22abtest%5C%22%3A%5C%227%5C%22%2C%5C%22rn%5C%22%3A%5C%22581759dfb5263dad588544aa4ddfc465%5C%22%2C%5C%22sid%5C%22%3A%5C%223f8aaa3191e5bf84a626a5038ed48083%5C%22%7D%22%2C%22itemNumId%22%3A%22'.$item_id.'%22%7D');
                 exit;
             }
+        }
+        //检查该推广链接是否已购买并审核通过
+        //判断端口
+        $port = $_SERVER["SERVER_PORT"]=='80'?'': ':'.$_SERVER["SERVER_PORT"]; 
+        $weitiao_link = 'http://'.$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI'];
+        $link_info =model('EcommerceShop')->getLinkInfoByLink($weitiao_link);
+        if (empty($link_info)) {
+            return $this->fetch('service_expired',array('err_msg' => "该推广链接不存在，请联系电商卖家确认"));
         }
 
         vendor('simple_html_dom.simple_html_dom');
@@ -485,7 +493,7 @@ class Index extends Controller
                 $arr['isTm']=$isTm;
 
                 if (!$item_id) {
-                    return $this->fetch('service_expired',array('err_msg' => "item_id参数错误不存在"));
+                    return $this->fetch('service_expired',array('err_msg' => "该推广链接不存在，请联系电商卖家确认"));
                 }
                 $item_info = model('AliTmGoodsDetail')->getGoodsDetailByItemId($item_id);
 
