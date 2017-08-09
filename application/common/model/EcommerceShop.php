@@ -75,7 +75,7 @@ class EcommerceShop extends Base
             return array();
         }
         $db1 = db('ecommerce_product_links', config('_database1'), true);
-        $result = $db1->where('review_status','审核通过')->where('weitiao_link',$weitiao_link)->where('delete_time',null)->find();
+        $link_info = $db1->where('review_status','审核通过')->where('weitiao_link',$weitiao_link)->where('delete_time',null)->find();
         return $link_info?$link_info:array();
     }
 }
