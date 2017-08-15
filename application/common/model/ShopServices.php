@@ -82,7 +82,6 @@ class ShopServices extends Base
         if (!$manager_id) {
             return array();
         }
-        $experience_time = model('Others')-> getValueByKey('experience_time');
         $where = '';
         if ($service_type==1) { //已过期
             $where ='service_end_time <= unix_timestamp(now())';
@@ -94,7 +93,7 @@ class ShopServices extends Base
                 ->field('id,transformed_url,shop_name,shop_url,service_start_time,service_end_time')
                 ->where('manager_id',$manager_id)
                 ->where('is_deleted',0)
-                ->where('service_end_time-service_start_time>'.$experience_time.'+1')
+                ->where('service_end_time-service_start_time>365*24*60*60-1')
                 ->where($where)
                 ->limit($offset, $pageSize)
                 ->select();
@@ -112,7 +111,6 @@ class ShopServices extends Base
         if (!$manager_id) {
             return 0;
         }
-        $experience_time = model('Others')-> getValueByKey('experience_time');
         $where = '';
         if ($service_type==1) { //已过期
             $where ='service_end_time <= unix_timestamp(now())';
@@ -122,7 +120,7 @@ class ShopServices extends Base
         $res = Db::table('wj_shop_services')
                 ->where('manager_id',$manager_id)
                 ->where('is_deleted',0)
-                ->where('service_end_time-service_start_time>'.$experience_time.'+1')
+                ->where('service_end_time-service_start_time>365*24*60*60-1')
                 ->where($where)
                 ->count();
         return $res;

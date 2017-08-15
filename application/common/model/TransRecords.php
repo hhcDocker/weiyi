@@ -33,14 +33,13 @@ class TransRecords extends Base
         if (!$manager_id) {
             return array();
         }
-        $experience_time = model('Others')-> getValueByKey('experience_time');
         $where = '';
         if ($service_type==1) { //未支付
-            $where ='s.service_end_time-s.service_start_time<='.$experience_time.'+1';
+            $where ='s.service_end_time-s.service_start_time<=365*24*60*60-1';
         }elseif ($service_type==2) { //生效中
-            $where ='s.service_start_time<UNIX_TIMESTAMP(NOW()) and s.service_end_time>unix_timestamp(now()) and s.service_end_time-s.service_start_time>'.$experience_time.'+1';
+            $where ='s.service_start_time<UNIX_TIMESTAMP(NOW()) and s.service_end_time>unix_timestamp(now()) and s.service_end_time-s.service_start_time>365*24*60*60-1';
         }elseif ($service_type==3) { //已到期
-            $where ='s.service_start_time>UNIX_TIMESTAMP(NOW()) or s.service_end_time<unix_timestamp(now()) and s.service_end_time-s.service_start_time>'.$experience_time.'+1';
+            $where ='s.service_start_time>UNIX_TIMESTAMP(NOW()) or s.service_end_time<unix_timestamp(now()) and s.service_end_time-s.service_start_time>365*24*60*60-1';
         }
         $offset = ($pageIndex-1)*$pageSize;
         $res = Db::table('wj_trans_records r')
@@ -67,14 +66,13 @@ class TransRecords extends Base
         if (!$manager_id) {
             return 0;
         }
-        $experience_time = model('Others')-> getValueByKey('experience_time');
         $where = '';
         if ($service_type==1) { //未支付
-            $where ='s.service_end_time-s.service_start_time<='.$experience_time.'+1';
+            $where ='s.service_end_time-s.service_start_time<=365*24*60*60-1';
         }elseif ($service_type==2) { //生效中
-            $where ='s.service_start_time<UNIX_TIMESTAMP(NOW()) and s.service_end_time>unix_timestamp(now()) and s.service_end_time-s.service_start_time>'.$experience_time.'+1';
+            $where ='s.service_start_time<UNIX_TIMESTAMP(NOW()) and s.service_end_time>unix_timestamp(now()) and s.service_end_time-s.service_start_time>365*24*60*60-1';
         }elseif ($service_type==3) { //已到期
-            $where ='s.service_start_time>UNIX_TIMESTAMP(NOW()) or s.service_end_time<unix_timestamp(now()) and s.service_end_time-s.service_start_time>'.$experience_time.'+1';
+            $where ='s.service_start_time>UNIX_TIMESTAMP(NOW()) or s.service_end_time<unix_timestamp(now()) and s.service_end_time-s.service_start_time>365*24*60*60-1';
         }
         $res = Db::table('wj_trans_records r')
                 ->join('wj_shop_services s','r.wj_shop_id=s.shop_id')
