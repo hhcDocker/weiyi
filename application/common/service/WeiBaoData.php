@@ -284,6 +284,9 @@ class WeiBaoData {
                 $arr['score'][$key]['text']=$li->find('b',0)->innertext;
             }
         }
+        if (!array_key_exists('score', $arr)) {
+            $arr['score'] = array(["className"=>"","text"=>"-"],["className"=>"","text"=>"-"],["className"=>"","text"=>"-"]);
+        }
 
         $add_data['score'] = json_encode($arr['score']);
         //得到商品信息
