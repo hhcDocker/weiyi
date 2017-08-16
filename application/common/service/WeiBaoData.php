@@ -191,6 +191,7 @@ class WeiBaoData {
         header("Connection:Keep-Alive");
         header("Proxy-Connection:Keep-Alive");
         $add_data = array();
+        $flag_error=0;
         try{
             $html = file_get_html($url);
         }catch (\Exception $e){
@@ -215,14 +216,18 @@ class WeiBaoData {
                     $id_str = $id_str[0];
                     $shop_id = str_replace('"rstShopId":','',$id_str);
                 }
-                $arr['dataOther'][]=iconv("GB2312//IGNORE","UTF-8",$script->innertext);;
+                if (strpos($v, '_DATA_Mdskip')!==false && strpos($v,'window.location.href')) {
+                    $flag_error=1;//反爬
+                    break;
+                }
+                $arr['dataOther'][]=$v;
             };
         }catch (\Exception $e){
             return array('errcode'=>30009);
         }
         $add_data['data_other'] = json_encode($arr['dataOther']);
         $add_data['shop_id'] = $shop_id;
-        if (!$shop_url || !$shop_id) {
+        if (!$shop_url || !$shop_id || $flag_error) {
             return array('errcode'=>30009);
         }
 
