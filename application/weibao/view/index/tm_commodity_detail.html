@@ -481,7 +481,7 @@
 				if(accessFlag){
 					page++;
 					var scriptRecommend = document.createElement('script');
-		            scriptRecommend.src = "https://rate.tmall.com/list_detail_rate.htm?itemId=528707440247&sellerId=2485044533&order=3&append=0&content=0&currentPage="+page+"&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp";
+		            scriptRecommend.src = "https://rate.tmall.com/list_detail_rate.htm?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId+"&order=3&append=0&content=0&currentPage="+page+"&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp";
 		            document.body.appendChild(scriptRecommend);
 		            setTimeout(function(){
 		            	scriptRecommend.parentNode.removeChild(scriptRecommend);
