@@ -40,8 +40,8 @@
 				</div>
 				<div class="titletab">
 					<p >快递:<span v-text="commodityData.freight"></span></p>
-					<p>月销<span v-text="dataMdsKig.defaultModel.sellCountDO.sellCount"></span>笔</p>
-					<p v-text="dataMdsKig.defaultModel.deliveryDO.deliveryAddress"></p>
+					<p>月销<span v-text="dataMdsKig.item.sellCount"></span>笔</p>
+					<p v-text="dataMdsKig.delivery.from"></p>
 				</div>
 				<div v-if="colorTypeFlag" class="choosedsku" @click="showFlag=!showFlag">
 					请选择 颜色分类 
@@ -123,7 +123,7 @@
 				<div class='detail' style="margin-bottom:1.333333rem;">
 					<h4 class="title">商品图片</h4>
 					<ul>
-						<li v-for='item in commodityData.pictureDetail'><img v-bind:src='item.img'/></li>
+						<li v-for='item in commodityData.pictureDetail'><img v-bind:src='item'/></li>
 					</ul>
 				</div>
 			</section>
@@ -174,7 +174,7 @@
 					<div class="color_type">
 						<h2 v-text="commodityData.colorType.text"></h2>
 						<ul>
-							<li @click='selecyColor($index,item.text,$event)' v-for="item in commodityData.colorType.values">{{item.text}}</li>
+							<li @click='selecyColor($index,item,$event)' v-for="item in commodityData.skuBase.props[0].values">{{item.name}}</li>
 						</ul>
 					</div>
 				</div>
@@ -227,7 +227,6 @@
 			try{
 				for(var i=0;i<data.dataOther.length;i++){
 					if(data.dataOther[i].indexOf('_DATA_Detail')>-1||data.dataOther[i].indexOf('_DATA_Mdskip')>-1){
-						console.log(i)
 						eval(data.dataOther[i]);
 					}
 				}
@@ -239,37 +238,39 @@
 			}
 			if(_DATA_Detail){
 				commodityData.lunboImageUrl=data.imgUrl;
-				commodityData.commodityName=_DATA_Detail.itemDO.title;
-				commodityData.delPrice=data.delPrice;
-				cmdPrice=parseInt(data.delPrice);
+				commodityData.commodityName=_DATA_Detail.item.title;
 				commodityData.freight="0.00";
 				commodityData.shopInfo.name=data.shopName;
-				commodityData.shopInfo.head_picture=_DATA_Detail.itemDO.shopIcon;
-				commodityData.newAttraction=_DATA_Detail.itemDO.newAttraction;
+				commodityData.shopInfo.head_picture=_DATA_Detail.seller.shopIcon;
+				commodityData.newAttraction=_DATA_Detail.item.subtitle;
+				//commodityData.newAttraction=_DATA_Detail.itemDO.newAttraction;
 				commodityData.allCommodity="/weibao/index/tmShopCommodityList";
 				commodityData.shopUrl=data.shortUrl;
 				commodityData.score=data.score;
-				commodityData.openAppUrl="taobao://item.taobao.com/item.html?id="+_DATA_Detail.itemDO.itemId;
+				commodityData.openAppUrl="taobao://item.taobao.com/item.html?id="+_DATA_Detail.item.itemId;
 				if(typeof(data.score)=="string"){
 					commodityData.score=JSON.parse(data.score);
 				}
 			}
+			try{
+				
+				commodityData.delPrice=dataMdsKig.price.newExtraPrices[0].priceText;
+				cmdPrice=dataMdsKig.price.price.priceText;
+			}catch(e){
+				//TODO handle the exception
+			}
 			//尝试得到颜色分类
 			try{
-				if(_DATA_Detail.valItemInfo.skuList){
+				if(_DATA_Mdskip.skuBase){
 					colorTypeFlag=true;
-					commodityData.valItemInfo=_DATA_Detail.valItemInfo;
-					var pvs = ';'+_DATA_Detail.valItemInfo.skuList[0]['pvs']+';';
-					skuStock=commodityData.valItemInfo.skuMap[pvs].stock;
-					skuPrice=commodityData.valItemInfo.skuMap[pvs].price;
-					if(commodityData.valItemInfo.skuPics[pvs]){
-						skuPics=commodityData.valItemInfo.skuPics[pvs];
-					}else{
-						skuPics=data.imgUrl[0];
-					}
-					
-					skuName=commodityData.valItemInfo.skuName[0].values[0].text;
-					commodityData.colorType=_DATA_Detail.valItemInfo.skuName[0];
+					commodityData.valItemInfo=_DATA_Mdskip.skuCore;
+					commodityData.skuBase=_DATA_Mdskip.skuBase;
+					skuStock=commodityData.valItemInfo.sku2info[0].quantity;
+					skuPrice=commodityData.valItemInfo.sku2info[0].price.priceText;
+					skuPics=data.imgUrl[0];
+					skuName="";
+					commodityData.colorType={};
+					commodityData.colorType.text=_DATA_Mdskip.skuBase.props[0].name;
 				}else{
 					colorTypeFlag=false;
 				}
@@ -279,21 +280,11 @@
 			//尝试得到商品详情
 			try{
 				console.log(_DATA_Detail);
-				if(_DATA_Detail.api.newWapDescJson){
-					_DATA_Detail.api.newWapDescJson.forEach(function(item,index){
-						if(item.moduleKey=='item_picture'){
-							commodityData.pictureDetail=item.data;
-						}else if(item.moduleKey=="custompriceDesc"){
-							if(item.data instanceof Array){
-								for (var i =0;i<item.data.length;i++){
-									commodityData.pictureDetail.push(item.data[i]);
-								}
-							}
-						}
-					});
+				if(data.picdetail){
+					commodityData.pictureDetail=data.picdetail;
 				}else{
 					commodityData.pictureDetail="";
-					var src="https://desc.alicdn.com/i1/550/210/"+_DATA_Detail.itemDO.itemId+"/TB1pRtJRFXXXXbgaXXX8qtpFXlX.desc%7Cvar%5Edesc%3Bsign%5Efc69c0d6d44204553975a2854a87c4de%3Blang%5Egbk%3Bt%5E1500258456";
+					var src="https://desc.alicdn.com/i1/550/210/"+_DATA_Detail.item.itemId+"/TB1pRtJRFXXXXbgaXXX8qtpFXlX.desc%7Cvar%5Edesc%3Bsign%5Efc69c0d6d44204553975a2854a87c4de%3Blang%5Egbk%3Bt%5E1500258456";
 					var scriptDesc = document.createElement('script');
 		            scriptDesc.src = src;
 		            document.body.appendChild(scriptDesc);
@@ -435,24 +426,21 @@
 						this.showFlag=true;
 					},
 					selecyColor:function(i,v,e){
-							var id=';'+_DATA_Detail.valItemInfo.skuList[i].pvs+';';
-							this.skuStock=commodityData.valItemInfo.skuMap[id].stock;
-							
+							var pvs = ""+_DATA_Mdskip.skuBase.props[0].pid+":"+v.vid;
+							var id = "";
+							for(var a in _DATA_Mdskip.skuBase.skus){
+								if(_DATA_Mdskip.skuBase.skus[a].propPath==pvs){
+									id = _DATA_Mdskip.skuBase.skus[a].skuId;
+								}
+							}
 							try{
-								console.log(this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo)
-								if(this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo){
-								var ids=_DATA_Detail.valItemInfo.skuList[i].skuId;
-								this.skuPrice=this.dataMdsKig.defaultModel.itemPriceResultDO.priceInfo[ids].promotionList[0].price;
-								}else{
-									this.skuPrice=commodityData.valItemInfo.skuMap[ids].price;
+								if(_DATA_Mdskip.skuCore.sku2info[id]){
+									this.skuStock=_DATA_Mdskip.skuCore.sku2info[id].quantity;
+									this.skuPics=v.image;
+									this.skuPrice=_DATA_Mdskip.skuCore.sku2info[id].price.priceText;
 								}
 							}catch(e){
-								this.skuPrice=commodityData.valItemInfo.skuMap[id].price;
 							}
-					  		this.skuName=v;
-					  		if(commodityData.valItemInfo.skuPics[id]){
-					  			this.skuPics=commodityData.valItemInfo.skuPics[id];
-					  		}
 						$(e.target).css({
 							"border-color": "#b10000",
 							"color": "#000"
@@ -481,7 +469,7 @@
 				if(accessFlag){
 					page++;
 					var scriptRecommend = document.createElement('script');
-		            scriptRecommend.src = "https://rate.tmall.com/list_detail_rate.htm?itemId=528707440247&sellerId=2485044533&order=3&append=0&content=0&currentPage="+page+"&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp";
+		            scriptRecommend.src = "https://rate.tmall.com/list_detail_rate.htm?itemId="+_DATA_Detail.item.itemId+"&sellerId="+_DATA_Detail.seller.userId+"&order=3&append=0&content=0&currentPage="+page+"&pageSize=10&tagId=&_ksTS=1489809936348_512&callback=jsonp";
 		            document.body.appendChild(scriptRecommend);
 		            setTimeout(function(){
 		            	scriptRecommend.parentNode.removeChild(scriptRecommend);
@@ -549,7 +537,7 @@
 				scriptRecommend = document.createElement('script');
 	            //scriptRecommend.src = "https://aldcdn.tmall.com/recommend.htm?appId=03080&itemId='.$_GET['itemId'].'&categoryId=110206&sellerId='.$_GET['sellerId'].'&resultSize=12&_ksTS=1489806690121_444&callback=jsonp";
 	            
-	            scriptRecommend.src="https://rate.tmall.com/listTagClouds.htm?itemId="+_DATA_Detail.itemDO.itemId+"&isAll=true&isInner=true&callback=jsonp_tag";
+	            scriptRecommend.src="https://rate.tmall.com/listTagClouds.htm?itemId="+_DATA_Detail.item.itemId+"&isAll=true&isInner=true&callback=jsonp_tag";
 	            document.body.appendChild(scriptRecommend);
 	            setTimeout(function(){
 	            	scriptRecommend.parentNode.removeChild(scriptRecommend);
@@ -563,7 +551,7 @@
 				function getRecommend(){
 				 	$.ajax({
 				 		type:"get",
-				 		url:"/weibao/index/GetTMRecommend?itemId="+_DATA_Detail.itemDO.itemId+"&sellerId="+_DATA_Detail.itemDO.userId,
+				 		url:"/weibao/index/GetTMRecommend?itemId="+_DATA_Detail.item.itemId+"&sellerId="+_DATA_Detail.seller.userId,
 				 		async:true,
 				 		success:function(res){
 				 			commodityData.recommend=JSON.parse(JSON.parse(res)[0]).list;

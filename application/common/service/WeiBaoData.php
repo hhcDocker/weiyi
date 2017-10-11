@@ -67,8 +67,9 @@ class WeiBaoData {
         $flag_error =0;
         $shopId=0;
         //校验是否全部获取到
+        	//var_dump($data[0]);
         foreach ($data as $k => $v) {
-            $v = preg_replace('/^mtopjsonp\d+\(([\s\S]+)\)/','$1', $v);
+            $v = preg_replace('/mtopjsonp\d+\(([\s\S]+)\)/','$1', $v);
             $v = json_decode($v,true);
             if ($v['ret'][0]!="SUCCESS::调用成功"){
                 $flag_error=1;
@@ -199,28 +200,28 @@ class WeiBaoData {
         }
         //店铺链接,shopid
         try{
-            if($html->find('div#s-actionbar',0)){
-                $shop_href_str = $html->find('div#s-actionbar',0)->find('div.toshop',0)->find('a',0)->href;
+            if($html->find('section#s-actionBar-container',0)){
+                $shop_href_str = $html->find('a.toshop',0)->href;
             }else{
                 return array('errcode'=>30009);
             }
-            
             $shop_url='https:'.trim(iconv("GB2312//IGNORE","UTF-8",$shop_href_str));
             $add_data['shop_url'] = $shop_url;
             //得到dataDetail对象
             //获取shopid
-            foreach($html->find('script') as $key => $script){
-                $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
-                if (strpos($v,'_DATA_Detail')!==false){
-                    preg_match('/(?:"rstShopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
-                    $id_str = $id_str[0];
-                    $shop_id = str_replace('"rstShopId":','',$id_str);
-                }
-                if (strpos($v, '_DATA_Mdskip')!==false && strpos($v,'window.location.href')) {
-                    $flag_error=1;//反爬
-                    break;
-                }
-                $arr['dataOther'][]=$v;
+            	foreach($html->find('script') as $key => $script){
+	                $v = iconv("GB2312//IGNORE","UTF-8",$script->innertext);
+	                if (strpos($v,'_DATA_Detail')!==false){
+	                    preg_match('/(?:"shopId":)\d+/',$v,$id_str);// echo $a;"rstShopId":60291124
+	                    $id_str = $id_str[0];
+	
+	                    $shop_id = str_replace('"shopId":','',$id_str);
+	            	}
+	                if (strpos($v, '_DATA_Mdskip')!==false && strpos($v,'window.location.href')) {
+	                    $flag_error=1;//反爬
+	                    break;
+	                }
+              	$arr['dataOther'][]=iconv("GB2312//IGNORE","UTF-8",$script->innertext);
             };
         }catch (\Exception $e){
             return array('errcode'=>30009);
@@ -259,24 +260,22 @@ class WeiBaoData {
 
         $add_data['assess_flag'] = $arr['assessFlag'];
         //得到商品图片url
-        foreach($html->find('section#s-showcase') as $pic_contain)
-        {
 
-            foreach($pic_contain->find('div.scroller') as $itembox)
-            {
-                $imgflag=1;
-                foreach ($itembox ->find('div.itbox') as $item) {
-                    if($imgflag==1){
-                        $arr['imgUrl'][]=$item->find('img',0)->src;
-                    }else{
-                        $arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
-                    }
-                    $imgflag++;
-                }
+        $imgflag=1;
+        foreach ($html->find('div.preview-scroller a') as $item) {
+            if($imgflag==1){
+                $arr['imgUrl'][]=$item->find('img',0)->src;
+            }else{
+                $arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
             }
-        };
-
+            $imgflag++;
+        }
         $add_data['img_url'] = json_encode($arr['imgUrl']);
+
+        foreach ($html->find('div.mui-custommodule-item') as $item) {
+                $arr['picdetail'][]=$item->find('img',0)->attr['data-ks-lazyload'];
+        }
+        $add_data['picdetail'] = json_encode($arr['picdetail']);
         //得到店铺score
         foreach ($html ->find('ul.score') as  $score) {
             foreach($score->find('li') as $key => $li){
@@ -302,10 +301,10 @@ class WeiBaoData {
             $add_data['cd_parameter'] =$arr['cd_parameter'];
 
             //得到店铺名
-            $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('section#s-shop',0)->find('div.shop-t',0)->innertext);
+            $arr['shopName']=iconv("GB2312//IGNORE","UTF-8",$html->find('div.shop-name',0)->innertext);
             $add_data['shop_name'] =$arr['shopName'];
 
-            $arr['delPrice']=$html->find('section#s-price',0)->find('span.mui-price',0)->find('span.mui-price-integer',0)->innertext;
+            $arr['delPrice']=$html->find('span.price',0)->innertext;
             $add_data['del_price'] =$arr['delPrice'];
             return array('errcode'=>0,'data'=>$add_data);
         }catch(Exception  $e){

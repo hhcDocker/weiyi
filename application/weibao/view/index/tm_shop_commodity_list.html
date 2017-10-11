@@ -128,6 +128,7 @@
 				},
 				async:true,
 				success:function(res){
+        			console.log(JSON.parse(res))
         			vm.cmdList=JSON.parse(JSON.parse(res).data);
         			vm.loadingFlag=false;
 				}

@@ -577,6 +577,7 @@ class Index extends Controller
             $arr['dataOther'] = json_decode($tm_res['data']['data_other'],true);
             $arr['assess_flag'] = $tm_res['data']['assess_flag'];
             $arr['imgUrl'] = json_decode($tm_res['data']['img_url'],true);
+            $arr['picdetail'] = json_decode($tm_res['data']['picdetail'],true);
             $arr['score'] = $tm_res['data']['score'];
             $arr['cd_parameter'] = $tm_res['data']['cd_parameter'];
             $arr['shopName'] = $tm_res['data']['shop_name'];
