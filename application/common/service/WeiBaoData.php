@@ -259,23 +259,27 @@ class WeiBaoData {
         $arr['assessFlag'] = iconv("GB2312//IGNORE","UTF-8",$assessFlag);
 
         $add_data['assess_flag'] = $arr['assessFlag'];
-        //得到商品图片url
-
-        $imgflag=1;
-        foreach ($html->find('div.preview-scroller a') as $item) {
-            if($imgflag==1){
-                $arr['imgUrl'][]=$item->find('img',0)->src;
-            }else{
-                $arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
-            }
-            $imgflag++;
+		try{
+	        //得到商品图片url
+	
+	        $imgflag=1;
+	        foreach ($html->find('div.preview-scroller a') as $item) {
+	            if($imgflag==1){
+	                $arr['imgUrl'][]=$item->find('img',0)->src;
+	            }else{
+	                $arr['imgUrl'][]=$item->find('img',0)->attr['data-src'];
+	            }
+	            $imgflag++;
+	        }
+	        $add_data['img_url'] = json_encode($arr['imgUrl']);
+	
+	        foreach ($html->find('div.mui-custommodule-item') as $item) {
+	                $arr['picdetail'][]=$item->find('img',0)->attr['data-ks-lazyload'];
+	        }
+	        $add_data['picdetail'] = json_encode($arr['picdetail']);
+        }catch(Exception  $e){
+            return array('errcode'=>30009);
         }
-        $add_data['img_url'] = json_encode($arr['imgUrl']);
-
-        foreach ($html->find('div.mui-custommodule-item') as $item) {
-                $arr['picdetail'][]=$item->find('img',0)->attr['data-ks-lazyload'];
-        }
-        $add_data['picdetail'] = json_encode($arr['picdetail']);
         //得到店铺score
         foreach ($html ->find('ul.score') as  $score) {
             foreach($score->find('li') as $key => $li){
