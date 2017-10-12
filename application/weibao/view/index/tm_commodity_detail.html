@@ -207,7 +207,6 @@
 		var _DATA_Mdskip=null,_DATA_Detail=null;
 			try{
 				var data={$data},dataMdsKig,cmdPrice;
-				console.log(data)
 			}catch(e){
 				alert(e+"</br>请求数据失败，请尝试刷新网页");
 			}
@@ -279,7 +278,6 @@
 			}
 			//尝试得到商品详情
 			try{
-				console.log(_DATA_Detail);
 				if(data.picdetail){
 					commodityData.pictureDetail=data.picdetail;
 				}else{
@@ -302,7 +300,6 @@
 			try{
 				if(data.cd_parameter){
 					commodityData.cd_parameter=JSON.parse(data.cd_parameter);
-				console.log(commodityData.cd_parameter);
 				}
 			}catch(e){
 				console.log(e);

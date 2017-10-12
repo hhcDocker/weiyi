@@ -201,20 +201,19 @@
 			var data={$data},shopData={},queryShopInfo,conponData,itemSearch=[],text_content,rankingData,titleArr=[],getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced=[];
 			for(var i=0;i<data.length;i++){
 				var apiData=JSON.parse(data[i].api_data);
-				if(data[i].api_url=="mtop.geb.view.getPageView"){
+				if(data[i].api_url=="mtop.geb.view.getpageview"){
 					shopData.data=apiData;
-				console.log(shopData)
 				}else if(data[i].api_url=="mtop.taobao.geb.shopinfo.queryshopinfo"){
 					queryShopInfo=apiData;
-				}else if(data[i].api_url=="com.taobao.shop.getConpon1111"){
+				}else if(data[i].api_url=="com.taobao.shop.getconpon1111"){
 					conponData=apiData;
 				}else if(data[i].api_url=="mtop.shop.decorate.coupon.query"){
 					conponQueryData=apiData;
-				}else if(data[i].api_url=="mtop.taobao.shop.itemSearch"){
+				}else if(data[i].api_url=="mtop.taobao.shop.itemsearch"){
 					itemSearch.push(apiData);
-				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get"){
+				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemlist.get"){
 					enhenced.push(apiData);
-				}else if(data[i].api_url=="mtop.taobao.geb.rankinglist.rankingListInfo"){
+				}else if(data[i].api_url=="mtop.taobao.geb.rankinglist.rankinglistInfo"){
 					getItemLists=apiData;
 					rankingData=getItemLists.favoredByDiamonds;
 				}else if(data[i].api_url=="mtop.taobao.shop.individuation"){
@@ -328,7 +327,6 @@
 													dataBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].dataBinding.value.replace('$',''),
 													styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding,
 												}
-												console.log(modelData)
 												modelData[0].label.push(obj);
 											}catch(e){
 												//TODO handle the exception
@@ -336,7 +334,6 @@
 											}
 											
 										}else if(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].type=='sliderView'){
-											console.log(shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].foreach.array)
 											try{
 												var name=shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].foreach.array.replace('$','');
 												var obj={
@@ -388,7 +385,6 @@
 				},
 				filters:{
 					filterImage:function(val){
-						console.log(val)
 						if(val.image){
 							return val.image;
 						}else if(val.slide_array_image){
@@ -466,8 +462,6 @@
 								location.href='/detail/0/'+id;
 							}else{
 								var keys = item.label[index].dataBinding.split('.');
-								console.log(keys)
-								console.log(shopData.data.data[keys[0]][keys[1]])
 								var urls = shopData.data.data[keys[0]][keys[1].replace("title",'url')].slice(shopData.data.data[keys[0]][keys[1].replace("title",'url')].indexOf('?'));
 								var id=this.getQueryString('id',urls);
 								location.href='/detail/0/'+id;
