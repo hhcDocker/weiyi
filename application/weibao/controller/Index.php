@@ -17,6 +17,7 @@
 
 namespace app\weibao\controller;
 use app\common\service\WeiBaoData;
+use app\common\service\WeiBaoDataTest;
 use app\common\utils\SN\ShortUrl;
 use app\common\utils\SN\ExpenseSN;
 use JonnyW\PhantomJs\Client;
@@ -565,10 +566,10 @@ class Index extends Controller
     public function testGoods()
     {
         $item_id = input('param.item_id') ? input('param.item_id') : '';
-        $wei_bao = new WeiBaoData();
+        $wei_bao = new WeiBaoDataTest();
         $tm_res = $wei_bao->getTmGoodsDetail($item_id);
         if ($tm_res['errcode']) {
-            return $this->fetch('service_expired',array('err_msg' => "获取数据失败"));
+            return $this->fetch('service_expired',array('err_msg' => $tm_res['errcode']));
         }else{
             //存储商品详情数据
             $shop_id =  $tm_res['data']['shop_id'];
