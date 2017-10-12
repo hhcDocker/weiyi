@@ -201,19 +201,19 @@
 			var data={$data},shopData={},queryShopInfo,conponData,itemSearch=[],text_content,rankingData,titleArr=[],getItemLists,conponQueryData,individuationData=[],banner=[],imagesModel=[],couponList=[],enhenced=[];
 			for(var i=0;i<data.length;i++){
 				var apiData=JSON.parse(data[i].api_data);
-				if(data[i].api_url=="mtop.geb.view.getpageview"){
+				if(data[i].api_url=="mtop.geb.view.getpageview" || data[i].api_url=="mtop.geb.view.getPageView"){
 					shopData.data=apiData;
 				}else if(data[i].api_url=="mtop.taobao.geb.shopinfo.queryshopinfo"){
 					queryShopInfo=apiData;
-				}else if(data[i].api_url=="com.taobao.shop.getconpon1111"){
+				}else if(data[i].api_url=="com.taobao.shop.getconpon1111" || data[i].api_url=="com.taobao.shop.getConpon1111"){
 					conponData=apiData;
 				}else if(data[i].api_url=="mtop.shop.decorate.coupon.query"){
 					conponQueryData=apiData;
-				}else if(data[i].api_url=="mtop.taobao.shop.itemsearch"){
+				}else if(data[i].api_url=="mtop.taobao.shop.itemsearch" || data[i].api_url=="mtop.taobao.shop.itemSearch"){
 					itemSearch.push(apiData);
-				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemlist.get"){
+				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemlist.get" || data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get"){
 					enhenced.push(apiData);
-				}else if(data[i].api_url=="mtop.taobao.geb.rankinglist.rankinglistInfo"){
+				}else if(data[i].api_url=="mtop.taobao.geb.rankinglist.rankinglistInfo" || data[i].api_url=="mtop.taobao.geb.rankinglist.rankingListInfo"){
 					getItemLists=apiData;
 					rankingData=getItemLists.favoredByDiamonds;
 				}else if(data[i].api_url=="mtop.taobao.shop.individuation"){
