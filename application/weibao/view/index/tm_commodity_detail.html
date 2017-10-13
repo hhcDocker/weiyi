@@ -278,7 +278,7 @@
 			}
 			//尝试得到商品详情
 			try{
-				if(data.picdetail){
+				if(data.picdetail&&data.picdetail.length>0){
 					commodityData.pictureDetail=data.picdetail;
 				}else{
 					commodityData.pictureDetail="";

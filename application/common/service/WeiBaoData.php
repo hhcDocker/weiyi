@@ -276,7 +276,11 @@ class WeiBaoData {
 	        foreach ($html->find('div.mui-custommodule-item') as $item) {
 	                $arr['picdetail'][]=$item->find('img',0)->attr['data-ks-lazyload'];
 	        }
-	        $add_data['picdetail'] = json_encode($arr['picdetail']);
+			if(!array_key_exists('picdetail', $arr)){
+	      	  $add_data['picdetail'] = json_encode([]);
+			}else{
+	      	  $add_data['picdetail'] = json_encode($arr['picdetail']);
+			}
         }catch(Exception  $e){
             return array('errcode'=>30009);
         }

@@ -164,7 +164,7 @@
 						<a href="javascript:void(0)"><img :src="item.imgUrl" alt="" /></a>
 						<h2 v-text="item.title"></h2>
 						<p>
-							<span>￥{{item.priceYuan}}</span><span class="priceFen">.00</span><del v-if="parseInt(item.reservePrice)>parseInt(item.priceYuan)">￥{{item.reservePrice}}</del>
+							<span>￥{{item.priceYuan}}.</span><span class="priceFen" v-text="priceFen"></span><del v-if="parseInt(item.reservePrice)>parseInt(item.priceYuan)">￥{{item.reservePrice}}</del>
 						</p>
 					</li>
 				</ul>
@@ -255,12 +255,23 @@
 																openUrl=openUrl.split(".");
 														}
 													}
-													var obj={
-														bannerArrName:name,
-														imageUrl:shopData.data.data[name.split('.')[0]][name.split('.')[1]],
-														cmdId:shopData.data.data[openUrl[0]][openUrl[1]],
-														styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding
-													};
+													console.log(name.indexOf("."))
+													if(name.indexOf(".")>-1){
+														var obj={
+															bannerArrName:name,
+															imageUrl:shopData.data.data[name.split('.')[0]][name.split('.')[1]],
+															cmdId:shopData.data.data[openUrl[0]][openUrl[1]],
+															styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding
+														};
+													}else{
+														var obj={
+															bannerArrName:name,
+															imageUrl:shopData.data.data[name],
+															cmdId:shopData.data.data[openUrl],
+															styleBinding:shopData.data.view.subViews[0].subViews[k].subViews[i].subViews[l].styleBinding
+														};
+													}
+													console.log(obj)
 													modelData.push(obj)
 													isLabel=false;
 												}else{

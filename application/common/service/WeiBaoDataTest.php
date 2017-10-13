@@ -275,7 +275,11 @@ class WeiBaoDataTest {
         foreach ($html->find('div.mui-custommodule-item') as $item) {
                 $arr['picdetail'][]=$item->find('img',0)->attr['data-ks-lazyload'];
         }
-        $add_data['picdetail'] = json_encode($arr['picdetail']);
+		if(!array_key_exists('picdetail', $arr)){
+      	  $add_data['picdetail'] = json_encode([]);
+		}else{
+      	  $add_data['picdetail'] = json_encode($arr['picdetail']);
+		}
         //得到店铺score
         foreach ($html ->find('ul.score') as  $score) {
             foreach($score->find('li') as $key => $li){

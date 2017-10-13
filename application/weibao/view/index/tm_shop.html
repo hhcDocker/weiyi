@@ -120,7 +120,7 @@
 					</li>
 				</ul>
 			</section>
-			<section class="enhenced" v-if="enhenced" v-for="models in enhenced"> 
+			<section class="enhenced" v-if="enhenced&&models.list.length>0" v-for="models in enhenced"> 
 				<!--<div class="title_container_itemsearch" v-if="titleArr[$index]">
 					<span>{{titleArr[$index]}}</span>
 				</div>-->
@@ -145,7 +145,7 @@
 					</li>
 				</ul>
 			</section>
-			<section class="getItemLists" v-if="getItemLists">
+			<section class="getItemLists" v-if="getItemLists&&rankingData.length>=3">
 				<h3>排行榜</h3>
 				<div class="ranking_nav">
 					<div :class="{'selected_ranking':rinkingIndex==0}" @click="selectRinking(0)">会员最爱</div>
@@ -233,13 +233,13 @@
 					shopData.data=apiData;
 				}else if(data[i].api_url=="mtop.shop.decorate.coupon.query"){
 					conponQueryData=apiData;
-				}else if(data[i].api_url=="com.taobao.shop.getConpon1111"){
+				}else if(data[i].api_url=="com.taobao.shop.getConpon1111" || data[i].api_url=="com.taobao.shop.getconpon1111"){
 					conponData=apiData;
-				}else if(data[i].api_url=="mtop.taobao.shop.itemSearch"){
+				}else if(data[i].api_url=="mtop.taobao.shop.itemSearch" || data[i].api_url=="mtop.taobao.shop.itemsearch"){
 					itemSearch.push(apiData);
-				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get"){
+				}else if(data[i].api_url=="mtop.taobao.geb.enhenced.itemList.get" || data[i].api_url=="mtop.taobao.geb.enhenced.itemlist.get"){
 					enhenced.push(apiData);
-				}else if(data[i].api_url=="mtop.taobao.rankingListRecommendService.getItemLists"){
+				}else if(data[i].api_url=="mtop.taobao.rankingListRecommendService.getItemLists" || data[i].api_url=="mtop.taobao.rankinglistrecommendservice.getitemlists"){
 					getItemLists=apiData;
 					rankingData=getItemLists.favoredByDiamonds;
 				}else if(data[i].api_url=="mtop.taobao.shop.individuation"){
