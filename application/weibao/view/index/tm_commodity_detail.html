@@ -32,7 +32,7 @@
 				</h1>
 				<div class="commodity_price">
 					<p>￥<span v-text="cmdPrice"></span></p>
-					<div class="del_price">
+					<div class="del_price" v-if="commodityData.delPrice">
 						<span>价格：</span>
 						<span>￥</span>
 						<del v-text="commodityData.delPrice"></del>
@@ -252,11 +252,13 @@
 				}
 			}
 			try{
-				
-				commodityData.delPrice=dataMdsKig.price.newExtraPrices[0].priceText;
+				if(dataMdsKig.price.newExtraPrices){
+					commodityData.delPrice=dataMdsKig.price.newExtraPrices[0].priceText;
+				}
 				cmdPrice=dataMdsKig.price.price.priceText;
 			}catch(e){
 				//TODO handle the exception
+				console.log(e)
 			}
 			//尝试得到颜色分类
 			try{
