@@ -41,7 +41,7 @@ class Index extends APIController
      * [getcaptcha description]
      * @return [type] [description]
      */
-    public function getcaptcha(){
+    public function getCaptcha(){
        $captcha = new Captcha((array)Config::get('captcha'));
        $response = $captcha->entry();
        $content = base64_encode($response->getContent());
