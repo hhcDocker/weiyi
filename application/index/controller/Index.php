@@ -20,6 +20,8 @@ use api\APIException;
 use think\Request;
 use think\Log;
 use think\Db;
+use think\captcha\Captcha;
+use think\Config;
 use app\common\service\WxPay;
 use app\common\service\AliPay;
 
@@ -36,18 +38,29 @@ class Index extends APIController
     }
 
     /**
+     * [getcaptcha description]
+     * @return [type] [description]
+     */
+    public function getcaptcha(){
+       $captcha = new Captcha((array)Config::get('captcha'));
+       $response = $captcha->entry();
+       $content = base64_encode($response->getContent());
+       return $this->format_ret(["data"=>"data:image/png;base64,{$content}"]);
+    }
+
+    /**
      * 发送注册短信验证码
      * @return array
      */ 
     public function getRegisterCode(){
         $mobilephone = noempty_input('mobilephone', '/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/');
-
+        $picture_code =noempty_input('pictureCode');
         $user_info = $this->ergodicSearchMobilephone($mobilephone); //手机是否注册过
         if ($user_info['code']>0) { //1-电商，2-网点，3-工厂，4-微驿，5-官网，0-无
             throw new APIException(10002);
         }
 
-        $this->getSmsCode($mobilephone); 
+        $this->getSmsCodeByCode($mobilephone,$picture_code); 
         return $this->format_ret();
     }
 
@@ -183,7 +196,8 @@ class Index extends APIController
      *  @return array
      */ 
     public function getResetCode(){
-       $mobilephone = noempty_input('mobilephone', '/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/'); 
+        $mobilephone = noempty_input('mobilephone', '/^(1(([35][0-9])|(47)|[78][0-9]))\d{8}$/'); 
+        $picture_code = noempty_input('pictureCode'); 
 
         $user_info = $this->ergodicSearchMobilephone($mobilephone); //手机是否注册过
         
@@ -191,7 +205,7 @@ class Index extends APIController
             throw new APIException(10013);
         }
 
-        $this->getSmsCode($mobilephone);
+        $this->getSmsCodeByCode($mobilephone,$picture_code);
         session('find_pwd_mobilephone',$mobilephone);
         return $this->format_ret();
     }
@@ -398,6 +412,50 @@ class Index extends APIController
             throw new APIException(10004);
         }
     }
+
+    /**
+     * 获取短信验证码
+     * @param  [type] $mobilephone  [description]
+     * @return [type]               [description]
+     */
+    public function getSmsCodeByCode($mobilephone='',$captcha_code='') {
+        if (!$mobilephone) {
+            throw new \Exception("mobilephone参数错误");
+        }
+        if (!$captcha_code) {
+            throw new \Exception("captcha_code参数错误");
+        }
+        $captcha_check_result = captcha_check($captcha_code);
+        if (!$captcha_check_result) {
+           throw new APIException(10024);
+        }  
+
+        $time_elapsed = time() - session('weitiao_sms_code_time');
+        if ($time_elapsed >= 60) {
+            $sms = new SMS();
+            $code = (string)rand(100000,999999);
+            $sms_result = $sms->sms([
+                    'param'  => ['code'=>$code],
+                    'mobile'  => $mobilephone,
+                    'template'  => 'SMS_71215766',
+            ]);
+
+            /*$sms_result = $sms->sms([
+                'param'  => ['code'=>$code, 'product'=>'大胖子车装联盟'],
+                'mobile'  => $mobilephone,
+                'template'  => 'SMS_6215201',
+            ]);*/
+            if($sms_result !== true){
+                throw new APIException(10003);
+            }
+            session('weitiao_sms_mobilephone', $mobilephone);
+            session('weitiao_sms_code', $code);
+            session('weitiao_sms_code_time', time());
+        } else {
+            throw new APIException(10004);
+        }
+    }
+
 
     /**
      * 检查短信验证码
