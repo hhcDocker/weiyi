@@ -45,6 +45,7 @@ class Index extends APIController
        $captcha = new Captcha((array)Config::get('captcha'));
        $response = $captcha->entry();
        $content = base64_encode($response->getContent());
+       $content = 'data:image/png;base64,'.$content;
        return $this->format_ret(["data"=>$content]);
     }
 

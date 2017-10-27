@@ -712,7 +712,7 @@ class WtService extends APIAuthController
             }else{
                 //生成微信支付二维码
                 $QRCode = new QRCode;
-                $response_data = base64_encode($QRCode->createQRCodeImg($result['msg']));
+                $response_data = 'data:image/png;base64,'.base64_encode($QRCode->createQRCodeImg($result['msg']));
                 
                 /*vendor('wxpay.phpqrcode');
                 $response_data =\QRcode::png(urldecode($result['msg']));*/
@@ -875,7 +875,7 @@ class WtService extends APIAuthController
             }else{
                 //生成微信支付二维码
                 $QRCode = new QRCode;
-                $response_data = base64_encode($QRCode->createQRCodeImg($result['msg']));
+                $response_data = 'data:image/png;base64,'.base64_encode($QRCode->createQRCodeImg($result['msg']));
                 
                 /*vendor('wxpay.phpqrcode');
                 $response_data =\QRcode::png(urldecode($result['msg']));*/
@@ -946,7 +946,7 @@ class WtService extends APIAuthController
                     $service_list[$k]['service_type'] = 2;
                 }
                 // unset($service_list[$k]['service_start_time']);
-                $service_list[$k]['qrcode_img'] = base64_encode($QRCode->createQRCodeImg($service_list[$k]['short_url']));
+                $service_list[$k]['qrcode_img'] ='data:image/png;base64,'.base64_encode($QRCode->createQRCodeImg($service_list[$k]['short_url']));
             }
         }
 
@@ -978,6 +978,7 @@ class WtService extends APIAuthController
         //二维码
         $QRCode = new QRCode;
         $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+        $img = 'data:image/png;base64,'.$img;
 
         $res_data =array('shop_name'=>$service_info['shop_name'],'shop_url'=>$service_info['shop_url'],'service_start_time'=>$service_info['service_start_time'],'service_end_time'=>$service_info['service_end_time'],'qrcode_url'=>$qrcode_url,'qrcode_img'=>$img);
         return $this->format_ret($res_data);
@@ -1024,7 +1025,7 @@ class WtService extends APIAuthController
                 }
 
                 unset($record_list[$k]['service_start_time']);
-                $record_list[$k]['qrcode_img'] = base64_encode($QRCode->createQRCodeImg($record_list[$k]['short_url']));
+                $record_list[$k]['qrcode_img'] = 'data:image/png;base64,'.base64_encode($QRCode->createQRCodeImg($record_list[$k]['short_url']));
             }
         }
         $service_count = model('TransRecords')->countRecordsByManagerId(session('manager_id'),$service_type);
@@ -1043,6 +1044,7 @@ class WtService extends APIAuthController
         //二维码
         $QRCode = new QRCode;
         $qrcode_img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+        $qrcode_img = 'data:image/png;base64,'.$qrcode_img;
         return $this->format_ret($qrcode_img);
     }
 
@@ -1344,6 +1346,7 @@ class WtService extends APIAuthController
                 //二维码
                 $QRCode = new QRCode;
                 $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+                $img = 'data:image/png;base64,'.$img;
             }else{ //体验过期
                 $qrcode_url='';
                 $service_type = 5;
@@ -1357,6 +1360,7 @@ class WtService extends APIAuthController
             //二维码
             $QRCode = new QRCode;
             $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+            $img = 'data:image/png;base64,'.$img;
         }elseif ($service_info['service_start_time']>time()) { //服务未开始
             //判断体验是否过期
             $service_experience_info = model('ExpenseRecords')->getExperienceInfoByService($service_info['id']);
@@ -1369,6 +1373,7 @@ class WtService extends APIAuthController
                 //二维码
                 $QRCode = new QRCode;
                 $img = base64_encode($QRCode->createQRCodeImg($qrcode_url));
+                $img = 'data:image/png;base64,'.$img;
             }else{
                 $qrcode_url='';
                 $service_type =3;
